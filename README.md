@@ -1,5 +1,3 @@
-# residential-jax-crm
-
 # Residential Property Acquisition CRM (Jacksonville / Duval County Focus)
 
 ## Context
