@@ -47,7 +47,7 @@
         },
         {
           "detail": "Recipient opened the message",
-          "occurredAt": "2026-08-21T23:28:11.952Z",
+          "occurredAt": "2026-08-21T23:26:01.797Z",
           "providerEventId": "sim_email_8f956bdd9173a4fcc560:opened",
           "status": "opened"
         }
