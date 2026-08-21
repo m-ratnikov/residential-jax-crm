@@ -57,7 +57,7 @@
     "yearsSinceLastSale": 32
   },
   "savedSearchId": "0mt36wk8df5mnst48",
-  "stage": "negotiating",
+  "stage": "under_contract",
   "stageEvents": [
     {
       "actorId": "0mt36wgohk1qdawvi",
@@ -82,8 +82,16 @@
       "id": "0mt36xp9fhnuvfs8i",
       "note": "Probate is the driver here. Two heirs, one out of state, both want it gone.",
       "toStage": "negotiating"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-21T17:42:28.194Z",
+      "fromStage": "negotiating",
+      "id": "0mt38lr363x7cc6ly",
+      "note": null,
+      "toStage": "under_contract"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:55:48.212Z"
+  "updatedAt": "2026-08-21T17:42:28.194Z"
 }
