@@ -15,11 +15,18 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt34qv5ittgrk9jb",
+      "body": "Owner answered the SMS asking who we are. Warm enough to keep going.",
+      "createdAt": "2026-08-21T15:55:22.864Z",
+      "id": "0mt34s19sao64acok"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34rwfzfxgghctc",
-  "ownerInterest": "Curious, not committed",
+  "ownerInterest": null,
   "ownerNameSnapshot": "SHADY COVE CONDOMINIUM ASSOCIA",
   "parcelIdentifier": "1038175000R",
   "propertyId": "1038175000R",
@@ -62,5 +69,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:55:21.504Z"
+  "updatedAt": "2026-08-21T15:55:22.864Z"
 }
