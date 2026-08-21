@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": "Follow up if nothing by Friday",
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt3hhgitu0cc1xod",
+      "body": "Letter went out last week. No reply yet.",
+      "createdAt": "2026-08-21T21:51:35.424Z",
+      "id": "0mt3hi4g0cg1907tu"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3hi1ltpj25cs23",
@@ -70,5 +77,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T21:51:34.607Z"
+  "updatedAt": "2026-08-21T21:51:35.424Z"
 }
