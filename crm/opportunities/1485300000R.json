@@ -3,7 +3,7 @@
   "addressLine": "10010 WHIPPOORWILL LN, JACKSONVILLE, 32256",
   "addressZip": "32256",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 168000,
   "assessedValue": 0,
   "assigneeId": "0mt34qs66bx65l6up",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.54963,
   "matchRationale": "held 26 years (+33); roof about 46 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 152000,
   "outreach": [],
   "ownerId": "0mt34sdj9ty17ww65",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "DEERWOOD IMPROVEMENT ASSN INC",
   "parcelIdentifier": "1485300000R",
   "propertyId": "1485300000R",
@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 26
   },
   "savedSearchId": "0mt34qwmnq7mw3qcj",
-  "stage": "negotiating",
+  "stage": "identified",
   "stageEvents": [
     {
       "actorId": "0mt34qrentckaguhg",
@@ -59,16 +59,8 @@
       "id": "0mt34se7uzei7xpwj",
       "note": "Created from search",
       "toStage": "identified"
-    },
-    {
-      "actorId": "0mt34qs66bx65l6up",
-      "createdAt": "2026-08-21T15:55:42.869Z",
-      "fromStage": "identified",
-      "id": "0mt34sgphvac6z1uc",
-      "note": "Probate is the driver here. Two heirs, one out of state, both want it gone.",
-      "toStage": "negotiating"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:55:42.869Z"
+  "updatedAt": "2026-08-21T15:55:44.355Z"
 }
