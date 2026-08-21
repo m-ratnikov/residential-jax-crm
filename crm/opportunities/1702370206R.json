@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello CASCONE ELIZABETH B TRUST,\n\nCounty records suggest the roof at 10 10TH ST 32, ATLANTIC BEACH, 32233 may be near the end of its service life. A re-roof in ATLANTIC BEACH is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $1.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36l35hymuh98wm",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:45:57.942Z",
+      "createdById": "0mt36ke1hsi85xcpb",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-17023702@example.invalid",
+          "occurredAt": "2026-08-21T16:45:57.942Z",
+          "providerEventId": "sim_email_19b933306abea84e287a:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:46:24.942Z",
+          "providerEventId": "sim_email_19b933306abea84e287a:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-21T16:47:05.942Z",
+          "providerEventId": "sim_email_19b933306abea84e287a:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt36l35i8irhnb84",
+      "providerMessageId": "sim_email_19b933306abea84e287a",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:45:57.942Z",
+      "subject": "About the roof at 10 10TH ST 32, ATLANTIC BEACH, 32233",
+      "templateId": "roof-condition",
+      "toAddress": "owner-17023702@example.invalid"
+    }
+  ],
   "ownerId": "0mt36kvcp1360xnzt",
   "ownerInterest": null,
   "ownerNameSnapshot": "CASCONE ELIZABETH B TRUST",
@@ -87,5 +123,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-21T16:45:57.062Z"
+  "updatedAt": "2026-08-21T16:45:57.942Z"
 }
