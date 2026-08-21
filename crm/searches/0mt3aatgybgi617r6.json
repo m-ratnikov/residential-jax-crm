@@ -26,7 +26,7 @@
   },
   "description": null,
   "id": "0mt3aatgybgi617r6",
-  "lastEvaluatedAt": "2026-08-21T20:41:44.998Z",
+  "lastEvaluatedAt": "2026-08-21T21:08:07.310Z",
   "lastMatchCount": 0,
   "lastPipelineRunId": "01M0HZCKVT3PS6GMFV9CWV2M8V",
   "matches": {},
@@ -36,5 +36,5 @@
   "notifyInApp": true,
   "notifySms": true,
   "ownerId": null,
-  "updatedAt": "2026-08-21T20:41:44.998Z"
+  "updatedAt": "2026-08-21T21:08:07.310Z"
 }
