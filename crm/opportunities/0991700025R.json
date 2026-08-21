@@ -15,16 +15,39 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [
+  "notes": [],
+  "offerPrice": null,
+  "outreach": [
     {
-      "authorId": "0mt34qs66bx65l6up",
-      "body": "Second on the same street as an existing deal. Worth a letter.",
-      "createdAt": "2026-08-21T15:55:03.469Z",
-      "id": "0mt34rmb1ekokpgpq"
+      "body": "Hello SIX THOUSAND ASSOCIATION INC,\n\nCounty records suggest the roof at 6000 SAN JOSE BLVD, JACKSONVILLE, 32217 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $0.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt34ro074te9lzgv",
+      "campaignName": "Seed - identified",
+      "channel": "direct_mail",
+      "createdAt": "2026-08-21T15:55:06.406Z",
+      "createdById": "0mt34qs66bx65l6up",
+      "events": [
+        {
+          "detail": "Accepted by simulated-print-and-mail for C/O MAY MANAGEMENT OFFICE",
+          "occurredAt": "2026-08-21T15:55:06.406Z",
+          "providerEventId": "sim_direct_mail_0556b53f178436ba9232:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-23T20:41:58.406Z",
+          "providerEventId": "sim_direct_mail_0556b53f178436ba9232:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt34rokmw5iuwt99",
+      "providerMessageId": "sim_direct_mail_0556b53f178436ba9232",
+      "status": "queued",
+      "statusAt": "2026-08-21T15:55:06.406Z",
+      "subject": "About the roof at 6000 SAN JOSE BLVD, JACKSONVILLE, 32217",
+      "templateId": "roof-condition",
+      "toAddress": "C/O MAY MANAGEMENT OFFICE"
     }
   ],
-  "offerPrice": null,
-  "outreach": [],
   "ownerId": "0mt34rivb6vhvpafm",
   "ownerInterest": null,
   "ownerNameSnapshot": "SIX THOUSAND ASSOCIATION INC",
@@ -69,5 +92,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:55:03.469Z"
+  "updatedAt": "2026-08-21T15:55:06.406Z"
 }
