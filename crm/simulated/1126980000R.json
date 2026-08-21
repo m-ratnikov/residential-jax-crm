@@ -1,0 +1,13 @@
+{
+  "createdAt": "2026-08-21T22:07:04.355Z",
+  "id": "1126980000R",
+  "label": "roof permit",
+  "propertyId": "1126980000R",
+  "runId": "sim-20260821220703-70b2c44f",
+  "values": {
+    "roof_age_basis": "PERMIT",
+    "roof_age_years": "0",
+    "roof_permit_count": "1",
+    "roof_year_est": "2026"
+  }
+}
