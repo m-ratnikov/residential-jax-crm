@@ -92,6 +92,16 @@
       "toStage": "under_contract"
     }
   ],
-  "tasks": [],
-  "updatedAt": "2026-08-21T16:46:28.327Z"
+  "tasks": [
+    {
+      "assigneeId": "0mt36ke1hsi85xcpb",
+      "completedAt": null,
+      "createdAt": "2026-08-21T16:46:29.301Z",
+      "dueAt": "2026-08-29T16:46:29.301Z",
+      "id": "0mt36lrclq04pjvfq",
+      "status": "open",
+      "title": "Book inspection"
+    }
+  ],
+  "updatedAt": "2026-08-21T16:46:29.301Z"
 }
