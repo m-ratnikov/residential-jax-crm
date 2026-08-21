@@ -3,7 +3,7 @@
   "addressLine": "1901 N 1ST ST G033, JACKSONVILLE BEACH, 32250",
   "addressZip": "32250",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 165000,
   "assessedValue": 1,
   "assigneeId": "0mt36ke1hsi85xcpb",
   "closedAt": null,
@@ -13,10 +13,10 @@
   "longitude": -81.3923064,
   "matchRationale": "held 39 years (+33); roof about 44 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 149000,
   "outreach": [],
   "ownerId": "0mt36lm5nrrfkthzg",
   "ownerInterest": null,
@@ -86,5 +86,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:46:26.414Z"
+  "updatedAt": "2026-08-21T16:46:27.308Z"
 }
