@@ -1,0 +1,68 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-08-21T22:07:53.498Z",
+  "dismissedAt": null,
+  "id": "0mt3i33e4zvncvswg__0mt3hhiquyk2xlkd7__0008200010R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt3i33e4zvncvswg",
+  "notifications": [
+    {
+      "body": "895 BRADDOCK CT, BALDWIN, 32234 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 99 / 100\nWhy: roof about 66 years old, estimated from year built (+50); assessed at $82,528 (+49).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: ERVIN ERIC T ET AL\nAssessed value: $82,528\nParcel: 0008200010R\n\nTriggered by pipeline run 01M0HZCKVT3PS6GMFV9CWV2M8V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-21T22:08:14.288Z",
+      "id": "0mt3i3j68idpiefru",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-21T22:08:14.288Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 895 BRADDOCK CT, BALDWIN, 32234"
+    },
+    {
+      "body": "895 BRADDOCK CT, BALDWIN, 32234 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 99 / 100\nWhy: roof about 66 years old, estimated from year built (+50); assessed at $82,528 (+49).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: ERVIN ERIC T ET AL\nAssessed value: $82,528\nParcel: 0008200010R\n\nTriggered by pipeline run 01M0HZCKVT3PS6GMFV9CWV2M8V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-21T22:08:14.289Z",
+      "id": "0mt3i3j699nivb3p5",
+      "providerMessageId": "sim_email_db160c17a0adc315bb03",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-21T22:08:14.289Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 895 BRADDOCK CT, BALDWIN, 32234"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0HZCKVT3PS6GMFV9CWV2M8V",
+  "propertyId": "0008200010R",
+  "propertySnapshot": {
+    "address": "895 BRADDOCK CT, BALDWIN, 32234",
+    "addressCity": "BALDWIN",
+    "addressZip": "32234",
+    "assessedValue": 82528,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2012-03-26",
+    "latitude": 30.300713,
+    "longitude": -81.9836529,
+    "ownerName": "ERVIN ERIC T ET AL",
+    "ownerOccupied": true,
+    "propertyId": "0008200010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0K4YAFPFW4JC7FP4DB8KH9M",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 14
+  },
+  "rationale": "roof about 66 years old, estimated from year built (+50); assessed at $82,528 (+49).",
+  "readAt": null,
+  "savedSearchId": "0mt3hhiquyk2xlkd7",
+  "score": 99.3
+}
