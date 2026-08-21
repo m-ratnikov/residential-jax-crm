@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": "Skip trace the mailing address",
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt34x03worqr9qp0",
+      "body": "Pulled from the tired landlord list. Roof is well past its life and the owner mails to another county.",
+      "createdAt": "2026-08-21T15:59:39.153Z",
+      "id": "0mt34xj0xwfm8mmnb"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34xgquvyncd84j",
@@ -62,5 +69,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:59:38.195Z"
+  "updatedAt": "2026-08-21T15:59:39.154Z"
 }
