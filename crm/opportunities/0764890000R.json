@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt3hhfku5sn1b3gl",
+      "body": "Probate is the driver here. Two heirs, one out of state, both want it gone.",
+      "createdAt": "2026-08-21T21:51:59.643Z",
+      "id": "0mt3hin4r7edfyoog"
+    }
+  ],
   "offerPrice": 152000,
   "outreach": [],
   "ownerId": "0mt3hij9zkkopahih",
@@ -78,5 +85,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T21:51:58.786Z"
+  "updatedAt": "2026-08-21T21:51:59.643Z"
 }
