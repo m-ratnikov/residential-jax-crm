@@ -41,7 +41,7 @@
         },
         {
           "detail": "Delivered",
-          "occurredAt": "2026-08-23T21:05:06.475Z",
+          "occurredAt": "2026-08-21T23:26:01.797Z",
           "providerEventId": "sim_direct_mail_9c72ebc84f0e18a11ae0:delivered",
           "status": "delivered"
         }
