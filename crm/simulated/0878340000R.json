@@ -1,0 +1,13 @@
+{
+  "createdAt": "2026-08-21T22:56:31.003Z",
+  "id": "0878340000R",
+  "label": "roof permit",
+  "propertyId": "0878340000R",
+  "runId": "sim-20260821225630-cd41c212",
+  "values": {
+    "roof_age_basis": "PERMIT",
+    "roof_age_years": "0",
+    "roof_permit_count": "1",
+    "roof_year_est": "2026"
+  }
+}
