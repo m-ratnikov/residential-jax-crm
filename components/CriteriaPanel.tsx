@@ -216,7 +216,11 @@ export function CriteriaPanel({
               onClick={() =>
                 onChange({
                   name: "Untitled search",
-                  filters: { residentialOnly: true, geometry: filters.geometry },
+                  filters: {
+                    residentialOnly: true,
+                    dwellingsOnly: true,
+                    geometry: filters.geometry,
+                  },
                   weights: criteria.weights,
                 })
               }
@@ -322,6 +326,12 @@ export function CriteriaPanel({
             onChange={(checked) => setFilters({ residentialOnly: checked })}
             label="Residential only"
             hint="property_type = RESIDENTIAL"
+          />
+          <Toggle
+            checked={filters.dwellingsOnly !== false}
+            onChange={(checked) => setFilters({ dwellingsOnly: checked })}
+            label="Has a dwelling"
+            hint="At least 400 sq ft of livable floor area, and a value on the roll. Excludes HOA common areas, retention ponds and 55 sq ft condo garage units, which are absentee owned with no homestead and so score highly on a distress thesis that nobody lives in."
           />
           {filters.residentialOnly === false && (
             <div className="flex flex-wrap gap-1.5">

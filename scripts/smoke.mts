@@ -86,9 +86,73 @@ async function main(): Promise<void> {
   await provenance.waitFor({ state: "visible", timeout: 60_000 }).catch(() => undefined);
   check("parcel drawer shows provenance", await provenance.isVisible().catch(() => false));
 
-  // Console errors that are not the expected "no CRM store" noise.
+  // 7. The CRM half. Searching a parquet is half the story; the assignment is a
+  //    CRM, so the deployed runtime has to show real saved criteria and real
+  //    worked deals read back out of the store, not an empty board.
+  await page.keyboard.press("Escape");
+
+  await page.goto(`${target}/searches`, { waitUntil: "domcontentloaded", timeout: 60_000 });
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  await open
+    .first()
+    .waitFor({ state: "visible", timeout: 60_000 })
+    .catch(() => undefined);
+  const savedCount = await open.count();
+  check("saved criteria are read back from the store", savedCount > 0, `${savedCount} saved`);
+
+  const evaluated = await page.getByText(/Matched last pass/i).count();
+  check(
+    "each saved thesis records what it matched",
+    evaluated === savedCount && savedCount > 0,
+    `${evaluated} baselined`,
+  );
+
+  await page.goto(`${target}/opportunities`, { waitUntil: "domcontentloaded", timeout: 60_000 });
+
+  // The board is the default view and the table is behind a toggle, so read the
+  // count the page itself reports rather than counting DOM rows.
+  const shown = page.getByText(/[0-9]+ of [0-9]+ shown/).first();
+  await shown.waitFor({ state: "visible", timeout: 60_000 }).catch(() => undefined);
+  const shownText = ((await shown.textContent().catch(() => "")) ?? "").trim();
+  const deals = Number(shownText.split(" of ")[0]);
+  check("the acquisition board has worked deals", deals > 0, shownText || "no count");
+
+  await page
+    .getByRole("button", { name: "Table", exact: true })
+    .click()
+    .catch(() => undefined);
+  const tableRows = await page.getByRole("row").count();
+  check(
+    "the table view lists them individually",
+    tableRows > deals,
+    `${tableRows} rows including the header`,
+  );
+
+  // A funnel, not a pile: several stages have to be occupied for the board to
+  // demonstrate anything about a lifecycle.
+  const counts = await Promise.all(
+    ["Identified", "Contacted", "Negotiating", "Under contract", "Closed"].map((stage) =>
+      page.getByText(stage, { exact: false }).count(),
+    ),
+  );
+  const occupied = counts.filter((n) => n > 0).length;
+  check("deals are spread across the funnel", occupied >= 3, `${occupied} stages present`);
+
+  // 8. The store is attached and writable, which the header says out loud when
+  //    it is not. Neither badge may be present on a correctly configured
+  //    deployment.
+  const readOnly = await page.getByText("Read only", { exact: true }).count();
+  const ephemeral = await page.getByText("In-memory store", { exact: true }).count();
+  check(
+    "the store is attached and writable",
+    readOnly === 0 && ephemeral === 0,
+    readOnly ? "header says read only" : ephemeral ? "header says in-memory" : "no warning badge",
+  );
+
+  // Failed requests are worth seeing, but a 503 from a deliberately read-only
+  // deployment is a state the UI renders rather than an error to fail on.
   const realErrors = errors.filter(
-    (text) => !/crm_store_not_configured|503|Failed to load resource/i.test(text),
+    (text) => !/crm_store_not_writable|Failed to load resource/i.test(text),
   );
   check(
     "no unexpected console errors",
@@ -96,6 +160,11 @@ async function main(): Promise<void> {
     realErrors.slice(0, 2).join(" | "),
   );
 
+  await page.goto(`${target}/search`, { waitUntil: "domcontentloaded", timeout: 60_000 });
+  await page
+    .getByTestId("dataset-badge")
+    .waitFor({ state: "visible", timeout: 180_000 })
+    .catch(() => undefined);
   await page.screenshot({ path: "smoke-search.png", fullPage: false });
   console.log("screenshot: smoke-search.png");
 

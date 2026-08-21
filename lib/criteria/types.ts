@@ -98,6 +98,21 @@ export const filtersSchema = z.object({
   propertyTypes: z.array(z.string()).max(40).optional(),
   /** Residential only. On by default for an acquisitions CRM. */
   residentialOnly: z.boolean().optional(),
+  /**
+   * Only parcels with somewhere to live on them.
+   *
+   * 27,801 of Duval's 367,653 residential parcels have no livable floor area:
+   * HOA common areas and retention ponds (usage 009, assessed at zero), and
+   * condominium garage and storage units (assessed at a dollar or two). All of
+   * them are residential, absentee owned, without a homestead exemption and
+   * held for decades, so on a distress thesis they score a perfect 100 and bury
+   * every real house. Filtering on assessed value alone does not remove them:
+   * a garage unit assessed at $1 passes `assessed_value > 0`.
+   *
+   * On by default, and shown in the panel so it can be turned off - a land
+   * buyer looking for infill lots genuinely wants the vacant ones.
+   */
+  dwellingsOnly: z.boolean().optional(),
 
   // Geography
   cities: z.array(z.string()).max(60).optional(),
@@ -162,7 +177,7 @@ export type CriteriaSet = z.infer<typeof criteriaSetSchema>;
 /** An empty criteria set, used as the starting point in the filter panel. */
 export const EMPTY_CRITERIA: CriteriaSet = {
   name: "Untitled search",
-  filters: { residentialOnly: true },
+  filters: { residentialOnly: true, dwellingsOnly: true },
   weights: DEFAULT_WEIGHTS,
 };
 
@@ -188,6 +203,7 @@ export const CRITERIA_PRESETS: CriteriaPreset[] = [
       name: "Tired landlord",
       filters: {
         residentialOnly: true,
+        dwellingsOnly: true,
         minYearsSinceSale: 10,
         minRoofAge: 15,
         distress: { absenteeOwner: true, noHomestead: true },
@@ -204,6 +220,7 @@ export const CRITERIA_PRESETS: CriteriaPreset[] = [
       name: "Aging roof, entry price band",
       filters: {
         residentialOnly: true,
+        dwellingsOnly: true,
         minRoofAge: 20,
         minAssessedValue: 80_000,
         maxAssessedValue: 250_000,
@@ -218,7 +235,12 @@ export const CRITERIA_PRESETS: CriteriaPreset[] = [
       "Water view, held fifteen years or more. Owners with equity and a reason to consider an offer.",
     criteria: {
       name: "Waterfront long hold",
-      filters: { residentialOnly: true, waterView: true, minYearsSinceSale: 15 },
+      filters: {
+        residentialOnly: true,
+        dwellingsOnly: true,
+        waterView: true,
+        minYearsSinceSale: 15,
+      },
       weights: { tenure: 3, roofAge: 1, distress: 1, value: 1, geography: 0, amenity: 3 },
     },
   },
@@ -231,6 +253,7 @@ export const CRITERIA_PRESETS: CriteriaPreset[] = [
       name: "Court distress",
       filters: {
         residentialOnly: true,
+        dwellingsOnly: true,
         distress: { hasLien: true, hasForeclosure: true, hasCodeEnforcement: true },
       },
       weights: { tenure: 1, roofAge: 1, distress: 5, value: 1, geography: 0, amenity: 0 },
@@ -245,6 +268,7 @@ export const CRITERIA_PRESETS: CriteriaPreset[] = [
       name: "Transit infill",
       filters: {
         residentialOnly: true,
+        dwellingsOnly: true,
         maxTransitDistanceM: 800,
         maxBuiltYear: 1990,
         minYearsSinceSale: 10,

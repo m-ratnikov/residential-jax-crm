@@ -18,6 +18,18 @@ import type { CriteriaSet, Filters, Geometry, Weights } from "./types";
 /** The view name the data source exposes over the query table. */
 export const VIEW = "properties";
 
+/**
+ * The smallest floor area this application will call a dwelling.
+ *
+ * Chosen from the roll rather than from taste: of Duval's 339,852 residential
+ * parcels with any livable floor area, 1,840 are below this and 338,012 above
+ * it. The ones below are 55 sq ft condo garage units assessed at a dollar
+ * (1,222 of them), 100 sq ft storage lockers, and a scatter of single-digit
+ * areas that are plainly bad rows. It is also roughly the smallest efficiency
+ * unit anyone builds.
+ */
+export const DWELLING_MIN_SQFT = 400;
+
 export const SCORE_ALIAS = "match_score";
 export const TOTAL_ALIAS = "match_total";
 
@@ -202,6 +214,11 @@ export function buildWhere(filters: Filters, courtJoinAvailable: boolean): Where
   const clauses: string[] = [];
 
   if (filters.residentialOnly) clauses.push(`property_type = 'RESIDENTIAL'`);
+  // See the note on `dwellingsOnly`. 400 sq ft is the floor area below which
+  // the roll is describing a garage, a storage locker or a data error rather
+  // than somewhere a person lives.
+  if (filters.dwellingsOnly)
+    clauses.push(`livable_floor_area >= ${DWELLING_MIN_SQFT} AND assessed_value > 0`);
   if (filters.propertyTypes?.length) clauses.push(inList("property_type", filters.propertyTypes));
 
   if (filters.minYearsSinceSale !== undefined)

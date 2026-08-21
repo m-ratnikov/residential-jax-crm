@@ -14,6 +14,7 @@ import { describe, expect, it, beforeAll, afterAll } from "vitest";
 import { DuckDbPropertyDataSource } from "@/lib/data/duckdb";
 import { SAMPLE_QUERY_TABLE, SAMPLE_RUN_HISTORY } from "@/lib/data/config";
 import { DEFAULT_WEIGHTS, type CriteriaSet } from "@/lib/criteria/types";
+import { DWELLING_MIN_SQFT } from "@/lib/criteria/sql";
 import type { Overlay } from "@/lib/data/overlay";
 
 const samplePath = join(process.cwd(), SAMPLE_QUERY_TABLE);
@@ -78,6 +79,32 @@ suite("DuckDbPropertyDataSource against the bundled sample", () => {
     expect(result.total).toBeGreaterThan(1_000);
     for (const row of result.rows) {
       expect(row.property.yearsSinceLastSale).toBeGreaterThanOrEqual(10);
+    }
+  });
+
+  it("excludes parcels with nowhere to live on them, which are not acquisitions", async () => {
+    // Duval's residential roll carries tens of thousands of parcels nobody
+    // lives on: HOA common areas and retention ponds with no floor area, and 55
+    // sq ft condo garage units assessed at a dollar. They are absentee owned,
+    // without a homestead exemption, held for decades, so on a distress thesis
+    // they score a perfect 100 and bury every real house.
+    const thesis = { residentialOnly: true, distress: { absenteeOwner: true, noHomestead: true } };
+
+    const all = await source.search({ criteria: criteria(thesis), limit: 200, orderBy: "score" });
+    const improved = await source.search({
+      criteria: criteria({ ...thesis, dwellingsOnly: true }),
+      limit: 200,
+      orderBy: "score",
+    });
+
+    expect(improved.total).toBeGreaterThan(0);
+    expect(improved.total).toBeLessThan(all.total);
+    for (const row of improved.rows) {
+      expect(row.property.livableFloorArea ?? 0).toBeGreaterThanOrEqual(DWELLING_MIN_SQFT);
+      // And a value on the roll. Floor area alone is not enough: a handful of
+      // dwellings are assessed at zero because they are exempt, and an exempt
+      // parcel is not an acquisition either.
+      expect(row.property.assessedValue).toBeGreaterThan(0);
     }
   });
 
