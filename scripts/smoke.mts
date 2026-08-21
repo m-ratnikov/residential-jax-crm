@@ -236,6 +236,35 @@ async function main(): Promise<void> {
   const occupied = counts.filter((n) => n > 0).length;
   check("deals are spread across the funnel", occupied >= 3, `${occupied} stages present`);
 
+  // 7a. And one of them opens.
+  //
+  // The board rendering is not the same claim as a deal being readable, and the
+  // difference was a hard crash in production for a while: the page read
+  // `detail.notes` while the API nested it inside `opportunity`, an unchecked
+  // cast hid it from tsc, and 20 green smoke checks never opened a single
+  // opportunity. Stage history, notes, tasks and the whole outreach thread live
+  // behind this click.
+  const firstDeal = page.getByRole("row").nth(1).getByRole("link").first();
+  const dealHref = await firstDeal.getAttribute("href").catch(() => null);
+  if (dealHref) {
+    await page.goto(`${target}${dealHref}`, { waitUntil: "domcontentloaded", timeout: 60_000 });
+  }
+  // Waited for rather than counted immediately: the deal page fetches its own
+  // detail after mount, and reading the DOM before that lands says "missing"
+  // about something that is merely late.
+  const history = page.getByText(/stage history|no stage changes/i).first();
+  await history.waitFor({ state: "visible", timeout: 45_000 }).catch(() => undefined);
+  const crashed = await page
+    .getByText(/couldn't load|something went wrong/i)
+    .count()
+    .catch(() => 0);
+  const stageHistory = await history.count().catch(() => 0);
+  check(
+    "an opportunity opens with its activity",
+    Boolean(dealHref) && crashed === 0 && stageHistory > 0,
+    dealHref ? (crashed ? "the page crashed" : `${dealHref}`) : "no link to a deal",
+  );
+
   // 7b. The Ask page offers models without asking for a key.
   //
   // Deliberately not a real question: a turn costs tokens on the deployment's

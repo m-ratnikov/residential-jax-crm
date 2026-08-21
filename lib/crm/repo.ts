@@ -21,10 +21,15 @@ import {
   type AlertDoc,
   type CourtDoc,
   type MatcherRunDoc,
+  type NoteDoc,
   type OpportunityDoc,
+  type OutreachEventDoc,
+  type OutreachMessageDoc,
   type OwnerDoc,
   type SavedSearchDoc,
   type SimulatedDoc,
+  type StageEventDoc,
+  type TaskDoc,
   type TeamMemberDoc,
 } from "./documents";
 import { documentId } from "./store";
@@ -397,6 +402,28 @@ export interface OpportunityView {
   searchName: string | null;
 }
 
+/**
+ * One opportunity with its activity resolved against the team.
+ *
+ * The store keeps stage events, notes, tasks and the outreach thread inside the
+ * opportunity document, each referring to a person by id. The detail page wants
+ * them beside the deal with the person attached, so the join happens once here
+ * rather than in the component - and, more to the point, so the shape the page
+ * reads is a shape something returns. It previously was not: the page read
+ * `detail.notes` while the API answered with them nested inside `opportunity`,
+ * and because `api<Detail>()` is an unchecked cast, `tsc` saw nothing and every
+ * opportunity page crashed on `undefined.length` in production.
+ */
+export interface OpportunityDetail extends OpportunityView {
+  stageEvents: {
+    event: StageEventDoc;
+    actor: TeamMemberDoc | null;
+  }[];
+  notes: { note: NoteDoc; author: TeamMemberDoc | null }[];
+  tasks: { task: TaskDoc; assignee: TeamMemberDoc | null }[];
+  outreach: { message: OutreachMessageDoc; events: OutreachEventDoc[] }[];
+}
+
 /** Joined in memory, which is what a document store trades a JOIN for. */
 export async function listOpportunities(
   filter: OpportunityFilter = {},
@@ -434,7 +461,7 @@ export async function listOpportunities(
     }));
 }
 
-export async function getOpportunityView(propertyId: string): Promise<OpportunityView | null> {
+export async function getOpportunityView(propertyId: string): Promise<OpportunityDetail | null> {
   const opportunity = await getOpportunity(propertyId);
   if (!opportunity) return null;
 
@@ -447,13 +474,28 @@ export async function getOpportunityView(propertyId: string): Promise<Opportunit
       : null,
   ]);
 
+  const person = (id: string | null): TeamMemberDoc | null =>
+    id ? (team.find((member) => member.id === id) ?? null) : null;
+
   return {
     opportunity,
     owner: owner ?? null,
-    assignee: opportunity.assigneeId
-      ? (team.find((member) => member.id === opportunity.assigneeId) ?? null)
-      : null,
+    assignee: person(opportunity.assigneeId),
     searchName: search?.name ?? null,
+    // Newest first for the things a reader scans, oldest first for the stage
+    // history, which only makes sense read forwards.
+    stageEvents: [...opportunity.stageEvents]
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+      .map((event) => ({ event, actor: person(event.actorId) })),
+    notes: [...opportunity.notes]
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .map((note) => ({ note, author: person(note.authorId) })),
+    tasks: [...opportunity.tasks]
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+      .map((task) => ({ task, assignee: person(task.assigneeId) })),
+    outreach: [...opportunity.outreach]
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .map((message) => ({ message, events: message.events })),
   };
 }
 
