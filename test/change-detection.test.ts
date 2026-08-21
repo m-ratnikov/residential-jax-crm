@@ -110,7 +110,9 @@ describe("match fingerprint", () => {
 describe("changed fields", () => {
   it("names exactly what moved", () => {
     const before = materialSnapshot(property());
-    const after = materialSnapshot(property({ assessedValue: 210000, ownerName: "SMITH FAMILY TRUST" }));
+    const after = materialSnapshot(
+      property({ assessedValue: 210000, ownerName: "SMITH FAMILY TRUST" }),
+    );
     expect(changedFields(before, after).sort()).toEqual(["assessedValue", "ownerName"]);
   });
 

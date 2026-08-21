@@ -17,19 +17,37 @@ Everything below exists to make that one sentence true and checkable.
 
 ## What it runs on
 
-| Role | Choice | Why |
-|---|---|---|
-| Runtime | Next.js 16 / React 19 / TypeScript on Vercel | no always-on server to pay for |
-| Property data | DuckDB over the published parquet, server side, via HTTP range reads | 404,023 parcels queryable with no database |
-| CRM state | Postgres (Neon free tier) via Drizzle | thousands of rows, not hundreds of thousands |
-| Map | MapLibre GL, raster basemap declared inline | no API key, no style-document dependency |
-| Agent | Vercel AI SDK, bring-your-own-key across seven providers | no server-side key on a public endpoint |
-| Schedule | GitHub Actions cron every 30 minutes | Vercel Hobby allows one cron a day, which is not a notifier |
+| Role             | Choice                                                                                         | Why                                                            |
+| ---------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Runtime          | Next.js 16 / React 19 / TypeScript on Vercel                                                   | no always-on server to pay for                                 |
+| Property queries | DuckDB-WASM **in the visitor's tab**, range reading the published parquet off the IPFS gateway | 404,023 parcels queryable with no database and no query server |
+| CRM state        | Postgres (Neon free tier) via Drizzle                                                          | thousands of rows, not hundreds of thousands                   |
+| Map              | MapLibre GL, raster basemap declared inline                                                    | no API key, no style-document dependency                       |
+| Agent            | Vercel AI SDK, bring-your-own-key across seven providers, loop runs in the tab                 | its tools need the parcel data, which is in the tab            |
+| Schedule         | GitHub Actions cron every 30 minutes, native DuckDB                                            | Vercel Hobby allows one cron a day, which is not a notifier    |
 
-The property corpus is never copied into Postgres. That is the whole point of
-the split, and it is what makes the story's cost criterion - *"without requiring
-Oracle to carry ongoing hosted-database cost beyond the existing Duval pipeline +
-DuckDB / Elephant IPFS pattern"* - true rather than aspirational.
+The property corpus is never copied into Postgres, and no server in this system
+holds a query engine. That is not a convenience: the story's cost criterion is
+_"without requiring Oracle to carry ongoing hosted-database cost beyond the
+existing Duval pipeline + DuckDB / Elephant IPFS pattern"_, and that sentence
+names an architecture. DuckDB-WASM range reading the published artifact from the
+tab **is** that pattern. Nothing is copied, nothing is converted, and when the
+pipeline re-points its IPNS name the next page load reads the new data with no
+redeploy.
+
+### Where each piece runs, and why
+
+| Runs in          | What                                                                                              | Why there                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| The tab          | every parcel query: map, list, detail, scoring, the property CSV, the agent's tools               | the query engine is here, so this is where the authoritative record is   |
+| Vercel functions | the CRM store: saved searches, alerts, opportunities, outreach, tasks, court records, the overlay | Postgres, and nothing else                                               |
+| GitHub Actions   | the scheduled matcher, with native DuckDB                                                         | a runner can use the better engine, and a cron belongs outside a request |
+
+Producing matches and deciding what to alert on are separated
+([`lib/notify/evaluate.ts`](lib/notify/evaluate.ts)) precisely so the tab and the
+cron hand the identical shape to the same decision code. An alert raised by the
+schedule and an alert raised by pressing a button in the app are the same code
+path, with no second implementation to drift.
 
 ---
 
@@ -49,12 +67,21 @@ listRuns(limit)         pipeline runs with per-source inserted/updated/unchanged
 runSql(sql, limit)      read-only escape hatch for the agent
 ```
 
-Swapping the bundled sample for the full published county artifact is **one
-environment variable**:
+There are two implementations of it, and swapping between the bundled sample and
+the full published county artifact is **one environment variable**:
 
 ```
-PROPERTY_DATA_URL=https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r
+NEXT_PUBLIC_PROPERTY_DATA_URL=https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r
 ```
+
+- `BrowserPropertyDataSource` - DuckDB-WASM in the tab. The deployed read path.
+- `DuckDbPropertyDataSource` - native DuckDB in Node, used by the scheduled
+  matcher and the seed script. Its engine seam
+  ([`lib/data/engine.ts`](lib/data/engine.ts)) also carries a WASM fallback for
+  environments where the native addon will not load.
+
+The interface earned its keep: when the native engine turned out to be
+undeployable, twelve integration tests passed unmodified against the replacement.
 
 The header says which of the two is answering, always. There is no state where
 the app runs on a subset without saying so.
@@ -82,7 +109,7 @@ the last touch on a parcel. So there is no per-row change stamp to read, and
 anything claiming to detect "changed parcels" from the parquet alone would be
 inventing it.
 
-What the pipeline *does* publish is `run-history.json`: fifteen runs, each with
+What the pipeline _does_ publish is `run-history.json`: fifteen runs, each with
 per-track `inserted` / `updated` / `unchanged` / `table_total_after` and the
 limitations that run declared for itself. That is real evidence, and every alert
 cites a run id from it.
@@ -106,7 +133,7 @@ evidence or the tenure is.
 - **A new saved search seeds, it does not shout.** The first pass records what
   already matches without alerting. Otherwise saving "roofs over fifteen years"
   would fire three hundred thousand alerts about houses that have sat there for
-  a decade. What the user asked to be told about is what changes *from now on*.
+  a decade. What the user asked to be told about is what changes _from now on_.
 - **Re-running is safe.** Alerts are unique on (search, property, pass), so a
   retry after a timeout cannot double notify.
 - **A broad search is capped and says so.** Each search caps alerts per pass and
@@ -115,7 +142,7 @@ evidence or the tenure is.
 ### Why passes that raise nothing are still recorded
 
 A history that only records the passes that produced something cannot answer
-*"why did nothing arrive last night"*, which is the question people actually
+_"why did nothing arrive last night"_, which is the question people actually
 ask. `/pipeline` shows every pass.
 
 ---
@@ -229,10 +256,32 @@ pnpm db:seed        # a team, three theses, nine worked opportunities
 
 ### The scheduler
 
-`.github/workflows/matcher.yml` calls `POST /api/matcher/run` every 30 minutes.
-On the repository running it, set the variable `RUNTIME_URL` to the deployment
-and the secret `MATCHER_TOKEN` to the same value as the deployment's
-`MATCHER_TOKEN`.
+`.github/workflows/matcher.yml` runs the matcher itself every 30 minutes, on the
+runner, with native DuckDB against the published artifact. On the repository
+running it set:
+
+- secret `DATABASE_URL` - the same Postgres the deployment uses
+- variable `PROPERTY_DATA_URL` and `RUN_HISTORY_URL` - the published artifacts
+
+It writes to Postgres directly rather than calling the deployment, so it needs
+no runtime URL and no token.
+
+To run one by hand:
+
+```bash
+pnpm matcher
+```
+
+### Proving the deployed runtime
+
+```bash
+npx tsx scripts/smoke.mts https://residential-jax-crm.vercel.app
+```
+
+Opens a real browser against the live URL and asserts that the artifact attaches
+over the gateway, the parcel count is county scale, a criteria search returns
+scored matches, the rationale cites real values, the SQL is disclosed and the
+parcel drawer shows provenance. It writes `smoke-search.png`.
 
 ### Everything else
 
@@ -247,9 +296,9 @@ Each step states what to look for. All of it runs against the deployed URL.
 
 1. **Open `/`.** The header states the dataset and its size. If it says a parcel
    count without SAMPLE, the full published county table is loaded.
-2. **Open `/search`.** Pick the *Tired landlord* thesis. Watch the count settle
-   as the criteria apply - it is debounced, not a button. Expand *Show the SQL
-   behind this result*: the statement that produced the count is on screen.
+2. **Open `/search`.** Pick the _Tired landlord_ thesis. Watch the count settle
+   as the criteria apply - it is debounced, not a button. Expand _Show the SQL
+   behind this result_: the statement that produced the count is on screen.
 3. **Draw an area.** `Radius`, click a centre, click again for the radius. The
    count drops to what is inside it. `Polygon` works the same way; double click
    closes it.
@@ -282,9 +331,9 @@ Each step states what to look for. All of it runs against the deployed URL.
     counts and declared limitations, next to every matcher pass including the
     ones that raised nothing. Press `Run matcher now`; a new pass appears.
     `Clear simulation` removes the simulated rows.
-14. **Open `/agent`.** Add a free-tier key on `/settings` first. Ask *"Which
+14. **Open `/agent`.** Add a free-tier key on `/settings` first. Ask _"Which
     residential properties in the Arlington area match my distressed criteria and
-    have not been contacted yet?"* Check the `Tools` and `Rows` tabs under the
+    have not been contacted yet?"_ Check the `Tools` and `Rows` tabs under the
     answer, and the caveats block.
 15. **Scroll to the bottom of `/opportunities`.** Disposition, portfolio tracking
     and live messaging are visible and disabled, with the reason each is out of
@@ -297,13 +346,13 @@ Each step states what to look for. All of it runs against the deployed URL.
 The kit's `apply-engineering-guidelines` was loaded and followed where it does
 not conflict with the story. Deviations, stated rather than hidden:
 
-| Rule | What was done | Why |
-|---|---|---|
-| `cloud-aws-primary`, CDK-only IaC | No AWS. Vercel plus GitHub Actions. | The story explicitly forbids ongoing hosted infrastructure cost. |
-| Powertools / X-Ray / CloudWatch | Structured JSON logs to stdout; metrics surfaced in-app on `/pipeline`. | No Lambda and no CloudWatch to publish to. |
-| PagerDuty on critical failure, DLQ alarms | Matcher failures are recorded on `matcher_runs` with the error and shown in the UI. | No on-call rotation exists for a take-home. |
-| Lexicon metric registration | Not done. | That repository is not part of this deliverable. |
-| `integrate-ci-cd` | Plain GitHub Actions workflows. | That skill's contract is a justfile of `cdk synth` / `cdk deploy` recipes. |
+| Rule                                      | What was done                                                                       | Why                                                                        |
+| ----------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `cloud-aws-primary`, CDK-only IaC         | No AWS. Vercel plus GitHub Actions.                                                 | The story explicitly forbids ongoing hosted infrastructure cost.           |
+| Powertools / X-Ray / CloudWatch           | Structured JSON logs to stdout; metrics surfaced in-app on `/pipeline`.             | No Lambda and no CloudWatch to publish to.                                 |
+| PagerDuty on critical failure, DLQ alarms | Matcher failures are recorded on `matcher_runs` with the error and shown in the UI. | No on-call rotation exists for a take-home.                                |
+| Lexicon metric registration               | Not done.                                                                           | That repository is not part of this deliverable.                           |
+| `integrate-ci-cd`                         | Plain GitHub Actions workflows.                                                     | That skill's contract is a justfile of `cdk synth` / `cdk deploy` recipes. |
 
 Kept in full: TypeScript everywhere, all LLM interaction through the Vercel AI
 SDK with zod tool schemas and no `any` on any LLM path, Vitest, Prettier,
