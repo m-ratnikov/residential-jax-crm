@@ -54,8 +54,8 @@
       ],
       "id": "0mt3hihmjiwhwjxzm",
       "providerMessageId": "sim_email_bc9a62bd3bc3d31fc157",
-      "status": "sent",
-      "statusAt": "2026-08-21T21:51:52.507Z",
+      "status": "opened",
+      "statusAt": "2026-08-21T21:55:50.507Z",
       "subject": "About the roof at 1532 W 6TH ST, JACKSONVILLE, 32209",
       "templateId": "roof-condition",
       "toAddress": "owner-05108600@example.invalid"
