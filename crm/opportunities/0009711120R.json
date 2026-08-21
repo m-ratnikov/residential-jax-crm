@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt3jkl2vzmjcfaed",
+      "body": "Owner listed with an agent two days after our letter. Not our deal.",
+      "createdAt": "2026-08-21T22:50:48.832Z",
+      "id": "0mt3jma9sh0m6qnmi"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3jm5xt53tk1wo8",
@@ -78,5 +85,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:47.887Z"
+  "updatedAt": "2026-08-21T22:50:48.832Z"
 }
