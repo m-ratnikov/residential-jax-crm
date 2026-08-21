@@ -3,7 +3,7 @@
   "addressLine": "12777 N HUNT CLUB RD, JACKSONVILLE, 32224",
   "addressZip": "32224",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 168000,
   "assessedValue": 0,
   "assigneeId": "0mt34x10kumtsvmyy",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.483496,
   "matchRationale": "held 32 years (+33); roof about 37 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 152000,
   "outreach": [],
   "ownerId": "0mt34y6x7qqktr1w2",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "JGCC PROPERTY OWNERS ASSOCIATI",
   "parcelIdentifier": "1670654950R",
   "propertyId": "1670654950R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:00:13.302Z"
+  "updatedAt": "2026-08-21T16:00:14.336Z"
 }
