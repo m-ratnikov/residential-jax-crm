@@ -1,20 +1,27 @@
 /**
  * The default CRM backend: JSON documents committed to a git repository.
  *
- * Reads go through the raw CDN, which is fast and needs no credential. Writes go
- * through the GitHub contents API, which needs a token with `contents: write` on
- * one repository. That token is a credential but not a database: nothing is
- * provisioned, nothing runs between requests, and there is no bill.
+ * Writes go through the GitHub contents API, which needs a token with
+ * `contents: write` on one repository. That token is a credential but not a
+ * database: nothing is provisioned, nothing runs between requests, and there is
+ * no bill.
  *
- * Three things make this workable rather than merely possible:
+ * Four things make this workable rather than merely possible:
  *
- * 1. **One document per aggregate.** Two writers touching different opportunities
- *    touch different files, so the common case has no conflict at all.
+ * 1. **One document per aggregate.** Two writers touching different
+ *    opportunities touch different files, so the common case has no conflict.
  * 2. **Unchanged documents are not written.** The matcher runs every thirty
- *    minutes and most passes change nothing; a `put` that matches what is already
- *    stored returns without a commit.
+ *    minutes and most passes change nothing; a `put` matching what is stored
+ *    returns without a commit, so steady state produces no history at all.
  * 3. **A conflicting write is retried once against the current blob sha**, which
- *    is the only failure mode the contents API actually produces here.
+ *    is the only failure the contents API actually produces here.
+ * 4. **Reads are content addressed, and a write updates the cache in place.**
+ *    Both matter for read-after-write. `download_url` points at a CDN that
+ *    serves a stale copy for minutes after a commit, and invalidating the cache
+ *    on write forces a re-read at exactly the moment the listing is most likely
+ *    to be behind. Together those lost a read-modify-write: a note added and
+ *    immediately followed by a task read the pre-note document and dropped the
+ *    note silently. Fetching blobs by sha cannot be stale by construction.
  *
  * The read cache is per process and short. A serverless instance handling a
  * burst of requests should not re-list a directory for each one, and thirty
@@ -124,7 +131,18 @@ export class GitHubCrmStore implements CrmStore {
 
     const documents = await Promise.all(
       files.map(async (file) => {
-        const content = await fetch(file.download_url, { cache: "no-store" });
+        // Fetched by blob sha rather than from `download_url`. The raw host is a
+        // CDN and serves a stale copy for minutes after a write, which loses a
+        // read-modify-write: a note added and immediately followed by a task
+        // would read the pre-note document and silently drop the note. A blob is
+        // content addressed, so this cannot be stale by construction.
+        const content = await fetch(
+          `${API}/repos/${this.options.repository}/git/blobs/${file.sha}`,
+          {
+            headers: { ...this.#headers(), accept: "application/vnd.github.raw" },
+            cache: "no-store",
+          },
+        );
         if (!content.ok) return null;
         try {
           return { sha: file.sha, document: (await content.json()) as StoredDocument };
@@ -172,7 +190,7 @@ export class GitHubCrmStore implements CrmStore {
     // per pass would be history noise and a round trip for no reason.
     if (existing && serialise(existing.document) === body) return document;
 
-    await this.#write(
+    const sha = await this.#write(
       collection,
       document.id,
       body,
@@ -180,8 +198,12 @@ export class GitHubCrmStore implements CrmStore {
       `crm: ${collection}/${document.id}`,
     );
 
-    entries.set(document.id, { sha: "", document });
-    this.#invalidate(collection);
+    // Kept in the cache with its new sha rather than invalidated. Invalidating
+    // would force a re-list, and a read straight after a write is exactly the
+    // moment the listing is most likely to be behind. This way the process that
+    // wrote a document always reads back what it wrote.
+    entries.set(document.id, { sha, document });
+    this.#cache.set(collection, { at: Date.now(), entries });
     return document;
   }
 
@@ -192,7 +214,7 @@ export class GitHubCrmStore implements CrmStore {
     sha: string | undefined,
     message: string,
     attempt = 0,
-  ): Promise<void> {
+  ): Promise<string> {
     const response = await fetch(
       `${API}/repos/${this.options.repository}/contents/${this.#path(collection, id)}`,
       {
@@ -210,7 +232,8 @@ export class GitHubCrmStore implements CrmStore {
 
     if (response.ok) {
       logEvent("store.written", { collection, id });
-      return;
+      const written = (await response.json()) as { content?: { sha?: string } };
+      return written.content?.sha ?? "";
     }
 
     // 409 or 422 means the blob moved under us, which happens when the matcher

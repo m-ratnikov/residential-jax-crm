@@ -81,6 +81,37 @@ const isHttp = (value: string) => /^https?:\/\//i.test(value);
 /* Native                                                               */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Retry a query that the gateway refused for load.
+ *
+ * A public IPFS gateway rate limits, and native DuckDB range reads a 50 MB
+ * parquet in many small requests, so a query can meet a 429 partway through.
+ * Observed for real while seeding: the artifact was reachable, then answered
+ * "429 Too Many Requests" once enough range reads had gone through.
+ *
+ * A scheduled pass that fails on a transient 429 would show as a red run and
+ * raise no alerts, which is worse than waiting a few seconds. Backoff is
+ * exponential and short; anything that is not a rate limit is rethrown at once,
+ * because retrying a genuine error just delays the report.
+ */
+async function withGatewayRetry<T>(run: () => Promise<T>, attempts = 4): Promise<T> {
+  let delay = 1_000;
+
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await run();
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      const rateLimited = /429|too many requests|rate limit/i.test(message);
+      if (!rateLimited || attempt >= attempts) throw error;
+
+      logEvent("engine.gateway_backoff", { attempt, delayMs: delay });
+      await new Promise((wake) => setTimeout(wake, delay));
+      delay *= 2;
+    }
+  }
+}
+
 async function openNative(source: string, viewSql: (path: string) => string): Promise<QueryEngine> {
   const { DuckDBInstance } = await import("@duckdb/node-api");
   const instance = await DuckDBInstance.create(":memory:");
@@ -105,19 +136,22 @@ async function openNative(source: string, viewSql: (path: string) => string): Pr
     kind: "native",
     async query(sql: string) {
       const started = Date.now();
-      const connection = await instance.connect();
-      try {
-        const result = await connection.runAndReadAll(sql);
-        const columns = result.columnNames();
-        const rows = (await result.getRowObjects()).map((row) => {
-          const out: Record<string, Plain> = {};
-          for (const column of columns) out[column] = toPlain(row[column]);
-          return out;
-        });
-        return { columns, rows, tookMs: Date.now() - started };
-      } finally {
-        connection.closeSync();
-      }
+      const result = await withGatewayRetry(async () => {
+        const connection = await instance.connect();
+        try {
+          const answered = await connection.runAndReadAll(sql);
+          const columns = answered.columnNames();
+          const rows = (await answered.getRowObjects()).map((row) => {
+            const out: Record<string, Plain> = {};
+            for (const column of columns) out[column] = toPlain(row[column]);
+            return out;
+          });
+          return { columns, rows };
+        } finally {
+          connection.closeSync();
+        }
+      });
+      return { ...result, tookMs: Date.now() - started };
     },
     async close() {
       instance.closeSync();

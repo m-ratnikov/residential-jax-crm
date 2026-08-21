@@ -20,7 +20,9 @@
     "sample": "tsx scripts/make-sample.ts",
     "matcher": "tsx scripts/run-matcher.ts",
     "assets": "node scripts/copy-duckdb.mjs",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "verify": "tsx scripts/verify-loop.ts",
+    "smoke": "tsx scripts/smoke.mts"
   },
   "dependencies": {
     "@ai-sdk/amazon-bedrock": "^5.0.59",
@@ -29,6 +31,7 @@
     "@ai-sdk/gateway": "^4.0.56",
     "@ai-sdk/google": "^4.0.47",
     "@ai-sdk/groq": "^4.0.29",
+    "@ai-sdk/openai": "^4.0.44",
     "@ai-sdk/openai-compatible": "^3.0.32",
     "@duckdb/duckdb-wasm": "1.32.0",
     "@duckdb/node-api": "1.5.5-r.4",
