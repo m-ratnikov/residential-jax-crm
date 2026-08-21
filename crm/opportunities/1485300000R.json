@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 26
   },
   "savedSearchId": "0mt34qwmnq7mw3qcj",
-  "stage": "contacted",
+  "stage": "negotiating",
   "stageEvents": [
     {
       "actorId": "0mt34qrentckaguhg",
@@ -62,13 +62,13 @@
     },
     {
       "actorId": "0mt34qs66bx65l6up",
-      "createdAt": "2026-08-21T15:55:41.386Z",
+      "createdAt": "2026-08-21T15:55:42.869Z",
       "fromStage": "identified",
-      "id": "0mt34sfkaz18q5srl",
-      "note": null,
-      "toStage": "contacted"
+      "id": "0mt34sgphvac6z1uc",
+      "note": "Probate is the driver here. Two heirs, one out of state, both want it gone.",
+      "toStage": "negotiating"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:55:41.386Z"
+  "updatedAt": "2026-08-21T15:55:42.869Z"
 }
