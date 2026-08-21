@@ -1,0 +1,40 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-21T18:29:57.297Z",
+  "criteria": {
+    "filters": {
+      "distress": {
+        "absenteeOwner": true,
+        "noHomestead": true
+      },
+      "dwellingsOnly": true,
+      "maxYearsSinceSale": 100,
+      "minRoofAge": 50,
+      "minYearsSinceSale": 100,
+      "residentialOnly": true
+    },
+    "name": "Tired landlord",
+    "weights": {
+      "amenity": 0,
+      "distress": 3,
+      "geography": 0,
+      "roofAge": 3,
+      "tenure": 3,
+      "value": 1
+    }
+  },
+  "description": null,
+  "id": "0mt3aatgybgi617r6",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Tired landlord",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": true,
+  "ownerId": null,
+  "updatedAt": "2026-08-21T18:29:57.297Z"
+}
