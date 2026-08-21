@@ -3,7 +3,7 @@
   "addressLine": "650 DUVAL ST, BALDWIN, 32234",
   "addressZip": "32234",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 168000,
   "assessedValue": 30609,
   "assigneeId": "0mt3jkmfbfdde2w53",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.9748593,
   "matchRationale": "held 36 years (last sale 1990-03-19) (+33); roof about 30 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 152000,
   "outreach": [],
   "ownerId": "0mt3jlq80qf9epa9h",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "BRYANT RENA",
   "parcelIdentifier": "0004940000R",
   "propertyId": "0004940000R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:25.731Z"
+  "updatedAt": "2026-08-21T22:50:26.532Z"
 }
