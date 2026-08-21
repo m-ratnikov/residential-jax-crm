@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello MANGUM MARK R,\nI am reaching out about 1069 VILLAGE GREEN DR, JACKSONVILLE, 32234. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 32 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3ktl08mfrbj6vg",
+      "campaignName": "Cash offer introduction - 2026-08-21",
+      "channel": "email",
+      "createdAt": "2026-08-21T23:24:28.952Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-00097111@example.invalid",
+          "occurredAt": "2026-08-21T23:24:28.952Z",
+          "providerEventId": "sim_email_8f956bdd9173a4fcc560:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T23:25:57.952Z",
+          "providerEventId": "sim_email_8f956bdd9173a4fcc560:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-21T23:28:11.952Z",
+          "providerEventId": "sim_email_8f956bdd9173a4fcc560:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt3ktl08qbqjyzxq",
+      "providerMessageId": "sim_email_8f956bdd9173a4fcc560",
+      "status": "queued",
+      "statusAt": "2026-08-21T23:24:28.952Z",
+      "subject": "Interested in buying 1069 VILLAGE GREEN DR, JACKSONVILLE, 32234",
+      "templateId": "cash-offer-intro",
+      "toAddress": "owner-00097111@example.invalid"
+    }
+  ],
   "ownerId": "0mt3jm5xt53tk1wo8",
   "ownerInterest": "Went to market",
   "ownerNameSnapshot": "MANGUM MARK R",
@@ -85,5 +121,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:48.832Z"
+  "updatedAt": "2026-08-21T23:24:28.952Z"
 }
