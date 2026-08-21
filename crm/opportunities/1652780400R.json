@@ -24,7 +24,49 @@
     }
   ],
   "offerPrice": 186000,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello VILLAGES OF PABLO HOMEOWNERS A,\n\nCounty records suggest the roof at 2702 S SAN PABLO RD, JACKSONVILLE, 32224 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $0.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt34y4ai1qxopeve",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:00:06.714Z",
+      "createdById": "0mt34x03worqr9qp0",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-16527804@example.invalid",
+          "occurredAt": "2026-08-21T16:00:06.714Z",
+          "providerEventId": "sim_email_f8164025de55df35d0ee:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:00:34.714Z",
+          "providerEventId": "sim_email_f8164025de55df35d0ee:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-21T16:00:56.714Z",
+          "providerEventId": "sim_email_f8164025de55df35d0ee:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Recipient replied",
+          "occurredAt": "2026-08-21T16:01:17.714Z",
+          "providerEventId": "sim_email_f8164025de55df35d0ee:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt34y4ai6qa2mro9",
+      "providerMessageId": "sim_email_f8164025de55df35d0ee",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:00:06.714Z",
+      "subject": "About the roof at 2702 S SAN PABLO RD, JACKSONVILLE, 32224",
+      "templateId": "roof-condition",
+      "toAddress": "owner-16527804@example.invalid"
+    }
+  ],
   "ownerId": "0mt34xyyz2i2sbns5",
   "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "VILLAGES OF PABLO HOMEOWNERS A",
@@ -95,5 +137,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-21T16:00:05.761Z"
+  "updatedAt": "2026-08-21T16:00:06.714Z"
 }
