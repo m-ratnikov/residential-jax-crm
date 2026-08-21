@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt36y2rdxeaikt7o",
-  "ownerInterest": null,
+  "ownerInterest": "Went to market",
   "ownerNameSnapshot": "MCCLAIN DAVID E ESTATE",
   "parcelIdentifier": "0199350200R",
   "propertyId": "0199350200R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:56:07.499Z"
+  "updatedAt": "2026-08-21T16:56:08.262Z"
 }
