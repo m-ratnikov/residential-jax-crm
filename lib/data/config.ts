@@ -17,7 +17,6 @@ import { resolve } from "node:path";
 
 export const SAMPLE_QUERY_TABLE = "public/sample/query-table.parquet";
 export const SAMPLE_RUN_HISTORY = "public/sample/run-history.json";
-export const SAMPLE_COURT_DATA = "public/sample/court-records.parquet";
 
 export const QUERY_TABLE_OBJECT = "query-table.parquet";
 export const RUN_HISTORY_OBJECT = "run-history.json";
@@ -25,8 +24,6 @@ export const RUN_HISTORY_OBJECT = "run-history.json";
 export interface DataConfig {
   /** Parquet path or URL DuckDB reads. */
   queryTableSource: string;
-  /** Court dataset, when one is configured or bundled. */
-  courtSource: string | null;
   runHistoryUrl: string | null;
   isSample: boolean;
   label: string;
@@ -37,16 +34,26 @@ export interface DataConfig {
 }
 
 /**
- * An IPNS pointer published by the pipeline is a directory root. DuckDB cannot
- * range read a directory, so append the object name when the configured URL
- * does not already name a file. Shared behaviour with the pipeline UI.
+ * Resolve a configured artifact URL to the exact object DuckDB should read.
+ *
+ * A trailing slash means "this is a directory, append the object name"; anything
+ * else addresses the object directly and is used unchanged.
+ *
+ * The trailing slash has to carry that meaning because nothing else can. The
+ * pipeline points each IPNS name at a single file's CID, so the query table
+ * lives at `/ipns/k51...` with nothing after it - while the Elephant convention
+ * also permits a name pointing at a directory, which looks identical as a
+ * string. Guessing from a file extension decides a bare `/ipns/k51...` must be
+ * a directory and requests `/ipns/k51.../query-table.parquet`; the gateway
+ * returns 404 against a perfectly good artifact. That bug was found and fixed
+ * in the pipeline UI, and this is the corrected rule rather than a second
+ * independent guess.
  */
 export function resolveArtifactUrl(baseUrl: string, objectName: string): string {
   const [withoutHash] = baseUrl.split("#");
-  const [path, query] = (withoutHash ?? "").split("?");
-  const last = (path ?? "").split("/").filter(Boolean).pop() ?? "";
-  if (/\.[a-z0-9]{2,8}$/i.test(last)) return baseUrl;
-  const joined = `${(path ?? "").replace(/\/+$/, "")}/${objectName}`;
+  const [path = "", query] = (withoutHash ?? "").split("?");
+  if (!path.endsWith("/")) return baseUrl;
+  const joined = `${path.replace(/\/+$/, "")}/${objectName}`;
   return query ? `${joined}?${query}` : joined;
 }
 
@@ -99,18 +106,8 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
       ? resolve(process.cwd(), SAMPLE_RUN_HISTORY)
       : null;
 
-  const courtConfigured = firstConfigured(env.COURT_DATA_URL);
-  const courtSource = courtConfigured
-    ? /^https?:\/\//i.test(courtConfigured)
-      ? courtConfigured
-      : resolve(courtConfigured)
-    : existsLocally(SAMPLE_COURT_DATA)
-      ? resolve(process.cwd(), SAMPLE_COURT_DATA)
-      : null;
-
   return {
     queryTableSource,
-    courtSource,
     runHistoryUrl,
     isSample,
     label: isSample

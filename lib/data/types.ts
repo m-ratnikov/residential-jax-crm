@@ -11,6 +11,7 @@
  */
 
 import type { CriteriaSet } from "@/lib/criteria/types";
+import type { Overlay } from "./overlay";
 
 /** Identity and honesty about what is currently answering. */
 export interface DataSourceInfo {
@@ -160,6 +161,11 @@ export interface PropertySearchQuery {
   readonly orderBy?: "score" | "assessed_value" | "roof_age" | "tenure";
   /** Restrict to these ids. Used by the matcher when re-checking known hits. */
   readonly propertyIds?: readonly string[];
+  /**
+   * Court records and simulated pipeline updates to apply on top of the
+   * published parquet for this query. See lib/data/overlay.ts.
+   */
+  readonly overlay?: Overlay;
 }
 
 export interface PropertySearchResult {
@@ -217,7 +223,7 @@ export interface PropertyDataSource {
   info(): Promise<DataSourceInfo>;
   getSchema(): Promise<readonly ColumnDescriptor[]>;
   search(query: PropertySearchQuery): Promise<PropertySearchResult>;
-  getProperty(propertyId: string): Promise<PropertyRecord | null>;
+  getProperty(propertyId: string, overlay?: Overlay): Promise<PropertyRecord | null>;
   /** Free text lookup by address, owner or parcel id, for the search box. */
   lookup(term: string, limit?: number): Promise<readonly PropertyRecord[]>;
   listRuns(limit?: number): Promise<readonly PipelineRun[]>;

@@ -8,11 +8,11 @@
  * database, which is what keeps the "no ongoing hosted-database cost" criterion
  * true for the property corpus.
  *
- * When a court dataset is configured it is LEFT JOINed into the same view, so
- * every court-derived predicate is either present for all callers or absent for
- * all of them. `courtDataAvailable` reports which, and the criteria builder
- * omits those predicates entirely rather than comparing against a column that
- * does not exist.
+ * Court records and simulated pipeline updates are not baked into the view.
+ * They arrive per query as an overlay (lib/data/overlay.ts) and are inlined as
+ * a CTE, because they change between one request and the next while the parquet
+ * does not. When no overlay is supplied the query reads the view directly, so
+ * the common path costs nothing.
  */
 
 import { existsSync } from "node:fs";
@@ -24,6 +24,7 @@ import { COLUMN_MEANINGS } from "@/lib/oracle/agent/schema";
 import { EXTRA_COLUMNS, PROVENANCE_COLUMNS } from "@/lib/oracle/columns";
 import { guardSql } from "@/lib/oracle/sql";
 import { buildSearch, VIEW, SCORE_ALIAS, TOTAL_ALIAS, str } from "@/lib/criteria/sql";
+import { buildOverlay, EMPTY_OVERLAY, isEmptyOverlay, type Overlay } from "./overlay";
 import { rationaleFor, matchHashOf } from "@/lib/criteria/score";
 import { dataConfig } from "./config";
 import type {
@@ -45,17 +46,6 @@ export type Row = Record<string, Plain>;
 
 const DERIVED = new Set<string>(EXTRA_COLUMNS);
 const PROVENANCE = new Set<string>(PROVENANCE_COLUMNS);
-
-/** Court columns the join contributes. Kept in one place so the view and the criteria agree. */
-export const COURT_COLUMNS = [
-  "court_lien_count",
-  "court_foreclosure_count",
-  "court_code_enforcement_count",
-  "court_probate_count",
-  "court_distress_score",
-  "court_latest_filing_date",
-  "court_source_url",
-] as const;
 
 function sqlPath(value: string): string {
   return `'${value.replaceAll("\\", "/").replaceAll("'", "''")}'`;
@@ -89,8 +79,8 @@ export function toPlain(value: DuckDBValue | unknown): Plain {
   return String(value);
 }
 
-async function createInstance(source: string, courtSource: string | null): Promise<DuckDBInstance> {
-  const needsHttp = /^https?:\/\//i.test(source) || (courtSource && /^https?:\/\//i.test(courtSource));
+async function createInstance(source: string): Promise<DuckDBInstance> {
+  const needsHttp = /^https?:\/\//i.test(source);
   const instance = await DuckDBInstance.create(":memory:");
   const setup = await instance.connect();
   try {
@@ -102,20 +92,9 @@ async function createInstance(source: string, courtSource: string | null): Promi
       await setup.run("LOAD httpfs");
     }
 
-    if (courtSource) {
-      const courtSelect = COURT_COLUMNS.map((c) => `c.${c}`).join(", ");
-      await setup.run(
-        `CREATE OR REPLACE VIEW ${VIEW} AS
-         SELECT p.*, ${courtSelect}
-         FROM read_parquet(${sqlPath(source)}) p
-         LEFT JOIN read_parquet(${sqlPath(courtSource)}) c
-           ON c.property_id = p.property_id`,
-      );
-    } else {
-      await setup.run(
-        `CREATE OR REPLACE VIEW ${VIEW} AS SELECT * FROM read_parquet(${sqlPath(source)})`,
-      );
-    }
+    await setup.run(
+      `CREATE OR REPLACE VIEW ${VIEW} AS SELECT * FROM read_parquet(${sqlPath(source)})`,
+    );
   } finally {
     setup.closeSync();
   }
@@ -140,8 +119,6 @@ async function runQuery(
 export interface DuckDbSourceOptions {
   /** Parquet path or URL for the query table. */
   source: string;
-  /** Optional court dataset joined on property_id. */
-  courtSource?: string | null;
   isSample: boolean;
   label: string;
   countyName: string;
@@ -160,18 +137,12 @@ export class DuckDbPropertyDataSource implements PropertyDataSource {
 
   constructor(private readonly options: DuckDbSourceOptions) {}
 
-  get courtDataAvailable(): boolean {
-    return Boolean(this.options.courtSource);
-  }
-
   async #db(): Promise<DuckDBInstance> {
     if (this.#closed) throw new Error("data source is closed");
-    this.#instance ??= createInstance(this.options.source, this.options.courtSource ?? null).catch(
-      (error: unknown) => {
-        this.#instance = null; // a failed open must not poison the cache
-        throw error;
-      },
-    );
+    this.#instance ??= createInstance(this.options.source).catch((error: unknown) => {
+      this.#instance = null; // a failed open must not poison the cache
+      throw error;
+    });
     return this.#instance;
   }
 
@@ -229,14 +200,17 @@ export class DuckDbPropertyDataSource implements PropertyDataSource {
   async search(query: PropertySearchQuery): Promise<PropertySearchResult> {
     const limit = Math.min(Math.max(query.limit ?? 200, 1), 5_000);
     const offset = Math.max(query.offset ?? 0, 0);
+    const overlay = buildOverlay(query.overlay ?? EMPTY_OVERLAY);
 
     const built = buildSearch({
       criteria: query.criteria,
       limit,
       offset,
       orderBy: query.orderBy ?? "score",
-      courtJoinAvailable: this.courtDataAvailable,
+      courtJoinAvailable: overlay.courtAvailable,
       propertyIds: query.propertyIds,
+      prefix: overlay.prefix,
+      from: overlay.from,
     });
 
     const [page, count] = await Promise.all([
@@ -283,9 +257,19 @@ export class DuckDbPropertyDataSource implements PropertyDataSource {
     };
   }
 
-  async getProperty(propertyId: string): Promise<PropertyRecord | null> {
+  async getProperty(propertyId: string, overlay?: Overlay): Promise<PropertyRecord | null> {
+    // Restrict the overlay to this parcel: inlining thousands of court rows to
+    // read one property would be a waste on every detail view.
+    const scoped = overlay && !isEmptyOverlay(overlay)
+      ? {
+          court: overlay.court.filter((entry) => entry.propertyId === propertyId),
+          overrides: overlay.overrides.filter((entry) => entry.propertyId === propertyId),
+        }
+      : EMPTY_OVERLAY;
+    const built = buildOverlay(scoped);
+
     const result = await this.#query(
-      `SELECT * FROM ${VIEW} WHERE property_id = ${str(propertyId)} LIMIT 1`,
+      `${built.prefix}SELECT * FROM ${built.from} WHERE property_id = ${str(propertyId)} LIMIT 1`,
     );
     const row = result.rows[0];
     return row ? toRecord(row) : null;
@@ -312,14 +296,17 @@ export class DuckDbPropertyDataSource implements PropertyDataSource {
 
   async runSql(sql: string, limit = 200): Promise<QueryResult> {
     const guard = guardSql(sql, limit);
-    if (!guard.ok) throw new Error(guard.reason);
-    const result = await this.#query(guard.sql);
+    if (!guard.ok || !guard.sql) {
+      throw new Error(guard.reason ?? "the statement was rejected by the read-only guard");
+    }
+    const guarded = guard.sql;
+    const result = await this.#query(guarded);
     return {
       columns: result.columns,
       rows: result.rows,
       rowCount: result.rows.length,
       truncated: result.rows.length >= limit,
-      sql: guard.sql,
+      sql: guarded,
       tookMs: result.tookMs,
     };
   }
@@ -338,7 +325,6 @@ export function createDuckDbSource(): DuckDbPropertyDataSource {
   const cfg = dataConfig();
   return new DuckDbPropertyDataSource({
     source: cfg.queryTableSource,
-    courtSource: cfg.courtSource,
     isSample: cfg.isSample,
     label: cfg.label,
     countyName: cfg.countyName,

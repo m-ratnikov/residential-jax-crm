@@ -16,8 +16,6 @@ import type { PropertyDataSource } from "./types";
 
 export interface PropertyDataSourceHandle {
   source: PropertyDataSource;
-  /** True when court-derived predicates can be evaluated. */
-  courtDataAvailable: boolean;
 }
 
 interface Cache {
@@ -32,7 +30,7 @@ const globalCache = globalThis as unknown as {
 
 function cacheKey(): string {
   const cfg = dataConfig();
-  return `${cfg.queryTableSource}::${cfg.courtSource ?? ""}::${cfg.runHistoryUrl ?? ""}`;
+  return `${cfg.queryTableSource}::${cfg.runHistoryUrl ?? ""}`;
 }
 
 /**
@@ -53,10 +51,7 @@ export function getPropertyDataSource(): PropertyDataSourceHandle {
   if (cached && cached.key === key) return cached.handle;
 
   const source: DuckDbPropertyDataSource = createDuckDbSource();
-  const handle: PropertyDataSourceHandle = {
-    source,
-    courtDataAvailable: source.courtDataAvailable,
-  };
+  const handle: PropertyDataSourceHandle = { source };
   globalCache.__jaxCrmDataSource = { key, handle };
   return handle;
 }

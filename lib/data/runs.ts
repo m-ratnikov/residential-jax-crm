@@ -97,11 +97,14 @@ function toRun(raw: RawRun): PipelineRun | null {
 
 async function readSource(location: string): Promise<unknown> {
   if (/^https?:\/\//i.test(location)) {
+    // The published history changes every six hours; a short revalidate window
+    // keeps the dashboard responsive without pinning a stale run id into an
+    // alert. The `next` hint is a Next.js extension to RequestInit and is
+    // ignored when this module runs outside the framework, which is why the
+    // cast is here rather than a framework import.
     const response = await fetch(location, {
-      // The published history changes every six hours; a short cache keeps the
-      // dashboard responsive without pinning a stale run id into an alert.
       next: { revalidate: 300 },
-    });
+    } as RequestInit);
     if (!response.ok) throw new Error(`run history ${response.status} from ${location}`);
     return response.json();
   }

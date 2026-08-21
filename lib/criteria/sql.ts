@@ -463,6 +463,13 @@ export interface BuildSearchOptions {
   courtJoinAvailable: boolean;
   /** Restrict to a known id set, used by the matcher when rechecking hits. */
   propertyIds?: readonly string[];
+  /**
+   * A `WITH ...` prefix and the relation to read, supplied by the overlay when
+   * court records or a simulated pipeline update sit on top of the parquet.
+   * Defaults to the plain published view.
+   */
+  prefix?: string;
+  from?: string;
 }
 
 const ORDER_SQL: Record<BuildSearchOptions["orderBy"], string> = {
@@ -489,17 +496,27 @@ export function buildSearch(options: BuildSearchOptions): BuiltSearch {
   }
   const whereSql = clauses.join("\n  AND ");
 
+  const prefix = options.prefix ?? "";
+  const from = options.from ?? VIEW;
+
+  // The court aggregates only exist on the relation when an overlay built it,
+  // so they are selected only then. Selecting them unconditionally would fail
+  // to bind against the plain parquet view.
+  const courtColumns = options.courtJoinAvailable
+    ? ",\n    court_lien_count,\n    court_foreclosure_count,\n    court_code_enforcement_count,\n    court_probate_count,\n    court_distress_score,\n    court_latest_filing_date"
+    : "";
+
   const columns = LIST_COLUMNS.join(",\n    ");
 
-  const sql = `SELECT
-    ${columns},
+  const sql = `${prefix}SELECT
+    ${columns}${courtColumns},
     ${score.selectFragment}
-  FROM ${VIEW}
+  FROM ${from}
   WHERE ${whereSql}
   ORDER BY ${ORDER_SQL[options.orderBy]}
   LIMIT ${num(options.limit)} OFFSET ${num(options.offset)}`;
 
-  const countSql = `SELECT count(*) AS ${TOTAL_ALIAS} FROM ${VIEW} WHERE ${whereSql}`;
+  const countSql = `${prefix}SELECT count(*) AS ${TOTAL_ALIAS} FROM ${from} WHERE ${whereSql}`;
 
   return { sql, countSql, score, where };
 }
