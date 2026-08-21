@@ -3,7 +3,7 @@
   "addressLine": "1901 N 1ST ST G027, JACKSONVILLE BEACH, 32250",
   "addressZip": "32250",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 168000,
   "assessedValue": 1,
   "assigneeId": "0mt36qoadjober5q5",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.3927938,
   "matchRationale": "held 37 years (+33); roof about 44 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 152000,
   "outreach": [],
   "ownerId": "0mt36ru756k5siu7r",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "MCNEIL EMMA L",
   "parcelIdentifier": "1747545258R",
   "propertyId": "1747545258R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:51:15.797Z"
+  "updatedAt": "2026-08-21T16:51:16.684Z"
 }
