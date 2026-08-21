@@ -3,7 +3,7 @@
   "addressLine": "1901 N 1ST ST G022, JACKSONVILLE BEACH, 32250",
   "addressZip": "32250",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 235000,
   "assessedValue": 1,
   "assigneeId": "0mt36qmy27lnzbdvu",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.3928006,
   "matchRationale": "held 37 years (+33); roof about 44 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Send the roof quote and re-offer",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 186000,
   "outreach": [],
   "ownerId": "0mt36rnsf3f5oshjc",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "BRYANT RITA H",
   "parcelIdentifier": "1747545248R",
   "propertyId": "1747545248R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:51:07.696Z"
+  "updatedAt": "2026-08-21T16:51:08.642Z"
 }
