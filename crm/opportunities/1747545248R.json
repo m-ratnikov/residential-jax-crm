@@ -24,7 +24,49 @@
     }
   ],
   "offerPrice": 186000,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello BRYANT RITA H,\n\nCounty records suggest the roof at 1901 N 1ST ST G022, JACKSONVILLE BEACH, 32250 may be near the end of its service life. A re-roof in JACKSONVILLE BEACH is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $1.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36rsvhz5gwpw1s",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:51:11.213Z",
+      "createdById": "0mt36qmy27lnzbdvu",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-17475452@example.invalid",
+          "occurredAt": "2026-08-21T16:51:11.213Z",
+          "providerEventId": "sim_email_6bff097d2700a71a2d1e:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:52:40.213Z",
+          "providerEventId": "sim_email_6bff097d2700a71a2d1e:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-21T16:53:46.213Z",
+          "providerEventId": "sim_email_6bff097d2700a71a2d1e:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Recipient replied",
+          "occurredAt": "2026-08-21T16:54:53.213Z",
+          "providerEventId": "sim_email_6bff097d2700a71a2d1e:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt36rsvhb2mbwq7z",
+      "providerMessageId": "sim_email_6bff097d2700a71a2d1e",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:51:11.213Z",
+      "subject": "About the roof at 1901 N 1ST ST G022, JACKSONVILLE BEACH, 32250",
+      "templateId": "roof-condition",
+      "toAddress": "owner-17475452@example.invalid"
+    }
+  ],
   "ownerId": "0mt36rnsf3f5oshjc",
   "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "BRYANT RITA H",
@@ -95,5 +137,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-21T16:51:10.353Z"
+  "updatedAt": "2026-08-21T16:51:11.214Z"
 }
