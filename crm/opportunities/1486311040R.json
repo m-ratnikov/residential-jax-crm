@@ -3,7 +3,7 @@
   "addressLine": "DEERWOOD POINT PL, JACKSONVILLE, 32256",
   "addressZip": "32256",
   "alertId": null,
-  "askingPrice": 165000,
+  "askingPrice": null,
   "assessedValue": 0,
   "assigneeId": "0mt34qtq4qgfs1sye",
   "closedAt": null,
@@ -13,10 +13,17 @@
   "longitude": -81.5505434,
   "matchRationale": "held 126 years (+33); roof about 41 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": "Inspection Tuesday",
+  "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
-  "offerPrice": 149000,
+  "notes": [
+    {
+      "authorId": "0mt34qtq4qgfs1sye",
+      "body": "Signed at 149k. Inspection window closes in nine days.",
+      "createdAt": "2026-08-21T15:55:56.667Z",
+      "id": "0mt34srcr0n5p1tes"
+    }
+  ],
+  "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34sknkj1qxgphy",
   "ownerInterest": null,
@@ -62,5 +69,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:55:55.408Z"
+  "updatedAt": "2026-08-21T15:55:56.668Z"
 }
