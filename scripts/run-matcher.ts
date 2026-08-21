@@ -120,9 +120,25 @@ async function main(): Promise<void> {
   await source.close();
 
   // A pass that failed internally has already recorded the error on its
-  // matcher_runs row; exiting non-zero is what makes the schedule visibly red.
+  // matcher-runs document; exiting non-zero is what makes the schedule visibly
+  // red.
   if (result.error) {
     console.error(result.error);
+    process.exit(1);
+  }
+
+  // And a pass where every search failed to evaluate is a failed pass, even
+  // though nothing threw. This is not hypothetical: a run against the public
+  // IPFS gateway answered "Timeout was reached" for all three searches after
+  // thirteen minutes of range reads, reported zero matched, and finished green.
+  // Nothing was corrupted - an evaluation that errors is not written, so the
+  // baselines survived - but a schedule that goes green while alerting nobody
+  // is the failure mode this whole thing exists to avoid.
+  const failed = result.outcomes.filter((outcome) => outcome.error);
+  if (failed.length > 0 && failed.length === result.outcomes.length) {
+    console.error(
+      `every search failed to evaluate (${failed.length}): ${failed[0]?.error ?? "unknown"}`,
+    );
     process.exit(1);
   }
 }

@@ -62,6 +62,12 @@ jobs:
       RUN_HISTORY_URL: ${{ vars.RUN_HISTORY_URL }}
       # Native DuckDB is available here, unlike on the serverless runtime.
       PROPERTY_ENGINE: native
+      # Pull the artifact down once rather than range reading it. The public
+      # gateway times out under hundreds of range requests: a pass that did it
+      # that way answered "Timeout was reached" for every search after thirteen
+      # minutes. This is the default under CI anyway; stated here because it is
+      # the difference between a working schedule and a red one.
+      PROPERTY_FETCH_WHOLE: "1"
     steps:
       - uses: actions/checkout@v4
 

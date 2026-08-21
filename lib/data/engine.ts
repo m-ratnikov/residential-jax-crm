@@ -112,9 +112,22 @@ async function withGatewayRetry<T>(run: () => Promise<T>, attempts = 4): Promise
   }
 }
 
-async function openNative(source: string, viewSql: (path: string) => string): Promise<QueryEngine> {
+async function openNative(
+  source: string,
+  viewSql: (path: string) => string,
+  fetchWhole = false,
+): Promise<QueryEngine> {
   const { DuckDBInstance } = await import("@duckdb/node-api");
   const instance = await DuckDBInstance.create(":memory:");
+
+  // Range reading is normally the reason to prefer this engine, but it turns
+  // one query into hundreds of small HTTP requests, and a public IPFS gateway
+  // rate limits and then times out under that. A scheduled pass answered
+  // "Timeout was reached" for every search after thirteen minutes of it.
+  // Fetching the artifact once - about 50 MB - and querying it from disk trades
+  // a single large transfer for that, which is the right trade anywhere the
+  // process outlives one query.
+  if (fetchWhole && isHttp(source)) source = await materialise(source);
 
   const setup = await instance.connect();
   try {
@@ -285,6 +298,21 @@ async function openWasm(source: string, viewSql: (path: string) => string): Prom
 /* Selection                                                            */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Whether to pull a remote artifact down before querying it.
+ *
+ * On by default for the native engine on a CI runner, where the process lives
+ * long enough to amortise one download and the gateway will not tolerate
+ * thousands of range reads. Off elsewhere, because range reading a 50 MB file
+ * for a single query is the cheaper thing to do.
+ */
+export function shouldFetchWhole(env: NodeJS.ProcessEnv = process.env): boolean {
+  const flag = env.PROPERTY_FETCH_WHOLE?.trim().toLowerCase();
+  if (flag === "1" || flag === "true") return true;
+  if (flag === "0" || flag === "false") return false;
+  return env.CI === "true";
+}
+
 export function preferredEngine(env: NodeJS.ProcessEnv = process.env): EngineKind | null {
   const forced = env.PROPERTY_ENGINE?.trim().toLowerCase();
   if (forced === "native" || forced === "wasm") return forced;
@@ -308,7 +336,7 @@ export async function openEngine(
 
   if (forced !== "wasm") {
     try {
-      const engine = await openNative(source, viewSql);
+      const engine = await openNative(source, viewSql, shouldFetchWhole(env));
       logEvent("engine.opened", { kind: "native", source });
       return engine;
     } catch (error: unknown) {
