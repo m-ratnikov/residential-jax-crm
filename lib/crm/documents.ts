@@ -37,6 +37,15 @@ export interface MatchSnapshot {
   firstSeenAt: string;
   lastSeenAt: string;
   lastRunId: string | null;
+  /**
+   * The published artifact these values were read from.
+   *
+   * Distinct from `lastRunId`, which is the pass. Two passes reading the same
+   * artifact must agree, so this is what makes "nothing can have changed"
+   * checkable rather than assumed. Optional because documents written before
+   * this existed do not carry it; those fall back to comparing fingerprints.
+   */
+  artifactRunId?: string | null;
 }
 
 export interface SavedSearchDoc {

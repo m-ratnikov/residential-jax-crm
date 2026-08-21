@@ -103,9 +103,17 @@ export async function runMatcher(
 
   // A simulated change is its own run and takes precedence: by construction it
   // is the most recent thing that happened to the data.
+  // The artifact's own run_id leads, and the published run history is only a
+  // fallback. They can disagree - the parquet and run-history.json are separate
+  // objects behind separate IPNS names, republished at different moments - and
+  // when they do, the values being fingerprinted came from the parquet. A pass
+  // stamped with a run id that did not produce the numbers it read is an alert
+  // that cites the wrong evidence, which is worse than citing none. Observed:
+  // four cron passes all citing 01M0HZCK while the parquet they read had moved
+  // on to 01M0K3B6.
   const simulated = overlaySummary.simulatedRunIds.at(-1) ?? null;
   const latest = runs[0] ?? null;
-  const pipelineRunId = simulated ?? latest?.runId ?? info.runId ?? null;
+  const pipelineRunId = simulated ?? info.runId ?? latest?.runId ?? null;
 
   const all = await listSavedSearches();
   const searches = options.savedSearchIds?.length
@@ -160,6 +168,7 @@ export async function runMatcher(
       location: info.location,
       rowCount: info.rowCount,
       isSample: info.isSample,
+      artifactRunId: info.runId,
     },
     evaluations,
     now: options.now,

@@ -98,7 +98,13 @@ async function main(): Promise<void> {
   for (const outcome of result.outcomes) {
     const state = outcome.seeded
       ? "seeded"
-      : `${outcome.newMatches} new, ${outcome.updatedMatches} changed`;
+      : `${outcome.newMatches} new, ${outcome.updatedMatches} changed` +
+        // Worth its own words rather than a silent skip: a non-zero count means
+        // one artifact name resolved to two different generations, which is an
+        // upstream fact somebody should know about.
+        (outcome.unstableReads
+          ? `, ${outcome.unstableReads} suppressed as unstable reads of the same artifact`
+          : "");
     console.log(`  ${outcome.name}: ${outcome.matched.toLocaleString("en-US")} matched, ${state}`);
     if (outcome.error) console.log(`    error: ${outcome.error}`);
   }

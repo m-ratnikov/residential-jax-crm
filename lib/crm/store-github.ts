@@ -38,7 +38,18 @@ import {
 import { logEvent, logError } from "@/lib/notify/log";
 
 const API = "https://api.github.com";
-const CACHE_MS = 30_000;
+/**
+ * How long a read is served from this process before the tree is re-read.
+ *
+ * Sixty seconds rather than thirty, and the trade is explicit: GitHub allows
+ * 5,000 requests an hour and this deployment exhausted them once, answering 500
+ * to every CRM read for the rest of the window. A write updates this process's
+ * cache in place, so the person who made a change never waits for it; what the
+ * window bounds is how long ANOTHER instance can show state one minute old.
+ * For an acquisitions board that is not a meaningful staleness. For a rate
+ * limit, the difference between thirty and sixty seconds is half the traffic.
+ */
+const CACHE_MS = 60_000;
 
 export interface GitHubStoreOptions {
   /** `owner/repo`. */
@@ -67,6 +78,8 @@ export class GitHubCrmStore implements CrmStore {
   readonly kind = "github-documents";
 
   #cache = new Map<Collection, CacheEntry>();
+  /** path -> blob sha for the whole branch, so a read costs one request. */
+  #treeCache: { at: number; paths: Map<string, string> } | null = null;
 
   constructor(private readonly options: GitHubStoreOptions) {}
 
@@ -93,70 +106,117 @@ export class GitHubCrmStore implements CrmStore {
   }
 
   /**
+   * The whole branch in one request, as path -> blob sha.
+   *
+   * This replaced a per-collection directory listing, and the reason is a
+   * production outage rather than tidiness. The old shape cost one listing plus
+   * one blob per document on every cache miss, per collection, per serverless
+   * instance. A single page load touches four collections; a browsing session
+   * touches them repeatedly; several instances each keep their own cache. That
+   * arithmetic reached GitHub's 5,000 requests an hour and the deployment began
+   * answering 500 to every CRM read - with the data intact and nothing wrong
+   * except the number of times it had been asked for.
+   *
+   * The trees API returns every path and sha under the branch in one call. A
+   * blob is then fetched only when its sha is one this process has not already
+   * read, so a warm instance costs ONE request per window no matter how many
+   * documents it serves, and a cold one costs 1 + the documents it actually
+   * needs. Content addressing is what makes that safe: a sha that has not
+   * changed cannot be stale.
+   */
+  async #tree(): Promise<Map<string, string>> {
+    const now = Date.now();
+    if (this.#treeCache && now - this.#treeCache.at < CACHE_MS) return this.#treeCache.paths;
+
+    const response = await fetch(
+      `${API}/repos/${this.options.repository}/git/trees/${encodeURIComponent(this.options.branch)}?recursive=1`,
+      { headers: this.#headers(), cache: "no-store" },
+    );
+
+    // 404 is the ordinary empty state: the branch does not exist until the
+    // first write creates it.
+    if (response.status === 404) {
+      const empty = new Map<string, string>();
+      this.#treeCache = { at: now, paths: empty };
+      return empty;
+    }
+    if (!response.ok) {
+      throw new Error(`could not read the tree: ${response.status} ${await response.text()}`);
+    }
+
+    const body = (await response.json()) as {
+      tree?: { path: string; type: string; sha: string }[];
+      truncated?: boolean;
+    };
+
+    // GitHub truncates a tree over 100,000 entries. This store holds hundreds,
+    // so it is a guard against a surprise rather than an expected path - but a
+    // silently short listing would read as "those documents were deleted".
+    if (body.truncated) {
+      throw new Error(
+        "the CRM branch has more files than one tree request returns; the store needs paging before it can be trusted",
+      );
+    }
+
+    const paths = new Map<string, string>();
+    for (const node of body.tree ?? []) {
+      if (node.type === "blob" && node.path.endsWith(".json")) paths.set(node.path, node.sha);
+    }
+
+    this.#treeCache = { at: now, paths };
+    return paths;
+  }
+
+  /** One blob by sha, content addressed and therefore never stale. */
+  async #blob(sha: string): Promise<StoredDocument | null> {
+    const response = await fetch(`${API}/repos/${this.options.repository}/git/blobs/${sha}`, {
+      headers: { ...this.#headers(), accept: "application/vnd.github.raw" },
+      cache: "no-store",
+    });
+    if (!response.ok) return null;
+    try {
+      return (await response.json()) as StoredDocument;
+    } catch {
+      // A document that will not parse is a corrupt write, not a reason to fail
+      // the whole listing.
+      logError("store.document_unreadable", new Error(sha), {});
+      return null;
+    }
+  }
+
+  /**
    * List a collection.
    *
-   * The contents API returns the directory listing with a blob sha per file but
-   * not the content, so the documents are fetched alongside. For the sizes this
-   * application produces - tens to low hundreds of documents - that is one
-   * listing plus a parallel fan out, which is fast enough and far simpler than
-   * maintaining an index file that two writers would fight over.
+   * Documents already held at the same sha are reused, so the common case -
+   * nothing changed since the last window - costs one tree request and no blob
+   * reads at all.
    */
   async #load(collection: Collection): Promise<Map<string, Entry>> {
     const cached = this.#cache.get(collection);
     if (cached && Date.now() - cached.at < CACHE_MS) return cached.entries;
 
+    const prefix = `${this.#path(collection)}/`;
+    const tree = await this.#tree();
+    const known = cached?.entries ?? this.#cache.get(collection)?.entries;
+
+    const wanted: { id: string; sha: string }[] = [];
+    for (const [path, sha] of tree) {
+      if (!path.startsWith(prefix)) continue;
+      wanted.push({ id: path.slice(prefix.length).replace(/\.json$/, ""), sha });
+    }
+
     const entries = new Map<string, Entry>();
-
-    const response = await fetch(
-      `${API}/repos/${this.options.repository}/contents/${this.#path(collection)}?ref=${encodeURIComponent(this.options.branch)}`,
-      { headers: this.#headers(), cache: "no-store" },
-    );
-
-    // 404 is the ordinary empty state: the directory does not exist until the
-    // first document is written.
-    if (response.status === 404) {
-      this.#cache.set(collection, { at: Date.now(), entries });
-      return entries;
-    }
-    if (!response.ok) {
-      throw new Error(`could not list ${collection}: ${response.status} ${await response.text()}`);
-    }
-
-    const listing = (await response.json()) as {
-      name: string;
-      sha: string;
-      download_url: string;
-    }[];
-    const files = listing.filter((file) => file.name.endsWith(".json"));
-
-    const documents = await Promise.all(
-      files.map(async (file) => {
-        // Fetched by blob sha rather than from `download_url`. The raw host is a
-        // CDN and serves a stale copy for minutes after a write, which loses a
-        // read-modify-write: a note added and immediately followed by a task
-        // would read the pre-note document and silently drop the note. A blob is
-        // content addressed, so this cannot be stale by construction.
-        const content = await fetch(
-          `${API}/repos/${this.options.repository}/git/blobs/${file.sha}`,
-          {
-            headers: { ...this.#headers(), accept: "application/vnd.github.raw" },
-            cache: "no-store",
-          },
-        );
-        if (!content.ok) return null;
-        try {
-          return { sha: file.sha, document: (await content.json()) as StoredDocument };
-        } catch {
-          // A document that will not parse is a corrupt write, not a reason to
-          // fail the whole listing.
-          logError("store.document_unreadable", new Error(file.name), { collection });
-          return null;
-        }
+    const fetched = await Promise.all(
+      wanted.map(async ({ id, sha }) => {
+        const held = known?.get(id);
+        if (held && held.sha === sha) return { id, entry: held };
+        const document = await this.#blob(sha);
+        return document ? { id, entry: { sha, document } } : null;
       }),
     );
 
-    for (const entry of documents) {
-      if (entry?.document?.id) entries.set(entry.document.id, entry);
+    for (const item of fetched) {
+      if (item?.entry.document?.id) entries.set(item.entry.document.id, item.entry);
     }
 
     this.#cache.set(collection, { at: Date.now(), entries });
@@ -165,6 +225,9 @@ export class GitHubCrmStore implements CrmStore {
 
   #invalidate(collection: Collection): void {
     this.#cache.delete(collection);
+    // The tree goes too: a write changed a sha, and a stale tree would hand the
+    // old one back and undo the read-after-write guarantee below.
+    this.#treeCache = null;
   }
 
   async list<T extends StoredDocument>(collection: Collection): Promise<T[]> {
@@ -199,9 +262,9 @@ export class GitHubCrmStore implements CrmStore {
     );
 
     // Kept in the cache with its new sha rather than invalidated. Invalidating
-    // would force a re-list, and a read straight after a write is exactly the
-    // moment the listing is most likely to be behind. This way the process that
-    // wrote a document always reads back what it wrote.
+    // would force a re-read, and a read straight after a write is exactly the
+    // moment the remote is most likely to be behind. This way the process that
+    // wrote a document always reads back what it wrote, and it costs no request.
     entries.set(document.id, { sha, document });
     this.#cache.set(collection, { at: Date.now(), entries });
     return document;

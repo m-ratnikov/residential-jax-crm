@@ -83,8 +83,11 @@ export async function runMatcherPass(options: RunPassOptions = {}): Promise<Matc
   // A simulated change is its own run and takes precedence: by construction it
   // is the most recent thing that happened to the data.
   const simulated = overlay.simulatedRunIds.at(-1) ?? null;
+  // The artifact's own run_id leads; see the note in matcher.ts. The two
+  // matchers must agree on this or a browser pass and a cron pass would stamp
+  // the same data with different runs.
   const latest = runs[0] ?? null;
-  const pipelineRunId = simulated ?? latest?.runId ?? info.runId ?? null;
+  const pipelineRunId = simulated ?? info.runId ?? latest?.runId ?? null;
 
   const evaluations = [];
   let done = 0;
@@ -148,6 +151,7 @@ export async function runMatcherPass(options: RunPassOptions = {}): Promise<Matc
       location: info.location,
       rowCount: info.rowCount,
       isSample: info.isSample,
+      artifactRunId: info.runId,
     },
     evaluations,
   });

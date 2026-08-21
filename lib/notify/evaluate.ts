@@ -71,6 +71,12 @@ export interface DataSourceStamp {
   location: string;
   rowCount: number;
   isSample: boolean;
+  /**
+   * The run that produced the artifact this pass read, taken from the parquet
+   * itself rather than from the published run history. Two passes that read the
+   * same generation are reading the same bytes.
+   */
+  artifactRunId?: string | null;
 }
 
 export interface EvaluateInput {
@@ -91,6 +97,12 @@ export interface SearchOutcome {
   newMatches: number;
   updatedMatches: number;
   leftMatches: number;
+  /**
+   * Fingerprints that moved without the artifact moving. Always zero on a
+   * healthy source; a non-zero count means one name resolved to two different
+   * generations, and is recorded rather than alerted on.
+   */
+  unstableReads: number;
   alertsCreated: number;
   alertsSuppressed: number;
   truncated: boolean;
@@ -117,6 +129,7 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
   const store = crmStore();
   const startedAt = (input.now ?? new Date()).toISOString();
   const runId = input.pipelineRunId;
+  const artifactRunId = input.dataSource.artifactRunId ?? null;
 
   // "New" is what makes an alert attributable to a county refresh rather than to
   // the matcher simply waking up.
@@ -144,6 +157,7 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         newMatches: 0,
         updatedMatches: 0,
         leftMatches: 0,
+        unstableReads: 0,
         alertsCreated: 0,
         alertsSuppressed: 0,
         truncated: evaluation.truncated,
@@ -179,6 +193,23 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
               outcome.newMatches += 1;
             }
           } else if (before.matchHash !== match.matchHash) {
+            // Same artifact, different fingerprint, is not a change in the
+            // world - it is a bug in the reader, and raising it would be
+            // telling somebody a house moved when a parser did.
+            //
+            // This is not hypothetical. Four consecutive cron passes alerted on
+            // the same 23 parcels, alternating `lastSaleDate` between a date and
+            // null, because a gateway resolved one IPNS name to two different
+            // pinned generations while `run-history.json` still named an older
+            // run. Comparing across generations is the job; comparing two reads
+            // of the same generation and believing the difference is not.
+            const sameArtifact =
+              Boolean(before.artifactRunId) && before.artifactRunId === artifactRunId;
+            if (sameArtifact) {
+              outcome.unstableReads += 1;
+              continue;
+            }
+
             const changed = changedFields(before.snapshot, match.snapshot);
             // A fingerprint that moved on no named field is an alert nobody can
             // act on, so it is counted but not raised.
@@ -247,6 +278,7 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
             firstSeenAt: before?.firstSeenAt ?? startedAt,
             lastSeenAt: startedAt,
             lastRunId: runId,
+            artifactRunId,
           };
         }
 
