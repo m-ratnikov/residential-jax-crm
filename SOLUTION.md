@@ -23,7 +23,7 @@ Everything below exists to make that one sentence true and checkable.
 | Property queries | DuckDB-WASM **in the visitor's tab**, range reading the published parquet off the IPFS gateway | 404,023 parcels queryable with no database and no query server |
 | CRM state        | JSON documents committed to a git branch (Postgres and in-process are drop-in alternatives)    | thousands of rows, and no database to provision or pay for     |
 | Map              | MapLibre GL, raster basemap declared inline                                                    | no API key, no style-document dependency                       |
-| Agent            | Vercel AI SDK, nine providers, loop runs in the tab, model call proxied server-side            | its tools need the parcel data, which is in the tab            |
+| Agent            | Vercel AI SDK, loop runs in the tab, model call proxied server-side on this deployment's key   | its tools need the parcel data, which is in the tab            |
 | Schedule         | GitHub Actions cron every 30 minutes, native DuckDB                                            | Vercel Hobby allows one cron a day, which is not a notifier    |
 
 The property corpus is never copied into a database, and no server in this
@@ -278,13 +278,18 @@ The residual risk is real and not engineered away: a public runtime answering on
 the owner's key can have that key spent by strangers, and a per-process counter
 raises the effort rather than removing it. The deployment owner decides whether
 to configure a key at all. With none configured the route 404s, the dropdown is
-empty, and the page asks the visitor for their own key instead - which is still
-supported, still stored only in their browser, and still takes precedence when
-present.
+empty, and the Ask page says so - while the map, search, saved criteria, alerts
+and the acquisition board carry on working, because nothing else here needs a
+model.
 
-Amazon Bedrock is the one provider that cannot be forwarded: it signs the whole
-request with SigV4 rather than carrying a header token. It stays on the
-bring-your-own path.
+**There is deliberately no bring-your-own-key page.** An earlier version had one
+and it was the wrong shape for this: asking the person evaluating a CRM to go
+and mint an API key before it will answer a question is a failure at the
+question. The deployment answers, or it says it cannot.
+
+Amazon Bedrock is the one provider in the registry that cannot be forwarded: it
+signs the whole request with SigV4 rather than carrying a header token, so it is
+listed but never offered.
 
 ---
 
@@ -444,8 +449,9 @@ Each step states what to look for. All of it runs against the deployed URL.
     `Clear simulation` removes the simulated rows. The passes marked `cron` were
     run by GitHub Actions on a runner nobody was watching, which is the point of
     the whole exercise.
-15. **Open `/agent`.** Pick a model from the dropdown - this deployment offers
-    its own, so nothing needs configuring. Ask _"Which
+15. **Open `/agent`.** Pick a model from the dropdown. This deployment answers
+    on its own key, so there is nothing to configure and no key to supply. Ask
+    _"Which
     residential properties in the Arlington area match my distressed criteria and
     have not been contacted yet?"_ Check the `Tools` and `Rows` tabs under the
     answer, and the caveats block.
@@ -491,8 +497,8 @@ which is what was done:
 
 `lib/oracle/` is **vendored** from the Duval pipeline repository at commit
 `28088d0`, not written here: the published column contract, the read-only SQL
-guard, the per-column meanings, and the whole bring-your-own-key provider
-registry. See [`lib/oracle/VENDORED.md`](lib/oracle/VENDORED.md) for why it is a
+guard, the per-column meanings, and the provider registry with its dated
+free-tier terms. See [`lib/oracle/VENDORED.md`](lib/oracle/VENDORED.md) for why it is a
 copy rather than a package - each assignment is graded as an independently
 clonable repository - and `scripts/sync-shared.mjs` to check the two copies for
 drift.

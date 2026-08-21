@@ -20,8 +20,8 @@
  * point of view the caller is a server.
  *
  * Bedrock is absent on purpose. It signs the whole request with SigV4 rather
- * than carrying a header token, so forwarding bytes cannot authenticate it. It
- * remains available on the bring-your-own-credential path.
+ * than carrying a header token, so forwarding bytes cannot authenticate it, and
+ * this deployment offers only what it can forward.
  */
 
 import type { LanguageModel } from "ai";
@@ -76,8 +76,6 @@ export async function createProxiedModel(
       return createOpenAICompatible({ name: provider, baseURL, apiKey: PLACEHOLDER })(modelId);
     }
     default:
-      throw new Error(
-        `${provider} cannot be proxied by this deployment. Add your own credential on the settings page.`,
-      );
+      throw new Error(`${provider} cannot be proxied by this deployment, so it is not offered.`);
   }
 }

@@ -17,7 +17,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { Badge, Button, Panel, Spinner, TextArea, ago, count, cx } from "@/components/ui";
-import { useAgentSettings } from "@/lib/agent/settings-client";
 import type { AgentProvider } from "@/lib/agent/providers";
 import { runClientAgent } from "@/lib/agent/client-run";
 import { isAgentError } from "@/lib/agent/errors";
@@ -50,7 +49,6 @@ interface ServerModel {
 const key = (model: ServerModel) => `${model.provider}:${model.id}`;
 
 export default function AgentPage() {
-  const { settings, loaded } = useAgentSettings();
   const [question, setQuestion] = useState("");
   const [turns, setTurns] = useState<Turn[]>([]);
   const [busy, setBusy] = useState(false);
@@ -82,11 +80,9 @@ export default function AgentPage() {
 
   const selected = (offered ?? []).find((model) => key(model) === chosen) ?? offered?.[0] ?? null;
 
-  // A visitor's own key wins when they have set one: they chose it and they pay
-  // for it. Otherwise the deployment answers on its own, through the proxy.
-  const ownKey = loaded ? Boolean(settings) : null;
-  const canAnswer = ownKey === true || Boolean(selected);
-  const nothingAvailable = loaded && ownKey === false && offered !== null && offered.length === 0;
+  // Null while the list is still loading, so the page does not flash a warning
+  // at somebody whose model is about to arrive.
+  const nothingAvailable = offered !== null && offered.length === 0;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -108,26 +104,18 @@ export default function AgentPage() {
     setTurns((current) => [...current, { question: trimmed, response: null, error: null }]);
 
     try {
-      if (!settings && !selected) {
+      if (!selected) {
         throw new Error(
-          "No model is available. This deployment has none configured, so add your own on the settings page; several providers have a free tier that needs no card.",
+          "This deployment has no model configured, so the agent cannot answer. Everything else in the application works without one.",
         );
       }
 
       // The loop runs here, in the tab, because its tools have to reach the
-      // parcel data and the query engine is here. A visitor's own key never
-      // reaches the server; a deployment key never reaches the browser, because
-      // the model call for that path is forwarded by /api/llm.
+      // parcel data and the query engine is here. The key does not: the model
+      // call is forwarded by /api/llm, which attaches it server-side.
       const body = await runClientAgent({
         messages: [...history, { role: "user", content: trimmed }],
-        credential: settings
-          ? { provider: settings.provider, modelId: settings.modelId, apiKey: settings.apiKey }
-          : null,
-        serverModel: settings
-          ? null
-          : selected
-            ? { provider: selected.provider, modelId: selected.id }
-            : null,
+        serverModel: { provider: selected.provider, modelId: selected.id },
       });
 
       setTurns((current) => {
@@ -163,50 +151,33 @@ export default function AgentPage() {
             with the rows behind it.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          {settings ? (
-            <span
-              className="text-[11px] text-ink-500"
-              title="Your own key, stored in this browser. It answers instead of the deployment's."
+        {offered !== null && offered.length > 0 && (
+          <label className="flex items-center gap-1.5 text-[11px] text-ink-500">
+            Model
+            <select
+              value={chosen}
+              onChange={(event) => setChosen(event.target.value)}
+              disabled={busy}
+              className="rounded-md border border-[var(--line)] bg-[var(--panel-raised)] px-2 py-1 text-[12px] text-ink-100 outline-none focus:border-accent-500"
             >
-              your key: {settings.provider}:{settings.modelId}
-            </span>
-          ) : (
-            offered !== null &&
-            offered.length > 0 && (
-              <label className="flex items-center gap-1.5 text-[11px] text-ink-500">
-                Model
-                <select
-                  value={chosen}
-                  onChange={(event) => setChosen(event.target.value)}
-                  disabled={busy}
-                  className="rounded-md border border-[var(--line)] bg-[var(--panel-raised)] px-2 py-1 text-[12px] text-ink-100 outline-none focus:border-accent-500"
-                >
-                  {offered.map((model) => (
-                    <option key={key(model)} value={key(model)} title={model.notes}>
-                      {model.provider_label} - {model.label}
-                      {model.free ? " (free tier)" : ""}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )
-          )}
-          <Link href="/settings">
-            <Button variant={canAnswer ? "ghost" : "primary"}>
-              {canAnswer ? "Use my own key" : "Add a model key"}
-            </Button>
-          </Link>
-        </div>
+              {offered.map((model) => (
+                <option key={key(model)} value={key(model)} title={model.notes}>
+                  {model.provider_label} - {model.label}
+                  {model.free ? " (free tier)" : ""}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
 
       {nothingAvailable && (
         <div className="rounded-lg border border-warn-500/40 bg-warn-500/10 px-4 py-3 text-xs text-warn-500">
-          <p className="font-medium">No model is available, so this page cannot answer yet.</p>
+          <p className="font-medium">This deployment has no model configured.</p>
           <p className="mt-1 text-warn-500/80">
-            This deployment has no key configured. Add your own on the settings page - several
-            providers have a free tier that needs no card. Nothing else in this application needs a
-            model.
+            Set a provider key in the environment and the models it offers appear here. Nothing else
+            in this application needs a model: the map, search, saved criteria, alerts and the
+            acquisition board all work without one.
           </p>
         </div>
       )}

@@ -24,8 +24,8 @@
  * The honest residual risk: a public runtime that answers questions on the
  * owner's key can have that key spent by strangers, and no amount of per
  * process counting changes that. The deployment owner decides whether to
- * configure a key at all; with none configured this route 404s and the agent
- * falls back to asking the visitor for their own.
+ * configure a key at all; with none configured this route 404s and the Ask page
+ * says so, while every other page carries on working.
  */
 
 import { NextResponse } from "next/server";
@@ -89,10 +89,7 @@ export async function POST(
 
   const key = serverKeyFor(definition.id);
   if (!key) {
-    return fail(
-      404,
-      `This deployment has no ${definition.label} key. Add your own on the settings page instead.`,
-    );
+    return fail(404, `This deployment has no ${definition.label} key configured.`);
   }
 
   const limit = AGENT_RATE_LIMIT.check(clientAddress(request.headers));
@@ -100,7 +97,7 @@ export async function POST(
     return NextResponse.json(
       {
         error: {
-          message: `Rate limit reached for this deployment's shared key: ${limit.limit} requests per window. Try again in ${limit.retryAfterSeconds}s, or add your own key on the settings page for an unshared allowance.`,
+          message: `Rate limit reached: ${limit.limit} requests per window for this deployment's key, shared by everyone using it. Try again in ${limit.retryAfterSeconds}s.`,
         },
       },
       { status: 429, headers: { "retry-after": String(limit.retryAfterSeconds) } },

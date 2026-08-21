@@ -1,62 +1,37 @@
 /**
- * Capability probe for the settings page, the chat page and for curl.
+ * What this deployment can answer with.
  *
- * There is no POST here any more. The agent's tools have to reach the parcel
- * data, and the parcel data is read by DuckDB-WASM in the visitor's tab, so the
- * tool loop runs there (lib/agent/client-run.ts). The visitor's key was already
- * held in the browser and never sent to this server, so nothing about the
- * credential changed when the loop moved.
+ * There is no POST here. The agent's tools have to reach the parcel data, and
+ * the parcel data is read by DuckDB-WASM in the visitor's tab, so the tool loop
+ * runs there (lib/agent/client-run.ts). The model call it makes is forwarded by
+ * /api/llm/<provider>, which is where this deployment's key is attached.
  *
- * What this still answers is "what would run, and what does this build
- * support": the full provider registry with each provider's free-tier terms and
- * the URL and date they were read, and whether a server-side key exists. It
- * reports the NAME of the environment variable that supplies a server key and
- * never its value.
+ * So this route publishes one thing: the provider and model pairs the server
+ * holds a key for, in the order the Ask page should offer them. Ids and labels
+ * only - never the key, and never the name of the variable holding it.
+ *
+ * There is no per-visitor credential any more. A CRM that asks the person
+ * evaluating it to go and mint an API key before it will answer a question has
+ * failed at the question, so the deployment answers on its own key or says
+ * plainly that it has none.
  */
 
 import { NextResponse } from "next/server";
 
-import { serverSelection } from "@/lib/agent/model";
-import {
-  KEY_HEADER,
-  MODEL_HEADER,
-  PROVIDER_HEADER,
-  readUserCredential,
-} from "@/lib/agent/credentials";
-import { AgentBadRequestError } from "@/lib/agent/errors";
 import { PROVIDERS } from "@/lib/agent/providers";
 import { serverModels } from "@/lib/agent/server-models";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request): Promise<NextResponse> {
-  const server = serverSelection();
-
-  let active: { provider: string; model: string; source: "user" | "server" } | null = server
-    ? { provider: server.provider, model: server.modelId, source: "server" }
-    : null;
-  let headerError: string | null = null;
-
-  try {
-    const credential = readUserCredential(request.headers);
-    if (credential) {
-      active = { provider: credential.provider, model: credential.modelId, source: "user" };
-    }
-  } catch (error: unknown) {
-    headerError =
-      error instanceof AgentBadRequestError ? error.message : "credential headers rejected";
-  }
-
-  // Every model this deployment can answer with on its own key. The Ask page
-  // renders exactly this list, in this order, and the first entry is what
-  // answers if the visitor does not choose. Ids and labels only: no key, and no
-  // hint of one beyond the variable name the settings page already reports.
+export async function GET(): Promise<NextResponse> {
   const available = serverModels();
+  const first = available[0] ?? null;
 
   return NextResponse.json({
-    configured: Boolean(server),
-    active,
+    configured: available.length > 0,
+    /** The pair that answers when the visitor does not choose. */
+    active: first ? { provider: first.provider, model: first.modelId, source: "server" } : null,
     server_models: available.map((model) => ({
       provider: model.provider,
       provider_label: model.providerLabel,
@@ -65,25 +40,18 @@ export async function GET(request: Request): Promise<NextResponse> {
       free: model.free,
       notes: model.notes,
     })),
-    /** Where the loop sends a model call when it uses one of the above. */
+    /** Where the loop sends a model call. */
     proxy_url: "/api/llm",
-    server_default: server
-      ? { provider: server.provider, model: server.modelId, env_key: server.envKey }
-      : null,
     runs_in: "browser",
-    bring_your_own_key: {
-      headers: { key: KEY_HEADER, provider: PROVIDER_HEADER, model: MODEL_HEADER },
-      settings_url: "/settings",
-      test_url: "/api/agent/test",
-      storage: "browser localStorage only; the server keeps no copy",
-    },
-    header_error: headerError,
+    /**
+     * The full registry, so a clone can see what this build supports before
+     * configuring anything. Free-tier terms carry the URL and the date they
+     * were read, because those numbers move monthly.
+     */
     providers: PROVIDERS.map((provider) => ({
       id: provider.id,
       label: provider.label,
       free_tier: provider.freeTier,
-      key_url: provider.keyUrl,
-      accepts_user_key: provider.acceptsUserKey,
       models: provider.models.map((model) => ({
         id: model.id,
         label: model.label,

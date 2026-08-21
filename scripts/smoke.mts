@@ -252,8 +252,9 @@ async function main(): Promise<void> {
   const offered = await models.count();
   check("the agent offers models with no key to configure", offered > 0, `${offered} models`);
   check(
-    "and does not ask the visitor to configure one",
-    (await page.getByText("No model is available", { exact: false }).count()) === 0,
+    "and asks the visitor for no key at all",
+    (await page.getByText("no model configured", { exact: false }).count()) === 0 &&
+      (await page.getByRole("link", { name: /key|settings/i }).count()) === 0,
   );
 
   // 8. The store is attached and writable, which the header says out loud when

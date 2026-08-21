@@ -4,24 +4,24 @@
  * The agent turn, run in the tab.
  *
  * The tools have to reach the parcel data, and the parcel data is read by
- * DuckDB-WASM in this tab, so the loop runs here. The visitor's key is already
- * held here too - it is stored in this browser and has never been on the server
- * - so nothing about the credential changes.
+ * DuckDB-WASM in this tab, so the loop runs here. The key it answers on does
+ * not: the model call goes through /api/llm/<provider>, which attaches this
+ * deployment's key server-side. Tools stay where the data is, the key stays
+ * where a key belongs, and the visitor is asked for nothing.
+ *
+ * Routing through our own origin also removes a caveat that used to need
+ * explaining: a browser cannot call every provider directly - some refuse
+ * browser origins outright and Anthropic needs an explicit opt-in header - but
+ * from the provider's side the caller here is a server.
  *
  * The prompt, the tool definitions, the provider registry, the evidence trace
  * and the response contract are all the shared ones. Only the place the loop
  * executes moved.
- *
- * The one honest caveat, surfaced on the settings page rather than discovered
- * as a failure: not every provider allows a browser to call it. Google AI Studio
- * does. Anthropic requires an explicit opt-in header, which this sends when the
- * visitor selects it, and some providers block browser origins outright.
  */
 
 import { ToolLoopAgent, stepCountIs, type ModelMessage } from "ai";
 
-import { resolveModel, type ResolvedModel } from "@/lib/oracle/agent/model";
-import type { UserCredential } from "@/lib/oracle/agent/credentials";
+import type { ResolvedModel } from "@/lib/oracle/agent/model";
 import { classifyProviderError } from "@/lib/oracle/agent/errors";
 import { safeMessage } from "@/lib/oracle/agent/redact";
 import type { AgentChatMessage, AgentResponse, AgentUsage } from "@/lib/oracle/agent/types";
@@ -73,11 +73,6 @@ function toUsage(
 export interface RunClientAgentOptions {
   messages: AgentChatMessage[];
   /**
-   * The visitor's own credential, when they have configured one. Absent means
-   * answer on the deployment's key through the proxy, using `serverModel`.
-   */
-  credential?: UserCredential | null;
-  /**
    * A provider and model this deployment offers on its own key. The loop still
    * runs here; only the model call goes through `/api/llm/<provider>`.
    */
@@ -89,20 +84,20 @@ export interface RunClientAgentOptions {
 }
 
 /**
- * Which model answers, and on whose key.
+ * Which model answers.
  *
- * A visitor's own credential wins whenever they have set one: they chose it,
- * they pay for it, and it should not be quietly overridden by whatever this
- * deployment happens to have configured.
+ * One path: a model this deployment publishes, called through the proxy that
+ * holds the key. There is no per-visitor credential to weigh against it, which
+ * is the point - a CRM that asks the person evaluating it to go and mint an API
+ * key before it will answer a question has failed at the question.
  */
 async function pickModel(options: RunClientAgentOptions): Promise<ResolvedModel> {
   if (options.model) return options.model;
-  if (options.credential) return resolveModel({}, options.credential);
 
   const chosen = options.serverModel;
   if (!chosen) {
     throw new Error(
-      "No model is available. This deployment has none configured, so add your own on the settings page.",
+      "This deployment has no model configured, so the agent cannot answer. Everything else in the application works without one.",
     );
   }
 
@@ -148,7 +143,11 @@ export async function runClientAgent(options: RunClientAgentOptions): Promise<Ag
   // Several providers quote the offending credential in the body of a 401, so
   // redact first and classify second even here, where the key is the visitor's
   // own: it must not end up in a rendered error string either.
-  const secrets = options.credential ? [options.credential.apiKey] : [];
+  // Nothing secret passes through this process any more: the key lives on the
+  // server and the proxy attaches it. The redaction pass stays because a
+  // provider can still quote a credential back in the body of a 401, and it
+  // must not reach a rendered error string.
+  const secrets: string[] = [];
   let result;
   try {
     result = await agent.generate({ messages: modelMessages, abortSignal: options.abortSignal });

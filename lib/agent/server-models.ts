@@ -9,11 +9,11 @@
  * tools stay in the tab, and neither has to move.
  *
  * What is published to the browser is only ever the provider id, the model ids
- * and their labels. Never a key, and never the name of the variable holding one
- * beyond what the settings page already reports.
+ * and their labels. Never a key, and never the name of the variable holding one.
  *
- * A visitor can still bring their own key on the settings page. That path is
- * unchanged and takes precedence: their key, their bill, their choice of model.
+ * There is no per-visitor credential. A CRM that asks the person evaluating it
+ * to mint an API key before it will answer a question has failed at the
+ * question, so a deployment either configures a key or says it has none.
  */
 
 import { PROVIDERS, type AgentProvider, type ProviderDefinition } from "@/lib/agent/providers";
@@ -30,9 +30,8 @@ export interface UpstreamProvider {
  *
  * Bedrock is deliberately absent: it signs requests with SigV4 over the whole
  * body rather than carrying a header token, so it cannot be proxied by
- * forwarding bytes and would need the AWS signer on this path. Anyone wanting
- * Bedrock supplies their own credential on the settings page, where the SDK
- * signs it in the tab.
+ * forwarding bytes and would need the AWS signer on this path. It is in the
+ * registry, so a clone that wants it knows what it would have to add.
  */
 const UPSTREAM: Partial<Record<AgentProvider, UpstreamProvider>> = {
   openai: {

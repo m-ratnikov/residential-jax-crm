@@ -140,18 +140,6 @@ export function AppHeader() {
               )}
             </>
           )}
-
-          <Link
-            href="/settings"
-            className={cx(
-              "rounded-md px-2.5 py-1 text-[13px] transition-colors",
-              pathname?.startsWith("/settings")
-                ? "bg-[var(--panel-raised)] text-ink-50"
-                : "text-ink-400 hover:text-ink-100",
-            )}
-          >
-            Settings
-          </Link>
         </div>
       </div>
     </header>
