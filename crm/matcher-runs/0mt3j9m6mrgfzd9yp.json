@@ -1,0 +1,28 @@
+{
+  "alertsCreated": 0,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-parquet",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "isSample": false,
+      "kind": "duckdb-parquet",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": []
+  },
+  "error": null,
+  "finishedAt": "2026-08-21T22:40:57.742Z",
+  "id": "0mt3j9m6mrgfzd9yp",
+  "notificationsSent": 0,
+  "pipelineRunId": "01M0HZCKVT3PS6GMFV9CWV2M8V",
+  "pipelineRunIsNew": false,
+  "pipelineRunStartedAt": "2026-08-21 10:55:39.9",
+  "propertiesEvaluated": 0,
+  "searchesEvaluated": 0,
+  "startedAt": "2026-08-21T22:40:57.096Z",
+  "trigger": "cron"
+}
