@@ -68,6 +68,16 @@
       "toStage": "identified"
     }
   ],
-  "tasks": [],
-  "updatedAt": "2026-08-21T21:51:24.127Z"
+  "tasks": [
+    {
+      "assigneeId": "0mt3hheabkk9k25gy",
+      "completedAt": null,
+      "createdAt": "2026-08-21T21:51:25.092Z",
+      "dueAt": "2026-08-23T21:51:25.091Z",
+      "id": "0mt3hhwh0p8f49qz7",
+      "status": "open",
+      "title": "Skip trace owner"
+    }
+  ],
+  "updatedAt": "2026-08-21T21:51:25.092Z"
 }
