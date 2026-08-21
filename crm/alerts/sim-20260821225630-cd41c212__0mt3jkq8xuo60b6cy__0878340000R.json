@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "roofYearEst",
+    "roofAgeYears",
+    "roofAgeBasis",
+    "roofPermitCount"
+  ],
+  "createdAt": "2026-08-21T22:56:33.831Z",
+  "dismissedAt": null,
+  "id": "sim-20260821225630-cd41c212__0mt3jkq8xuo60b6cy__0878340000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt3jtoh3qtqw1uhs",
+  "notifications": [
+    {
+      "body": "4510 N PEARL ST, JACKSONVILLE, 32206 already matched \"Transit infill\" and has changed.\n\nMatch score: 100 / 100\nWhy: 3 m to Pearl St. & Long Branch Blvd. (+60); held 26 years (+40).\n\nChanged since the last pass: estimated roof year, roof age, roof age evidence, roof permit count.\n\nOwner of record: TYRRELL ROBERT A\nAssessed value: $40,967\nParcel: 0878340000R\n\nTriggered by pipeline run sim-20260821225630-cd41c212.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-21T22:56:34.792Z",
+      "id": "0mt3jtp7svoafeme0",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-21T22:56:34.792Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 4510 N PEARL ST, JACKSONVILLE, 32206"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260821225630-cd41c212",
+  "propertyId": "0878340000R",
+  "propertySnapshot": {
+    "address": "4510 N PEARL ST, JACKSONVILLE, 32206",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32206",
+    "assessedValue": 40967,
+    "courtDistressScore": 0,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3656517,
+    "longitude": -81.6569776,
+    "ownerName": "TYRRELL ROBERT A",
+    "ownerOccupied": true,
+    "propertyId": "0878340000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0K3B67EVNXBSQFPBES35ZMS",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "PERMIT",
+    "roofAgeYears": 0,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 26
+  },
+  "rationale": "3 m to Pearl St. & Long Branch Blvd. (+60); held 26 years (+40).",
+  "readAt": null,
+  "savedSearchId": "0mt3jkq8xuo60b6cy",
+  "score": 99.8
+}
