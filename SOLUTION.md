@@ -139,8 +139,12 @@ It is deliberately a narrow bet, and the constraints that make it safe are:
 Where it stops: writes are serialised per branch and cost a round trip, so this
 suits a small acquisitions team, not a call centre. That is why the interface
 exists and why the Postgres backend is kept working - the swap is one
-environment variable, with no code change and no data model change. The same
-verification script (`pnpm verify`) passes against all three.
+environment variable, with no code change and no data model change.
+
+`pnpm verify` runs the whole notification loop against whichever backend is
+configured, and seeds what it needs first, so it is a single command against any
+of the three rather than a script that assumes somebody already ran the seed in
+the same process.
 
 ---
 
@@ -157,10 +161,18 @@ the last touch on a parcel. So there is no per-row change stamp to read, and
 anything claiming to detect "changed parcels" from the parquet alone would be
 inventing it.
 
-What the pipeline _does_ publish is `run-history.json`: fifteen runs, each with
-per-track `inserted` / `updated` / `unchanged` / `table_total_after` and the
-limitations that run declared for itself. That is real evidence, and every alert
-cites a run id from it.
+What the pipeline _does_ publish is `run-history.json`: every run it has made
+(38 at the time of writing, and growing every six hours), each with per-track
+`inserted` / `updated` / `unchanged` / `table_total_after` and the limitations
+that run declared for itself. That is real evidence, and `/pipeline` shows it
+beside the CRM's own passes.
+
+An alert cites the run id **stamped inside the artifact it read**, not the newest
+entry in that history. The two can disagree: the parquet and `run-history.json`
+are separate objects behind separate IPNS names, republished at different
+moments, and an alert that cited a run which did not produce the values it
+quotes would be citing the wrong evidence. The history is the fallback when the
+artifact carries no run id at all.
 
 So the matcher follows the snapshot-diff shape:
 
