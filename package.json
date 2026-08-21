@@ -47,6 +47,7 @@
     "@ai-sdk/provider": "^4.0.7",
     "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.3.3",
+    "@types/geojson": "^7946.0.16",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",

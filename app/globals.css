@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+/**
+ * A working tool, not a landing page. The palette is deliberately narrow: a
+ * neutral ground, one accent for the things you can act on, and a small set of
+ * semantic colours for stage and match quality. Anything that carries meaning
+ * carries a label too, because a colour alone is not readable to everyone.
+ */
+
+@theme {
+  --color-ink-50: #f6f7f9;
+  --color-ink-100: #eceef2;
+  --color-ink-200: #d9dde5;
+  --color-ink-300: #b8bfcd;
+  --color-ink-400: #8d97ab;
+  --color-ink-500: #6b7689;
+  --color-ink-600: #515a6b;
+  --color-ink-700: #3d4553;
+  --color-ink-800: #262c37;
+  --color-ink-900: #171b23;
+  --color-ink-950: #0e1116;
+
+  --color-accent-400: #4f9cf0;
+  --color-accent-500: #2b7fe0;
+  --color-accent-600: #1f66bb;
+
+  --color-good-500: #2f9e6b;
+  --color-warn-500: #c8871d;
+  --color-bad-500: #cf4a4a;
+}
+
+:root {
+  color-scheme: dark;
+  --surface: var(--color-ink-950);
+  --panel: var(--color-ink-900);
+  --panel-raised: var(--color-ink-800);
+  --line: color-mix(in oklab, var(--color-ink-700) 70%, transparent);
+  --text: var(--color-ink-100);
+  --text-muted: var(--color-ink-400);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--surface);
+  color: var(--text);
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Numbers in tables must align, and a parcel id must not be confusable. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-accent-500) 45%, transparent);
+}
+
+/* Scrollbars that do not shout, but are still findable. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-700) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-ink-700);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* MapLibre's own chrome, toned to match the panels. */
+.maplibregl-ctrl-group {
+  background: var(--panel-raised) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--line) !important;
+}
+
+.maplibregl-ctrl-group button span {
+  filter: invert(1);
+}
+
+.maplibregl-popup-content {
+  background: var(--panel-raised) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px !important;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.45);
+}
+
+.maplibregl-popup-tip {
+  border-top-color: var(--panel-raised) !important;
+  border-bottom-color: var(--panel-raised) !important;
+}
+
+.maplibregl-ctrl-attrib {
+  background: color-mix(in oklab, var(--color-ink-950) 80%, transparent) !important;
+  color: var(--text-muted) !important;
+}
+
+.maplibregl-ctrl-attrib a {
+  color: var(--color-ink-300) !important;
+}
+
+/* The drawing cursor has to say which mode is armed. */
+.map-draw-active .maplibregl-canvas-container {
+  cursor: crosshair !important;
+}
+
+@keyframes pulse-once {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent-500) 70%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 14px transparent;
+  }
+}
+
+.pulse-once {
+  animation: pulse-once 1.1s ease-out 2;
+}

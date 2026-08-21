@@ -13,7 +13,7 @@
  */
 
 import { existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { join } from "node:path";
 
 export const SAMPLE_QUERY_TABLE = "public/sample/query-table.parquet";
 export const SAMPLE_RUN_HISTORY = "public/sample/run-history.json";
@@ -67,7 +67,7 @@ function firstConfigured(...candidates: (string | undefined)[]): string | null {
 
 function existsLocally(relative: string): boolean {
   try {
-    return existsSync(resolve(process.cwd(), relative));
+    return existsSync(join(process.cwd(), relative));
   } catch {
     return false;
   }
@@ -90,10 +90,14 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
     queryTableSource = resolveArtifactUrl(configured, QUERY_TABLE_OBJECT);
     isSample = false;
   } else if (configured && !configured.startsWith("/sample/") && existsSync(configured)) {
-    queryTableSource = resolve(configured);
+    // Passed through unresolved on purpose. Calling path.resolve on a value the
+    // bundler cannot see statically makes Next trace the entire project into the
+    // serverless output; DuckDB reads a relative path from the working directory
+    // perfectly well.
+    queryTableSource = configured;
     isSample = false;
   } else {
-    queryTableSource = resolve(process.cwd(), SAMPLE_QUERY_TABLE);
+    queryTableSource = join(process.cwd(), SAMPLE_QUERY_TABLE);
     isSample = true;
   }
 
@@ -101,9 +105,9 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
   const runHistoryUrl = runHistoryConfigured
     ? /^https?:\/\//i.test(runHistoryConfigured)
       ? resolveArtifactUrl(runHistoryConfigured, RUN_HISTORY_OBJECT)
-      : resolve(runHistoryConfigured)
+      : runHistoryConfigured
     : existsLocally(SAMPLE_RUN_HISTORY)
-      ? resolve(process.cwd(), SAMPLE_RUN_HISTORY)
+      ? join(process.cwd(), SAMPLE_RUN_HISTORY)
       : null;
 
   return {
