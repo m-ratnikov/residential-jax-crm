@@ -69,8 +69,28 @@ function AlertsFeed() {
   const convert = async (alert: AlertRow) => {
     setConverting(alert.id);
     try {
+      // The alert already carries the parcel as it looked when it fired, which
+      // is exactly what should be tracked: the record the decision was made on.
+      const snapshot = alert.propertySnapshot as Record<string, unknown>;
+      const provenance = (snapshot["provenance"] ?? {}) as {
+        sourceSystem?: string | null;
+        sourceUrl?: string | null;
+      };
+
       await post("/api/opportunities", {
         propertyId: alert.propertyId,
+        addressLine: String(snapshot["address"] ?? `Parcel ${alert.propertyId}`),
+        addressCity: (snapshot["addressCity"] as string | null) ?? null,
+        addressZip: (snapshot["addressZip"] as string | null) ?? null,
+        latitude: (snapshot["latitude"] as number | null) ?? null,
+        longitude: (snapshot["longitude"] as number | null) ?? null,
+        assessedValue: (snapshot["assessedValue"] as number | null) ?? null,
+        ownerName: (snapshot["ownerName"] as string | null) ?? null,
+        sourceSystem: provenance.sourceSystem ?? null,
+        sourceUrl: provenance.sourceUrl ?? null,
+        propertySnapshot: snapshot,
+        matchScore: alert.score,
+        matchRationale: alert.rationale,
         savedSearchId: alert.savedSearchId,
         alertId: alert.id,
       });

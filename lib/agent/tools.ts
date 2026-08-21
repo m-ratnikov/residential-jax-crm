@@ -22,10 +22,49 @@ import { displayAddress } from "@/lib/data/map";
 import { runDelta } from "@/lib/data/runs";
 import type { PropertyDataSource } from "@/lib/data/types";
 import type { Overlay } from "@/lib/data/overlay";
-import { loadOverlay } from "@/lib/crm/overlay";
-import { tryDb } from "@/lib/crm/db";
-import { listAlerts, listOpportunities, listSavedSearches } from "@/lib/crm/repo";
 import type { AgentDataFreshness, AgentEvidenceRow, AgentToolCall } from "@/lib/oracle/agent/types";
+
+/** The shapes the CRM API returns, named so the tools stay free of `any`. */
+interface SavedSearchRow {
+  id: string;
+  name: string;
+  description: string | null;
+  active: boolean;
+  lastEvaluatedAt: string | null;
+  lastPipelineRunId: string | null;
+  lastMatchCount: number | null;
+  criteria: unknown;
+}
+
+interface OpportunityListRow {
+  opportunity: {
+    id: string;
+    propertyId: string;
+    addressLine: string;
+    stage: string;
+    matchScore: number | null;
+    ownerNameSnapshot: string | null;
+    askingPrice: number | null;
+    offerPrice: number | null;
+    nextStep: string | null;
+  };
+  owner: { name: string } | null;
+  assignee: { name: string } | null;
+  searchName: string | null;
+}
+
+interface AlertListRow {
+  id: string;
+  kind: string;
+  propertyId: string;
+  searchName: string | null;
+  score: number;
+  rationale: string;
+  changedFields: string[];
+  pipelineRunId: string | null;
+  createdAt: string;
+  readAt: string | null;
+}
 
 export interface AgentTrace {
   calls: AgentToolCall[];
@@ -85,13 +124,21 @@ export interface ToolContext {
   courtDataAvailable: boolean;
 }
 
-export async function createToolContext(source: PropertyDataSource): Promise<ToolContext> {
-  const overlay = await loadOverlay();
-  return {
-    source,
-    overlay: overlay.overlay,
-    courtDataAvailable: overlay.courtDataAvailable,
-  };
+/**
+ * CRM reads go over the application's own HTTP API rather than through the
+ * repository, because this loop runs in the tab and the repository is a
+ * Postgres client. A deployment with no store answers these with a 503, which
+ * is reported as "unavailable" rather than thrown - the parcel tools still work
+ * and the agent can still answer most questions.
+ */
+async function crmFetch<T>(path: string): Promise<T | null> {
+  try {
+    const response = await fetch(path);
+    if (!response.ok) return null;
+    return (await response.json()) as T;
+  } catch {
+    return null;
+  }
 }
 
 const NO_STORE_NOTE =
@@ -321,12 +368,13 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
       inputSchema: z.object({}),
       execute: async () => {
         const started = Date.now();
-        if (!tryDb()) {
+        const body = await crmFetch<{ searches: SavedSearchRow[] }>("/api/searches");
+        if (!body) {
           note(trace, NO_STORE_NOTE);
           record(trace, "list_saved_searches", {}, started, 0, "no CRM store attached");
           return { available: false, searches: [] };
         }
-        const searches = await listSavedSearches();
+        const searches = body.searches;
         record(
           trace,
           "list_saved_searches",
@@ -364,7 +412,12 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
       }),
       execute: async ({ stage, limit }) => {
         const started = Date.now();
-        if (!tryDb()) {
+        const query = new URLSearchParams({ limit: String(limit) });
+        if (stage?.length) query.set("stage", stage.join(","));
+        const body = await crmFetch<{ opportunities: OpportunityListRow[] }>(
+          `/api/opportunities?${query.toString()}`,
+        );
+        if (!body) {
           note(trace, NO_STORE_NOTE);
           record(
             trace,
@@ -376,7 +429,7 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
           );
           return { available: false, opportunities: [] };
         }
-        const rows = await listOpportunities({ stages: stage, limit });
+        const rows = body.opportunities;
         record(
           trace,
           "list_opportunities",
@@ -413,12 +466,15 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
       }),
       execute: async ({ unread_only, limit }) => {
         const started = Date.now();
-        if (!tryDb()) {
+        const query = new URLSearchParams({ limit: String(limit) });
+        if (unread_only) query.set("unread", "true");
+        const body = await crmFetch<{ alerts: AlertListRow[] }>(`/api/alerts?${query.toString()}`);
+        if (!body) {
           note(trace, NO_STORE_NOTE);
           record(trace, "list_alerts", { unread_only, limit }, started, 0, "no CRM store attached");
           return { available: false, alerts: [] };
         }
-        const rows = await listAlerts({ unreadOnly: unread_only, limit });
+        const rows = body.alerts;
         record(
           trace,
           "list_alerts",
@@ -430,16 +486,16 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
         return {
           available: true,
           alerts: rows.map((row) => ({
-            id: row.alert.id,
-            kind: row.alert.kind,
-            property_id: row.alert.propertyId,
+            id: row.id,
+            kind: row.kind,
+            property_id: row.propertyId,
             search: row.searchName,
-            score: row.alert.score,
-            rationale: row.alert.rationale,
-            changed_fields: row.alert.changedFields,
-            pipeline_run_id: row.alert.pipelineRunId,
-            created_at: row.alert.createdAt,
-            read: row.alert.readAt !== null,
+            score: row.score,
+            rationale: row.rationale,
+            changed_fields: row.changedFields,
+            pipeline_run_id: row.pipelineRunId,
+            created_at: row.createdAt,
+            read: row.readAt !== null,
           })),
         };
       },

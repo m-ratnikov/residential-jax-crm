@@ -1,0 +1,147 @@
+"use client";
+
+/**
+ * The property export, built where the property data is.
+ *
+ * It deliberately re-runs the search rather than exporting the rows on screen:
+ * an analyst who has scrolled two pages into a forty thousand parcel match set
+ * and presses Export means "give me the matches", not "give me the two hundred
+ * I happen to have looked at".
+ *
+ * Provenance travels with the data. Every row carries the source system, the
+ * source URL, when it was collected and the pipeline run it came from, so an
+ * exported file cannot lose its audit trail the moment it leaves the app.
+ */
+
+import type { CriteriaSet } from "@/lib/criteria/types";
+import { displayAddress } from "./map";
+import { fetchOverlay, propertySource } from "./client-source";
+
+/** Above this the browser is doing the county's job; the file says it stopped. */
+const MAX_ROWS = 10_000;
+
+const HEADERS = [
+  "property_id",
+  "parcel_identifier",
+  "situs_address",
+  "city",
+  "zip",
+  "latitude",
+  "longitude",
+  "owner_name",
+  "owner_occupied",
+  "owner_region_class",
+  "owner_mailing_address",
+  "owner_mailing_city",
+  "owner_mailing_state",
+  "owner_mailing_zip",
+  "assessed_value",
+  "market_value",
+  "built_year",
+  "livable_floor_area",
+  "roof_age_years",
+  "roof_age_basis",
+  "years_since_last_sale",
+  "last_sale_date",
+  "tenure_basis",
+  "water_view",
+  "nearest_transit_stop_m",
+  "court_distress_score",
+  "match_score",
+  "match_rationale",
+  "source_system",
+  "source_url",
+  "fetched_at",
+  "pipeline_run_id",
+] as const;
+
+/** RFC 4180: quote anything that could be misread, double the quotes inside. */
+function cell(value: unknown): string {
+  if (value === null || value === undefined) return "";
+  const text = String(value);
+  if (!/[",\n\r]/.test(text)) return text;
+  return `"${text.replaceAll('"', '""')}"`;
+}
+
+export async function buildPropertyCsv(criteria: CriteriaSet): Promise<string> {
+  const source = propertySource();
+  const overlay = await fetchOverlay();
+
+  const result = await source.search({
+    criteria,
+    limit: MAX_ROWS,
+    orderBy: "score",
+    overlay: overlay.overlay,
+  });
+
+  const lines = [HEADERS.join(",")];
+
+  for (const scored of result.rows) {
+    const property = scored.property;
+    lines.push(
+      [
+        property.propertyId,
+        property.parcelIdentifier,
+        displayAddress(property),
+        property.addressCity,
+        property.addressZip,
+        property.latitude,
+        property.longitude,
+        property.ownerName,
+        property.ownerOccupied,
+        property.ownerRegionClass,
+        property.ownerMailingAddress,
+        property.ownerMailingCity,
+        property.ownerMailingState,
+        property.ownerMailingZip,
+        property.assessedValue,
+        property.marketValue,
+        property.builtYear,
+        property.livableFloorArea,
+        property.roofAgeYears,
+        property.roofAgeBasis,
+        property.yearsSinceLastSale,
+        property.lastSaleDate,
+        property.tenureBasis,
+        property.waterViewFlag,
+        property.nearestTransitStopM,
+        property.raw["court_distress_score"] ?? null,
+        scored.score,
+        scored.rationale,
+        property.provenance.sourceSystem,
+        property.provenance.sourceUrl,
+        property.provenance.fetchedAt,
+        property.provenance.runId,
+      ]
+        .map(cell)
+        .join(","),
+    );
+  }
+
+  if (result.total > result.rows.length) {
+    // Saying so in the file itself, because a silently truncated export reads
+    // as a complete one on the other end.
+    lines.push("");
+    lines.push(
+      cell(
+        `Truncated: ${result.total.toLocaleString("en-US")} parcels matched, ${result.rows.length.toLocaleString("en-US")} exported. Narrow the criteria to export the rest.`,
+      ),
+    );
+  }
+
+  return `${lines.join("\r\n")}\r\n`;
+}
+
+export async function downloadPropertyCsv(criteria: CriteriaSet): Promise<void> {
+  const csv = await buildPropertyCsv(criteria);
+  const stamp = new Date().toISOString().slice(0, 10);
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `duval-properties-${stamp}.csv`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}

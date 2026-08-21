@@ -15,7 +15,11 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Badge, Button, Empty, Panel, Spinner, Toggle, ago, count } from "@/components/ui";
 import { ApiError, api, del, patch, post, type SavedSearch } from "@/lib/client";
-import type { MatcherResult } from "@/lib/notify/matcher";
+import type { MatcherResult } from "@/lib/notify/evaluate";
+import { runMatcherPass } from "@/lib/notify/client-matcher";
+import { criteriaSetSchema } from "@/lib/criteria/types";
+import { fetchOverlay, propertySource } from "@/lib/data/client-source";
+import { displayAddress } from "@/lib/data/map";
 
 interface SimulationResponse {
   simulation: {
@@ -23,7 +27,6 @@ interface SimulationResponse {
     kind: string;
     changes: { propertyId: string; addressLine: string; label: string; detail: string }[];
   };
-  matcher: MatcherResult | null;
 }
 
 export default function SavedSearchesPage() {
@@ -52,7 +55,7 @@ export default function SavedSearchesPage() {
     setBusy(search.id);
     setOutcome(null);
     try {
-      const result = await post<MatcherResult>(`/api/searches/${search.id}/run`, {});
+      const result = await runMatcherPass({ savedSearchIds: [search.id], trigger: "manual" });
       const own = result.outcomes[0];
       setOutcome({
         id: search.id,
@@ -77,20 +80,74 @@ export default function SavedSearchesPage() {
     }
   };
 
+  /**
+   * Choosing which parcels to affect needs parcel data, and the query engine is
+   * in this tab, so the selection happens here. The server only applies the
+   * change it is handed, and the matcher pass that follows is the ordinary one.
+   */
   const simulate = async (search: SavedSearch, kind: "court_filing" | "roll_movement") => {
     setBusy(search.id);
     setOutcome(null);
     try {
-      const result = await post<SimulationResponse>("/api/simulate", {
-        savedSearchId: search.id,
-        kind,
-        count: 3,
-        runMatcher: true,
+      const criteria = criteriaSetSchema.parse(search.criteria);
+      const overlay = await fetchOverlay();
+      const source = propertySource();
+
+      // A court filing has to land on parcels that do NOT already match a
+      // distress criteria set, or the next pass sees no change. So the court
+      // predicates are dropped from the query that picks the targets.
+      const forTargets =
+        kind === "court_filing"
+          ? {
+              ...criteria,
+              filters: {
+                ...criteria.filters,
+                distress: criteria.filters.distress
+                  ? {
+                      absenteeOwner: criteria.filters.distress.absenteeOwner,
+                      noHomestead: criteria.filters.distress.noHomestead,
+                    }
+                  : undefined,
+              },
+            }
+          : criteria;
+
+      const flagged = new Set(overlay.overlay.court.map((entry) => entry.propertyId));
+      const found = await source.search({
+        criteria: forTargets,
+        limit: 60,
+        orderBy: "score",
+        overlay: overlay.overlay,
       });
+
+      const targets = found.rows
+        .filter((row) => (kind === "court_filing" ? !flagged.has(row.property.propertyId) : true))
+        .slice(0, 3)
+        .map((row) => ({
+          propertyId: row.property.propertyId,
+          parcelIdentifier: row.property.parcelIdentifier,
+          addressLine: displayAddress(row.property),
+          ownerName: row.property.ownerName,
+          assessedValue: row.property.assessedValue,
+          roofPermitCount: row.property.roofPermitCount,
+        }));
+
+      if (!targets.length) {
+        setOutcome({
+          id: search.id,
+          tone: "bad",
+          text: "Nothing to simulate against: this search matches no parcels that could take that change.",
+        });
+        return;
+      }
+
+      const applied = await post<SimulationResponse>("/api/simulate", { kind, targets });
+      const matcher = await runMatcherPass({ savedSearchIds: [search.id], trigger: "simulation" });
+
       setOutcome({
         id: search.id,
         tone: "good",
-        text: `Pipeline run ${result.simulation.runId} changed ${count(result.simulation.changes.length)} parcels (${result.simulation.changes.map((change) => change.label).join(", ")}). The matcher raised ${count(result.matcher?.alertsCreated ?? 0)} alerts.`,
+        text: `Pipeline run ${applied.simulation.runId} changed ${count(applied.simulation.changes.length)} parcels (${applied.simulation.changes.map((change) => change.label).join(", ")}). The matcher raised ${count(matcher.alertsCreated)} alerts.`,
       });
       load();
     } catch (cause: unknown) {

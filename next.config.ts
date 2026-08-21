@@ -1,74 +1,46 @@
 import type { NextConfig } from "next";
 
 /**
- * Getting a DuckDB onto a serverless function took four failed deploys, and the
- * conclusions are worth keeping because none of them announced themselves.
+ * There is no query engine on the server any more, and that is the point.
  *
- * 1. **The native addon cannot ship here.** `@duckdb/node-api` links
- *    `libduckdb.so`, which is 70.5 MB. A function package carrying it is
- *    rejected at upload with an empty error message. Verified by deploying it
- *    alone in a single route, and again by tracing only the two binary files
- *    rather than the whole package - the shared library IS the 70 MB.
+ * Parcel queries run in the visitor's tab with DuckDB-WASM, range reading the
+ * published parquet straight off the IPFS gateway. That is the pattern the
+ * assignment names - "the existing Duval pipeline + DuckDB / Elephant IPFS
+ * pattern" - and it is what the pipeline UI already does at 404,023 parcels.
  *
- * 2. **WASM ships.** The Node build of `@duckdb/duckdb-wasm` is about 38 MB
- *    across three files and deploys cleanly. Only the exception-handling build
- *    is traced; the MVP fallback is another 41 MB and Node always supports
- *    exceptions, so shipping it would double the payload for a path never
- *    taken. lib/data/engine.ts picks the engine by what actually loads.
+ * It also settles a fight with the platform that four deploys could not win.
+ * The native addon links `libduckdb.so` at 70.5 MB and a function package
+ * carrying it is rejected at upload with an empty error message, verified with
+ * the bindings traced into a single route. The WASM build deploys but its Node
+ * runtime cannot fetch the `parquet` extension, because that runtime has no
+ * HTTP implementation. In a browser both problems disappear: the wasm is a
+ * static asset and the extension loads over the network like anything else.
  *
- * 3. **pnpm's default symlinked node_modules breaks packaging.** Any function
- *    tracing a binary asset fails with "the framework produced an invalid
- *    deployment package ... files in symlinked directories". Fixed with
- *    `nodeLinker: hoisted` in pnpm-workspace.yaml.
+ * Two things still have to hold in the server bundles, both learned the hard
+ * way:
  *
- * 4. **Nothing on a traced path may call existsSync or path.resolve on a value
- *    the bundler cannot see statically.** Next responds by tracing the ENTIRE
+ * 1. Nothing on a traced path may call existsSync or path.resolve on a value
+ *    the bundler cannot see statically. Next responds by tracing the ENTIRE
  *    project - node_modules and public/ included - into every function, and the
- *    upload is then rejected. See lib/data/config.ts, which resolves paths
- *    without touching the filesystem for exactly this reason.
+ *    upload is then rejected. See lib/data/config.ts.
+ * 2. The bundled sample parquet must stay out of the function bundles. Its path
+ *    is a constant, so the tracer folds it and packs 9 MB into every function
+ *    that imports the data config.
  */
-
-const DUCKDB_NATIVE = [
-  "./node_modules/@duckdb/node-bindings-linux-x64/**/*",
-  // Both spellings, because pnpm installs the package as a symlink into .pnpm
-  // and the tracer needs the real path as well as the linked one.
-  "./node_modules/.pnpm/@duckdb+node-bindings-linux-x64@*/node_modules/@duckdb/node-bindings-linux-x64/**/*",
-];
-
-/** Every route that opens a query engine over the parcel data. */
-const PARCEL_ROUTES = [
-  "/api/datasource",
-  "/api/search",
-  "/api/property/[id]",
-  "/api/export",
-  "/api/agent",
-  "/api/matcher/run",
-  "/api/simulate",
-  "/api/runs",
-  "/api/searches/[id]/run",
-  "/api/opportunities",
-];
-
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Both DuckDB packages stay external. The native addon so its dynamic import
-  // can fail cleanly at runtime rather than being bundled; the WASM build so
-  // its require survives the bundler instead of becoming a build-time
-  // "module not found".
-  serverExternalPackages: ["@duckdb/node-api", "@duckdb/duckdb-wasm"],
-  outputFileTracingIncludes: Object.fromEntries(PARCEL_ROUTES.map((route) => [route, DUCKDB_NATIVE])),
   outputFileTracingExcludes: {
-    "**": [
-      // The sample path is a constant, so the tracer folds it and packs the
-      // 9 MB parquet into every function that imports the data config - for a
-      // fallback a deployed instance never takes, because it reads the sample
-      // over HTTP from its own static output. It is still deployed as a static
-      // asset.
-      "./public/sample/**",
-      // Sourcemaps for the WASM build are around 15 MB and are never read at
-      // runtime.
-      "./node_modules/@duckdb/duckdb-wasm/dist/**/*.map",
-    ],
+    "**": ["./public/sample/**", "./public/duckdb/**"],
+  },
+  async headers() {
+    return [
+      {
+        // The wasm and its worker are immutable per release; let the browser
+        // keep them rather than refetching 34 MB on every visit.
+        source: "/duckdb/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+    ];
   },
 };
 

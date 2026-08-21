@@ -14,22 +14,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { propertySource } from "@/lib/data/client-source";
 import { Badge, cx, count } from "./ui";
 
-interface DataSourceStatus {
-  dataSource: {
-    label: string;
-    location: string;
-    isSample: boolean;
-    rowCount: number;
-    columnCount: number;
-    countyName: string;
-    stateCode: string;
-    runId: string | null;
-  };
+interface ServerStatus {
   crmStore: { configured: boolean };
   overlay: { courtDataAvailable: boolean; simulatedProperties: number };
   pipeline: { runId: string; status: string; startedAt: string } | null;
+}
+
+interface DatasetBadge {
+  label: string;
+  isSample: boolean;
+  rowCount: number;
+  columnCount: number;
 }
 
 const NAV = [
@@ -44,15 +42,39 @@ const NAV = [
 
 export function AppHeader() {
   const pathname = usePathname();
-  const [status, setStatus] = useState<DataSourceStatus | null>(null);
+  const [status, setStatus] = useState<ServerStatus | null>(null);
+  const [dataset, setDataset] = useState<DatasetBadge | null>(null);
   const [unread, setUnread] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
     fetch("/api/datasource")
       .then((response) => (response.ok ? response.json() : null))
-      .then((body: DataSourceStatus | null) => {
+      .then((body: ServerStatus | null) => {
         if (!cancelled) setStatus(body);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // The dataset badge comes from the engine in this tab rather than from the
+  // server, because the tab is what actually reads the artifact. It resolves
+  // once the parquet has attached, which is also the moment the count becomes
+  // true.
+  useEffect(() => {
+    let cancelled = false;
+    void propertySource()
+      .info()
+      .then((info) => {
+        if (cancelled) return;
+        setDataset({
+          label: info.label,
+          isSample: info.isSample,
+          rowCount: info.rowCount,
+          columnCount: info.columnCount,
+        });
       })
       .catch(() => undefined);
     return () => {
@@ -75,7 +97,7 @@ export function AppHeader() {
     };
   }, [pathname]);
 
-  const data = status?.dataSource;
+  const data = dataset;
 
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--panel)]/95 backdrop-blur">
@@ -119,14 +141,14 @@ export function AppHeader() {
               {data.isSample ? (
                 <Badge
                   tone="warn"
-                  title={`Bundled sample extract: ${count(data.rowCount)} parcels. Set PROPERTY_DATA_URL to read the full published county artifact.`}
+                  title={`Bundled sample extract: ${count(data.rowCount)} parcels over ${data.columnCount} columns. Set NEXT_PUBLIC_PROPERTY_DATA_URL to read the full published county artifact.`}
                 >
                   SAMPLE - {count(data.rowCount)} parcels
                 </Badge>
               ) : (
                 <Badge
                   tone="good"
-                  title={`Published ${data.countyName} County query table: ${count(data.rowCount)} parcels over ${data.columnCount} columns.`}
+                  title={`${data.label}: ${count(data.rowCount)} parcels over ${data.columnCount} columns, range read from the gateway in this tab.`}
                 >
                   {count(data.rowCount)} parcels
                 </Badge>

@@ -40,9 +40,10 @@ import {
   tasks,
   teamMembers,
 } from "@/lib/crm/schema";
-import { createOpportunity, updateOpportunity } from "@/lib/crm/repo";
+import { createOpportunityFromSnapshot, updateOpportunity } from "@/lib/crm/repo";
 import { sendOutreach } from "@/lib/notify/outreach";
-import { runMatcher } from "@/lib/notify/matcher";
+import { alertSnapshot, runMatcher } from "@/lib/notify/matcher";
+import { displayAddress } from "@/lib/data/map";
 import type { AcquisitionStage } from "@/lib/notify/types";
 
 function loadEnvFile(): void {
@@ -246,8 +247,26 @@ async function main(): Promise<void> {
     if (!scored) break;
 
     const assignee = members[index % members.length];
-    const { opportunity } = await createOpportunity({
-      scored,
+    const property = scored.property;
+    const { opportunity } = await createOpportunityFromSnapshot({
+      propertyId: property.propertyId,
+      parcelIdentifier: property.parcelIdentifier,
+      addressLine: displayAddress(property),
+      addressCity: property.addressCity,
+      addressZip: property.addressZip,
+      latitude: property.latitude,
+      longitude: property.longitude,
+      assessedValue: property.assessedValue,
+      ownerName: property.ownerName,
+      ownerMailingAddress: property.ownerMailingAddress,
+      ownerMailingCity: property.ownerMailingCity,
+      ownerMailingState: property.ownerMailingState,
+      ownerMailingZip: property.ownerMailingZip,
+      sourceSystem: property.provenance.sourceSystem,
+      sourceUrl: property.provenance.sourceUrl,
+      propertySnapshot: alertSnapshot(scored),
+      matchScore: scored.score,
+      matchRationale: scored.rationale,
       savedSearchId: lead.id,
       assigneeId: assignee?.id ?? null,
       actorId: members[0]?.id ?? null,

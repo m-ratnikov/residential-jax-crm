@@ -1,15 +1,19 @@
 /**
- * What is answering, and how honest the app is being about it.
+ * What the server knows about this deployment.
  *
- * The header reads this on every page. It is deliberately the first route: a
- * reviewer opening the deployed app should be able to see, without clicking
- * anything, which dataset is loaded, how many parcels are in it, whether it is
- * a sample, and which pipeline run produced it.
+ * Deliberately NOT the parcel dataset: the browser reads that itself, straight
+ * from the gateway, and reports its own row count and column count once the
+ * artifact is attached. Asking a server function to count 404,023 rows to
+ * populate a badge would put a query engine on the critical path of every page
+ * load for information the tab already has.
+ *
+ * What the server does know is whether a CRM store is attached, what the
+ * overlay holds, and what the pipeline's published run history says.
  */
 
 import { handleError, ok } from "@/lib/api";
 import { dataConfig } from "@/lib/data/config";
-import { getPropertyDataSource } from "@/lib/data/source";
+import { loadRunHistory } from "@/lib/data/runs";
 import { loadOverlay } from "@/lib/crm/overlay";
 import { hasDatabase } from "@/lib/crm/db";
 
@@ -18,22 +22,17 @@ export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<Response> {
   try {
-    const { source } = getPropertyDataSource();
     const config = dataConfig();
-
-    const [info, runs, overlay] = await Promise.all([
-      source.info(),
-      source.listRuns(1),
+    const [runs, overlay] = await Promise.all([
+      loadRunHistory(config.runHistoryUrl, 1),
       loadOverlay(),
     ]);
 
     const latest = runs[0] ?? null;
 
     return ok({
-      dataSource: info,
       crmStore: {
         configured: hasDatabase(),
-        // Named rather than described so the UI can say what to do about it.
         provider: hasDatabase() ? "postgres" : null,
       },
       overlay: {
@@ -52,7 +51,6 @@ export async function GET(): Promise<Response> {
             limitations: latest.limitations,
           }
         : null,
-      map: config.center,
       county: { name: config.countyName, state: config.stateCode },
     });
   } catch (error: unknown) {

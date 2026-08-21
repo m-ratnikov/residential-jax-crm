@@ -17,7 +17,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { Badge, Button, Panel, Spinner, TextArea, ago, count, cx } from "@/components/ui";
-import { credentialHeaders, useAgentSettings } from "@/lib/agent/settings-client";
+import { useAgentSettings } from "@/lib/agent/settings-client";
+import { runClientAgent } from "@/lib/agent/client-run";
+import { isAgentError } from "@/lib/agent/errors";
 import type { AgentResponse } from "@/lib/agent/types";
 
 const SUGGESTIONS = [
@@ -41,12 +43,11 @@ export default function AgentPage() {
   const [configured, setConfigured] = useState<boolean | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
+  // Configuration is now a purely local question: the loop runs in this tab
+  // with the key stored in this browser.
   useEffect(() => {
-    fetch("/api/agent")
-      .then((response) => (response.ok || response.status === 501 ? response.json() : null))
-      .then((body: { active?: unknown } | null) => setConfigured(Boolean(body?.active)))
-      .catch(() => setConfigured(false));
-  }, [settings]);
+    if (loaded) setConfigured(Boolean(settings));
+  }, [loaded, settings]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -68,26 +69,40 @@ export default function AgentPage() {
     setTurns((current) => [...current, { question: trimmed, response: null, error: null }]);
 
     try {
-      const response = await fetch("/api/agent", {
-        method: "POST",
-        headers: { "content-type": "application/json", ...credentialHeaders(settings) },
-        body: JSON.stringify({ messages: [...history, { role: "user", content: trimmed }] }),
+      if (!settings) {
+        throw new Error(
+          "No model is configured. Add a provider and key on the settings page; several have a free tier that needs no card.",
+        );
+      }
+
+      // The loop runs here, in the tab, because its tools have to reach the
+      // parcel data and the query engine is here. The key was already held in
+      // this browser and still never reaches the server.
+      const body = await runClientAgent({
+        messages: [...history, { role: "user", content: trimmed }],
+        credential: {
+          provider: settings.provider,
+          modelId: settings.modelId,
+          apiKey: settings.apiKey,
+        },
       });
-      const body = (await response.json()) as AgentResponse;
+
       setTurns((current) => {
         const next = [...current];
         const last = next[next.length - 1];
-        if (last) {
-          if (response.ok) last.response = body;
-          else last.error = body.message ?? body.hint ?? "The agent could not answer.";
-        }
+        if (last) last.response = body;
         return next;
       });
-    } catch {
+    } catch (cause: unknown) {
+      const message = isAgentError(cause)
+        ? cause.message
+        : cause instanceof Error
+          ? cause.message
+          : "The agent could not answer.";
       setTurns((current) => {
         const next = [...current];
         const last = next[next.length - 1];
-        if (last) last.error = "The request could not reach the server.";
+        if (last) last.error = message;
         return next;
       });
     } finally {

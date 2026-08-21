@@ -15,7 +15,8 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { Badge, Button, Empty, Panel, Spinner, Stat, ago, count, when } from "@/components/ui";
-import { api, del, post, type MatcherRunRow } from "@/lib/client";
+import { api, del, type MatcherRunRow } from "@/lib/client";
+import { runMatcherPass } from "@/lib/notify/client-matcher";
 
 interface PipelineRunRow {
   runId: string;
@@ -85,11 +86,7 @@ export default function PipelinePage() {
     setBusy(true);
     setMessage(null);
     try {
-      const result = await post<{
-        alertsCreated: number;
-        searchesEvaluated: number;
-        alertsSuppressed: number;
-      }>("/api/matcher/run", {});
+      const result = await runMatcherPass({ trigger: "manual" });
       setMessage(
         `Evaluated ${count(result.searchesEvaluated)} saved searches and raised ${count(result.alertsCreated)} alerts${
           result.alertsSuppressed

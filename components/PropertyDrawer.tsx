@@ -15,37 +15,31 @@
 
 import { useEffect, useState } from "react";
 
-import { api, post, type ApiError } from "@/lib/client";
+import { post } from "@/lib/client";
+import { COLUMN_GROUPS, ungroupedColumns } from "@/lib/oracle/columns";
+import { displayAddress } from "@/lib/data/map";
+import { fetchOverlay, propertySource } from "@/lib/data/client-source";
+import type { PropertyRecord } from "@/lib/data/types";
 import { Badge, Button, Empty, Panel, ScoreBadge, Spinner, cx, money, when } from "./ui";
 
+interface CourtRecordRow {
+  id: string;
+  caseNumber: string;
+  caseType: string;
+  filedDate: string | null;
+  partyName: string | null;
+  amount: number | null;
+  status: string | null;
+  sourceSystem: string;
+  sourceUrl: string | null;
+}
+
 interface PropertyDetail {
-  property: {
-    propertyId: string;
-    address: string;
-    ownerName: string | null;
-    provenance: {
-      sourceSystem: string | null;
-      sourceUrl: string | null;
-      fetchedAt: string | null;
-      runId: string | null;
-      sourceArtifact: string | null;
-      sourceSha256: string | null;
-    };
-    raw: Record<string, unknown>;
-  };
+  property: PropertyRecord;
+  address: string;
   groups: { title: string; description: string; columns: string[] }[];
   otherColumns: string[];
-  court: {
-    id: string;
-    caseNumber: string;
-    caseType: string;
-    filedDate: string | null;
-    partyName: string | null;
-    amount: number | null;
-    status: string | null;
-    sourceSystem: string;
-    sourceUrl: string | null;
-  }[];
+  court: CourtRecordRow[];
   opportunity: { id: string; stage: string } | null;
   simulated: boolean;
 }
@@ -80,7 +74,6 @@ export interface PropertyDrawerProps {
   score?: number | null;
   rationale?: string | null;
   savedSearchId?: string | null;
-  criteria?: unknown;
   onTracked?: (opportunityId: string) => void;
 }
 
@@ -90,7 +83,6 @@ export function PropertyDrawer({
   score,
   rationale,
   savedSearchId,
-  criteria,
   onTracked,
 }: PropertyDrawerProps) {
   const [detail, setDetail] = useState<PropertyDetail | null>(null);
@@ -108,16 +100,47 @@ export function PropertyDrawer({
     setLoading(true);
     setError(null);
     setShowAll(false);
-    api<PropertyDetail>(`/api/property/${encodeURIComponent(propertyId)}`)
-      .then((body) => {
-        if (!cancelled) setDetail(body);
-      })
-      .catch((cause: ApiError) => {
-        if (!cancelled) setError(cause.message);
-      })
-      .finally(() => {
+
+    // The parcel comes from the engine in this tab; the CRM's view of it - court
+    // filings, and whether it is already being worked - comes from the server.
+    void (async () => {
+      try {
+        const overlay = await fetchOverlay();
+        const [property, crm] = await Promise.all([
+          propertySource().getProperty(propertyId, overlay.overlay),
+          fetch(`/api/property/${encodeURIComponent(propertyId)}`)
+            .then((response) => (response.ok ? response.json() : { opportunity: null, court: [] }))
+            .catch(() => ({ opportunity: null, court: [] })),
+        ]);
+
+        if (cancelled) return;
+        if (!property) {
+          setError(`No parcel ${propertyId} in the loaded dataset.`);
+          setDetail(null);
+          return;
+        }
+
+        const available = Object.keys(property.raw);
+        setDetail({
+          property,
+          address: displayAddress(property),
+          groups: COLUMN_GROUPS.map((group) => ({
+            title: group.title,
+            description: group.description,
+            columns: group.columns.filter((column) => available.includes(column)),
+          })).filter((group) => group.columns.length),
+          otherColumns: ungroupedColumns(available),
+          court: (crm as { court?: CourtRecordRow[] }).court ?? [],
+          opportunity: (crm as { opportunity?: { id: string; stage: string } | null }).opportunity ?? null,
+          simulated: Boolean(property.raw["overlay_run_id"]),
+        });
+      } catch (cause: unknown) {
+        if (!cancelled) setError(cause instanceof Error ? cause.message : "Could not read the parcel.");
+      } finally {
         if (!cancelled) setLoading(false);
-      });
+      }
+    })();
+
     return () => {
       cancelled = true;
     };
@@ -129,9 +152,49 @@ export function PropertyDrawer({
     setTracking(true);
     setError(null);
     try {
+      if (!detail) throw new Error("The parcel is still loading.");
+      const property = detail.property;
+
+      // The parcel as this tab read it, which is the authoritative record: the
+      // query engine lives here, so re-reading it on the server would need a
+      // second engine to arrive at the same answer.
       const result = await post<{ opportunity: { id: string }; created: boolean }>(
         "/api/opportunities",
-        { propertyId, savedSearchId: savedSearchId ?? null, criteria: criteria ?? undefined },
+        {
+          propertyId,
+          parcelIdentifier: property.parcelIdentifier,
+          addressLine: detail.address,
+          addressCity: property.addressCity,
+          addressZip: property.addressZip,
+          latitude: property.latitude,
+          longitude: property.longitude,
+          assessedValue: property.assessedValue,
+          ownerName: property.ownerName,
+          ownerMailingAddress: property.ownerMailingAddress,
+          ownerMailingCity: property.ownerMailingCity,
+          ownerMailingState: property.ownerMailingState,
+          ownerMailingZip: property.ownerMailingZip,
+          sourceSystem: property.provenance.sourceSystem,
+          sourceUrl: property.provenance.sourceUrl,
+          propertySnapshot: {
+            builtYear: property.builtYear,
+            livableFloorArea: property.livableFloorArea,
+            roofAgeYears: property.roofAgeYears,
+            roofAgeBasis: property.roofAgeBasis,
+            yearsSinceLastSale: property.yearsSinceLastSale,
+            lastSaleDate: property.lastSaleDate,
+            lastSalePrice: property.lastSalePrice,
+            ownerOccupied: property.ownerOccupied,
+            homesteadFlag: property.homesteadFlag,
+            waterViewFlag: property.waterViewFlag,
+            nearestTransitStopM: property.nearestTransitStopM,
+            courtDistressScore: property.raw["court_distress_score"] ?? null,
+            provenance: property.provenance,
+          },
+          matchScore: score ?? null,
+          matchRationale: rationale ?? null,
+          savedSearchId: savedSearchId ?? null,
+        },
       );
       onTracked?.(result.opportunity.id);
       setDetail((current) =>
@@ -154,7 +217,7 @@ export function PropertyDrawer({
       <header className="flex items-start justify-between gap-3 border-b border-[var(--line)] px-4 py-3">
         <div className="min-w-0">
           <h2 className="truncate text-sm font-semibold">
-            {detail?.property.address ?? "Loading parcel"}
+            {detail?.address ?? "Loading parcel"}
           </h2>
           <p className="mono truncate text-[11px] text-ink-500">{propertyId}</p>
         </div>

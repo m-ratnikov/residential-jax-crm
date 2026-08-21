@@ -10,8 +10,6 @@
 import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { criteriaSetSchema, type CriteriaSet } from "@/lib/criteria/types";
-import { displayAddress } from "@/lib/data/map";
-import type { PropertyRecord, ScoredProperty } from "@/lib/data/types";
 import type { AcquisitionStage, OutreachChannel } from "@/lib/notify/types";
 import { db, type CrmDatabase } from "./db";
 import {
@@ -185,49 +183,6 @@ export async function listMatcherRuns(limit = 25) {
 /* Owners                                                               */
 /* ------------------------------------------------------------------ */
 
-/**
- * Owners of record are published on the roll, so the CRM upserts on the name
- * and mailing address rather than inventing an identity. Contact details a team
- * adds by hand are kept on the same row and never overwritten by a later roll
- * value.
- */
-export async function upsertOwnerFromProperty(
-  database: CrmDatabase,
-  property: PropertyRecord,
-): Promise<string | null> {
-  if (!property.ownerName) return null;
-
-  const [existing] = await database
-    .select({ id: owners.id })
-    .from(owners)
-    .where(
-      and(
-        eq(owners.name, property.ownerName),
-        property.ownerMailingAddress
-          ? eq(owners.mailingAddress, property.ownerMailingAddress)
-          : isNull(owners.mailingAddress),
-      ),
-    )
-    .limit(1);
-
-  if (existing) return existing.id;
-
-  const [created] = await database
-    .insert(owners)
-    .values({
-      name: property.ownerName,
-      mailingAddress: property.ownerMailingAddress,
-      mailingCity: property.ownerMailingCity,
-      mailingState: property.ownerMailingState,
-      mailingZip: property.ownerMailingZip,
-      sourceSystem: property.provenance.sourceSystem,
-      sourceUrl: property.provenance.sourceUrl,
-    })
-    .returning({ id: owners.id });
-
-  return created?.id ?? null;
-}
-
 export async function updateOwner(
   id: string,
   patch: { email?: string | null; phone?: string | null; notes?: string | null },
@@ -245,12 +200,80 @@ export async function getOwner(id: string) {
 /* Opportunities                                                        */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A parcel as the client read it, plus why it is being tracked.
+ *
+ * The browser holds the query engine, so it holds the authoritative record. The
+ * owner of record and the provenance travel with it so the CRM can create the
+ * owner row and keep the audit trail without a second read.
+ */
 export interface CreateOpportunityInput {
-  scored: ScoredProperty;
+  propertyId: string;
+  parcelIdentifier?: string | null;
+  addressLine: string;
+  addressCity?: string | null;
+  addressZip?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  assessedValue?: number | null;
+  ownerName?: string | null;
+  ownerMailingAddress?: string | null;
+  ownerMailingCity?: string | null;
+  ownerMailingState?: string | null;
+  ownerMailingZip?: string | null;
+  sourceSystem?: string | null;
+  sourceUrl?: string | null;
+  propertySnapshot?: Record<string, unknown>;
+
+  matchScore?: number | null;
+  matchRationale?: string | null;
   savedSearchId?: string | null;
   alertId?: string | null;
   assigneeId?: string | null;
   actorId?: string | null;
+}
+
+/**
+ * Owners of record are published on the roll, so the CRM upserts on the name
+ * and mailing address rather than inventing an identity. Contact details a team
+ * adds by hand live on the same row and are never overwritten by a later roll
+ * value.
+ */
+async function upsertOwner(
+  database: CrmDatabase,
+  input: CreateOpportunityInput,
+): Promise<string | null> {
+  if (!input.ownerName) return null;
+
+  const [existing] = await database
+    .select({ id: owners.id })
+    .from(owners)
+    .where(
+      and(
+        eq(owners.name, input.ownerName),
+        input.ownerMailingAddress
+          ? eq(owners.mailingAddress, input.ownerMailingAddress)
+          : isNull(owners.mailingAddress),
+      ),
+    )
+    .limit(1);
+
+  if (existing) return existing.id;
+
+  const [created] = await database
+    .insert(owners)
+    .values({
+      name: input.ownerName,
+      mailingAddress: input.ownerMailingAddress ?? null,
+      mailingCity: input.ownerMailingCity ?? null,
+      mailingState: input.ownerMailingState ?? null,
+      mailingZip: input.ownerMailingZip ?? null,
+      sourceSystem: input.sourceSystem ?? null,
+      sourceUrl: input.sourceUrl ?? null,
+    })
+    .returning({ id: owners.id });
+
+  return created?.id ?? null;
 }
 
 /**
@@ -260,14 +283,13 @@ export interface CreateOpportunityInput {
  * create two records for the same house. The second call returns the existing
  * opportunity and links the alert to it.
  */
-export async function createOpportunity(input: CreateOpportunityInput) {
+export async function createOpportunityFromSnapshot(input: CreateOpportunityInput) {
   const database = db();
-  const property = input.scored.property;
 
   const [existing] = await database
     .select()
     .from(opportunities)
-    .where(eq(opportunities.propertyId, property.propertyId))
+    .where(eq(opportunities.propertyId, input.propertyId))
     .limit(1);
 
   if (existing) {
@@ -280,40 +302,26 @@ export async function createOpportunity(input: CreateOpportunityInput) {
     return { opportunity: existing, created: false };
   }
 
-  const ownerId = await upsertOwnerFromProperty(database, property);
+  const ownerId = await upsertOwner(database, input);
 
   const [created] = await database
     .insert(opportunities)
     .values({
-      propertyId: property.propertyId,
-      parcelIdentifier: property.parcelIdentifier,
-      addressLine: displayAddress(property),
-      addressCity: property.addressCity,
-      addressZip: property.addressZip,
-      latitude: property.latitude,
-      longitude: property.longitude,
-      assessedValue: property.assessedValue,
-      ownerNameSnapshot: property.ownerName,
-      propertySnapshot: {
-        builtYear: property.builtYear,
-        livableFloorArea: property.livableFloorArea,
-        roofAgeYears: property.roofAgeYears,
-        roofAgeBasis: property.roofAgeBasis,
-        yearsSinceLastSale: property.yearsSinceLastSale,
-        lastSaleDate: property.lastSaleDate,
-        lastSalePrice: property.lastSalePrice,
-        ownerOccupied: property.ownerOccupied,
-        homesteadFlag: property.homesteadFlag,
-        waterViewFlag: property.waterViewFlag,
-        nearestTransitStopM: property.nearestTransitStopM,
-        courtDistressScore: property.raw["court_distress_score"] ?? null,
-        provenance: property.provenance,
-      },
+      propertyId: input.propertyId,
+      parcelIdentifier: input.parcelIdentifier ?? null,
+      addressLine: input.addressLine,
+      addressCity: input.addressCity ?? null,
+      addressZip: input.addressZip ?? null,
+      latitude: input.latitude ?? null,
+      longitude: input.longitude ?? null,
+      assessedValue: input.assessedValue ?? null,
+      ownerNameSnapshot: input.ownerName ?? null,
+      propertySnapshot: input.propertySnapshot ?? {},
       ownerId,
       savedSearchId: input.savedSearchId ?? null,
       alertId: input.alertId ?? null,
-      matchScore: input.scored.score,
-      matchRationale: input.scored.rationale,
+      matchScore: input.matchScore ?? null,
+      matchRationale: input.matchRationale ?? null,
       assigneeId: input.assigneeId ?? null,
       stage: "identified",
     })

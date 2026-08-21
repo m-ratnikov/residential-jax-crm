@@ -17,10 +17,10 @@ import { PropertyDrawer } from "@/components/PropertyDrawer";
 import { PropertyMap } from "@/components/PropertyMap";
 import { ResultList } from "@/components/ResultList";
 import { Button, Field, Panel, TextArea, TextInput, Toggle, count } from "@/components/ui";
-import { ApiError, post, type SavedSearch, type SearchResponse } from "@/lib/client";
+import { ApiError, post, type SavedSearch } from "@/lib/client";
+import { useParcelSearch, type OrderBy } from "@/lib/data/use-search";
+import { publicDataConfig } from "@/lib/data/public-config";
 import { EMPTY_CRITERIA, type CriteriaSet, type Geometry } from "@/lib/criteria/types";
-
-const PAGE_SIZE = 100;
 
 /**
  * useSearchParams opts a route out of static prerendering unless it sits under
@@ -42,22 +42,15 @@ function SearchWorkspace() {
   const params = useSearchParams();
 
   const [criteria, setCriteria] = useState<CriteriaSet>(EMPTY_CRITERIA);
-  const [orderBy, setOrderBy] = useState<"score" | "assessed_value" | "roof_age" | "tenure">(
-    "score",
-  );
-  const [result, setResult] = useState<SearchResponse | null>(null);
-  const [rows, setRows] = useState<SearchResponse["rows"]>([]);
-  const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [orderBy, setOrderBy] = useState<OrderBy>("score");
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [center, setCenter] = useState({ lat: 30.3322, lng: -81.6557, zoom: 10.5 });
-  const [courtDataAvailable, setCourtDataAvailable] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
+
+  const savedSearchId = params.get("saved");
+  const focusId = params.get("focus");
 
   // Load a saved search when one is named in the URL, so an alert or the saved
   // criteria page can link straight into a live search.
-  const savedSearchId = params.get("saved");
   useEffect(() => {
     if (!savedSearchId) return;
     let cancelled = false;
@@ -73,63 +66,11 @@ function SearchWorkspace() {
   }, [savedSearchId]);
 
   useEffect(() => {
-    fetch("/api/datasource")
-      .then((response) => (response.ok ? response.json() : null))
-      .then((body: { map?: typeof center; overlay?: { courtDataAvailable: boolean } } | null) => {
-        if (body?.map) setCenter(body.map);
-        if (body?.overlay) setCourtDataAvailable(body.overlay.courtDataAvailable);
-      })
-      .catch(() => undefined);
-  }, []);
+    if (focusId) setSelectedId(focusId);
+  }, [focusId]);
 
-  // Only the criteria that affect the query take part in the debounce key, so
-  // renaming a search does not re-run it.
-  const queryKey = useMemo(
-    () => JSON.stringify({ filters: criteria.filters, weights: criteria.weights, orderBy }),
-    [criteria.filters, criteria.weights, orderBy],
-  );
-
-  const requestId = useRef(0);
-
-  const runSearch = useCallback(
-    async (nextOffset: number, append: boolean) => {
-      const id = ++requestId.current;
-      setLoading(true);
-      setError(null);
-      try {
-        const body = await post<SearchResponse>("/api/search", {
-          criteria,
-          limit: PAGE_SIZE,
-          offset: nextOffset,
-          orderBy,
-          includeMap: !append,
-        });
-        // A slow earlier request must not overwrite a faster later one.
-        if (id !== requestId.current) return;
-        setResult((current) => (append && current ? { ...body, map: current.map } : body));
-        setRows((current) => (append ? [...current, ...body.rows] : body.rows));
-        setOffset(nextOffset);
-        setCourtDataAvailable(body.courtDataAvailable);
-      } catch (cause: unknown) {
-        if (id !== requestId.current) return;
-        setError(cause instanceof ApiError ? cause.message : "The search failed.");
-        if (!append) {
-          setRows([]);
-          setResult(null);
-        }
-      } finally {
-        if (id === requestId.current) setLoading(false);
-      }
-    },
-    [criteria, orderBy],
-  );
-
-  useEffect(() => {
-    const timer = setTimeout(() => void runSearch(0, false), 250);
-    return () => clearTimeout(timer);
-    // runSearch closes over criteria and orderBy, both in queryKey.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryKey]);
+  const search = useParcelSearch(criteria, orderBy);
+  const { rows, total, loading, error } = search;
 
   const setGeometry = useCallback((geometry: Geometry | null) => {
     setCriteria((current) => ({
@@ -146,7 +87,7 @@ function SearchWorkspace() {
         <CriteriaPanel
           criteria={criteria}
           onChange={setCriteria}
-          courtDataAvailable={courtDataAvailable}
+          courtDataAvailable={search.overlay.courtDataAvailable}
           onSave={() => setSaveOpen(true)}
         />
       </div>
@@ -159,14 +100,14 @@ function SearchWorkspace() {
         )}
         <div className={error ? "h-[calc(100%-38px)]" : "h-full"}>
           <PropertyMap
-            points={result?.map.points ?? []}
-            center={center}
+            points={search.mapPoints}
+            center={publicDataConfig.center}
             geometry={criteria.filters.geometry ?? null}
             onGeometryChange={setGeometry}
             onSelect={setSelectedId}
             selectedId={selectedId}
-            truncated={result?.map.truncated}
-            total={result?.total}
+            truncated={search.mapTruncated}
+            total={total}
             loading={loading}
           />
         </div>
@@ -175,16 +116,17 @@ function SearchWorkspace() {
       <div className="min-h-0">
         <ResultList
           rows={rows}
-          total={result?.total ?? 0}
+          total={total}
           loading={loading}
           selectedId={selectedId}
           onSelect={setSelectedId}
-          hasMore={Boolean(result && rows.length < result.total)}
-          onLoadMore={() => void runSearch(offset + PAGE_SIZE, true)}
-          sql={result?.sql ?? ""}
-          tookMs={result?.tookMs ?? 0}
+          hasMore={search.hasMore}
+          onLoadMore={search.loadMore}
+          sql={search.sql}
+          tookMs={search.tookMs}
           orderBy={orderBy}
           onOrderChange={setOrderBy}
+          criteria={criteria}
         />
       </div>
 
@@ -194,14 +136,13 @@ function SearchWorkspace() {
         score={selectedRow?.score ?? null}
         rationale={selectedRow?.rationale ?? null}
         savedSearchId={savedSearchId}
-        criteria={criteria}
-        onTracked={() => void runSearch(0, false)}
+        onTracked={search.refresh}
       />
 
       {saveOpen && (
         <SaveSearchDialog
           criteria={criteria}
-          matchCount={result?.total ?? 0}
+          matchCount={total}
           onClose={() => setSaveOpen(false)}
           onSaved={(search) => {
             setSaveOpen(false);

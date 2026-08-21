@@ -1,35 +1,41 @@
 /**
- * Simulate an incremental pipeline update.
+ * Apply a simulated incremental pipeline update.
  *
- * POST writes a real change to the data the matcher reads - a court filing, or
- * a movement on the roll - stamped with a synthetic `sim-` run id, then runs
- * the ordinary matcher pass against the affected saved search. The alert that
- * comes back was produced by the same diff a genuine county refresh would
- * produce; nothing about it is staged.
+ * The client picks the target parcels, because choosing them means querying the
+ * published data and the query engine lives in the tab. This route writes the
+ * change - a court filing, or a movement on the roll - stamped with a synthetic
+ * `sim-` run id. The client then runs an ordinary matcher pass, and the alert
+ * that comes back was produced by the same diff a genuine county refresh would
+ * produce. Nothing about it is staged.
  *
  * DELETE removes every simulated row and restores the published values.
  */
 
 import { z } from "zod";
 
-import { fail, handleError, ok, readJson } from "@/lib/api";
-import { criteriaSetSchema } from "@/lib/criteria/types";
-import { getPropertyDataSource } from "@/lib/data/source";
-import { clearSimulation, simulatePipelineUpdate } from "@/lib/crm/simulate";
-import { getSavedSearch, listSimulatedChanges } from "@/lib/crm/repo";
-import { runMatcher } from "@/lib/notify/matcher";
+import { handleError, ok } from "@/lib/api";
+import { readJson } from "@/lib/api";
+import { applySimulation, clearSimulation } from "@/lib/crm/simulate";
+import { listSimulatedChanges } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 300;
 
 const bodySchema = z.object({
-  savedSearchId: z.string().uuid().optional(),
-  criteria: criteriaSetSchema.optional(),
   kind: z.enum(["court_filing", "roll_movement"]).default("court_filing"),
-  count: z.number().int().min(1).max(25).default(3),
-  /** Run the matcher immediately, so the alert lands while the user is looking. */
-  runMatcher: z.boolean().default(true),
+  targets: z
+    .array(
+      z.object({
+        propertyId: z.string().min(1),
+        parcelIdentifier: z.string().nullish(),
+        addressLine: z.string().min(1).max(400),
+        ownerName: z.string().max(400).nullish(),
+        assessedValue: z.number().nullish(),
+        roofPermitCount: z.number().nullish(),
+      }),
+    )
+    .min(1)
+    .max(25),
 });
 
 export async function GET(): Promise<Response> {
@@ -43,36 +49,18 @@ export async function GET(): Promise<Response> {
 export async function POST(request: Request): Promise<Response> {
   try {
     const input = bodySchema.parse(await readJson(request));
-
-    let criteria = input.criteria;
-    if (input.savedSearchId) {
-      const search = await getSavedSearch(input.savedSearchId);
-      if (!search) return fail("not_found", "No such saved search.", 404);
-      criteria = criteriaSetSchema.parse(search.criteria);
-    }
-    if (!criteria) {
-      return fail(
-        "invalid_request",
-        "Name a saved search or supply a criteria set to aim the simulation at.",
-        400,
-      );
-    }
-
-    const { source } = getPropertyDataSource();
-    const simulation = await simulatePipelineUpdate(source, {
-      criteria,
-      kind: input.kind,
-      count: input.count,
-    });
-
-    const matcher = input.runMatcher
-      ? await runMatcher(source, {
-          trigger: "simulation",
-          savedSearchIds: input.savedSearchId ? [input.savedSearchId] : undefined,
-        })
-      : null;
-
-    return ok({ simulation, matcher }, { status: 201 });
+    const simulation = await applySimulation(
+      input.kind,
+      input.targets.map((target) => ({
+        propertyId: target.propertyId,
+        parcelIdentifier: target.parcelIdentifier ?? null,
+        addressLine: target.addressLine,
+        ownerName: target.ownerName ?? null,
+        assessedValue: target.assessedValue ?? null,
+        roofPermitCount: target.roofPermitCount ?? null,
+      })),
+    );
+    return ok({ simulation }, { status: 201 });
   } catch (error: unknown) {
     return handleError("POST /api/simulate", error);
   }

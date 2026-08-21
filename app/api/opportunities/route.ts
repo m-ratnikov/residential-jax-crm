@@ -1,33 +1,50 @@
 /**
  * Opportunities: the list, and turning a matched parcel into one.
  *
- * The POST takes a parcel id rather than a body full of property fields. The
- * parcel is re-read from the data source and re-scored against the criteria
- * that surfaced it, so what gets stored is what the pipeline actually says
- * right now rather than whatever the browser happened to be holding.
+ * The POST takes the parcel as the client read it. That is not a shortcut: the
+ * browser is where the query engine lives, so it holds the authoritative record
+ * straight from the published artifact, along with the score and the rationale
+ * the same criteria produced on screen. Re-reading it here would need a second
+ * query engine on the server to arrive at the same answer.
+ *
+ * What is stored is a snapshot, not a cache to query against: every search
+ * still hits the parquet. It is here so an opportunity created six months ago
+ * still renders if the parcel later leaves the roll.
  */
 
 import { z } from "zod";
 
-import { fail, handleError, ok, readJson } from "@/lib/api";
-import { criteriaSetSchema, EMPTY_CRITERIA } from "@/lib/criteria/types";
-import { getPropertyDataSource } from "@/lib/data/source";
-import { loadOverlay } from "@/lib/crm/overlay";
-import { createOpportunity, getSavedSearch, listOpportunities } from "@/lib/crm/repo";
+import { handleError, ok, readJson } from "@/lib/api";
+import { createOpportunityFromSnapshot, listOpportunities } from "@/lib/crm/repo";
 import { ACQUISITION_STAGES } from "@/lib/notify/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
 
 const createSchema = z.object({
   propertyId: z.string().min(1),
+  parcelIdentifier: z.string().nullish(),
+  addressLine: z.string().min(1).max(400),
+  addressCity: z.string().max(200).nullish(),
+  addressZip: z.string().max(40).nullish(),
+  latitude: z.number().nullish(),
+  longitude: z.number().nullish(),
+  assessedValue: z.number().nullish(),
+  ownerName: z.string().max(400).nullish(),
+  ownerMailingAddress: z.string().max(400).nullish(),
+  ownerMailingCity: z.string().max(200).nullish(),
+  ownerMailingState: z.string().max(40).nullish(),
+  ownerMailingZip: z.string().max(40).nullish(),
+  sourceSystem: z.string().max(200).nullish(),
+  sourceUrl: z.string().max(2000).nullish(),
+  propertySnapshot: z.record(z.string(), z.unknown()).default({}),
+
+  matchScore: z.number().nullish(),
+  matchRationale: z.string().max(4000).nullish(),
   savedSearchId: z.string().uuid().nullish(),
   alertId: z.string().uuid().nullish(),
   assigneeId: z.string().uuid().nullish(),
   actorId: z.string().uuid().nullish(),
-  /** Ad hoc criteria, when the parcel came from an unsaved search. */
-  criteria: criteriaSetSchema.optional(),
 });
 
 export async function GET(request: Request): Promise<Response> {
@@ -60,56 +77,10 @@ export async function GET(request: Request): Promise<Response> {
 export async function POST(request: Request): Promise<Response> {
   try {
     const input = createSchema.parse(await readJson(request));
-    const { source } = getPropertyDataSource();
-    const overlay = await loadOverlay();
-
-    // Which criteria to score against: the saved search that surfaced it, the
-    // ad hoc set the browser was using, or nothing at all.
-    let criteria = input.criteria ?? EMPTY_CRITERIA;
-    if (input.savedSearchId) {
-      const search = await getSavedSearch(input.savedSearchId);
-      if (search) {
-        const parsed = criteriaSetSchema.safeParse(search.criteria);
-        if (parsed.success) criteria = parsed.data;
-      }
-    }
-
-    const result = await source.search({
-      criteria,
-      limit: 1,
-      propertyIds: [input.propertyId],
-      overlay: overlay.overlay,
-    });
-
-    // A parcel that no longer matches its criteria is still a legitimate thing
-    // to track by hand, so fall back to reading it unscored rather than
-    // refusing.
-    let scored = result.rows[0];
-    if (!scored) {
-      const property = await source.getProperty(input.propertyId, overlay.overlay);
-      if (!property) {
-        return fail("not_found", `No parcel ${input.propertyId} in the loaded dataset.`, 404);
-      }
-      scored = {
-        property,
-        score: 0,
-        components: [],
-        rationale: "Added by hand; this parcel does not currently match a saved criteria set.",
-        matchHash: "",
-      };
-    }
-
-    const created = await createOpportunity({
-      scored,
-      savedSearchId: input.savedSearchId ?? null,
-      alertId: input.alertId ?? null,
-      assigneeId: input.assigneeId ?? null,
-      actorId: input.actorId ?? null,
-    });
-
+    const result = await createOpportunityFromSnapshot(input);
     return ok(
-      { opportunity: created.opportunity, created: created.created },
-      { status: created.created ? 201 : 200 },
+      { opportunity: result.opportunity, created: result.created },
+      { status: result.created ? 201 : 200 },
     );
   } catch (error: unknown) {
     return handleError("POST /api/opportunities", error);

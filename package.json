@@ -7,8 +7,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "pnpm run assets && next dev",
+    "build": "pnpm run assets && next build",
     "start": "next start",
     "lint": "tsc --noEmit && eslint .",
     "typecheck": "tsc --noEmit",
@@ -21,7 +21,8 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
     "sample": "tsx scripts/make-sample.ts",
-    "matcher": "tsx scripts/run-matcher.ts"
+    "matcher": "tsx scripts/run-matcher.ts",
+    "assets": "node scripts/copy-duckdb.mjs"
   },
   "dependencies": {
     "@ai-sdk/amazon-bedrock": "^5.0.59",

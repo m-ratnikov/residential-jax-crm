@@ -11,7 +11,11 @@
 
 "use client";
 
+import { useState } from "react";
+
 import type { SearchRow } from "@/lib/client";
+import type { CriteriaSet } from "@/lib/criteria/types";
+import { downloadPropertyCsv } from "@/lib/data/export-csv";
 import { Badge, Button, ScoreBadge, cx, count, money } from "./ui";
 
 export interface ResultListProps {
@@ -26,6 +30,8 @@ export interface ResultListProps {
   tookMs: number;
   orderBy: "score" | "assessed_value" | "roof_age" | "tenure";
   onOrderChange: (value: "score" | "assessed_value" | "roof_age" | "tenure") => void;
+  /** Passed so the export can re-run the same query for the full match set. */
+  criteria: CriteriaSet;
 }
 
 const ORDER_OPTIONS = [
@@ -47,7 +53,10 @@ export function ResultList({
   tookMs,
   orderBy,
   onOrderChange,
+  criteria,
 }: ResultListProps) {
+  const [exporting, setExporting] = useState(false);
+
   return (
     <div className="flex min-h-0 flex-col rounded-xl border border-[var(--line)] bg-[var(--panel)]">
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line)] px-3 py-2.5">
@@ -61,6 +70,22 @@ export function ResultList({
           </p>
         </div>
         <div className="flex items-center gap-1">
+          <Button
+            size="sm"
+            variant="ghost"
+            disabled={exporting || !rows.length}
+            title="Export every matching parcel, not just the page on screen."
+            onClick={async () => {
+              setExporting(true);
+              try {
+                await downloadPropertyCsv(criteria);
+              } finally {
+                setExporting(false);
+              }
+            }}
+          >
+            {exporting ? "Exporting" : "Export"}
+          </Button>
           {ORDER_OPTIONS.map((option) => (
             <button
               key={option.value}

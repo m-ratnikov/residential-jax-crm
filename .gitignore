@@ -17,3 +17,6 @@ s2.json
 .env
 .env.local
 .env.*.local
+
+# Copied out of node_modules by scripts/copy-duckdb.mjs on every build.
+public/duckdb
