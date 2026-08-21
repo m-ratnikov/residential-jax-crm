@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello CROFT CLARA M,\nI am reaching out about 8663 MAXVILLE BLVD, JACKSONVILLE, 32234. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 30 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3kuk69wp9s91o6",
+      "campaignName": "Cash offer introduction - 2026-08-21",
+      "channel": "email",
+      "createdAt": "2026-08-21T23:25:14.529Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-00103800@example.invalid",
+          "occurredAt": "2026-08-21T23:25:14.529Z",
+          "providerEventId": "sim_email_c823af1f08c6b228b77a:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T23:25:30.529Z",
+          "providerEventId": "sim_email_c823af1f08c6b228b77a:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-21T23:25:53.529Z",
+          "providerEventId": "sim_email_c823af1f08c6b228b77a:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt3kuk691lq11gc0",
+      "providerMessageId": "sim_email_c823af1f08c6b228b77a",
+      "status": "queued",
+      "statusAt": "2026-08-21T23:25:14.529Z",
+      "subject": "Interested in buying 8663 MAXVILLE BLVD, JACKSONVILLE, 32234",
+      "templateId": "cash-offer-intro",
+      "toAddress": "owner-00103800@example.invalid"
+    }
+  ],
   "ownerId": "0mt3kq14bqislk0o0",
   "ownerInterest": null,
   "ownerNameSnapshot": "CROFT CLARA M",
@@ -73,5 +109,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T23:22:45.544Z"
+  "updatedAt": "2026-08-21T23:25:14.529Z"
 }
