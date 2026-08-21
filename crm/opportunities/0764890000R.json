@@ -3,7 +3,7 @@
   "addressLine": "1811 W 2ND ST, JACKSONVILLE, 32209",
   "addressZip": "32209",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 168000,
   "assessedValue": 21934,
   "assigneeId": "0mt36whm5yjd1cc5b",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.6869537,
   "matchRationale": "held 32 years (+33); roof about 107 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 152000,
   "outreach": [],
   "ownerId": "0mt36xn0iokllajjb",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "THOMPSON OWITA E",
   "parcelIdentifier": "0764890000R",
   "propertyId": "0764890000R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:55:46.467Z"
+  "updatedAt": "2026-08-21T16:55:47.304Z"
 }
