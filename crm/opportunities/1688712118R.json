@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34yi2ssdepm612",
-  "ownerInterest": null,
+  "ownerInterest": "Went to market",
   "ownerNameSnapshot": "COURTYARDS AT ATLANTIC BEACH C",
   "parcelIdentifier": "1688712118R",
   "propertyId": "1688712118R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:00:34.535Z"
+  "updatedAt": "2026-08-21T16:00:35.515Z"
 }
