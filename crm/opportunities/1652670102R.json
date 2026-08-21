@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello KENSINGTON ASSOCIATION INC,\nI am reaching out about 1665 KENSINGTON GARDENS BLVD, JACKSONVILLE, 32246. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 32 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt34xx6uug26blb7",
+      "campaignName": "Seed - contacted",
+      "channel": "sms",
+      "createdAt": "2026-08-21T15:59:57.510Z",
+      "createdById": "0mt34x2ktgd0p304r",
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for +1-904-555-0000",
+          "occurredAt": "2026-08-21T15:59:57.510Z",
+          "providerEventId": "sim_sms_9a3a03bf36af9666021f:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Number not in service",
+          "occurredAt": "2026-08-21T16:01:21.510Z",
+          "providerEventId": "sim_sms_9a3a03bf36af9666021f:failed",
+          "status": "failed"
+        }
+      ],
+      "id": "0mt34xx6uk8mntasn",
+      "providerMessageId": "sim_sms_9a3a03bf36af9666021f",
+      "status": "queued",
+      "statusAt": "2026-08-21T15:59:57.510Z",
+      "subject": null,
+      "templateId": "cash-offer-intro",
+      "toAddress": "+1-904-555-0000"
+    }
+  ],
   "ownerId": "0mt34xtnfwx7a9ymi",
   "ownerInterest": "Curious, not committed",
   "ownerNameSnapshot": "KENSINGTON ASSOCIATION INC",
@@ -77,5 +107,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:59:56.661Z"
+  "updatedAt": "2026-08-21T15:59:57.510Z"
 }
