@@ -126,8 +126,8 @@ export default function SettingsPage() {
         ) : (
           <p className="text-xs text-warn-500">
             No model is configured. This deployment sets no key of its own, because a public
-            unauthenticated agent endpoint with a server-side key attached is a bill any stranger can
-            run up. Add your own below.
+            unauthenticated agent endpoint with a server-side key attached is a bill any stranger
+            can run up. Add your own below.
           </p>
         )}
         {settings && (
@@ -203,9 +203,7 @@ export default function SettingsPage() {
               <p className="mt-1.5 text-ink-400">{definition.freeTier.summary}</p>
               {(() => {
                 const model = definition.models.find((entry) => entry.id === modelId);
-                return model?.notes ? (
-                  <p className="mt-1 text-ink-500">{model.notes}</p>
-                ) : null;
+                return model?.notes ? <p className="mt-1 text-ink-500">{model.notes}</p> : null;
               })()}
             </div>
           )}

@@ -23,7 +23,12 @@ export function ok<T>(body: T, init?: ResponseInit): NextResponse {
   return NextResponse.json(body, init);
 }
 
-export function fail(code: string, message: string, status: number, detail?: unknown): NextResponse {
+export function fail(
+  code: string,
+  message: string,
+  status: number,
+  detail?: unknown,
+): NextResponse {
   const body: ApiErrorBody = { error: message, code };
   if (detail !== undefined) body.detail = detail;
   return NextResponse.json(body, { status });

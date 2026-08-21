@@ -21,7 +21,10 @@ export const circleSchema = z.object({
 /** A polygon drawn on the map. Ring is [lng, lat] pairs, unclosed. */
 export const polygonSchema = z.object({
   type: z.literal("polygon"),
-  ring: z.array(z.tuple([z.number(), z.number()])).min(3).max(200),
+  ring: z
+    .array(z.tuple([z.number(), z.number()]))
+    .min(3)
+    .max(200),
 });
 
 /** The current map viewport. */

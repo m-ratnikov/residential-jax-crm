@@ -29,7 +29,13 @@ import {
   money,
 } from "@/components/ui";
 import { ApiError, api, patch, post, type OpportunityRow } from "@/lib/client";
-import { ACQUISITION_STAGES, CHANNEL_LABELS, STAGE_LABELS, type AcquisitionStage, type OutreachChannel } from "@/lib/notify/types";
+import {
+  ACQUISITION_STAGES,
+  CHANNEL_LABELS,
+  STAGE_LABELS,
+  type AcquisitionStage,
+  type OutreachChannel,
+} from "@/lib/notify/types";
 
 const BOARD_STAGES: AcquisitionStage[] = [
   "identified",
@@ -70,7 +76,8 @@ export default function OpportunitiesPage() {
     return (rows ?? []).filter((row) => {
       if (stageFilter !== "all" && row.opportunity.stage !== stageFilter) return false;
       if (min && (row.opportunity.matchScore ?? 0) < min) return false;
-      if (needle && !(row.opportunity.addressCity ?? "").toLowerCase().includes(needle)) return false;
+      if (needle && !(row.opportunity.addressCity ?? "").toLowerCase().includes(needle))
+        return false;
       const snapshot = (row.opportunity.propertySnapshot ?? {}) as {
         ownerOccupied?: boolean | null;
         courtDistressScore?: number | null;
@@ -193,7 +200,10 @@ export default function OpportunitiesPage() {
           {BOARD_STAGES.map((stage) => {
             const list = byStage.get(stage) ?? [];
             return (
-              <div key={stage} className="flex min-h-[200px] flex-col rounded-xl border border-[var(--line)] bg-[var(--panel)]">
+              <div
+                key={stage}
+                className="flex min-h-[200px] flex-col rounded-xl border border-[var(--line)] bg-[var(--panel)]"
+              >
                 <header className="flex items-center justify-between border-b border-[var(--line)] px-3 py-2">
                   <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-400">
                     {STAGE_LABELS[stage]}
@@ -335,7 +345,9 @@ function OpportunityCard({
       <p className="truncate text-[11px] text-ink-500">
         {row.owner?.name ?? row.opportunity.ownerNameSnapshot ?? "owner not published"}
       </p>
-      <p className="tabular mt-1 text-[11px] text-ink-400">{money(row.opportunity.assessedValue)}</p>
+      <p className="tabular mt-1 text-[11px] text-ink-400">
+        {money(row.opportunity.assessedValue)}
+      </p>
 
       <div className="mt-1.5 flex flex-wrap gap-1">
         {snapshot.ownerOccupied === false && <Badge tone="outline">absentee</Badge>}
@@ -490,7 +502,9 @@ function CampaignDialog({
                       : "border-[var(--line)] hover:bg-[var(--panel-raised)]"
                   }`}
                 >
-                  <span className="block text-[12px] font-medium text-ink-100">{template.name}</span>
+                  <span className="block text-[12px] font-medium text-ink-100">
+                    {template.name}
+                  </span>
                   <span className="block text-[11px] text-ink-500">{template.description}</span>
                 </button>
               ))}

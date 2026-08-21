@@ -97,7 +97,9 @@ export function AppHeader() {
                 href={item.href}
                 className={cx(
                   "relative rounded-md px-2.5 py-1 text-[13px] transition-colors",
-                  active ? "bg-[var(--panel-raised)] text-ink-50" : "text-ink-400 hover:text-ink-100",
+                  active
+                    ? "bg-[var(--panel-raised)] text-ink-50"
+                    : "text-ink-400 hover:text-ink-100",
                 )}
               >
                 {item.label}

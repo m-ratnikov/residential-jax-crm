@@ -54,7 +54,9 @@ export const STATUS_RANK: Record<OutreachStatus, number> = {
 };
 
 export function isTerminal(status: OutreachStatus): boolean {
-  return status === "replied" || status === "bounced" || status === "returned" || status === "failed";
+  return (
+    status === "replied" || status === "bounced" || status === "returned" || status === "failed"
+  );
 }
 
 export function supersedes(next: OutreachStatus, current: OutreachStatus): boolean {

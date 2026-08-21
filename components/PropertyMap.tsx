@@ -108,7 +108,9 @@ function geometryToFeature(geometry: Geometry | null): GeoJSON.FeatureCollection
 
   return {
     type: "FeatureCollection",
-    features: [{ type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring] } }],
+    features: [
+      { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring] } },
+    ],
   };
 }
 
@@ -186,9 +188,18 @@ export function PropertyMap({
     map.addControl(new ScaleControl({ unit: "imperial" }), "bottom-left");
 
     map.on("load", () => {
-      map.addSource(POINTS_SOURCE, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
-      map.addSource(SHAPE_SOURCE, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
-      map.addSource(DRAFT_SOURCE, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+      map.addSource(POINTS_SOURCE, {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+      });
+      map.addSource(SHAPE_SOURCE, {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+      });
+      map.addSource(DRAFT_SOURCE, {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+      });
 
       map.addLayer({
         id: "shape-fill",
@@ -209,27 +220,9 @@ export function PropertyMap({
         source: POINTS_SOURCE,
         paint: {
           // Points grow with zoom so a dense block is legible when you go in.
-          "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            9,
-            2,
-            13,
-            4,
-            16,
-            7,
-          ],
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, 2, 13, 4, 16, 7],
           // Colour by match score. The legend states the bands.
-          "circle-color": [
-            "step",
-            ["get", "score"],
-            "#6b7689",
-            45,
-            "#c8871d",
-            75,
-            "#2f9e6b",
-          ],
+          "circle-color": ["step", ["get", "score"], "#6b7689", 45, "#c8871d", 75, "#2f9e6b"],
           "circle-opacity": 0.85,
           "circle-stroke-width": ["case", ["boolean", ["feature-state", "selected"], false], 2, 0],
           "circle-stroke-color": "#ffffff",
@@ -273,7 +266,12 @@ export function PropertyMap({
           return;
         }
         const radiusM = Math.max(150, Math.round(haversine(anchor, point)));
-        stateRef.current.onGeometryChange({ type: "circle", lat: anchor.lat, lng: anchor.lng, radiusM });
+        stateRef.current.onGeometryChange({
+          type: "circle",
+          lat: anchor.lat,
+          lng: anchor.lng,
+          radiusM,
+        });
         setCircleAnchor(null);
         setMode("none");
         return;
@@ -314,7 +312,9 @@ export function PropertyMap({
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
-    (map.getSource(SHAPE_SOURCE) as GeoJSONSource | undefined)?.setData(geometryToFeature(geometry));
+    (map.getSource(SHAPE_SOURCE) as GeoJSONSource | undefined)?.setData(
+      geometryToFeature(geometry),
+    );
   }, [geometry, ready]);
 
   useEffect(() => {
@@ -343,7 +343,10 @@ export function PropertyMap({
     const map = mapRef.current;
     if (!map || !ready) return;
     if (previousSelection.current) {
-      map.setFeatureState({ source: POINTS_SOURCE, id: previousSelection.current }, { selected: false });
+      map.setFeatureState(
+        { source: POINTS_SOURCE, id: previousSelection.current },
+        { selected: false },
+      );
     }
     if (selectedId) {
       map.setFeatureState({ source: POINTS_SOURCE, id: selectedId }, { selected: true });
@@ -370,7 +373,10 @@ export function PropertyMap({
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-xl border border-[var(--line)]">
-      <div ref={containerRef} className={cx("h-full w-full", mode !== "none" && "map-draw-active")} />
+      <div
+        ref={containerRef}
+        className={cx("h-full w-full", mode !== "none" && "map-draw-active")}
+      />
 
       <div className="pointer-events-none absolute left-3 top-3 flex flex-col gap-2">
         <div className="pointer-events-auto flex flex-wrap items-center gap-1.5 rounded-lg border border-[var(--line)] bg-[var(--panel)]/95 p-1.5 backdrop-blur">
@@ -423,7 +429,12 @@ export function PropertyMap({
               Clear area
             </Button>
           )}
-          <Button size="sm" variant="ghost" onClick={fitToPoints} title="Zoom to the current matches.">
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={fitToPoints}
+            title="Zoom to the current matches."
+          >
             Fit
           </Button>
         </div>

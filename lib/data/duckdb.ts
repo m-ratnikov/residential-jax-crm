@@ -87,7 +87,9 @@ async function createInstance(source: string): Promise<DuckDBInstance> {
     if (needsHttp) {
       // A serverless filesystem is read only except for the temp directory,
       // and httpfs has to be fetched once per cold start.
-      await setup.run(`SET extension_directory = ${sqlPath(resolve(tmpdir(), "duckdb-extensions"))}`);
+      await setup.run(
+        `SET extension_directory = ${sqlPath(resolve(tmpdir(), "duckdb-extensions"))}`,
+      );
       await setup.run("INSTALL httpfs");
       await setup.run("LOAD httpfs");
     }
@@ -213,10 +215,7 @@ export class DuckDbPropertyDataSource implements PropertyDataSource {
       from: overlay.from,
     });
 
-    const [page, count] = await Promise.all([
-      this.#query(built.sql),
-      this.#query(built.countSql),
-    ]);
+    const [page, count] = await Promise.all([this.#query(built.sql), this.#query(built.countSql)]);
 
     const rows: ScoredProperty[] = page.rows.map((row) => {
       const property = toRecord(row);
@@ -260,12 +259,13 @@ export class DuckDbPropertyDataSource implements PropertyDataSource {
   async getProperty(propertyId: string, overlay?: Overlay): Promise<PropertyRecord | null> {
     // Restrict the overlay to this parcel: inlining thousands of court rows to
     // read one property would be a waste on every detail view.
-    const scoped = overlay && !isEmptyOverlay(overlay)
-      ? {
-          court: overlay.court.filter((entry) => entry.propertyId === propertyId),
-          overrides: overlay.overrides.filter((entry) => entry.propertyId === propertyId),
-        }
-      : EMPTY_OVERLAY;
+    const scoped =
+      overlay && !isEmptyOverlay(overlay)
+        ? {
+            court: overlay.court.filter((entry) => entry.propertyId === propertyId),
+            overrides: overlay.overrides.filter((entry) => entry.propertyId === propertyId),
+          }
+        : EMPTY_OVERLAY;
     const built = buildOverlay(scoped);
 
     const result = await this.#query(

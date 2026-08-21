@@ -19,7 +19,13 @@ import { and, eq, inArray, lte, sql } from "drizzle-orm";
 import { displayAddress } from "@/lib/data/map";
 import type { PropertyRecord } from "@/lib/data/types";
 import { db, type CrmDatabase } from "@/lib/crm/db";
-import { opportunities, outreachCampaigns, outreachEvents, outreachMessages, owners } from "@/lib/crm/schema";
+import {
+  opportunities,
+  outreachCampaigns,
+  outreachEvents,
+  outreachMessages,
+  owners,
+} from "@/lib/crm/schema";
 import { providerFor } from "./providers";
 import { supersedes, type OutreachChannel, type OutreachStatus } from "./types";
 import { logEvent, logError } from "./log";
@@ -48,7 +54,9 @@ export interface TemplateContext {
 }
 
 function money(value: number | null): string {
-  return value === null ? "the county's assessed value" : `$${Math.round(value).toLocaleString("en-US")}`;
+  return value === null
+    ? "the county's assessed value"
+    : `$${Math.round(value).toLocaleString("en-US")}`;
 }
 
 export const OUTREACH_TEMPLATES: OutreachTemplate[] = [
@@ -56,7 +64,8 @@ export const OUTREACH_TEMPLATES: OutreachTemplate[] = [
     id: "cash-offer-intro",
     name: "Cash offer introduction",
     channels: ["email", "sms", "direct_mail"],
-    description: "First touch. States the interest plainly and asks for a conversation, not a price.",
+    description:
+      "First touch. States the interest plainly and asks for a conversation, not a price.",
     subject: (c) => `Interested in buying ${c.addressLine}`,
     body: (c) =>
       [
@@ -79,7 +88,8 @@ export const OUTREACH_TEMPLATES: OutreachTemplate[] = [
     id: "roof-condition",
     name: "Aging roof angle",
     channels: ["email", "direct_mail"],
-    description: "For parcels where the roof is past its expected life. Leads with the repair burden.",
+    description:
+      "For parcels where the roof is past its expected life. Leads with the repair burden.",
     subject: (c) => `About the roof at ${c.addressLine}`,
     body: (c) =>
       [
@@ -97,7 +107,8 @@ export const OUTREACH_TEMPLATES: OutreachTemplate[] = [
     id: "absentee-landlord",
     name: "Out of area owner",
     channels: ["email", "sms", "direct_mail"],
-    description: "For owners whose mailing address is not the property. Leads with the management burden.",
+    description:
+      "For owners whose mailing address is not the property. Leads with the management burden.",
     subject: (c) => `Managing ${c.addressLine} from out of town?`,
     body: (c) =>
       [
@@ -133,7 +144,8 @@ export function templateById(id: string): OutreachTemplate | null {
   return OUTREACH_TEMPLATES.find((template) => template.id === id) ?? null;
 }
 
-const SENDER_NAME = process.env.OUTREACH_SENDER_NAME?.trim() || "Dana Whitfield, Riverbend Acquisitions";
+const SENDER_NAME =
+  process.env.OUTREACH_SENDER_NAME?.trim() || "Dana Whitfield, Riverbend Acquisitions";
 const SENDER_PHONE = process.env.OUTREACH_SENDER_PHONE?.trim() || "(904) 555-0142";
 
 export function contextFor(input: {
@@ -154,7 +166,10 @@ export function contextFor(input: {
   };
 }
 
-export function contextForProperty(property: PropertyRecord, ownerName?: string | null): TemplateContext {
+export function contextForProperty(
+  property: PropertyRecord,
+  ownerName?: string | null,
+): TemplateContext {
   return contextFor({
     ownerName: ownerName ?? property.ownerName,
     addressLine: displayAddress(property),

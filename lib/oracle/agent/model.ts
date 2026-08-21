@@ -86,7 +86,11 @@ function firstConfiguredEnvKey(provider: ProviderDefinition, env: Env): string |
     if (env[key]?.trim()) return key;
   }
   // Bedrock also authenticates through a long lived access key pair.
-  if (provider.id === "bedrock" && env.AWS_ACCESS_KEY_ID?.trim() && env.AWS_SECRET_ACCESS_KEY?.trim()) {
+  if (
+    provider.id === "bedrock" &&
+    env.AWS_ACCESS_KEY_ID?.trim() &&
+    env.AWS_SECRET_ACCESS_KEY?.trim()
+  ) {
     return "AWS_ACCESS_KEY_ID";
   }
   return null;
@@ -102,7 +106,9 @@ function firstConfiguredEnvKey(provider: ProviderDefinition, env: Env): string |
  */
 export function serverSelection(env: Env = process.env): ServerSelection | null {
   const named = env.AGENT_PROVIDER?.trim().toLowerCase();
-  const candidates = named ? [findProvider(named)].filter((p): p is ProviderDefinition => p !== null) : [...PROVIDERS];
+  const candidates = named
+    ? [findProvider(named)].filter((p): p is ProviderDefinition => p !== null)
+    : [...PROVIDERS];
 
   for (const provider of candidates) {
     const envKey = firstConfiguredEnvKey(provider, env);
@@ -111,7 +117,8 @@ export function serverSelection(env: Env = process.env): ServerSelection | null 
     const requested = env.AGENT_MODEL?.trim();
     // An AGENT_MODEL that belongs to a different provider is ignored rather
     // than fatal, so setting the pair in the wrong order still boots.
-    const modelId = requested && findModel(provider.id, requested) ? requested : defaultModelFor(provider.id);
+    const modelId =
+      requested && findModel(provider.id, requested) ? requested : defaultModelFor(provider.id);
 
     return {
       provider: provider.id,
@@ -206,14 +213,19 @@ async function createProviderModel(
       ]);
       // Without an apiKey the provider falls back to SigV4 over the ambient
       // AWS credentials, which is the only path here that is not a bare string.
-      const bedrock = createAmazonBedrock({ apiKey, region: env.AWS_REGION?.trim() || "us-east-1" });
+      const bedrock = createAmazonBedrock({
+        apiKey,
+        region: env.AWS_REGION?.trim() || "us-east-1",
+      });
       return withBedrockPromptCaching(bedrock(modelId));
     }
     default: {
       // Exhaustiveness: a new registry id with no branch fails loudly here
       // rather than silently answering with the wrong model.
       const unreachable: never = provider;
-      throw new AgentBadRequestError(`Provider "${String(unreachable)}" is in the registry but has no client branch.`);
+      throw new AgentBadRequestError(
+        `Provider "${String(unreachable)}" is in the registry but has no client branch.`,
+      );
     }
   }
 }
@@ -240,7 +252,12 @@ export async function resolveModel(
       provider: credential.provider,
       modelId: credential.modelId,
       source: "user",
-      model: await createProviderModel(credential.provider, credential.modelId, credential.apiKey, env),
+      model: await createProviderModel(
+        credential.provider,
+        credential.modelId,
+        credential.apiKey,
+        env,
+      ),
       instructions: instructionsFor(credential.provider),
     };
   }

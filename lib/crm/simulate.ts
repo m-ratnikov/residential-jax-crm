@@ -66,7 +66,10 @@ const COURT_CASE_TYPES = [
 
 /** A synthetic run id that can never be mistaken for a pipeline one. */
 export function newSimulationRunId(): string {
-  return `sim-${new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14)}-${randomUUID().slice(0, 8)}`;
+  return `sim-${new Date()
+    .toISOString()
+    .replace(/[-:.TZ]/g, "")
+    .slice(0, 14)}-${randomUUID().slice(0, 8)}`;
 }
 
 function addressOf(scored: ScoredProperty): string {
@@ -176,7 +179,12 @@ async function simulateRollMovement(
 
   for (const [index, scored] of candidates.entries()) {
     const property = scored.property;
-    const writes: { column: OverridableColumn; value: string | null; label: string; detail: string }[] = [];
+    const writes: {
+      column: OverridableColumn;
+      value: string | null;
+      label: string;
+      detail: string;
+    }[] = [];
 
     switch (index % 3) {
       case 0: {
@@ -230,7 +238,12 @@ async function simulateRollMovement(
           label: "owner change",
           detail: "",
         });
-        writes.push({ column: "years_since_last_sale", value: "0", label: "owner change", detail: "" });
+        writes.push({
+          column: "years_since_last_sale",
+          value: "0",
+          label: "owner change",
+          detail: "",
+        });
         break;
       }
     }
@@ -283,7 +296,9 @@ export async function simulatePipelineUpdate(
 /** Remove every simulated change and every simulated court filing. */
 export async function clearSimulation(): Promise<{ changes: number; courtRecords: number }> {
   const database = db();
-  const removedChanges = await database.delete(simulatedChanges).returning({ id: simulatedChanges.id });
+  const removedChanges = await database
+    .delete(simulatedChanges)
+    .returning({ id: simulatedChanges.id });
   const removedCourt = await database
     .delete(courtRecords)
     .where(eq(courtRecords.sourceSystem, "simulated_court_feed"))

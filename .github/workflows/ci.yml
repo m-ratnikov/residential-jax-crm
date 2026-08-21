@@ -1,0 +1,51 @@
+name: ci
+
+# Format, types, lint, tests and a production build on every push.
+#
+# The kit's integrate-ci-cd skill wires a shared workflow whose recipes are
+# `cdk synth` and `cdk deploy`; there is no AWS here, and the deploy is Vercel's
+# own git integration, so this is the plain equivalent rather than that shape.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Formatting
+        run: pnpm run format:check
+
+      - name: Types
+        run: pnpm run typecheck
+
+      - name: Lint
+        run: pnpm exec eslint .
+
+      - name: Tests
+        run: pnpm test
+
+      # The build has to run on a clone with no database and no artifact URL,
+      # because that is exactly how a reviewer will first run it.
+      - name: Build
+        run: pnpm build

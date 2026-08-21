@@ -68,7 +68,9 @@ export default function PipelinePage() {
   const [expanded, setExpanded] = useState<string | null>(null);
 
   const load = useCallback(() => {
-    api<DataSourceStatus>("/api/datasource").then(setStatus).catch(() => undefined);
+    api<DataSourceStatus>("/api/datasource")
+      .then(setStatus)
+      .catch(() => undefined);
     api<{ pipelineRuns: PipelineRunRow[]; matcherRuns: MatcherRunRow[] }>("/api/runs?limit=25")
       .then((body) => {
         setRuns(body.pipelineRuns);
@@ -83,13 +85,16 @@ export default function PipelinePage() {
     setBusy(true);
     setMessage(null);
     try {
-      const result = await post<{ alertsCreated: number; searchesEvaluated: number; alertsSuppressed: number }>(
-        "/api/matcher/run",
-        {},
-      );
+      const result = await post<{
+        alertsCreated: number;
+        searchesEvaluated: number;
+        alertsSuppressed: number;
+      }>("/api/matcher/run", {});
       setMessage(
         `Evaluated ${count(result.searchesEvaluated)} saved searches and raised ${count(result.alertsCreated)} alerts${
-          result.alertsSuppressed ? `, suppressing ${count(result.alertsSuppressed)} beyond the per-search cap` : ""
+          result.alertsSuppressed
+            ? `, suppressing ${count(result.alertsSuppressed)} beyond the per-search cap`
+            : ""
         }.`,
       );
       load();
@@ -170,7 +175,10 @@ export default function PipelinePage() {
         />
       </div>
 
-      <Panel title="Data source" subtitle="Swapping this is one environment variable, not a code change.">
+      <Panel
+        title="Data source"
+        subtitle="Swapping this is one environment variable, not a code change."
+      >
         {!status ? (
           <Spinner />
         ) : (
@@ -209,10 +217,7 @@ export default function PipelinePage() {
         )}
       </Panel>
 
-      <Panel
-        title="Matcher passes"
-        subtitle="Every pass, including the ones that raised nothing."
-      >
+      <Panel title="Matcher passes" subtitle="Every pass, including the ones that raised nothing.">
         {passes.length === 0 ? (
           <Empty title="No passes yet">
             Save a criteria set, then run the matcher. In deployment a GitHub Actions cron calls the

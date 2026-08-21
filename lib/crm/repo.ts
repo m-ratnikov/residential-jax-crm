@@ -81,7 +81,10 @@ export async function createSavedSearch(input: SaveSearchInput) {
   return row ?? null;
 }
 
-export async function updateSavedSearch(id: string, patch: Partial<SaveSearchInput> & { active?: boolean }) {
+export async function updateSavedSearch(
+  id: string,
+  patch: Partial<SaveSearchInput> & { active?: boolean },
+) {
   const values: Record<string, unknown> = { updatedAt: new Date() };
   if (patch.name !== undefined) values.name = patch.name;
   if (patch.description !== undefined) values.description = patch.description;
@@ -92,7 +95,11 @@ export async function updateSavedSearch(id: string, patch: Partial<SaveSearchInp
   if (patch.alertLimitPerRun !== undefined) values.alertLimitPerRun = patch.alertLimitPerRun;
   if (patch.active !== undefined) values.active = patch.active;
 
-  const [row] = await db().update(savedSearches).set(values).where(eq(savedSearches.id, id)).returning();
+  const [row] = await db()
+    .update(savedSearches)
+    .set(values)
+    .where(eq(savedSearches.id, id))
+    .returning();
   return row ?? null;
 }
 
@@ -323,7 +330,10 @@ export async function createOpportunity(input: CreateOpportunityInput) {
   });
 
   if (input.alertId) {
-    await database.update(alerts).set({ opportunityId: created.id }).where(eq(alerts.id, input.alertId));
+    await database
+      .update(alerts)
+      .set({ opportunityId: created.id })
+      .where(eq(alerts.id, input.alertId));
   }
 
   return { opportunity: created, created: true };
@@ -407,7 +417,11 @@ export interface UpdateOpportunityInput {
  */
 export async function updateOpportunity(id: string, patch: UpdateOpportunityInput) {
   const database = db();
-  const [current] = await database.select().from(opportunities).where(eq(opportunities.id, id)).limit(1);
+  const [current] = await database
+    .select()
+    .from(opportunities)
+    .where(eq(opportunities.id, id))
+    .limit(1);
   if (!current) return null;
 
   const values: Record<string, unknown> = { updatedAt: new Date() };

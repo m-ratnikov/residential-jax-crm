@@ -19,13 +19,7 @@
  */
 
 export type AgentProvider =
-  | "google"
-  | "groq"
-  | "cerebras"
-  | "huggingface"
-  | "vercel-ai-gateway"
-  | "anthropic"
-  | "bedrock";
+  "google" | "groq" | "cerebras" | "huggingface" | "vercel-ai-gateway" | "anthropic" | "bedrock";
 
 export interface ProviderModel {
   id: string;
@@ -93,7 +87,8 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "gemini-2.5-flash",
         label: "Gemini 2.5 Flash",
         free: true,
-        notes: "Long lived, widely tested Flash. Free of charge, useful as a fallback if a newer id is rejected.",
+        notes:
+          "Long lived, widely tested Flash. Free of charge, useful as a fallback if a newer id is rejected.",
       },
       {
         id: "gemini-2.5-pro",
@@ -131,13 +126,15 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "openai/gpt-oss-20b",
         label: "GPT-OSS 20B",
         free: true,
-        notes: "Same published free tier limits as the 120B, smaller and faster, weaker at multi step planning.",
+        notes:
+          "Same published free tier limits as the 120B, smaller and faster, weaker at multi step planning.",
       },
       {
         id: "qwen/qwen3.6-27b",
         label: "Qwen 3.6 27B",
         free: true,
-        notes: "Same published free tier limits: 30 requests/min, 1,000 requests/day, 8,000 tokens/min.",
+        notes:
+          "Same published free tier limits: 30 requests/min, 1,000 requests/day, 8,000 tokens/min.",
       },
     ],
     docsUrl: "https://console.groq.com/docs/rate-limits",
@@ -245,13 +242,15 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "anthropic/claude-opus-5",
         label: "Claude Opus 5 (via Gateway)",
         free: false,
-        notes: "Outside the free tier catalog. Needs purchased AI Gateway credits, billed at provider list price with no markup.",
+        notes:
+          "Outside the free tier catalog. Needs purchased AI Gateway credits, billed at provider list price with no markup.",
       },
       {
         id: "google/gemini-3.7-flash",
         label: "Gemini 3.7 Flash (via Gateway)",
         free: false,
-        notes: "Outside the free tier catalog. Cheaper per token than Opus, but still needs purchased credits.",
+        notes:
+          "Outside the free tier catalog. Cheaper per token than Opus, but still needs purchased credits.",
       },
     ],
     docsUrl: "https://vercel.com/docs/ai-gateway/pricing",
@@ -275,13 +274,15 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "claude-opus-5",
         label: "Claude Opus 5",
         free: false,
-        notes: "The quality option. Best multi step tool planning of anything here, and the most expensive per answer.",
+        notes:
+          "The quality option. Best multi step tool planning of anything here, and the most expensive per answer.",
       },
       {
         id: "claude-sonnet-5",
         label: "Claude Sonnet 5",
         free: false,
-        notes: "Trades some answer quality for latency, which matters when a turn already runs 30 to 90 seconds.",
+        notes:
+          "Trades some answer quality for latency, which matters when a turn already runs 30 to 90 seconds.",
       },
       {
         id: "claude-haiku-4-5-20251001",
@@ -310,7 +311,8 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "anthropic.claude-opus-5",
         label: "Claude Opus 5 (Bedrock)",
         free: false,
-        notes: "Bedrock ids carry an anthropic. prefix and no date suffix. Billed to the AWS account behind the token.",
+        notes:
+          "Bedrock ids carry an anthropic. prefix and no date suffix. Billed to the AWS account behind the token.",
       },
       {
         id: "anthropic.claude-sonnet-5",
@@ -326,7 +328,8 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
       "A Bedrock API key (bearer token). Long lived AWS access keys need SigV4 signing and cannot be pasted here; set them server side instead.",
     freeTier: {
       available: false,
-      summary: "No free tier for these models. Usage bills to the AWS account that issued the token.",
+      summary:
+        "No free tier for these models. Usage bills to the AWS account that issued the token.",
       source: "https://aws.amazon.com/bedrock/pricing/",
       readOn: FREE_TIER_VERIFIED_ON,
     },
@@ -340,7 +343,10 @@ export function findProvider(id: string | null | undefined): ProviderDefinition 
   return PROVIDERS.find((provider) => provider.id === id) ?? null;
 }
 
-export function findModel(providerId: string | null | undefined, modelId: string | null | undefined) {
+export function findModel(
+  providerId: string | null | undefined,
+  modelId: string | null | undefined,
+) {
   const provider = findProvider(providerId);
   if (!provider || !modelId) return null;
   return provider.models.find((model) => model.id === modelId) ?? null;

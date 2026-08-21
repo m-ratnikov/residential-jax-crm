@@ -34,8 +34,16 @@ export const COLUMN_GROUPS: ColumnGroup[] = [
   },
   {
     title: "Location",
-    description: "Situs address and parcel centroid. This is the mailing address only when they match.",
-    columns: ["address_street", "address_city", "address_zip", "latitude", "longitude", "subdivision"],
+    description:
+      "Situs address and parcel centroid. This is the mailing address only when they match.",
+    columns: [
+      "address_street",
+      "address_city",
+      "address_zip",
+      "latitude",
+      "longitude",
+      "subdivision",
+    ],
   },
   {
     title: "Structure",
@@ -67,7 +75,8 @@ export const COLUMN_GROUPS: ColumnGroup[] = [
   },
   {
     title: "Ownership",
-    description: "Owner of record plus the derived region class used by the regional owner question.",
+    description:
+      "Owner of record plus the derived region class used by the regional owner question.",
     columns: [
       "owner_name",
       "owners_text",
@@ -94,7 +103,8 @@ export const COLUMN_GROUPS: ColumnGroup[] = [
   },
   {
     title: "Walkability",
-    description: "Derived straight line distance from the parcel centroid to the nearest stop and store.",
+    description:
+      "Derived straight line distance from the parcel centroid to the nearest stop and store.",
     columns: [
       "nearest_transit_stop_m",
       "nearest_transit_stop_name",

@@ -37,12 +37,7 @@ import { runDelta } from "@/lib/data/runs";
 import type { PipelineRun, PropertyDataSource, ScoredProperty } from "@/lib/data/types";
 import { loadOverlay } from "@/lib/crm/overlay";
 import { db, type CrmDatabase } from "@/lib/crm/db";
-import {
-  alerts,
-  matcherRuns,
-  savedSearches,
-  searchMatches,
-} from "@/lib/crm/schema";
+import { alerts, matcherRuns, savedSearches, searchMatches } from "@/lib/crm/schema";
 import { deliverAlert } from "./deliver";
 import { logEvent } from "./log";
 
@@ -203,7 +198,10 @@ export async function runMatcher(
       .from(savedSearches)
       .where(
         options.savedSearchIds?.length
-          ? and(eq(savedSearches.active, true), inArray(savedSearches.id, [...options.savedSearchIds]))
+          ? and(
+              eq(savedSearches.active, true),
+              inArray(savedSearches.id, [...options.savedSearchIds]),
+            )
           : eq(savedSearches.active, true),
       );
 

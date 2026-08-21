@@ -25,7 +25,9 @@ const origin = originIndex >= 0 ? args[originIndex + 1] : null;
 const pull = args.includes("--pull");
 
 if (!origin) {
-  console.error("usage: node scripts/sync-shared.mjs --origin <path to pipeline repo ui/> [--pull]");
+  console.error(
+    "usage: node scripts/sync-shared.mjs --origin <path to pipeline repo ui/> [--pull]",
+  );
   process.exit(2);
 }
 

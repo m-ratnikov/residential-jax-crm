@@ -60,7 +60,9 @@ export default function SavedSearchesPage() {
         text: own?.seeded
           ? `Baseline recorded: ${count(own.matched)} parcels match now. You will be told when that set changes.`
           : `${count(result.alertsCreated)} alerts raised from ${count(own?.matched ?? 0)} matches${
-              result.alertsSuppressed ? `, ${count(result.alertsSuppressed)} suppressed by the cap` : ""
+              result.alertsSuppressed
+                ? `, ${count(result.alertsSuppressed)} suppressed by the cap`
+                : ""
             }.`,
       });
       load();
@@ -118,8 +120,8 @@ export default function SavedSearchesPage() {
         <div>
           <h1 className="text-lg font-semibold tracking-tight">Saved criteria</h1>
           <p className="text-xs text-ink-500">
-            Each of these is evaluated against every pipeline refresh. New and changed matches become
-            alerts.
+            Each of these is evaluated against every pipeline refresh. New and changed matches
+            become alerts.
           </p>
         </div>
         <Link href="/search">
@@ -138,8 +140,8 @@ export default function SavedSearchesPage() {
         <Spinner label="Reading saved criteria" />
       ) : searches.length === 0 && !storeMissing ? (
         <Empty title="Nothing saved yet">
-          Build a set of criteria on the search page and save it. The first pass records what already
-          matches as a baseline; after that you are told about changes.
+          Build a set of criteria on the search page and save it. The first pass records what
+          already matches as a baseline; after that you are told about changes.
         </Empty>
       ) : (
         <div className="space-y-3">
@@ -172,11 +174,7 @@ export default function SavedSearchesPage() {
                   <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] sm:grid-cols-3">
                     <Row label="Matched last pass" value={count(search.lastMatchCount ?? 0)} />
                     <Row label="Last evaluated" value={ago(search.lastEvaluatedAt)} />
-                    <Row
-                      label="Against run"
-                      value={search.lastPipelineRunId ?? "none yet"}
-                      mono
-                    />
+                    <Row label="Against run" value={search.lastPipelineRunId ?? "none yet"} mono />
                   </dl>
 
                   <div className="flex flex-wrap gap-3">

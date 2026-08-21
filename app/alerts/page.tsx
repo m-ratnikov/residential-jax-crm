@@ -15,7 +15,18 @@ import Link from "next/link";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { Badge, Button, Empty, Panel, ScoreBadge, Spinner, ago, count, money, when } from "@/components/ui";
+import {
+  Badge,
+  Button,
+  Empty,
+  Panel,
+  ScoreBadge,
+  Spinner,
+  ago,
+  count,
+  money,
+  when,
+} from "@/components/ui";
 import { ApiError, api, patch, post, type AlertRow } from "@/lib/client";
 import { humanField } from "@/lib/criteria/score";
 
@@ -78,8 +89,8 @@ function AlertsFeed() {
         <div>
           <h1 className="text-lg font-semibold tracking-tight">Alerts</h1>
           <p className="text-xs text-ink-500">
-            Raised when a parcel newly matches a saved criteria set, or when one that already matched
-            changes underneath you.
+            Raised when a parcel newly matches a saved criteria set, or when one that already
+            matched changes underneath you.
           </p>
         </div>
         <div className="flex gap-2">
@@ -147,7 +158,11 @@ function AlertsFeed() {
                 actions={
                   <>
                     <ScoreBadge score={alert.score} />
-                    <Button size="sm" variant="ghost" onClick={() => setExpanded(open ? null : alert.id)}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setExpanded(open ? null : alert.id)}
+                    >
                       {open ? "Less" : "Detail"}
                     </Button>
                   </>
@@ -172,12 +187,17 @@ function AlertsFeed() {
                     <Row label="Assessed" value={money(snapshot.assessedValue ?? null)} />
                     <Row
                       label="Roof age"
-                      value={snapshot.roofAgeYears !== null && snapshot.roofAgeYears !== undefined ? `${snapshot.roofAgeYears} years` : "unknown"}
+                      value={
+                        snapshot.roofAgeYears !== null && snapshot.roofAgeYears !== undefined
+                          ? `${snapshot.roofAgeYears} years`
+                          : "unknown"
+                      }
                     />
                     <Row
                       label="Held"
                       value={
-                        snapshot.yearsSinceLastSale !== null && snapshot.yearsSinceLastSale !== undefined
+                        snapshot.yearsSinceLastSale !== null &&
+                        snapshot.yearsSinceLastSale !== undefined
                           ? `${snapshot.yearsSinceLastSale} years`
                           : "no recorded sale"
                       }

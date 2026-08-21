@@ -89,7 +89,9 @@ function toRun(raw: RawRun): PipelineRun | null {
     status: text(raw.status) ?? "unknown",
     trigger: text(raw.trigger),
     tracks: stringArray(raw.tracks),
-    sources: Array.isArray(raw.sources) ? raw.sources.map((item) => toSource(item as RawSource)) : [],
+    sources: Array.isArray(raw.sources)
+      ? raw.sources.map((item) => toSource(item as RawSource))
+      : [],
     limitations: stringArray(raw.limitations),
     totals,
   };
@@ -129,7 +131,7 @@ export async function loadRunHistory(
   const rawRuns = Array.isArray(container)
     ? container
     : Array.isArray((container as { runs?: unknown }).runs)
-      ? ((container as { runs: unknown[] }).runs)
+      ? (container as { runs: unknown[] }).runs
       : [];
 
   const runs = rawRuns
@@ -141,7 +143,11 @@ export async function loadRunHistory(
 }
 
 /** Total rows inserted and updated across every track in a run. */
-export function runDelta(run: PipelineRun): { inserted: number; updated: number; unchanged: number } {
+export function runDelta(run: PipelineRun): {
+  inserted: number;
+  updated: number;
+  unchanged: number;
+} {
   return run.sources.reduce(
     (totals, source) => ({
       inserted: totals.inserted + source.inserted,

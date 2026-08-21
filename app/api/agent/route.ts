@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import { serverSelection, AgentNotConfiguredError } from "@/lib/agent/model";
 import { runAgent } from "@/lib/agent/run";
 import { logAgent } from "@/lib/agent/log";
-import { readUserCredential, KEY_HEADER, PROVIDER_HEADER, MODEL_HEADER } from "@/lib/agent/credentials";
+import {
+  readUserCredential,
+  KEY_HEADER,
+  PROVIDER_HEADER,
+  MODEL_HEADER,
+} from "@/lib/agent/credentials";
 import { isAgentError, AgentBadRequestError, AgentRateLimitError } from "@/lib/agent/errors";
 import { AGENT_RATE_LIMIT, clientAddress } from "@/lib/agent/ratelimit";
 import { safeMessage } from "@/lib/agent/redact";
@@ -85,9 +90,13 @@ function toErrorResponse(
             : "The model provider failed the call. Nothing was fabricated. Retrying, or picking a different model on the settings page, is usually enough.";
 
     const headers: Record<string, string> = {};
-    if (error instanceof AgentRateLimitError) headers["retry-after"] = String(error.retryAfterSeconds);
+    if (error instanceof AgentRateLimitError)
+      headers["retry-after"] = String(error.retryAfterSeconds);
 
-    return NextResponse.json(emptyResponse("error", error.message, hint), { status: error.status, headers });
+    return NextResponse.json(emptyResponse("error", error.message, hint), {
+      status: error.status,
+      headers,
+    });
   }
 
   const message = safeMessage(error, secrets);
@@ -115,11 +124,15 @@ function parseMessages(body: unknown): AgentChatMessage[] | null {
           typeof (item as { content?: unknown }).content === "string",
       )
       .filter((item) => item.role === "user" || item.role === "assistant")
-      .map((item) => ({ role: item.role as "user" | "assistant", content: item.content.slice(0, 8000) }));
+      .map((item) => ({
+        role: item.role as "user" | "assistant",
+        content: item.content.slice(0, 8000),
+      }));
     return messages.length > 0 ? messages : null;
   }
   const single = (body as { message?: unknown }).message;
-  if (typeof single === "string" && single.trim()) return [{ role: "user", content: single.slice(0, 8000) }];
+  if (typeof single === "string" && single.trim())
+    return [{ role: "user", content: single.slice(0, 8000) }];
   return null;
 }
 
@@ -128,7 +141,10 @@ export async function POST(request: Request): Promise<NextResponse<AgentResponse
   // public route on a 300 second function is worth protecting whoever pays.
   const decision = AGENT_RATE_LIMIT.check(clientAddress(request.headers));
   if (!decision.allowed) {
-    logAgent("warn", "agent rate limited", { limit: decision.limit, retry_after_s: decision.retryAfterSeconds });
+    logAgent("warn", "agent rate limited", {
+      limit: decision.limit,
+      retry_after_s: decision.retryAfterSeconds,
+    });
     return toErrorResponse(
       new AgentRateLimitError(
         `Too many questions from this address: the limit is ${decision.limit} per window. Try again in ${decision.retryAfterSeconds} seconds.`,
@@ -153,14 +169,20 @@ export async function POST(request: Request): Promise<NextResponse<AgentResponse
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json(emptyResponse("error", "Request body must be JSON with a messages array."), {
-      status: 400,
-    });
+    return NextResponse.json(
+      emptyResponse("error", "Request body must be JSON with a messages array."),
+      {
+        status: 400,
+      },
+    );
   }
   const messages = parseMessages(body);
   if (!messages || messages[messages.length - 1]?.role !== "user") {
     return NextResponse.json(
-      emptyResponse("error", "Send { messages: [{ role: 'user' | 'assistant', content }] } ending with a user message."),
+      emptyResponse(
+        "error",
+        "Send { messages: [{ role: 'user' | 'assistant', content }] } ending with a user message.",
+      ),
       { status: 400 },
     );
   }
@@ -196,9 +218,11 @@ export async function GET(request: Request): Promise<NextResponse> {
 
   try {
     const credential = readUserCredential(request.headers);
-    if (credential) active = { provider: credential.provider, model: credential.modelId, source: "user" };
+    if (credential)
+      active = { provider: credential.provider, model: credential.modelId, source: "user" };
   } catch (error: unknown) {
-    headerError = error instanceof AgentBadRequestError ? error.message : "credential headers rejected";
+    headerError =
+      error instanceof AgentBadRequestError ? error.message : "credential headers rejected";
   }
 
   return NextResponse.json({
@@ -206,7 +230,9 @@ export async function GET(request: Request): Promise<NextResponse> {
     // What would answer a question sent exactly like this one.
     active,
     // The server side default, by variable NAME. Never a value.
-    server_default: server ? { provider: server.provider, model: server.modelId, env_key: server.envKey } : null,
+    server_default: server
+      ? { provider: server.provider, model: server.modelId, env_key: server.envKey }
+      : null,
     bring_your_own_key: {
       headers: { key: KEY_HEADER, provider: PROVIDER_HEADER, model: MODEL_HEADER },
       settings_url: "/settings",
@@ -220,10 +246,17 @@ export async function GET(request: Request): Promise<NextResponse> {
       free_tier: provider.freeTier,
       key_url: provider.keyUrl,
       docs_url: provider.docsUrl,
-      models: provider.models.map((model) => ({ id: model.id, label: model.label, free: model.free })),
+      models: provider.models.map((model) => ({
+        id: model.id,
+        label: model.label,
+        free: model.free,
+      })),
     })),
     tools: ["get_schema", "run_sql", "preset_question", "get_property", "get_run_history"],
-    rate_limit: { scope: "per client address", note: "in process, per instance; see lib/agent/ratelimit.ts" },
+    rate_limit: {
+      scope: "per client address",
+      note: "in process, per instance; see lib/agent/ratelimit.ts",
+    },
     message: active
       ? `agent will answer with ${active.provider}:${active.model} (${active.source} credential)`
       : NOT_CONFIGURED_MESSAGE,

@@ -11,9 +11,7 @@
       "status": "completed",
       "trigger": "consolidation",
       "git_sha": null,
-      "tracks": [
-        "consolidation"
-      ],
+      "tracks": ["consolidation"],
       "window": "changed",
       "sources": [
         {
@@ -72,9 +70,7 @@
       "status": "completed",
       "trigger": "workflow_dispatch",
       "git_sha": "60e22c1bbec32c7ae1f19773c65d6ca054585033",
-      "tracks": [
-        "contractors"
-      ],
+      "tracks": ["contractors"],
       "window": null,
       "sources": [
         {
@@ -285,9 +281,7 @@
       "status": "completed",
       "trigger": "consolidation",
       "git_sha": null,
-      "tracks": [
-        "consolidation"
-      ],
+      "tracks": ["consolidation"],
       "window": "changed",
       "sources": [
         {
@@ -1209,9 +1203,7 @@
       "status": "completed",
       "trigger": "consolidation",
       "git_sha": null,
-      "tracks": [
-        "consolidation"
-      ],
+      "tracks": ["consolidation"],
       "window": "changed",
       "sources": [
         {
@@ -2091,9 +2083,7 @@
       "status": "completed",
       "trigger": "consolidation",
       "git_sha": null,
-      "tracks": [
-        "consolidation"
-      ],
+      "tracks": ["consolidation"],
       "window": "changed",
       "sources": [
         {

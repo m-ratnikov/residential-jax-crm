@@ -89,14 +89,20 @@ export function readUserCredential(headers: Headers): UserCredential | null {
   const apiKey = requireKeyShape(rawKey);
 
   if (!rawProvider) {
-    throw new AgentBadRequestError(`A request carrying ${KEY_HEADER} must also send ${PROVIDER_HEADER}.`);
+    throw new AgentBadRequestError(
+      `A request carrying ${KEY_HEADER} must also send ${PROVIDER_HEADER}.`,
+    );
   }
   const provider = findProvider(rawProvider);
   if (!provider) {
-    throw new AgentBadRequestError(`Unknown provider "${rawProvider}". See GET /api/agent for the supported list.`);
+    throw new AgentBadRequestError(
+      `Unknown provider "${rawProvider}". See GET /api/agent for the supported list.`,
+    );
   }
   if (!provider.acceptsUserKey) {
-    throw new AgentBadRequestError(`${provider.label} cannot be driven by a pasted key; configure it server side.`);
+    throw new AgentBadRequestError(
+      `${provider.label} cannot be driven by a pasted key; configure it server side.`,
+    );
   }
 
   const modelId = rawModel ?? defaultModelFor(provider.id);

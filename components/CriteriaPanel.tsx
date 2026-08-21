@@ -141,7 +141,10 @@ export function CriteriaPanel({
   const setWeights = (patch: Partial<Weights>) =>
     onChange({ ...criteria, weights: { ...criteria.weights, ...patch } });
 
-  const toggleInList = (key: "cities" | "zips" | "propertyTypes" | "ownerRegionClasses", value: string) => {
+  const toggleInList = (
+    key: "cities" | "zips" | "propertyTypes" | "ownerRegionClasses",
+    value: string,
+  ) => {
     const current = filters[key] ?? [];
     const next = current.includes(value)
       ? current.filter((entry) => entry !== value)
@@ -484,10 +487,14 @@ export function CriteriaPanel({
                     max={5}
                     step={1}
                     value={criteria.weights[key]}
-                    onChange={(event) => setWeights({ [key]: Number(event.target.value) } as Partial<Weights>)}
+                    onChange={(event) =>
+                      setWeights({ [key]: Number(event.target.value) } as Partial<Weights>)
+                    }
                     className="flex-1 accent-[var(--color-accent-500)]"
                   />
-                  <span className="tabular w-4 text-right text-ink-300">{criteria.weights[key]}</span>
+                  <span className="tabular w-4 text-right text-ink-300">
+                    {criteria.weights[key]}
+                  </span>
                 </label>
               ))}
             </div>

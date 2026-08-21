@@ -73,7 +73,8 @@ export async function POST(request: Request): Promise<NextResponse<TestResult>> 
   try {
     credential = readUserCredential(request.headers);
   } catch (error: unknown) {
-    const message = error instanceof AgentBadRequestError ? error.message : "credential headers rejected";
+    const message =
+      error instanceof AgentBadRequestError ? error.message : "credential headers rejected";
     return NextResponse.json(
       {
         ok: false,
@@ -110,7 +111,8 @@ export async function POST(request: Request): Promise<NextResponse<TestResult>> 
     const resolved = await resolveModel(process.env, credential);
     const result = await generateText({
       model: resolved.model,
-      system: "You are a connectivity probe. Follow the instruction exactly and keep every reply under five words.",
+      system:
+        "You are a connectivity probe. Follow the instruction exactly and keep every reply under five words.",
       prompt: PROBE_PROMPT,
       tools: {
         health_check: tool({

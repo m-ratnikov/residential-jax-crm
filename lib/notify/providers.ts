@@ -150,7 +150,9 @@ function simulatedProvider(channel: OutreachChannel, id: string): OutreachProvid
       // A bounce or a failure never reaches delivered; everything else does,
       // and only then goes on to open or reply.
       const failsEarly =
-        outcome.status === "bounced" || outcome.status === "failed" || outcome.status === "returned";
+        outcome.status === "bounced" ||
+        outcome.status === "failed" ||
+        outcome.status === "returned";
 
       if (!failsEarly) {
         events.push({

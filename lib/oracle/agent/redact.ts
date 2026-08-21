@@ -53,7 +53,10 @@ function escapeLiteral(value: string): string {
  * not credentials, and blanket replacing a 3 character string would corrupt
  * unrelated text.
  */
-export function redactSecrets(value: string, secrets: Iterable<string | null | undefined> = []): string {
+export function redactSecrets(
+  value: string,
+  secrets: Iterable<string | null | undefined> = [],
+): string {
   let out = value;
   for (const secret of secrets) {
     const trimmed = secret?.trim();
@@ -73,7 +76,10 @@ export function redactSecrets(value: string, secrets: Iterable<string | null | u
  * routinely quote the request, so the whole error is serialised before being
  * scrubbed rather than only its top level `message`.
  */
-export function safeMessage(error: unknown, secrets: Iterable<string | null | undefined> = []): string {
+export function safeMessage(
+  error: unknown,
+  secrets: Iterable<string | null | undefined> = [],
+): string {
   const base = error instanceof Error ? error.message : String(error);
   const withCause =
     error instanceof Error && error.cause instanceof Error && error.cause.message !== base

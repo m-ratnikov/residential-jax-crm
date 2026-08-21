@@ -17,12 +17,7 @@ import { logAgent } from "@/lib/oracle/agent/log";
 import { resolveModel, type ResolvedModel } from "@/lib/oracle/agent/model";
 import type { UserCredential } from "@/lib/oracle/agent/credentials";
 import { keyFingerprint, safeMessage } from "@/lib/oracle/agent/redact";
-import type {
-  AgentChatMessage,
-  AgentResponse,
-  AgentUsage,
-  Env,
-} from "@/lib/oracle/agent/types";
+import type { AgentChatMessage, AgentResponse, AgentUsage, Env } from "@/lib/oracle/agent/types";
 import { SYSTEM_PROMPT } from "./prompt";
 import { createAgentTools, createToolContext, newTrace, TOOL_ORDER } from "./tools";
 

@@ -36,7 +36,10 @@ export function formatTimestamp(value: string | null | undefined): string {
   if (!value) return NOT_AVAILABLE;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toISOString().replace("T", " ").replace(/\.\d+Z$/, "Z");
+  return date
+    .toISOString()
+    .replace("T", " ")
+    .replace(/\.\d+Z$/, "Z");
 }
 
 export function formatDateOnly(value: string | null | undefined): string {

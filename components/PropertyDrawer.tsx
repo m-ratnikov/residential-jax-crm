@@ -178,14 +178,19 @@ export function PropertyDrawer({
           <>
             <div className="flex flex-wrap gap-1.5">
               {detail.opportunity ? (
-                <Badge tone="accent">In pipeline - {detail.opportunity.stage.replace("_", " ")}</Badge>
+                <Badge tone="accent">
+                  In pipeline - {detail.opportunity.stage.replace("_", " ")}
+                </Badge>
               ) : (
                 <Button size="sm" variant="primary" onClick={track} disabled={tracking}>
                   {tracking ? "Adding" : "Track as opportunity"}
                 </Button>
               )}
               {detail.simulated && (
-                <Badge tone="warn" title="One or more values below came from a simulated pipeline update.">
+                <Badge
+                  tone="warn"
+                  title="One or more values below came from a simulated pipeline update."
+                >
                   simulated values
                 </Badge>
               )}
@@ -198,7 +203,10 @@ export function PropertyDrawer({
             )}
 
             {detail.court.length > 0 && (
-              <Panel title="Court records" subtitle="Distress signals from the attached court source.">
+              <Panel
+                title="Court records"
+                subtitle="Distress signals from the attached court source."
+              >
                 <ul className="space-y-2">
                   {detail.court.map((record) => (
                     <li key={record.id} className="rounded border border-[var(--line)] px-2.5 py-2">
@@ -212,7 +220,9 @@ export function PropertyDrawer({
                       </div>
                       <p className="mono mt-1 text-[11px] text-ink-500">{record.caseNumber}</p>
                       <p className="tabular mt-0.5 text-[11px] text-ink-400">
-                        {record.filedDate ? `filed ${record.filedDate.slice(0, 10)}` : "no filing date"}
+                        {record.filedDate
+                          ? `filed ${record.filedDate.slice(0, 10)}`
+                          : "no filing date"}
                         {record.amount ? ` - ${money(record.amount)}` : ""}
                       </p>
                       <p className="mt-0.5 text-[11px] text-ink-500">
@@ -234,7 +244,11 @@ export function PropertyDrawer({
                     <Row label="Artifact" value={provenance.sourceArtifact} mono />
                   )}
                   {provenance.sourceSha256 && (
-                    <Row label="Artifact sha256" value={provenance.sourceSha256.slice(0, 24)} mono />
+                    <Row
+                      label="Artifact sha256"
+                      value={provenance.sourceSha256.slice(0, 24)}
+                      mono
+                    />
                   )}
                   {provenance.sourceUrl && (
                     <div className="flex gap-2">

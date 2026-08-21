@@ -177,7 +177,11 @@ export default function AgentPage() {
                 placeholder="Ask about parcels, saved criteria, alerts or the pipeline"
               />
             </div>
-            <Button variant="primary" onClick={() => void ask(question)} disabled={busy || !question.trim()}>
+            <Button
+              variant="primary"
+              onClick={() => void ask(question)}
+              disabled={busy || !question.trim()}
+            >
               {busy ? "Asking" : "Ask"}
             </Button>
           </div>
@@ -267,7 +271,9 @@ function AnswerBlock({ response }: { response: AgentResponse }) {
               <div className="flex flex-wrap items-center gap-2">
                 <span className="mono text-[12px] text-accent-400">{call.name}</span>
                 <span className="text-[11px] text-ink-500">{call.output_summary}</span>
-                <span className="tabular ml-auto text-[11px] text-ink-600">{call.elapsed_ms} ms</span>
+                <span className="tabular ml-auto text-[11px] text-ink-600">
+                  {call.elapsed_ms} ms
+                </span>
               </div>
               {call.error && <p className="mt-1 text-[11px] text-bad-500">{call.error}</p>}
               <pre className="mono mt-1 max-h-40 overflow-auto whitespace-pre-wrap rounded bg-[var(--surface)] p-2 text-[10px] text-ink-500">
@@ -295,7 +301,10 @@ function AnswerBlock({ response }: { response: AgentResponse }) {
               </thead>
               <tbody className="tabular">
                 {response.evidence.map((row, index) => (
-                  <tr key={`${String(row.property_id)}-${index}`} className="border-t border-[var(--line)]">
+                  <tr
+                    key={`${String(row.property_id)}-${index}`}
+                    className="border-t border-[var(--line)]"
+                  >
                     <td className="mono py-1 text-ink-300">{String(row.property_id)}</td>
                     <td className="max-w-[280px] truncate py-1 text-ink-200">
                       {String(row.address ?? "")}

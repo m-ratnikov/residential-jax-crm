@@ -13,7 +13,19 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { Badge, Button, Empty, Panel, ScoreBadge, Spinner, Stat, StageBadge, ago, count, money } from "@/components/ui";
+import {
+  Badge,
+  Button,
+  Empty,
+  Panel,
+  ScoreBadge,
+  Spinner,
+  Stat,
+  StageBadge,
+  ago,
+  count,
+  money,
+} from "@/components/ui";
 import { api, type AlertRow, type MatcherRunRow, type OpportunityRow } from "@/lib/client";
 import { STAGE_LABELS, type AcquisitionStage } from "@/lib/notify/types";
 
@@ -49,7 +61,9 @@ export default function DashboardPage() {
   const [storeMissing, setStoreMissing] = useState(false);
 
   useEffect(() => {
-    api<DataSourceStatus>("/api/datasource").then(setStatus).catch(() => undefined);
+    api<DataSourceStatus>("/api/datasource")
+      .then(setStatus)
+      .catch(() => undefined);
 
     api<{ alerts: AlertRow[] }>("/api/alerts?limit=8")
       .then((body) => setAlerts(body.alerts))

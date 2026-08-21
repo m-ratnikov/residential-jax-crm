@@ -59,7 +59,8 @@ export function readSettings(): StoredSettings | null {
     const parsed = JSON.parse(raw) as Partial<StoredSettings>;
     if (typeof parsed.apiKey !== "string" || !parsed.apiKey.trim()) return null;
     if (typeof parsed.provider !== "string") return null;
-    const modelId = typeof parsed.modelId === "string" ? parsed.modelId : defaultModelFor(parsed.provider);
+    const modelId =
+      typeof parsed.modelId === "string" ? parsed.modelId : defaultModelFor(parsed.provider);
     if (!findModel(parsed.provider, modelId)) return null;
     return {
       provider: parsed.provider,
@@ -76,7 +77,11 @@ export function readSettings(): StoredSettings | null {
 
 export function writeSettings(settings: Omit<StoredSettings, "savedAt">): StoredSettings | null {
   if (!isBrowser()) return null;
-  const stored: StoredSettings = { ...settings, apiKey: settings.apiKey.trim(), savedAt: new Date().toISOString() };
+  const stored: StoredSettings = {
+    ...settings,
+    apiKey: settings.apiKey.trim(),
+    savedAt: new Date().toISOString(),
+  };
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
     window.dispatchEvent(new Event(CHANGE_EVENT));

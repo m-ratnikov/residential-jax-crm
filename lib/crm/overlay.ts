@@ -40,7 +40,10 @@ const NUMERIC_COLUMNS = new Set<OverridableColumn>([
 
 const BOOLEAN_COLUMNS = new Set<OverridableColumn>(["owner_occupied", "homestead_flag"]);
 
-function parseValue(column: OverridableColumn, raw: string | null): string | number | boolean | null {
+function parseValue(
+  column: OverridableColumn,
+  raw: string | null,
+): string | number | boolean | null {
   if (raw === null) return null;
   if (NUMERIC_COLUMNS.has(column)) {
     const parsed = Number(raw);

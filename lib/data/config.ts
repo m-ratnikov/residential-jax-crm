@@ -101,7 +101,10 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
     isSample = true;
   }
 
-  const runHistoryConfigured = firstConfigured(env.RUN_HISTORY_URL, env.NEXT_PUBLIC_RUN_HISTORY_URL);
+  const runHistoryConfigured = firstConfigured(
+    env.RUN_HISTORY_URL,
+    env.NEXT_PUBLIC_RUN_HISTORY_URL,
+  );
   const runHistoryUrl = runHistoryConfigured
     ? /^https?:\/\//i.test(runHistoryConfigured)
       ? resolveArtifactUrl(runHistoryConfigured, RUN_HISTORY_OBJECT)

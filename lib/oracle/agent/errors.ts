@@ -95,7 +95,11 @@ export function isAgentError(error: unknown): error is AgentError {
  * for a bad key (Google does this) are caught by the message probe instead.
  * The message handed in here must already be redacted.
  */
-export function classifyProviderError(error: unknown, safeText: string, source: "user" | "server"): AgentError {
+export function classifyProviderError(
+  error: unknown,
+  safeText: string,
+  source: "user" | "server",
+): AgentError {
   const statusCode = (error as { statusCode?: unknown } | null)?.statusCode;
   const status = typeof statusCode === "number" ? statusCode : null;
 

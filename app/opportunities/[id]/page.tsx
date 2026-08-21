@@ -31,7 +31,14 @@ import {
   money,
   when,
 } from "@/components/ui";
-import { ApiError, api, patch, post, type OpportunityRow, type OutreachMessageRow } from "@/lib/client";
+import {
+  ApiError,
+  api,
+  patch,
+  post,
+  type OpportunityRow,
+  type OutreachMessageRow,
+} from "@/lib/client";
 import {
   ACQUISITION_STAGES,
   CHANNEL_LABELS,
@@ -41,10 +48,19 @@ import {
 
 interface Detail extends OpportunityRow {
   stageEvents: {
-    event: { id: string; fromStage: string | null; toStage: string; note: string | null; createdAt: string };
+    event: {
+      id: string;
+      fromStage: string | null;
+      toStage: string;
+      note: string | null;
+      createdAt: string;
+    };
     actor: { id: string; name: string } | null;
   }[];
-  notes: { note: { id: string; body: string; createdAt: string }; author: { name: string } | null }[];
+  notes: {
+    note: { id: string; body: string; createdAt: string };
+    author: { name: string } | null;
+  }[];
   tasks: {
     task: { id: string; title: string; status: string; dueAt: string | null };
     assignee: { id: string; name: string } | null;
@@ -136,7 +152,8 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
             </p>
             {detail.searchName && (
               <p className="mt-1.5 text-[11px] text-ink-500">
-                Surfaced by the saved search <span className="text-ink-300">{detail.searchName}</span>.
+                Surfaced by the saved search{" "}
+                <span className="text-ink-300">{detail.searchName}</span>.
               </p>
             )}
             <dl className="tabular mt-2.5 grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] sm:grid-cols-4">
@@ -153,7 +170,8 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
               <Row
                 label="Held"
                 value={
-                  snapshot["yearsSinceLastSale"] !== null && snapshot["yearsSinceLastSale"] !== undefined
+                  snapshot["yearsSinceLastSale"] !== null &&
+                  snapshot["yearsSinceLastSale"] !== undefined
                     ? `${snapshot["yearsSinceLastSale"]} years`
                     : "no recorded sale"
                 }
@@ -202,7 +220,9 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
                       </span>
                     </div>
                     {message.subject && (
-                      <p className="mt-1.5 text-[12px] font-medium text-ink-200">{message.subject}</p>
+                      <p className="mt-1.5 text-[12px] font-medium text-ink-200">
+                        {message.subject}
+                      </p>
                     )}
                     <pre className="mt-1 whitespace-pre-wrap text-[11px] leading-relaxed text-ink-400">
                       {message.body}
@@ -220,7 +240,9 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
                               <StatusBadge status={event.status} />
                               <span className="text-ink-500">{event.detail}</span>
                               <span className="ml-auto text-ink-600">
-                                {future ? `scheduled ${when(event.occurredAt)}` : ago(event.occurredAt)}
+                                {future
+                                  ? `scheduled ${when(event.occurredAt)}`
+                                  : ago(event.occurredAt)}
                               </span>
                             </li>
                           );
@@ -236,7 +258,12 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
           <Panel title="Notes">
             <div className="flex gap-2">
               <div className="flex-1">
-                <TextArea value={noteBody} onChange={setNoteBody} rows={2} placeholder="What happened" />
+                <TextArea
+                  value={noteBody}
+                  onChange={setNoteBody}
+                  rows={2}
+                  placeholder="What happened"
+                />
               </div>
               <Button
                 variant="primary"
@@ -284,7 +311,9 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
                       </p>
                       {event.note && <p className="text-[11px] text-ink-500">{event.note}</p>}
                     </div>
-                    <span className="shrink-0 text-[11px] text-ink-600">{ago(event.createdAt)}</span>
+                    <span className="shrink-0 text-[11px] text-ink-600">
+                      {ago(event.createdAt)}
+                    </span>
                   </li>
                 ))}
               </ol>
@@ -414,7 +443,11 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
                       }}
                       className="size-3.5 accent-[var(--color-accent-500)]"
                     />
-                    <span className={task.status === "done" ? "text-ink-600 line-through" : "text-ink-200"}>
+                    <span
+                      className={
+                        task.status === "done" ? "text-ink-600 line-through" : "text-ink-200"
+                      }
+                    >
                       {task.title}
                     </span>
                     {assignee && <Badge tone="neutral">{assignee.name.split(" ")[0]}</Badge>}

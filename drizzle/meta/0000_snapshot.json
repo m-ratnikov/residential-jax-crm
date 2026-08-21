@@ -161,12 +161,8 @@
           "name": "alerts_saved_search_id_saved_searches_id_fk",
           "tableFrom": "alerts",
           "tableTo": "saved_searches",
-          "columnsFrom": [
-            "saved_search_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["saved_search_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -174,12 +170,8 @@
           "name": "alerts_matcher_run_id_matcher_runs_id_fk",
           "tableFrom": "alerts",
           "tableTo": "matcher_runs",
-          "columnsFrom": [
-            "matcher_run_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["matcher_run_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -519,12 +511,8 @@
           "name": "notes_opportunity_id_opportunities_id_fk",
           "tableFrom": "notes",
           "tableTo": "opportunities",
-          "columnsFrom": [
-            "opportunity_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["opportunity_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -532,12 +520,8 @@
           "name": "notes_author_id_team_members_id_fk",
           "tableFrom": "notes",
           "tableTo": "team_members",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -640,12 +624,8 @@
           "name": "notifications_alert_id_alerts_id_fk",
           "tableFrom": "notifications",
           "tableTo": "alerts",
-          "columnsFrom": [
-            "alert_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["alert_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -874,12 +854,8 @@
           "name": "opportunities_owner_id_owners_id_fk",
           "tableFrom": "opportunities",
           "tableTo": "owners",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["owner_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -887,12 +863,8 @@
           "name": "opportunities_saved_search_id_saved_searches_id_fk",
           "tableFrom": "opportunities",
           "tableTo": "saved_searches",
-          "columnsFrom": [
-            "saved_search_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["saved_search_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -900,12 +872,8 @@
           "name": "opportunities_alert_id_alerts_id_fk",
           "tableFrom": "opportunities",
           "tableTo": "alerts",
-          "columnsFrom": [
-            "alert_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["alert_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -913,12 +881,8 @@
           "name": "opportunities_assignee_id_team_members_id_fk",
           "tableFrom": "opportunities",
           "tableTo": "team_members",
-          "columnsFrom": [
-            "assignee_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assignee_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -979,12 +943,8 @@
           "name": "outreach_campaigns_created_by_id_team_members_id_fk",
           "tableFrom": "outreach_campaigns",
           "tableTo": "team_members",
-          "columnsFrom": [
-            "created_by_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1083,12 +1043,8 @@
           "name": "outreach_events_message_id_outreach_messages_id_fk",
           "tableFrom": "outreach_events",
           "tableTo": "outreach_messages",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1225,12 +1181,8 @@
           "name": "outreach_messages_campaign_id_outreach_campaigns_id_fk",
           "tableFrom": "outreach_messages",
           "tableTo": "outreach_campaigns",
-          "columnsFrom": [
-            "campaign_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["campaign_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1238,12 +1190,8 @@
           "name": "outreach_messages_opportunity_id_opportunities_id_fk",
           "tableFrom": "outreach_messages",
           "tableTo": "opportunities",
-          "columnsFrom": [
-            "opportunity_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["opportunity_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1251,12 +1199,8 @@
           "name": "outreach_messages_created_by_id_team_members_id_fk",
           "tableFrom": "outreach_messages",
           "tableTo": "team_members",
-          "columnsFrom": [
-            "created_by_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1495,12 +1439,8 @@
           "name": "saved_searches_owner_id_team_members_id_fk",
           "tableFrom": "saved_searches",
           "tableTo": "team_members",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["owner_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1616,12 +1556,8 @@
           "name": "search_matches_saved_search_id_saved_searches_id_fk",
           "tableFrom": "search_matches",
           "tableTo": "saved_searches",
-          "columnsFrom": [
-            "saved_search_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["saved_search_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1799,12 +1735,8 @@
           "name": "stage_events_opportunity_id_opportunities_id_fk",
           "tableFrom": "stage_events",
           "tableTo": "opportunities",
-          "columnsFrom": [
-            "opportunity_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["opportunity_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1812,12 +1744,8 @@
           "name": "stage_events_actor_id_team_members_id_fk",
           "tableFrom": "stage_events",
           "tableTo": "team_members",
-          "columnsFrom": [
-            "actor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["actor_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1922,12 +1850,8 @@
           "name": "tasks_opportunity_id_opportunities_id_fk",
           "tableFrom": "tasks",
           "tableTo": "opportunities",
-          "columnsFrom": [
-            "opportunity_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["opportunity_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1935,12 +1859,8 @@
           "name": "tasks_assignee_id_team_members_id_fk",
           "tableFrom": "tasks",
           "tableTo": "team_members",
-          "columnsFrom": [
-            "assignee_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assignee_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2002,42 +1922,22 @@
     "public.acquisition_stage": {
       "name": "acquisition_stage",
       "schema": "public",
-      "values": [
-        "identified",
-        "contacted",
-        "negotiating",
-        "under_contract",
-        "closed",
-        "dead"
-      ]
+      "values": ["identified", "contacted", "negotiating", "under_contract", "closed", "dead"]
     },
     "public.alert_kind": {
       "name": "alert_kind",
       "schema": "public",
-      "values": [
-        "new_match",
-        "updated_match",
-        "left_match"
-      ]
+      "values": ["new_match", "updated_match", "left_match"]
     },
     "public.notify_channel": {
       "name": "notify_channel",
       "schema": "public",
-      "values": [
-        "in_app",
-        "email",
-        "sms",
-        "push"
-      ]
+      "values": ["in_app", "email", "sms", "push"]
     },
     "public.outreach_channel": {
       "name": "outreach_channel",
       "schema": "public",
-      "values": [
-        "email",
-        "sms",
-        "direct_mail"
-      ]
+      "values": ["email", "sms", "direct_mail"]
     },
     "public.outreach_status": {
       "name": "outreach_status",
@@ -2056,11 +1956,7 @@
     "public.task_status": {
       "name": "task_status",
       "schema": "public",
-      "values": [
-        "open",
-        "done",
-        "cancelled"
-      ]
+      "values": ["open", "done", "cancelled"]
     }
   },
   "schemas": {},

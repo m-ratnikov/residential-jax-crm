@@ -64,7 +64,9 @@ async function main(): Promise<void> {
        TO ${sqlPath(OUT_PARQUET)} (FORMAT parquet, COMPRESSION zstd)`,
     );
 
-    console.log(`wrote ${OUT_PARQUET}: ${rows.toLocaleString("en-US")} parcels from ${SAMPLE_ZIPS.join(", ")}`);
+    console.log(
+      `wrote ${OUT_PARQUET}: ${rows.toLocaleString("en-US")} parcels from ${SAMPLE_ZIPS.join(", ")}`,
+    );
   } finally {
     connection.closeSync();
     instance.closeSync();

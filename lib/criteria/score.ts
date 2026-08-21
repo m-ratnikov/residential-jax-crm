@@ -40,7 +40,9 @@ export const MATERIAL_FIELDS = [
 ] as const satisfies readonly (keyof PropertyRecord)[];
 
 export function matchHashOf(property: PropertyRecord): string {
-  const material = MATERIAL_FIELDS.map((field) => `${field}=${String(property[field] ?? "")}`).join("|");
+  const material = MATERIAL_FIELDS.map((field) => `${field}=${String(property[field] ?? "")}`).join(
+    "|",
+  );
   return createHash("sha256").update(material).digest("hex").slice(0, 32);
 }
 
@@ -121,7 +123,8 @@ function evidenceFor(key: string, property: PropertyRecord): string | null {
       const foreclosures = Number(court["court_foreclosure_count"] ?? 0);
       const code = Number(court["court_code_enforcement_count"] ?? 0);
       if (liens > 0) signals.push(`${liens} recorded lien${liens === 1 ? "" : "s"}`);
-      if (foreclosures > 0) signals.push(`${foreclosures} foreclosure filing${foreclosures === 1 ? "" : "s"}`);
+      if (foreclosures > 0)
+        signals.push(`${foreclosures} foreclosure filing${foreclosures === 1 ? "" : "s"}`);
       if (code > 0) signals.push(`${code} code enforcement case${code === 1 ? "" : "s"}`);
       return signals.length ? signals.join(", ") : null;
     }
@@ -137,7 +140,9 @@ function evidenceFor(key: string, property: PropertyRecord): string | null {
         signals.push(`water view of ${property.waterBodyName}`);
       else if (property.waterViewFlag) signals.push("water view");
       if (property.nearestTransitStopM !== null)
-        signals.push(`${Math.round(property.nearestTransitStopM)} m to ${property.nearestTransitStopName ?? "a transit stop"}`);
+        signals.push(
+          `${Math.round(property.nearestTransitStopM)} m to ${property.nearestTransitStopName ?? "a transit stop"}`,
+        );
       return signals.length ? signals.join(", ") : null;
     }
     default:

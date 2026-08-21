@@ -49,7 +49,11 @@ export interface SearchResponse {
   returned: number;
   offset: number;
   rows: SearchRow[];
-  map: { points: { id: string; lat: number; lng: number; score: number }[]; truncated: boolean; cap: number };
+  map: {
+    points: { id: string; lat: number; lng: number; score: number }[];
+    truncated: boolean;
+    cap: number;
+  };
   sql: string;
   tookMs: number;
   courtDataAvailable: boolean;

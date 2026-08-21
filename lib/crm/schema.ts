@@ -400,7 +400,9 @@ export const outreachMessages = pgTable(
   "outreach_messages",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    campaignId: uuid("campaign_id").references(() => outreachCampaigns.id, { onDelete: "set null" }),
+    campaignId: uuid("campaign_id").references(() => outreachCampaigns.id, {
+      onDelete: "set null",
+    }),
     opportunityId: uuid("opportunity_id")
       .notNull()
       .references(() => opportunities.id, { onDelete: "cascade" }),

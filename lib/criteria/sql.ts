@@ -184,7 +184,9 @@ export function geometrySql(geometry: Geometry): string {
 export function needsCourtData(filters: Filters): boolean {
   const d = filters.distress;
   if (!d) return false;
-  return Boolean(d.hasLien || d.hasForeclosure || d.hasCodeEnforcement || d.hasProbate || d.minCourtScore);
+  return Boolean(
+    d.hasLien || d.hasForeclosure || d.hasCodeEnforcement || d.hasProbate || d.minCourtScore,
+  );
 }
 
 export interface WhereResult {
@@ -207,13 +209,17 @@ export function buildWhere(filters: Filters, courtJoinAvailable: boolean): Where
   if (filters.maxYearsSinceSale !== undefined)
     clauses.push(`years_since_last_sale <= ${num(filters.maxYearsSinceSale)}`);
 
-  if (filters.minRoofAge !== undefined) clauses.push(`roof_age_years >= ${num(filters.minRoofAge)}`);
-  if (filters.maxRoofAge !== undefined) clauses.push(`roof_age_years <= ${num(filters.maxRoofAge)}`);
+  if (filters.minRoofAge !== undefined)
+    clauses.push(`roof_age_years >= ${num(filters.minRoofAge)}`);
+  if (filters.maxRoofAge !== undefined)
+    clauses.push(`roof_age_years <= ${num(filters.maxRoofAge)}`);
   if (filters.requireRoofEvidence)
     clauses.push(`roof_age_basis IS NOT NULL AND roof_age_basis NOT ILIKE '%PROXY%'`);
 
-  if (filters.minBuiltYear !== undefined) clauses.push(`built_year >= ${num(filters.minBuiltYear)}`);
-  if (filters.maxBuiltYear !== undefined) clauses.push(`built_year <= ${num(filters.maxBuiltYear)}`);
+  if (filters.minBuiltYear !== undefined)
+    clauses.push(`built_year >= ${num(filters.minBuiltYear)}`);
+  if (filters.maxBuiltYear !== undefined)
+    clauses.push(`built_year <= ${num(filters.maxBuiltYear)}`);
   if (filters.minLivableArea !== undefined)
     clauses.push(`livable_floor_area >= ${num(filters.minLivableArea)}`);
   if (filters.maxLivableArea !== undefined)
@@ -339,7 +345,8 @@ export function buildScoreComponents(
       signals.push(
         `CASE WHEN NOT coalesce(owner_occupied, false) AND owner_mailing_address IS NOT NULL THEN 1 ELSE 0 END`,
       );
-    if (d.noHomestead) signals.push(`CASE WHEN NOT coalesce(homestead_flag, false) THEN 1 ELSE 0 END`);
+    if (d.noHomestead)
+      signals.push(`CASE WHEN NOT coalesce(homestead_flag, false) THEN 1 ELSE 0 END`);
     if (courtJoinAvailable) {
       if (d.hasLien) signals.push(`CASE WHEN coalesce(court_lien_count, 0) > 0 THEN 1 ELSE 0 END`);
       if (d.hasForeclosure)
@@ -438,9 +445,7 @@ export function buildScore(criteria: CriteriaSet, courtJoinAvailable: boolean): 
   }
 
   const totalWeight = components.reduce((sum, c) => sum + c.weight, 0);
-  const weighted = components
-    .map((c) => `${num(c.weight)} * ${c.alias}`)
-    .join(" + ");
+  const weighted = components.map((c) => `${num(c.weight)} * ${c.alias}`).join(" + ");
 
   const aliases = components.map((c) => `${c.expression} AS ${c.alias}`).join(",\n    ");
 

@@ -29,7 +29,9 @@ const PAGE_SIZE = 100;
  */
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-xs text-ink-500">Loading the search workspace</div>}>
+    <Suspense
+      fallback={<div className="p-8 text-xs text-ink-500">Loading the search workspace</div>}
+    >
       <SearchWorkspace />
     </Suspense>
   );
@@ -40,7 +42,9 @@ function SearchWorkspace() {
   const params = useSearchParams();
 
   const [criteria, setCriteria] = useState<CriteriaSet>(EMPTY_CRITERIA);
-  const [orderBy, setOrderBy] = useState<"score" | "assessed_value" | "roof_age" | "tenure">("score");
+  const [orderBy, setOrderBy] = useState<"score" | "assessed_value" | "roof_age" | "tenure">(
+    "score",
+  );
   const [result, setResult] = useState<SearchResponse | null>(null);
   const [rows, setRows] = useState<SearchResponse["rows"]>([]);
   const [offset, setOffset] = useState(0);
@@ -225,9 +229,7 @@ function SaveSearchDialog({
   onClose: () => void;
   onSaved: (search: SavedSearch) => void;
 }) {
-  const [name, setName] = useState(
-    criteria.name === "Untitled search" ? "" : criteria.name,
-  );
+  const [name, setName] = useState(criteria.name === "Untitled search" ? "" : criteria.name);
   const [description, setDescription] = useState(criteria.description ?? "");
   const [inApp, setInApp] = useState(true);
   const [email, setEmail] = useState(true);
@@ -284,9 +286,9 @@ function SaveSearchDialog({
             </Field>
 
             <div className="rounded-md border border-[var(--line)] bg-[var(--panel-raised)] px-3 py-2 text-[11px] text-ink-400">
-              The first matcher pass records these {count(matchCount)} parcels as the baseline without
-              alerting. After that you are told when a parcel newly matches, or when one that already
-              matched changes underneath you.
+              The first matcher pass records these {count(matchCount)} parcels as the baseline
+              without alerting. After that you are told when a parcel newly matches, or when one
+              that already matched changes underneath you.
             </div>
 
             <div className="space-y-2">
@@ -300,7 +302,10 @@ function SaveSearchDialog({
               <Toggle checked={sms} onChange={setSms} label="Send a mocked SMS" />
             </div>
 
-            <Field label="Most alerts per pass" hint="Anything beyond this is counted and suppressed.">
+            <Field
+              label="Most alerts per pass"
+              hint="Anything beyond this is counted and suppressed."
+            >
               <TextInput type="number" value={limit} onChange={setLimit} />
             </Field>
 

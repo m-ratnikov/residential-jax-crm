@@ -25,11 +25,7 @@ import type { Overlay } from "@/lib/data/overlay";
 import { loadOverlay } from "@/lib/crm/overlay";
 import { tryDb } from "@/lib/crm/db";
 import { listAlerts, listOpportunities, listSavedSearches } from "@/lib/crm/repo";
-import type {
-  AgentDataFreshness,
-  AgentEvidenceRow,
-  AgentToolCall,
-} from "@/lib/oracle/agent/types";
+import type { AgentDataFreshness, AgentEvidenceRow, AgentToolCall } from "@/lib/oracle/agent/types";
 
 export interface AgentTrace {
   calls: AgentToolCall[];
@@ -263,14 +259,23 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
           };
         } catch (error: unknown) {
           const message = error instanceof Error ? error.message : String(error);
-          record(trace, "run_sql", { sql, limit }, started, 0, "the statement was rejected", message);
+          record(
+            trace,
+            "run_sql",
+            { sql, limit },
+            started,
+            0,
+            "the statement was rejected",
+            message,
+          );
           return { error: message, rows: [], row_count: 0 };
         }
       },
     }),
 
     get_property: tool({
-      description: "The full published record for one parcel, including every column and its provenance.",
+      description:
+        "The full published record for one parcel, including every column and its provenance.",
       inputSchema: z.object({ property_id: z.string().min(1) }),
       execute: async ({ property_id }) => {
         const started = Date.now();
@@ -351,7 +356,9 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
         "Opportunities the team is working, with stage, assignee, match score and owner. Use this to tell a parcel nobody has touched from one already in play.",
       inputSchema: z.object({
         stage: z
-          .array(z.enum(["identified", "contacted", "negotiating", "under_contract", "closed", "dead"]))
+          .array(
+            z.enum(["identified", "contacted", "negotiating", "under_contract", "closed", "dead"]),
+          )
           .optional(),
         limit: z.number().int().min(1).max(200).default(50),
       }),
@@ -412,7 +419,14 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
           return { available: false, alerts: [] };
         }
         const rows = await listAlerts({ unreadOnly: unread_only, limit });
-        record(trace, "list_alerts", { unread_only, limit }, started, rows.length, `${rows.length} alerts`);
+        record(
+          trace,
+          "list_alerts",
+          { unread_only, limit },
+          started,
+          rows.length,
+          `${rows.length} alerts`,
+        );
         return {
           available: true,
           alerts: rows.map((row) => ({

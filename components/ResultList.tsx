@@ -130,11 +130,16 @@ export function ResultList({
                 <div className="mt-1.5 flex flex-wrap gap-1">
                   {row.opportunityId && <Badge tone="accent">In pipeline</Badge>}
                   {row.simulated && (
-                    <Badge tone="warn" title="A value on this parcel came from a simulated pipeline update.">
+                    <Badge
+                      tone="warn"
+                      title="A value on this parcel came from a simulated pipeline update."
+                    >
                       simulated
                     </Badge>
                   )}
-                  {Number(row.courtForeclosureCount ?? 0) > 0 && <Badge tone="bad">foreclosure</Badge>}
+                  {Number(row.courtForeclosureCount ?? 0) > 0 && (
+                    <Badge tone="bad">foreclosure</Badge>
+                  )}
                   {Number(row.courtLienCount ?? 0) > 0 && <Badge tone="bad">lien</Badge>}
                   {row.ownerOccupied === false && <Badge tone="outline">absentee</Badge>}
                   {row.waterViewFlag && <Badge tone="outline">water view</Badge>}
