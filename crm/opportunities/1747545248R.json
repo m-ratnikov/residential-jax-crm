@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": 186000,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello BRYANT RITA H,\n\nCounty records suggest the roof at 1901 N 1ST ST G022, JACKSONVILLE BEACH, 32250 may be near the end of its service life. A re-roof in JACKSONVILLE BEACH is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $1.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36lfff2ojmqwou",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:46:13.852Z",
+      "createdById": "0mt36kc3hrmnvqdpf",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-17475452@example.invalid",
+          "occurredAt": "2026-08-21T16:46:13.852Z",
+          "providerEventId": "sim_email_374cbb100deb9e08821b:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:47:14.852Z",
+          "providerEventId": "sim_email_374cbb100deb9e08821b:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-21T16:48:46.852Z",
+          "providerEventId": "sim_email_374cbb100deb9e08821b:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt36lffgm11o4i4y",
+      "providerMessageId": "sim_email_374cbb100deb9e08821b",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:46:13.852Z",
+      "subject": "About the roof at 1901 N 1ST ST G022, JACKSONVILLE BEACH, 32250",
+      "templateId": "roof-condition",
+      "toAddress": "owner-17475452@example.invalid"
+    }
+  ],
   "ownerId": "0mt36l9zpnv9cwngq",
   "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "BRYANT RITA H",
@@ -95,5 +131,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-21T16:46:12.892Z"
+  "updatedAt": "2026-08-21T16:46:13.852Z"
 }
