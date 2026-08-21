@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": null,
+      "body": "Eval note: owner reached, wants a roof quote.",
+      "createdAt": "2026-08-21T23:22:45.544Z",
+      "id": "0mt3krd7se1g91znf"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3kq14bqislk0o0",
@@ -66,5 +73,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T23:22:27.248Z"
+  "updatedAt": "2026-08-21T23:22:45.544Z"
 }
