@@ -3,7 +3,7 @@
   "addressLine": "ABBEYFIELD DR, JACKSONVILLE, 32277",
   "addressZip": "32277",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 235000,
   "assessedValue": 0,
   "assigneeId": "0mt34qrentckaguhg",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.5574927,
   "matchRationale": "held 26 years (+33); roof about 30 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Send the roof quote and re-offer",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 186000,
   "outreach": [],
   "ownerId": "0mt34s3zoyu89uqi5",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "KATHERINE ABBEY MANOR OWNERS A",
   "parcelIdentifier": "1129030285R",
   "propertyId": "1129030285R",
@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 26
   },
   "savedSearchId": "0mt34qwmnq7mw3qcj",
-  "stage": "negotiating",
+  "stage": "identified",
   "stageEvents": [
     {
       "actorId": "0mt34qrentckaguhg",
@@ -59,16 +59,8 @@
       "id": "0mt34s4r2p23goi5z",
       "note": "Created from search",
       "toStage": "identified"
-    },
-    {
-      "actorId": "0mt34qrentckaguhg",
-      "createdAt": "2026-08-21T15:55:30.650Z",
-      "fromStage": "identified",
-      "id": "0mt34s7a27wx28om5",
-      "note": "Owner wants 235k. Comps in the neighbourhood do not support it with this roof.",
-      "toStage": "negotiating"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:55:30.650Z"
+  "updatedAt": "2026-08-21T15:55:31.989Z"
 }
