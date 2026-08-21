@@ -3,7 +3,7 @@
   "addressLine": "1532 W 6TH ST, JACKSONVILLE, 32209",
   "addressZip": "32209",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 235000,
   "assessedValue": 20062,
   "assigneeId": "0mt36wgohk1qdawvi",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.6806215,
   "matchRationale": "held 34 years (+33); roof about 110 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Send the roof quote and re-offer",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 186000,
   "outreach": [],
   "ownerId": "0mt36xgjax7iquuwz",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "HALL LORNE",
   "parcelIdentifier": "0510860000R",
   "propertyId": "0510860000R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:55:38.183Z"
+  "updatedAt": "2026-08-21T16:55:39.014Z"
 }
