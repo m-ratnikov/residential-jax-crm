@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello SIX THOUSAND ASSOCIATION INC,\n\nCounty records suggest the roof at 6000 SAN JOSE BLVD, JACKSONVILLE, 32217 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $0.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt34xsc8f065jscn",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-21T15:59:51.224Z",
+      "createdById": "0mt34x1vttigoz6ji",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-09917000@example.invalid",
+          "occurredAt": "2026-08-21T15:59:51.224Z",
+          "providerEventId": "sim_email_2daa2170949a4c588150:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:00:55.224Z",
+          "providerEventId": "sim_email_2daa2170949a4c588150:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt34xsc8nsvj21rf",
+      "providerMessageId": "sim_email_2daa2170949a4c588150",
+      "status": "queued",
+      "statusAt": "2026-08-21T15:59:51.224Z",
+      "subject": "About the roof at 6000 SAN JOSE BLVD, JACKSONVILLE, 32217",
+      "templateId": "roof-condition",
+      "toAddress": "owner-09917000@example.invalid"
+    }
+  ],
   "ownerId": "0mt34xkccynszaijd",
   "ownerInterest": null,
   "ownerNameSnapshot": "SIX THOUSAND ASSOCIATION INC",
@@ -87,5 +117,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-21T15:59:50.414Z"
+  "updatedAt": "2026-08-21T15:59:51.224Z"
 }
