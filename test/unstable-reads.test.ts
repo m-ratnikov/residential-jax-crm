@@ -120,3 +120,29 @@ describe("a fingerprint that moves without the artifact moving", () => {
     expect(after.alertsCreated).toBe(1);
   });
 });
+
+describe("an overlay is a real change even though the artifact has not moved", () => {
+  it("alerts when a simulated update changes the values under the same parquet", async () => {
+    setCrmStore(new MemoryCrmStore());
+    const preset = CRITERIA_PRESETS.find((entry) => entry.id === "tired-landlord")!;
+    const search = await createSavedSearch({
+      name: preset.name,
+      description: null,
+      criteria: preset.criteria,
+      ownerId: null,
+      notifyInApp: true,
+      notifyEmail: false,
+      notifySms: false,
+    });
+
+    await pass(search.id, "01M0K3B6", match("2003-11-26", "hash-1"));
+
+    // A simulated pipeline update reads the same parquet and overlays values on
+    // top, so the matcher stamps the pass with the overlay's own run. Without
+    // that, the suppression above would swallow the one change we know is real.
+    const simulated = await pass(search.id, "sim-20260821-abc", match(null, "hash-2"));
+
+    expect(simulated.outcomes[0]?.unstableReads).toBe(0);
+    expect(simulated.alertsCreated).toBe(1);
+  });
+});

@@ -168,7 +168,12 @@ export async function runMatcher(
       location: info.location,
       rowCount: info.rowCount,
       isSample: info.isSample,
-      artifactRunId: info.runId,
+      // The identity of the DATA this pass read, not of the parquet alone: an
+      // overlay - a simulated pipeline update, or court records - changes the
+      // values without changing the file underneath them. Stamping the parquet
+      // alone would make the suppression below swallow a simulated change,
+      // which is the one change we know for certain is real.
+      artifactRunId: simulated ?? info.runId,
     },
     evaluations,
     now: options.now,
