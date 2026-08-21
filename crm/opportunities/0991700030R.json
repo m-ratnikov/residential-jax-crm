@@ -17,7 +17,49 @@
   "nextStepDueAt": null,
   "notes": [],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello SIX THOUSAND ASSOCIATION INC,\n\nCounty records suggest the roof at 6000 SAN JOSE BLVD, JACKSONVILLE, 32217 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $0.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt34ruz45h7kg1ph",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-21T15:55:15.146Z",
+      "createdById": "0mt34qtq4qgfs1sye",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-09917000@example.invalid",
+          "occurredAt": "2026-08-21T15:55:15.146Z",
+          "providerEventId": "sim_email_57891114c44a5fb338b9:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T15:55:48.146Z",
+          "providerEventId": "sim_email_57891114c44a5fb338b9:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-21T15:56:13.146Z",
+          "providerEventId": "sim_email_57891114c44a5fb338b9:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Recipient replied",
+          "occurredAt": "2026-08-21T15:56:38.146Z",
+          "providerEventId": "sim_email_57891114c44a5fb338b9:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt34rvbediicvmer",
+      "providerMessageId": "sim_email_57891114c44a5fb338b9",
+      "status": "queued",
+      "statusAt": "2026-08-21T15:55:15.146Z",
+      "subject": "About the roof at 6000 SAN JOSE BLVD, JACKSONVILLE, 32217",
+      "templateId": "roof-condition",
+      "toAddress": "owner-09917000@example.invalid"
+    }
+  ],
   "ownerId": "0mt34rivb6vhvpafm",
   "ownerInterest": null,
   "ownerNameSnapshot": "SIX THOUSAND ASSOCIATION INC",
@@ -61,16 +103,6 @@
       "toStage": "identified"
     }
   ],
-  "tasks": [
-    {
-      "assigneeId": "0mt34qtq4qgfs1sye",
-      "completedAt": null,
-      "createdAt": "2026-08-21T15:55:13.717Z",
-      "dueAt": "2026-08-25T15:55:13.326Z",
-      "id": "0mt34ru7pxa659jos",
-      "status": "open",
-      "title": "Follow up call"
-    }
-  ],
-  "updatedAt": "2026-08-21T15:55:13.717Z"
+  "tasks": [],
+  "updatedAt": "2026-08-21T15:55:15.147Z"
 }
