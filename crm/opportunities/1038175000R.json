@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt363aa22d4325f5",
-  "ownerInterest": null,
+  "ownerInterest": "Went to market",
   "ownerNameSnapshot": "SHADY COVE CONDOMINIUM ASSOCIA",
   "parcelIdentifier": "1038175000R",
   "propertyId": "1038175000R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:32:11.294Z"
+  "updatedAt": "2026-08-21T16:32:12.206Z"
 }
