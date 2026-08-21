@@ -107,9 +107,9 @@
     },
     {
       "actorId": null,
-      "createdAt": "2026-08-21T17:42:28.966Z",
+      "createdAt": "2026-08-21T17:42:29.803Z",
       "fromStage": "contacted",
-      "id": "0mt38lromhjqaelco",
+      "id": "0mt38lsbvsxbrwyqc",
       "note": null,
       "toStage": "negotiating"
     }
@@ -125,5 +125,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-21T17:42:28.966Z"
+  "updatedAt": "2026-08-21T17:42:29.803Z"
 }
