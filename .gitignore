@@ -4,10 +4,16 @@ out
 .vercel
 *.tsbuildinfo
 next-env.d.ts
-.env
-.env.local
-.env.*.local
 coverage
 test-results
 playwright-report
 .data
+pmdl
+s.json
+s2.json
+
+# Secrets. NOT a blanket .env* : the Vercel CLI appends that on `vercel link`,
+# and it would hide the committed .env.example that documents every variable.
+.env
+.env.local
+.env.*.local

@@ -96,6 +96,15 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
     // perfectly well.
     queryTableSource = configured;
     isSample = false;
+  } else if (env.VERCEL_URL?.trim()) {
+    // On a serverless deployment the sample is read over HTTP from this same
+    // deployment's own static output rather than from the function's filesystem.
+    // Tracing a 9 MB parquet into every API function inflates the upload past
+    // what the platform will accept, and the file is already being served as a
+    // static asset a few milliseconds away. DuckDB range reads it exactly as it
+    // would range read a gateway URL.
+    queryTableSource = `https://${env.VERCEL_URL.trim()}/sample/query-table.parquet`;
+    isSample = true;
   } else {
     queryTableSource = join(process.cwd(), SAMPLE_QUERY_TABLE);
     isSample = true;
@@ -109,9 +118,11 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
     ? /^https?:\/\//i.test(runHistoryConfigured)
       ? resolveArtifactUrl(runHistoryConfigured, RUN_HISTORY_OBJECT)
       : runHistoryConfigured
-    : existsLocally(SAMPLE_RUN_HISTORY)
-      ? join(process.cwd(), SAMPLE_RUN_HISTORY)
-      : null;
+    : env.VERCEL_URL?.trim()
+      ? `https://${env.VERCEL_URL.trim()}/sample/run-history.json`
+      : existsLocally(SAMPLE_RUN_HISTORY)
+        ? join(process.cwd(), SAMPLE_RUN_HISTORY)
+        : null;
 
   return {
     queryTableSource,
