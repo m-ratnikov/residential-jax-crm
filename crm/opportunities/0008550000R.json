@@ -3,7 +3,7 @@
   "addressLine": "429 COLLINS LN, BALDWIN, 32234",
   "addressZip": "32234",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 142000,
   "assessedValue": 94087,
   "assigneeId": "0mt3jko7rxun9qszv",
   "closedAt": "2026-08-21T22:50:40.317Z",
@@ -16,7 +16,7 @@
   "nextStep": null,
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 131500,
   "outreach": [],
   "ownerId": "0mt3jm05xtez6bd0f",
   "ownerInterest": null,
@@ -94,5 +94,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:40.317Z"
+  "updatedAt": "2026-08-21T22:50:41.178Z"
 }
