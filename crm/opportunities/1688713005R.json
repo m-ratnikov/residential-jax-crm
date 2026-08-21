@@ -24,7 +24,49 @@
     }
   ],
   "offerPrice": 186000,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello COURTYARDS AT ATLANTIC BEACH C,\n\nCounty records suggest the roof at E DEFENDER CT, JACKSONVILLE, 32233 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $0.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt362skdz82nlph9",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:31:44.413Z",
+      "createdById": "0mt361ew2dhptzuhr",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-16887130@example.invalid",
+          "occurredAt": "2026-08-21T16:31:44.413Z",
+          "providerEventId": "sim_email_6d3f81b3634fe0f47c14:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:33:04.413Z",
+          "providerEventId": "sim_email_6d3f81b3634fe0f47c14:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-21T16:34:03.413Z",
+          "providerEventId": "sim_email_6d3f81b3634fe0f47c14:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Recipient replied",
+          "occurredAt": "2026-08-21T16:35:03.413Z",
+          "providerEventId": "sim_email_6d3f81b3634fe0f47c14:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt362skd2cqexqo8",
+      "providerMessageId": "sim_email_6d3f81b3634fe0f47c14",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:31:44.413Z",
+      "subject": "About the roof at E DEFENDER CT, JACKSONVILLE, 32233",
+      "templateId": "roof-condition",
+      "toAddress": "owner-16887130@example.invalid"
+    }
+  ],
   "ownerId": "0mt362hpn2vvddgkl",
   "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "COURTYARDS AT ATLANTIC BEACH C",
@@ -95,5 +137,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-21T16:31:43.034Z"
+  "updatedAt": "2026-08-21T16:31:44.413Z"
 }
