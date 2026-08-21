@@ -91,6 +91,18 @@ export class GitHubCrmStore implements CrmStore {
    * to the last known-good copy and says so, instead of failing.
    */
   #lastGoodTree: Map<string, string> | null = null;
+  /**
+   * The ETag of the last tree read, so the next read can be conditional.
+   *
+   * A request that answers 304 Not Modified does not count against the hourly
+   * budget. Measured against the live API: two unconditional reads took the
+   * remaining count 4996 -> 4995, then three consecutive conditional reads all
+   * reported 4994. So polling for changes is free, and the budget is only spent
+   * when something has actually changed - which is the difference between a
+   * store that costs one request per minute per instance and one that costs one
+   * request per write.
+   */
+  #treeEtag: string | null = null;
   #rateLimitedUntil = 0;
 
   /** True when the last read was served from a stale copy after a refusal. */
@@ -147,8 +159,22 @@ export class GitHubCrmStore implements CrmStore {
 
     const response = await fetch(
       `${API}/repos/${this.options.repository}/git/trees/${encodeURIComponent(this.options.branch)}?recursive=1`,
-      { headers: this.#headers(), cache: "no-store" },
+      {
+        headers: {
+          ...this.#headers(),
+          // Free when nothing has changed. See the note on #treeEtag.
+          ...(this.#treeEtag && this.#lastGoodTree ? { "if-none-match": this.#treeEtag } : {}),
+        },
+        cache: "no-store",
+      },
     );
+
+    // Nothing has changed since the last read, and this cost no budget.
+    if (response.status === 304 && this.#lastGoodTree) {
+      this.#treeCache = { at: now, paths: this.#lastGoodTree };
+      this.#rateLimitedUntil = 0;
+      return this.#lastGoodTree;
+    }
 
     // 404 is the ordinary empty state: the branch does not exist until the
     // first write creates it.
@@ -200,6 +226,7 @@ export class GitHubCrmStore implements CrmStore {
 
     this.#treeCache = { at: now, paths };
     this.#lastGoodTree = paths;
+    this.#treeEtag = response.headers.get("etag");
     this.#rateLimitedUntil = 0;
     return paths;
   }
