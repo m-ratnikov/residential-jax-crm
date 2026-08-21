@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": 186000,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello BALDWIN GROVES APTS INC,\n\nCounty records suggest the roof at 510 DUVAL CIRCLE ST, BALDWIN, 32234 may be near the end of its service life. A re-roof in BALDWIN is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $1,450,226.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3jloy3g4g64mby",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-21T22:50:21.195Z",
+      "createdById": "0mt3jkl2vzmjcfaed",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-00048800@example.invalid",
+          "occurredAt": "2026-08-21T22:50:21.195Z",
+          "providerEventId": "sim_email_4eac3fac64577f4fdf28:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T22:51:15.195Z",
+          "providerEventId": "sim_email_4eac3fac64577f4fdf28:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-21T22:52:36.195Z",
+          "providerEventId": "sim_email_4eac3fac64577f4fdf28:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt3jloy3uxrzu8yn",
+      "providerMessageId": "sim_email_4eac3fac64577f4fdf28",
+      "status": "queued",
+      "statusAt": "2026-08-21T22:50:21.195Z",
+      "subject": "About the roof at 510 DUVAL CIRCLE ST, BALDWIN, 32234",
+      "templateId": "roof-condition",
+      "toAddress": "owner-00048800@example.invalid"
+    }
+  ],
   "ownerId": "0mt3jlj95snfalkk6",
   "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "BALDWIN GROVES APTS INC",
@@ -95,5 +131,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-21T22:50:19.606Z"
+  "updatedAt": "2026-08-21T22:50:21.195Z"
 }
