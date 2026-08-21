@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello MCCLAIN GLORIA J,\n\nCounty records suggest the roof at 4630 WRICO DR, JACKSONVILLE, 32209 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $17,257.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3hi01binqdbvej",
+      "campaignName": "Seed - identified",
+      "channel": "direct_mail",
+      "createdAt": "2026-08-21T21:51:29.711Z",
+      "createdById": "0mt3hhfku5sn1b3gl",
+      "events": [
+        {
+          "detail": "Accepted by simulated-print-and-mail for 850 N GORDON AVE APT 125",
+          "occurredAt": "2026-08-21T21:51:29.711Z",
+          "providerEventId": "sim_direct_mail_fd0a498a9ca56cd80a43:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-25T11:07:27.711Z",
+          "providerEventId": "sim_direct_mail_fd0a498a9ca56cd80a43:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt3hi01bih47tg96",
+      "providerMessageId": "sim_direct_mail_fd0a498a9ca56cd80a43",
+      "status": "queued",
+      "statusAt": "2026-08-21T21:51:29.711Z",
+      "subject": "About the roof at 4630 WRICO DR, JACKSONVILLE, 32209",
+      "templateId": "roof-condition",
+      "toAddress": "850 N GORDON AVE APT 125"
+    }
+  ],
   "ownerId": "0mt3hhx2pd3j31pzp",
   "ownerInterest": null,
   "ownerNameSnapshot": "MCCLAIN GLORIA J",
@@ -69,5 +99,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T21:51:28.719Z"
+  "updatedAt": "2026-08-21T21:51:29.712Z"
 }
