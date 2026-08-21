@@ -3,7 +3,7 @@
   "addressLine": "6000 SAN JOSE BLVD, JACKSONVILLE, 32217",
   "addressZip": "32217",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 165000,
   "assessedValue": 0,
   "assigneeId": "0mt361guosnl96xm7",
   "closedAt": null,
@@ -13,10 +13,10 @@
   "longitude": -81.6478701,
   "matchRationale": "held 35 years (+33); roof about 45 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 149000,
   "outreach": [],
   "ownerId": "0mt362yw9rx3e5uwe",
   "ownerInterest": null,
@@ -86,5 +86,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:31:56.467Z"
+  "updatedAt": "2026-08-21T16:31:57.296Z"
 }
