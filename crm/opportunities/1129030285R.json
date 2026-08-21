@@ -17,7 +17,37 @@
   "nextStepDueAt": null,
   "notes": [],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello KATHERINE ABBEY MANOR OWNERS A,\n\nCounty records suggest the roof at ABBEYFIELD DR, JACKSONVILLE, 32277 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $0.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt34sc45ni2jcilf",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-21T15:55:37.391Z",
+      "createdById": "0mt34qrentckaguhg",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-11290302@example.invalid",
+          "occurredAt": "2026-08-21T15:55:37.391Z",
+          "providerEventId": "sim_email_88b8d8702566533d3491:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T15:56:12.391Z",
+          "providerEventId": "sim_email_88b8d8702566533d3491:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt34schbwrr2gdrz",
+      "providerMessageId": "sim_email_88b8d8702566533d3491",
+      "status": "queued",
+      "statusAt": "2026-08-21T15:55:37.391Z",
+      "subject": "About the roof at ABBEYFIELD DR, JACKSONVILLE, 32277",
+      "templateId": "roof-condition",
+      "toAddress": "owner-11290302@example.invalid"
+    }
+  ],
   "ownerId": "0mt34s3zoyu89uqi5",
   "ownerInterest": null,
   "ownerNameSnapshot": "KATHERINE ABBEY MANOR OWNERS A",
@@ -61,16 +91,6 @@
       "toStage": "identified"
     }
   ],
-  "tasks": [
-    {
-      "assigneeId": "0mt34qrentckaguhg",
-      "completedAt": null,
-      "createdAt": "2026-08-21T15:55:35.255Z",
-      "dueAt": "2026-08-27T15:55:34.333Z",
-      "id": "0mt34satznwtzlurd",
-      "status": "open",
-      "title": "Get a re-roof quote"
-    }
-  ],
-  "updatedAt": "2026-08-21T15:55:35.255Z"
+  "tasks": [],
+  "updatedAt": "2026-08-21T15:55:37.391Z"
 }
