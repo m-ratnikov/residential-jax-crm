@@ -3,7 +3,7 @@
   "addressLine": "1901 N 1ST ST G048, JACKSONVILLE BEACH, 32250",
   "addressZip": "32250",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 142000,
   "assessedValue": 1,
   "assigneeId": "0mt36qpvthrkbg04i",
   "closedAt": "2026-08-21T16:51:31.116Z",
@@ -16,7 +16,7 @@
   "nextStep": null,
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 131500,
   "outreach": [],
   "ownerId": "0mt36s4ct3ahr84hn",
   "ownerInterest": null,
@@ -94,5 +94,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:51:31.116Z"
+  "updatedAt": "2026-08-21T16:51:32.078Z"
 }
