@@ -14,8 +14,19 @@
 
 import { join } from "node:path";
 
-export const SAMPLE_QUERY_TABLE = "public/sample/query-table.parquet";
-export const SAMPLE_RUN_HISTORY = "public/sample/run-history.json";
+/**
+ * The bundled sample lives under public/, and its path is assembled from an
+ * environment variable rather than written as a literal ON PURPOSE. A literal
+ * path is statically resolvable, so the bundler traces the 9 MB parquet into
+ * every serverless function that imports this module - for a fallback path a
+ * deployed instance never takes, since it reads the sample over HTTP from its
+ * own static output instead. Reading the directory from the environment keeps
+ * the file out of every function bundle while leaving local development
+ * unchanged.
+ */
+export const SAMPLE_DIR = process.env.SAMPLE_DIR ?? "public/sample";
+export const SAMPLE_QUERY_TABLE = `${SAMPLE_DIR}/query-table.parquet`;
+export const SAMPLE_RUN_HISTORY = `${SAMPLE_DIR}/run-history.json`;
 
 export const QUERY_TABLE_OBJECT = "query-table.parquet";
 export const RUN_HISTORY_OBJECT = "run-history.json";

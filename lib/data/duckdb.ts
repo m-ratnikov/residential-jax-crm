@@ -15,10 +15,6 @@
  * the common path costs nothing.
  */
 
-import { tmpdir } from "node:os";
-import { resolve } from "node:path";
-import { DuckDBInstance, type DuckDBConnection, type DuckDBValue } from "@duckdb/node-api";
-
 import { COLUMN_MEANINGS } from "@/lib/oracle/agent/schema";
 import { EXTRA_COLUMNS, PROVENANCE_COLUMNS } from "@/lib/oracle/columns";
 import { guardSql } from "@/lib/oracle/sql";
@@ -40,82 +36,13 @@ import type {
 import { toRecord } from "./map";
 import { loadRunHistory } from "./runs";
 
-export type Plain = string | number | boolean | null | Plain[] | { [key: string]: Plain };
+import { openEngine, sqlPath, type Plain, type QueryEngine } from "./engine";
+
+export type { Plain } from "./engine";
 export type Row = Record<string, Plain>;
 
 const DERIVED = new Set<string>(EXTRA_COLUMNS);
 const PROVENANCE = new Set<string>(PROVENANCE_COLUMNS);
-
-function sqlPath(value: string): string {
-  return `'${value.replaceAll("\\", "/").replaceAll("'", "''")}'`;
-}
-
-/** DuckDB values to JSON safe values, keeping numbers numeric where they fit. */
-export function toPlain(value: DuckDBValue | unknown): Plain {
-  if (value === null || value === undefined) return null;
-  if (typeof value === "bigint") {
-    return value >= BigInt(Number.MIN_SAFE_INTEGER) && value <= BigInt(Number.MAX_SAFE_INTEGER)
-      ? Number(value)
-      : value.toString();
-  }
-  if (typeof value === "number" || typeof value === "string" || typeof value === "boolean") {
-    return value;
-  }
-  if (Array.isArray(value)) return value.map((item) => toPlain(item));
-  if (value instanceof Date) return value.toISOString();
-  if (typeof value === "object") {
-    const maybe = value as { toString?: () => string; items?: unknown };
-    if (maybe.items && Array.isArray(maybe.items)) return maybe.items.map((item) => toPlain(item));
-    if (typeof maybe.toString === "function" && maybe.toString !== Object.prototype.toString) {
-      return maybe.toString();
-    }
-    const out: Record<string, Plain> = {};
-    for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
-      out[key] = toPlain(item);
-    }
-    return out;
-  }
-  return String(value);
-}
-
-async function createInstance(source: string): Promise<DuckDBInstance> {
-  const needsHttp = /^https?:\/\//i.test(source);
-  const instance = await DuckDBInstance.create(":memory:");
-  const setup = await instance.connect();
-  try {
-    if (needsHttp) {
-      // A serverless filesystem is read only except for the temp directory,
-      // and httpfs has to be fetched once per cold start.
-      await setup.run(
-        `SET extension_directory = ${sqlPath(resolve(tmpdir(), "duckdb-extensions"))}`,
-      );
-      await setup.run("INSTALL httpfs");
-      await setup.run("LOAD httpfs");
-    }
-
-    await setup.run(
-      `CREATE OR REPLACE VIEW ${VIEW} AS SELECT * FROM read_parquet(${sqlPath(source)})`,
-    );
-  } finally {
-    setup.closeSync();
-  }
-  return instance;
-}
-
-async function runQuery(
-  connection: DuckDBConnection,
-  sql: string,
-): Promise<{ columns: string[]; rows: Row[]; tookMs: number }> {
-  const started = Date.now();
-  const result = await connection.runAndReadAll(sql);
-  const columns = result.columnNames();
-  const rows = (await result.getRowObjects()).map((row) => {
-    const out: Row = {};
-    for (const column of columns) out[column] = toPlain(row[column]);
-    return out;
-  });
-  return { columns, rows, tookMs: Date.now() - started };
-}
 
 export interface DuckDbSourceOptions {
   /** Parquet path or URL for the query table. */
@@ -131,30 +58,33 @@ export interface DuckDbSourceOptions {
 export class DuckDbPropertyDataSource implements PropertyDataSource {
   readonly kind = "duckdb-parquet";
 
-  #instance: Promise<DuckDBInstance> | null = null;
+  #engine: Promise<QueryEngine> | null = null;
   #info: DataSourceInfo | null = null;
   #schema: readonly ColumnDescriptor[] | null = null;
   #closed = false;
 
   constructor(private readonly options: DuckDbSourceOptions) {}
 
-  async #db(): Promise<DuckDBInstance> {
+  /** Which engine answered, for the data source panel. */
+  async engineKind(): Promise<string> {
+    return (await this.#db()).kind;
+  }
+
+  async #db(): Promise<QueryEngine> {
     if (this.#closed) throw new Error("data source is closed");
-    this.#instance ??= createInstance(this.options.source).catch((error: unknown) => {
-      this.#instance = null; // a failed open must not poison the cache
+    this.#engine ??= openEngine(
+      this.options.source,
+      (path) => `CREATE OR REPLACE VIEW ${VIEW} AS SELECT * FROM read_parquet(${sqlPath(path)})`,
+    ).catch((error: unknown) => {
+      this.#engine = null; // a failed open must not poison the cache
       throw error;
     });
-    return this.#instance;
+    return this.#engine;
   }
 
   async #query(sql: string) {
-    const instance = await this.#db();
-    const connection = await instance.connect();
-    try {
-      return await runQuery(connection, sql);
-    } finally {
-      connection.closeSync();
-    }
+    const engine = await this.#db();
+    return engine.query(sql);
   }
 
   async info(): Promise<DataSourceInfo> {
@@ -313,9 +243,9 @@ export class DuckDbPropertyDataSource implements PropertyDataSource {
   async close(): Promise<void> {
     if (this.#closed) return;
     this.#closed = true;
-    const instance = this.#instance;
-    this.#instance = null;
-    if (instance) (await instance).closeSync();
+    const engine = this.#engine;
+    this.#engine = null;
+    if (engine) await (await engine).close();
   }
 }
 
