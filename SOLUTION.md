@@ -361,6 +361,8 @@ Each step states what to look for. All of it runs against the deployed URL.
 2. **Open `/search`.** Pick the _Tired landlord_ thesis. Watch the count settle
    as the criteria apply - it is debounced, not a button. Expand _Show the SQL
    behind this result_: the statement that produced the count is on screen.
+   Turn off _Has a dwelling_ and watch 55 sq ft condo garage units assessed at a
+   dollar take over the top of the list. That is why it is on by default.
 3. **Draw an area.** `Radius`, click a centre, click again for the radius. The
    count drops to what is inside it. `Polygon` works the same way; double click
    closes it.
@@ -392,7 +394,9 @@ Each step states what to look for. All of it runs against the deployed URL.
 13. **Open `/pipeline`.** Upstream pipeline runs with their real per-source
     counts and declared limitations, next to every matcher pass including the
     ones that raised nothing. Press `Run matcher now`; a new pass appears.
-    `Clear simulation` removes the simulated rows.
+    `Clear simulation` removes the simulated rows. The passes marked `cron` were
+    run by GitHub Actions on a runner nobody was watching, which is the point of
+    the whole exercise.
 14. **Open `/agent`.** Add a free-tier key on `/settings` first. Ask _"Which
     residential properties in the Arlington area match my distressed criteria and
     have not been contacted yet?"_ Check the `Tools` and `Rows` tabs under the
