@@ -15,14 +15,7 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [
-    {
-      "authorId": "0mt34qtq4qgfs1sye",
-      "body": "Signed at 149k. Inspection window closes in nine days.",
-      "createdAt": "2026-08-21T15:55:56.667Z",
-      "id": "0mt34srcr0n5p1tes"
-    }
-  ],
+  "notes": [],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34sknkj1qxgphy",
@@ -68,6 +61,16 @@
       "toStage": "identified"
     }
   ],
-  "tasks": [],
-  "updatedAt": "2026-08-21T15:55:56.668Z"
+  "tasks": [
+    {
+      "assigneeId": "0mt34qtq4qgfs1sye",
+      "completedAt": null,
+      "createdAt": "2026-08-21T15:55:57.902Z",
+      "dueAt": "2026-08-29T15:55:57.461Z",
+      "id": "0mt34ssb215c9wkbd",
+      "status": "open",
+      "title": "Book inspection"
+    }
+  ],
+  "updatedAt": "2026-08-21T15:55:57.902Z"
 }
