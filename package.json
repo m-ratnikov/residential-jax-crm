@@ -19,7 +19,7 @@
     "test:e2e": "playwright test",
     "sample": "tsx scripts/make-sample.ts",
     "matcher": "tsx scripts/run-matcher.ts",
-    "assets": "node scripts/copy-duckdb.mjs",
+    "assets": "node scripts/copy-duckdb.mjs && node scripts/copy-maplibre.mjs",
     "seed": "tsx scripts/seed.ts",
     "verify": "tsx scripts/verify-loop.ts",
     "smoke": "tsx scripts/smoke.mts"

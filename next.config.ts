@@ -30,7 +30,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingExcludes: {
-    "**": ["./public/sample/**", "./public/duckdb/**"],
+    "**": ["./public/sample/**", "./public/duckdb/**", "./public/maplibre/**"],
   },
   async headers() {
     return [

@@ -25,6 +25,7 @@ import {
   Map as MapLibreMap,
   NavigationControl,
   ScaleControl,
+  setWorkerUrl,
   type GeoJSONSource,
   type LngLatLike,
   type MapLayerMouseEvent,
@@ -36,6 +37,22 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import type { Geometry } from "@/lib/criteria/types";
 import { Badge, Button, cx, count } from "./ui";
+
+/**
+ * Tell MapLibre where its worker is.
+ *
+ * It would otherwise resolve one with `new URL("./maplibre-gl-worker.mjs",
+ * import.meta.url)`, and inside a Next bundle `import.meta.url` is the URL of
+ * the page. The browser started a worker, handed it the page's HTML, and the
+ * worker died - silently, because a raster basemap needs no worker and a
+ * GeoJSON source whose worker is gone does not error, it simply never finishes
+ * loading. The parcels source held every feature it was given and the map
+ * stayed empty.
+ *
+ * The file is copied into public/maplibre by scripts/copy-maplibre.mjs, which
+ * runs as part of `pnpm build`.
+ */
+setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
 
 export interface MapPoint {
   id: string;
@@ -150,6 +167,7 @@ export function PropertyMap({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const [ready, setReady] = useState(false);
+  const [drawn, setDrawn] = useState(0);
   const [mode, setMode] = useState<DrawMode>("none");
   const [draftRing, setDraftRing] = useState<[number, number][]>([]);
   const [circleAnchor, setCircleAnchor] = useState<{ lat: number; lng: number } | null>(null);
@@ -239,6 +257,16 @@ export function PropertyMap({
         type: "line",
         source: DRAFT_SOURCE,
         paint: { "line-color": "#4f9cf0", "line-width": 2 },
+      });
+
+      // `idle` fires when every source has been tiled and every layer drawn,
+      // which is the only moment it is true to say how many parcels are on
+      // screen. Published as an attribute so the deployed-runtime smoke test can
+      // assert that the map drew something: the failure this guards against -
+      // MapLibre's worker never starting, so a GeoJSON source holds all its
+      // features and tiles none of them - throws nothing and logs nothing.
+      map.on("idle", () => {
+        setDrawn(map.queryRenderedFeatures({ layers: ["parcels"] }).length);
       });
 
       setReady(true);
@@ -380,6 +408,8 @@ export function PropertyMap({
     <div className="relative h-full w-full overflow-hidden rounded-xl border border-[var(--line)]">
       <div
         ref={containerRef}
+        data-testid="map-canvas"
+        data-parcels-drawn={drawn}
         className={cx("h-full w-full", mode !== "none" && "map-draw-active")}
       />
 

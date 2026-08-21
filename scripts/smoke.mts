@@ -76,6 +76,37 @@ async function main(): Promise<void> {
     rationaleText.slice(0, 90),
   );
 
+  // 4b. The score is a number.
+  //
+  // It was NaN for a while, on every row, in the browser and nowhere else: a
+  // decimal literal makes DuckDB type the score column DECIMAL, Arrow carries a
+  // decimal as a Uint32Array, and the row converter turned that into a JSON
+  // string. The native engine was unaffected, so the unit tests and the seed
+  // script all agreed the scoring worked.
+  const scoreBadge = page.getByTestId("score").first();
+  const badgeValue = ((await scoreBadge.textContent().catch(() => "")) ?? "").trim();
+  check(
+    "the score is a number",
+    /^[0-9]+(\.[0-9]+)?$/.test(badgeValue),
+    badgeValue || "no score badge",
+  );
+
+  // 4c. The map actually drew the parcels.
+  //
+  // Also silent when broken: MapLibre resolves its worker relative to
+  // `import.meta.url`, which inside a Next bundle is the page, so the worker
+  // started on the page's own HTML and died. A GeoJSON source with no worker
+  // holds every feature it is given and tiles none of them - no error, no
+  // warning, an empty city under a working basemap.
+  const canvas = page.getByTestId("map-canvas");
+  let plotted = 0;
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    plotted = Number((await canvas.getAttribute("data-parcels-drawn").catch(() => "0")) ?? 0);
+    if (plotted > 0) break;
+    await page.waitForTimeout(1_000);
+  }
+  check("the map drew the matches", plotted > 0, `${plotted} parcels on screen`);
+
   // 5. The SQL behind the result is on the page, so the count is arguable.
   const sqlToggle = page.getByText("Show the SQL behind this result");
   check("result SQL is disclosed", await sqlToggle.isVisible().catch(() => false));

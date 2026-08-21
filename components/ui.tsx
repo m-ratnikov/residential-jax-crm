@@ -161,11 +161,17 @@ export function Field({
   hint?: ReactNode;
   children: ReactNode;
 }) {
+  // Full height with the control pushed to the bottom, so that two fields side
+  // by side line up even when one label wraps to a second line and the other
+  // does not. "Held at least (years)" next to "At most (years)" did exactly
+  // that, and the two inputs sat at different heights.
   return (
-    <label className="block">
+    <label className="flex h-full flex-col">
       <span className="text-[11px] font-medium uppercase tracking-wide text-ink-500">{label}</span>
-      <div className="mt-1">{children}</div>
-      {hint && <p className="mt-1 text-[11px] text-ink-500">{hint}</p>}
+      <div className="mt-auto pt-1">
+        {children}
+        {hint && <p className="mt-1 text-[11px] text-ink-500">{hint}</p>}
+      </div>
     </label>
   );
 }
@@ -357,7 +363,9 @@ export function ScoreBadge({ score, title }: { score: number; title?: string }) 
   const tone = score >= 75 ? "good" : score >= 45 ? "warn" : "neutral";
   return (
     <Badge tone={tone} title={title ?? "Match score out of 100. Hover a row for the rationale."}>
-      <span className="tabular">{score.toFixed(0)}</span>
+      <span className="tabular" data-testid="score">
+        {score.toFixed(0)}
+      </span>
     </Badge>
   );
 }

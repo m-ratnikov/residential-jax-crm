@@ -448,6 +448,18 @@ export interface ScoreSql {
   unranked: boolean;
 }
 
+/**
+ * Build the score expression.
+ *
+ * Everything numeric here is cast to DOUBLE on the way out, which looks
+ * redundant and is not. A decimal literal makes DuckDB type the column
+ * DECIMAL, Arrow carries a decimal as a four-element Uint32Array, and the
+ * browser's row converter turns an unrecognised object into a JSON string.
+ * `Number("{\"0\":1000,...}")` is NaN, so every score in the tab rendered as
+ * NaN and the map's paint expression - which steps on that number - failed and
+ * drew nothing. The native engine was unaffected, which is why the tests and
+ * the seed never saw it.
+ */
 export function buildScore(criteria: CriteriaSet, courtJoinAvailable: boolean): ScoreSql {
   const components = buildScoreComponents(criteria, courtJoinAvailable);
 
@@ -456,7 +468,7 @@ export function buildScore(criteria: CriteriaSet, courtJoinAvailable: boolean): 
     // order from columns the user never mentioned is not.
     return {
       components,
-      selectFragment: `100.0 AS ${SCORE_ALIAS}`,
+      selectFragment: `CAST(100.0 AS DOUBLE) AS ${SCORE_ALIAS}`,
       unranked: true,
     };
   }

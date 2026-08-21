@@ -20,7 +20,14 @@ s2.json
 
 # Copied out of node_modules by scripts/copy-duckdb.mjs on every build.
 public/duckdb
+# Copied out of node_modules by scripts/copy-maplibre.mjs on every build.
+public/maplibre
 
 # Smoke-check output and throwaway patch scripts.
 smoke-*.png
 patch-*.py
+
+# Written by `next dev` on every start. Local tooling instructions, not part of
+# the deliverable, and recreated whenever the dev server runs.
+AGENTS.md
+CLAUDE.md
