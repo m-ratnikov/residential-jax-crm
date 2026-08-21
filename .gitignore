@@ -20,3 +20,7 @@ s2.json
 
 # Copied out of node_modules by scripts/copy-duckdb.mjs on every build.
 public/duckdb
+
+# Smoke-check output and throwaway patch scripts.
+smoke-*.png
+patch-*.py
