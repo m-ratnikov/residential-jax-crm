@@ -24,7 +24,49 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello SMART YVONNE ESTATE,\nI am reaching out about 4540 FRIDEN DR, JACKSONVILLE, 32209. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 127 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36xf8ycelj2sa3",
+      "campaignName": "Seed - contacted",
+      "channel": "sms",
+      "createdAt": "2026-08-21T16:55:33.490Z",
+      "createdById": "0mt36wjjjsvl3xgbt",
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for +1-904-555-0000",
+          "occurredAt": "2026-08-21T16:55:33.490Z",
+          "providerEventId": "sim_sms_c8259ddfb1b92e2cf522:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:55:51.490Z",
+          "providerEventId": "sim_sms_c8259ddfb1b92e2cf522:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-21T16:56:04.490Z",
+          "providerEventId": "sim_sms_c8259ddfb1b92e2cf522:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Recipient replied",
+          "occurredAt": "2026-08-21T16:56:17.490Z",
+          "providerEventId": "sim_sms_c8259ddfb1b92e2cf522:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt36xf8y2pccfhg3",
+      "providerMessageId": "sim_sms_c8259ddfb1b92e2cf522",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:55:33.490Z",
+      "subject": null,
+      "templateId": "cash-offer-intro",
+      "toAddress": "+1-904-555-0000"
+    }
+  ],
   "ownerId": "0mt36xbolk1fawoub",
   "ownerInterest": "Curious, not committed",
   "ownerNameSnapshot": "SMART YVONNE ESTATE",
@@ -77,5 +119,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:55:32.565Z"
+  "updatedAt": "2026-08-21T16:55:33.490Z"
 }
