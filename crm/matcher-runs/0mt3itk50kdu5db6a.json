@@ -1,0 +1,78 @@
+{
+  "alertsCreated": 50,
+  "alertsSuppressed": 53,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-parquet",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "01M0K3B67EVNXBSQFPBES35ZMS",
+      "isSample": false,
+      "kind": "duckdb-parquet",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 0,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 0,
+        "matched": 67399,
+        "matchesTruncated": true,
+        "name": "Transit infill",
+        "newMatches": 0,
+        "savedSearchId": "0mt3hhjiol0ahbj5v",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": true,
+        "unstableReads": 0,
+        "updatedMatches": 0
+      },
+      {
+        "alertsCreated": 25,
+        "alertsSuppressed": 35,
+        "evaluated": 2000,
+        "leftMatches": 57,
+        "matched": 151856,
+        "matchesTruncated": true,
+        "name": "Aging roof, entry price band",
+        "newMatches": 57,
+        "savedSearchId": "0mt3hhiquyk2xlkd7",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": true,
+        "unstableReads": 0,
+        "updatedMatches": 3
+      },
+      {
+        "alertsCreated": 25,
+        "alertsSuppressed": 18,
+        "evaluated": 2000,
+        "leftMatches": 40,
+        "matched": 10209,
+        "matchesTruncated": true,
+        "name": "Tired landlord",
+        "newMatches": 40,
+        "savedSearchId": "0mt3hhi1i9fwbavl7",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": true,
+        "unstableReads": 0,
+        "updatedMatches": 3
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-21T22:29:28.546Z",
+  "id": "0mt3itk50kdu5db6a",
+  "notificationsSent": 100,
+  "pipelineRunId": "01M0K3B67EVNXBSQFPBES35ZMS",
+  "pipelineRunIsNew": false,
+  "pipelineRunStartedAt": "2026-08-21 10:55:39.9",
+  "propertiesEvaluated": 6000,
+  "searchesEvaluated": 3,
+  "startedAt": "2026-08-21T22:28:27.734Z",
+  "trigger": "cron"
+}
