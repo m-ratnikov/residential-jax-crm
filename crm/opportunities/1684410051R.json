@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 126
   },
   "savedSearchId": "0mt34x39gojt1ozqj",
-  "stage": "negotiating",
+  "stage": "under_contract",
   "stageEvents": [
     {
       "actorId": "0mt34x03worqr9qp0",
@@ -75,8 +75,16 @@
       "id": "0mt34ye1rim9ucwl9",
       "note": null,
       "toStage": "negotiating"
+    },
+    {
+      "actorId": "0mt34x1vttigoz6ji",
+      "createdAt": "2026-08-21T16:00:20.264Z",
+      "fromStage": "negotiating",
+      "id": "0mt34yeqw4lnkaco0",
+      "note": "Signed at 149k. Inspection window closes in nine days.",
+      "toStage": "under_contract"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:00:19.359Z"
+  "updatedAt": "2026-08-21T16:00:20.264Z"
 }
