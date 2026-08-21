@@ -25,6 +25,7 @@ import {
 } from "@/lib/agent/credentials";
 import { AgentBadRequestError } from "@/lib/agent/errors";
 import { PROVIDERS } from "@/lib/agent/providers";
+import { serverModels } from "@/lib/agent/server-models";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -47,9 +48,25 @@ export async function GET(request: Request): Promise<NextResponse> {
       error instanceof AgentBadRequestError ? error.message : "credential headers rejected";
   }
 
+  // Every model this deployment can answer with on its own key. The Ask page
+  // renders exactly this list, in this order, and the first entry is what
+  // answers if the visitor does not choose. Ids and labels only: no key, and no
+  // hint of one beyond the variable name the settings page already reports.
+  const available = serverModels();
+
   return NextResponse.json({
     configured: Boolean(server),
     active,
+    server_models: available.map((model) => ({
+      provider: model.provider,
+      provider_label: model.providerLabel,
+      id: model.modelId,
+      label: model.label,
+      free: model.free,
+      notes: model.notes,
+    })),
+    /** Where the loop sends a model call when it uses one of the above. */
+    proxy_url: "/api/llm",
     server_default: server
       ? { provider: server.provider, model: server.modelId, env_key: server.envKey }
       : null,

@@ -19,7 +19,11 @@ import { z } from "zod";
 
 import { criteriaSetSchema, CRITERIA_PRESETS } from "@/lib/criteria/types";
 import { displayAddress } from "@/lib/data/map";
-import { runDelta } from "@/lib/data/runs";
+// From runs-parse, not runs: these tools run in the browser, and lib/data/runs
+// is the Node half of that split - it imports node:fs/promises for the local
+// file path. Pulling it in here put a node: builtin in the browser chunk, which
+// Turbopack cannot chunk, and `pnpm dev` answered /agent with a 500.
+import { runDelta } from "@/lib/data/runs-parse";
 import type { PropertyDataSource } from "@/lib/data/types";
 import type { Overlay } from "@/lib/data/overlay";
 import type { AgentDataFreshness, AgentEvidenceRow, AgentToolCall } from "@/lib/oracle/agent/types";

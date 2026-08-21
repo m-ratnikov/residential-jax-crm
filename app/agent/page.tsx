@@ -18,6 +18,7 @@ import remarkGfm from "remark-gfm";
 
 import { Badge, Button, Panel, Spinner, TextArea, ago, count, cx } from "@/components/ui";
 import { useAgentSettings } from "@/lib/agent/settings-client";
+import type { AgentProvider } from "@/lib/agent/providers";
 import { runClientAgent } from "@/lib/agent/client-run";
 import { isAgentError } from "@/lib/agent/errors";
 import type { AgentResponse } from "@/lib/agent/types";
@@ -35,6 +36,19 @@ interface Turn {
   error: string | null;
 }
 
+/** One entry of what GET /api/agent publishes as `server_models`. */
+interface ServerModel {
+  provider: AgentProvider;
+  provider_label: string;
+  id: string;
+  label: string;
+  free: boolean;
+  notes: string;
+}
+
+/** A stable value for the <select>, since a model id is only unique per provider. */
+const key = (model: ServerModel) => `${model.provider}:${model.id}`;
+
 export default function AgentPage() {
   const { settings, loaded } = useAgentSettings();
   const [question, setQuestion] = useState("");
@@ -42,10 +56,37 @@ export default function AgentPage() {
   const [busy, setBusy] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // Configuration is a purely local question: the loop runs in this tab with
-  // the key stored in this browser. Derived rather than stored, so it cannot be
-  // a render behind the settings it describes. Null means "still reading".
-  const configured = loaded ? Boolean(settings) : null;
+  // The models this deployment can answer with on its own key. Fetched rather
+  // than compiled in, because whether a key exists is a property of the
+  // deployment and not of the build.
+  const [offered, setOffered] = useState<ServerModel[] | null>(null);
+  const [chosen, setChosen] = useState<string>("");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/agent")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((body: { server_models?: ServerModel[] } | null) => {
+        if (cancelled) return;
+        const models = body?.server_models ?? [];
+        setOffered(models);
+        setChosen((current) => current || (models[0] ? key(models[0]) : ""));
+      })
+      .catch(() => {
+        if (!cancelled) setOffered([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const selected = (offered ?? []).find((model) => key(model) === chosen) ?? offered?.[0] ?? null;
+
+  // A visitor's own key wins when they have set one: they chose it and they pay
+  // for it. Otherwise the deployment answers on its own, through the proxy.
+  const ownKey = loaded ? Boolean(settings) : null;
+  const canAnswer = ownKey === true || Boolean(selected);
+  const nothingAvailable = loaded && ownKey === false && offered !== null && offered.length === 0;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -67,22 +108,26 @@ export default function AgentPage() {
     setTurns((current) => [...current, { question: trimmed, response: null, error: null }]);
 
     try {
-      if (!settings) {
+      if (!settings && !selected) {
         throw new Error(
-          "No model is configured. Add a provider and key on the settings page; several have a free tier that needs no card.",
+          "No model is available. This deployment has none configured, so add your own on the settings page; several providers have a free tier that needs no card.",
         );
       }
 
       // The loop runs here, in the tab, because its tools have to reach the
-      // parcel data and the query engine is here. The key was already held in
-      // this browser and still never reaches the server.
+      // parcel data and the query engine is here. A visitor's own key never
+      // reaches the server; a deployment key never reaches the browser, because
+      // the model call for that path is forwarded by /api/llm.
       const body = await runClientAgent({
         messages: [...history, { role: "user", content: trimmed }],
-        credential: {
-          provider: settings.provider,
-          modelId: settings.modelId,
-          apiKey: settings.apiKey,
-        },
+        credential: settings
+          ? { provider: settings.provider, modelId: settings.modelId, apiKey: settings.apiKey }
+          : null,
+        serverModel: settings
+          ? null
+          : selected
+            ? { provider: selected.provider, modelId: selected.id }
+            : null,
       });
 
       setTurns((current) => {
@@ -118,21 +163,50 @@ export default function AgentPage() {
             with the rows behind it.
           </p>
         </div>
-        {loaded && configured === false && (
+        <div className="flex items-center gap-2">
+          {settings ? (
+            <span
+              className="text-[11px] text-ink-500"
+              title="Your own key, stored in this browser. It answers instead of the deployment's."
+            >
+              your key: {settings.provider}:{settings.modelId}
+            </span>
+          ) : (
+            offered !== null &&
+            offered.length > 0 && (
+              <label className="flex items-center gap-1.5 text-[11px] text-ink-500">
+                Model
+                <select
+                  value={chosen}
+                  onChange={(event) => setChosen(event.target.value)}
+                  disabled={busy}
+                  className="rounded-md border border-[var(--line)] bg-[var(--panel-raised)] px-2 py-1 text-[12px] text-ink-100 outline-none focus:border-accent-500"
+                >
+                  {offered.map((model) => (
+                    <option key={key(model)} value={key(model)} title={model.notes}>
+                      {model.provider_label} - {model.label}
+                      {model.free ? " (free tier)" : ""}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )
+          )}
           <Link href="/settings">
-            <Button variant="primary">Add a model key</Button>
+            <Button variant={canAnswer ? "ghost" : "primary"}>
+              {canAnswer ? "Use my own key" : "Add a model key"}
+            </Button>
           </Link>
-        )}
+        </div>
       </div>
 
-      {loaded && configured === false && (
+      {nothingAvailable && (
         <div className="rounded-lg border border-warn-500/40 bg-warn-500/10 px-4 py-3 text-xs text-warn-500">
-          <p className="font-medium">No model is configured, so this page cannot answer yet.</p>
+          <p className="font-medium">No model is available, so this page cannot answer yet.</p>
           <p className="mt-1 text-warn-500/80">
-            This deployment ships no key of its own on purpose: a public agent endpoint with a
-            server-side key attached is a bill any stranger can run up. Add your own on the settings
-            page - several providers have a free tier that needs no card. Nothing else in this
-            application needs a model.
+            This deployment has no key configured. Add your own on the settings page - several
+            providers have a free tier that needs no card. Nothing else in this application needs a
+            model.
           </p>
         </div>
       )}

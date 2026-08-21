@@ -23,7 +23,7 @@ Everything below exists to make that one sentence true and checkable.
 | Property queries | DuckDB-WASM **in the visitor's tab**, range reading the published parquet off the IPFS gateway | 404,023 parcels queryable with no database and no query server |
 | CRM state        | JSON documents committed to a git branch (Postgres and in-process are drop-in alternatives)    | thousands of rows, and no database to provision or pay for     |
 | Map              | MapLibre GL, raster basemap declared inline                                                    | no API key, no style-document dependency                       |
-| Agent            | Vercel AI SDK, bring-your-own-key across seven providers, loop runs in the tab                 | its tools need the parcel data, which is in the tab            |
+| Agent            | Vercel AI SDK, nine providers, loop runs in the tab, model call proxied server-side            | its tools need the parcel data, which is in the tab            |
 | Schedule         | GitHub Actions cron every 30 minutes, native DuckDB                                            | Vercel Hobby allows one cron a day, which is not a notifier    |
 
 The property corpus is never copied into a database, and no server in this
@@ -246,6 +246,48 @@ The rationale quotes the values behind the number:
 
 ---
 
+## The agent answers on this deployment's key, from a loop in your tab
+
+Two facts that pull in opposite directions. The agent's tools query the parcel
+data, and that data is read by DuckDB-WASM **in the visitor's tab**, so the tool
+loop has to run there. The model key belongs on the **server**, because a key
+shipped to a browser is a key given away.
+
+So only the model call crosses over. The loop runs in the tab and points the AI
+SDK at `/api/llm/<provider>`
+([route](app/api/llm/[provider]/[...path]/route.ts)), which forwards the request
+upstream with the key attached and streams the answer back. Same SDK, same wire
+protocol, one hop. The key never reaches the browser and the tools never leave
+it.
+
+The Ask page therefore opens with a dropdown of the models this deployment can
+answer with, not a request to go and configure something. The list is published
+by `GET /api/agent` from the registry, so the server cannot offer a model it
+would refuse to run.
+
+**What bounds the proxy**, because a route that spends someone's key on behalf
+of anonymous callers deserves stating plainly:
+
+- the provider must be one this build knows **and** have a key configured here,
+  so the path cannot be used to reach arbitrary hosts;
+- the model must be one the registry lists for that provider, or a hand-written
+  request could point the key at the most expensive model the vendor sells;
+- every caller is rate limited by address, per process.
+
+The residual risk is real and not engineered away: a public runtime answering on
+the owner's key can have that key spent by strangers, and a per-process counter
+raises the effort rather than removing it. The deployment owner decides whether
+to configure a key at all. With none configured the route 404s, the dropdown is
+empty, and the page asks the visitor for their own key instead - which is still
+supported, still stored only in their browser, and still takes precedence when
+present.
+
+Amazon Bedrock is the one provider that cannot be forwarded: it signs the whole
+request with SigV4 rather than carrying a header token. It stays on the
+bring-your-own path.
+
+---
+
 ## What the data can and cannot answer
 
 Stated here rather than discovered by a reviewer.
@@ -402,7 +444,8 @@ Each step states what to look for. All of it runs against the deployed URL.
     `Clear simulation` removes the simulated rows. The passes marked `cron` were
     run by GitHub Actions on a runner nobody was watching, which is the point of
     the whole exercise.
-15. **Open `/agent`.** Add a free-tier key on `/settings` first. Ask _"Which
+15. **Open `/agent`.** Pick a model from the dropdown - this deployment offers
+    its own, so nothing needs configuring. Ask _"Which
     residential properties in the Arlington area match my distressed criteria and
     have not been contacted yet?"_ Check the `Tools` and `Rows` tabs under the
     answer, and the caveats block.

@@ -26,6 +26,8 @@ import { classifyProviderError } from "@/lib/oracle/agent/errors";
 import { safeMessage } from "@/lib/oracle/agent/redact";
 import type { AgentChatMessage, AgentResponse, AgentUsage } from "@/lib/oracle/agent/types";
 import { propertySource, fetchOverlay } from "@/lib/data/client-source";
+import { createProxiedModel } from "./proxy-model";
+import type { AgentProvider } from "@/lib/agent/providers";
 import { SYSTEM_PROMPT } from "./prompt";
 import { createAgentTools, newTrace, TOOL_ORDER } from "./tools";
 
@@ -70,11 +72,49 @@ function toUsage(
 
 export interface RunClientAgentOptions {
   messages: AgentChatMessage[];
-  credential: UserCredential;
+  /**
+   * The visitor's own credential, when they have configured one. Absent means
+   * answer on the deployment's key through the proxy, using `serverModel`.
+   */
+  credential?: UserCredential | null;
+  /**
+   * A provider and model this deployment offers on its own key. The loop still
+   * runs here; only the model call goes through `/api/llm/<provider>`.
+   */
+  serverModel?: { provider: AgentProvider; modelId: string } | null;
   /** Injected by tests. */
   model?: ResolvedModel;
   maxSteps?: number;
   abortSignal?: AbortSignal;
+}
+
+/**
+ * Which model answers, and on whose key.
+ *
+ * A visitor's own credential wins whenever they have set one: they chose it,
+ * they pay for it, and it should not be quietly overridden by whatever this
+ * deployment happens to have configured.
+ */
+async function pickModel(options: RunClientAgentOptions): Promise<ResolvedModel> {
+  if (options.model) return options.model;
+  if (options.credential) return resolveModel({}, options.credential);
+
+  const chosen = options.serverModel;
+  if (!chosen) {
+    throw new Error(
+      "No model is available. This deployment has none configured, so add your own on the settings page.",
+    );
+  }
+
+  return {
+    provider: chosen.provider,
+    modelId: chosen.modelId,
+    model: await createProxiedModel(chosen.provider, chosen.modelId),
+    source: "server",
+    // Plain system prompt. The Anthropic cache marker is a server-side saving
+    // that this path cannot claim, since the proxy re-sends the prefix anyway.
+    instructions: (system: string) => ({ role: "system", content: system }),
+  };
 }
 
 export async function runClientAgent(options: RunClientAgentOptions): Promise<AgentResponse> {
@@ -85,10 +125,7 @@ export async function runClientAgent(options: RunClientAgentOptions): Promise<Ag
   }
 
   const source = propertySource();
-  const [resolved, overlay] = await Promise.all([
-    options.model ? Promise.resolve(options.model) : resolveModel({}, options.credential),
-    fetchOverlay(),
-  ]);
+  const [resolved, overlay] = await Promise.all([pickModel(options), fetchOverlay()]);
 
   const trace = newTrace();
   const tools = createAgentTools(
@@ -111,12 +148,12 @@ export async function runClientAgent(options: RunClientAgentOptions): Promise<Ag
   // Several providers quote the offending credential in the body of a 401, so
   // redact first and classify second even here, where the key is the visitor's
   // own: it must not end up in a rendered error string either.
-  const secrets = [options.credential.apiKey];
+  const secrets = options.credential ? [options.credential.apiKey] : [];
   let result;
   try {
     result = await agent.generate({ messages: modelMessages, abortSignal: options.abortSignal });
   } catch (error: unknown) {
-    throw classifyProviderError(error, safeMessage(error, secrets), "user");
+    throw classifyProviderError(error, safeMessage(error, secrets), resolved.source);
   }
 
   let answer = result.text.trim();
