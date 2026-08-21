@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello ATLANTIC TOWERS CONDOMINIUM AS,\n\nCounty records suggest the roof at SEMINOLE RD, ATLANTIC BEACH, 32233 may be near the end of its service life. A re-roof in ATLANTIC BEACH is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $0.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt362g7w6k6toe7i",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:31:28.412Z",
+      "createdById": "0mt361guosnl96xm7",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-16844100@example.invalid",
+          "occurredAt": "2026-08-21T16:31:28.412Z",
+          "providerEventId": "sim_email_7063e0ddc4d9bc16b7ed:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Mailbox does not exist",
+          "occurredAt": "2026-08-21T16:34:58.412Z",
+          "providerEventId": "sim_email_7063e0ddc4d9bc16b7ed:bounced",
+          "status": "bounced"
+        }
+      ],
+      "id": "0mt362g7wk8zfzkh1",
+      "providerMessageId": "sim_email_7063e0ddc4d9bc16b7ed",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:31:28.412Z",
+      "subject": "About the roof at SEMINOLE RD, ATLANTIC BEACH, 32233",
+      "templateId": "roof-condition",
+      "toAddress": "owner-16844100@example.invalid"
+    }
+  ],
   "ownerId": "0mt362bbqhk91263j",
   "ownerInterest": null,
   "ownerNameSnapshot": "ATLANTIC TOWERS CONDOMINIUM AS",
@@ -87,5 +117,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-21T16:31:27.317Z"
+  "updatedAt": "2026-08-21T16:31:28.412Z"
 }
