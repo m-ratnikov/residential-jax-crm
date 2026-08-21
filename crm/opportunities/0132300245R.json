@@ -76,6 +76,16 @@
       "toStage": "contacted"
     }
   ],
-  "tasks": [],
-  "updatedAt": "2026-08-21T16:55:25.341Z"
+  "tasks": [
+    {
+      "assigneeId": "0mt36wiiel4uur28g",
+      "completedAt": null,
+      "createdAt": "2026-08-21T16:55:26.250Z",
+      "dueAt": "2026-08-25T16:55:26.250Z",
+      "id": "0mt36x9nuaff9u3hd",
+      "status": "open",
+      "title": "Follow up call"
+    }
+  ],
+  "updatedAt": "2026-08-21T16:55:26.250Z"
 }
