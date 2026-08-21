@@ -21,8 +21,8 @@
  * structural here, because the document key IS the constraint:
  *
  * - one live opportunity per parcel -> `opportunities/<propertyId>`
- * - one alert per (search, property, pass) -> `alerts/<run>__<search>__<parcel>`
- * - outreach status events applied once -> `outreach-events/<providerEventId>`
+ * - one alert per (search, property, pass) -> `alerts/<pass>__<search>__<parcel>`
+ * - one evidence record per matcher pass -> `matcher-runs/<matcherRunId>`
  *
  * That is stronger than a check-then-write, and it means two writers - the
  * scheduled matcher and someone clicking in the app - cannot collide on the same

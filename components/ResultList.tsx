@@ -16,6 +16,7 @@ import { useState } from "react";
 import type { SearchRow } from "@/lib/client";
 import type { CriteriaSet } from "@/lib/criteria/types";
 import { downloadPropertyCsv } from "@/lib/data/export-csv";
+import { TRACKED_MATCH_CAP } from "@/lib/notify/limits";
 import { Badge, Button, ScoreBadge, cx, count, money } from "./ui";
 
 export interface ResultListProps {
@@ -78,6 +79,22 @@ export function ResultList({
             {rows.length ? `Showing ${count(rows.length)}` : "No parcels match these criteria"}
             {tookMs ? ` - ${tookMs} ms` : ""}
           </p>
+          {/*
+            The count above is what the criteria select. It is not what saving
+            them would watch: the matcher fingerprints the best
+            TRACKED_MATCH_CAP matches per pass, so a change to anything ranked
+            below that raises no alert, ever. Said here because this is the
+            number somebody reads immediately before pressing "Save and watch".
+          */}
+          {!loading && total > TRACKED_MATCH_CAP && (
+            <p
+              className="text-[11px] text-ink-500"
+              title={`A saved search fingerprints the top ${count(TRACKED_MATCH_CAP)} matches by score on each pass and alerts on changes among those. Changes to lower ranked matches are not detected. Narrow the criteria to bring the set you care about inside the cap.`}
+            >
+              Saving these criteria watches the top {count(TRACKED_MATCH_CAP)} by score, not all{" "}
+              {count(total)}.
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-1">
           <Button

@@ -61,9 +61,31 @@ export function handleError(route: string, error: unknown): NextResponse {
   );
 }
 
-/** Parse a JSON body, treating an absent one as `{}`. */
+/**
+ * Parse a JSON body, treating an absent one as `{}` and inflating a gzipped one.
+ *
+ * The browser compresses a large post (see `postLarge` in lib/client.ts): the
+ * matcher sends every match it evaluated, which measured 2.75 MB for one saved
+ * search against the real artifact, and the platform refuses a body over
+ * 4.5 MB. Runtimes do not transparently inflate a request the way they do a
+ * response, so the one place that receives one does it here.
+ */
 export async function readJson(request: Request): Promise<unknown> {
-  const text = await request.text();
+  const encoding = request.headers.get("content-encoding")?.toLowerCase() ?? "";
+
+  let text: string;
+  if (encoding.includes("gzip")) {
+    const { gunzipSync } = await import("node:zlib");
+    const raw = Buffer.from(await request.arrayBuffer());
+    try {
+      text = gunzipSync(raw).toString("utf8");
+    } catch {
+      throw new SyntaxError("The request body announced gzip but could not be decompressed.");
+    }
+  } else {
+    text = await request.text();
+  }
+
   if (!text.trim()) return {};
   try {
     return JSON.parse(text);

@@ -11,7 +11,7 @@ import { z } from "zod";
 import { handleError, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
 import { criteriaSetSchema } from "@/lib/criteria/types";
-import { createSavedSearch, listSavedSearches } from "@/lib/crm/repo";
+import { createSavedSearch, listSavedSearchesForDisplay } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -29,7 +29,7 @@ const createSchema = z.object({
 
 export async function GET(): Promise<Response> {
   try {
-    return ok({ searches: await listSavedSearches() });
+    return ok({ searches: await listSavedSearchesForDisplay() });
   } catch (error: unknown) {
     return handleError("GET /api/searches", error);
   }

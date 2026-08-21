@@ -76,6 +76,25 @@ export async function listSavedSearches(): Promise<SavedSearchDoc[]> {
   return searches.sort(byNewest((search) => search.createdAt));
 }
 
+/**
+ * A saved search as a list needs it: everything except the tracked matches.
+ *
+ * `matches` holds a snapshot per watched parcel - up to 2,000 of them, sixteen
+ * fields each - because that is what the next pass diffs against. It is state
+ * the matcher needs and nothing on screen ever shows, and sending it made
+ * `GET /api/searches` a 3.5 MB response that every page listing criteria paid
+ * for, on every load, to display a handful of counts.
+ *
+ * `matchesTruncated` and `lastMatchCount` survive, because those two ARE shown:
+ * they are how the cap is disclosed next to the number it applies to.
+ */
+export type SavedSearchListItem = Omit<SavedSearchDoc, "matches">;
+
+export async function listSavedSearchesForDisplay(): Promise<SavedSearchListItem[]> {
+  const searches = await listSavedSearches();
+  return searches.map(({ matches: _matches, ...rest }) => rest);
+}
+
 export async function getSavedSearch(id: string): Promise<SavedSearchDoc | null> {
   return crmStore().get<SavedSearchDoc>("searches", id);
 }

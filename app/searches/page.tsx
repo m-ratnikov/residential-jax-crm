@@ -21,6 +21,7 @@ import { criteriaSetSchema } from "@/lib/criteria/types";
 import { fetchOverlay, propertySource } from "@/lib/data/client-source";
 import { displayAddress } from "@/lib/data/map";
 import { storeWarning, useServerStatus } from "@/lib/data/status";
+import { TRACKED_MATCH_CAP } from "@/lib/notify/limits";
 
 interface SimulationResponse {
   simulation: {
@@ -224,7 +225,14 @@ export default function SavedSearchesPage() {
               <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_260px]">
                 <div className="space-y-2.5">
                   <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] sm:grid-cols-3">
-                    <Row label="Matched last pass" value={count(search.lastMatchCount ?? 0)} />
+                    <Row
+                      label="Matched last pass"
+                      value={
+                        search.matchesTruncated
+                          ? `${count(search.lastMatchCount ?? 0)} (watching top ${count(TRACKED_MATCH_CAP)})`
+                          : count(search.lastMatchCount ?? 0)
+                      }
+                    />
                     <Row label="Last evaluated" value={ago(search.lastEvaluatedAt)} />
                     <Row label="Against run" value={search.lastPipelineRunId ?? "none yet"} mono />
                   </dl>

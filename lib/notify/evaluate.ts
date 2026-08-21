@@ -20,6 +20,7 @@
  */
 
 import { changedFields } from "@/lib/criteria/score";
+import { TRACKED_MATCH_CAP } from "./limits";
 import { crmStore } from "@/lib/crm/db";
 import {
   newId,
@@ -32,16 +33,6 @@ import {
 import { alertId, hasSeenPipelineRun } from "@/lib/crm/repo";
 import { deliverAlert } from "./deliver";
 import { logEvent } from "./log";
-
-/**
- * How many matching parcels one saved search tracks between passes.
- *
- * The snapshot is what the diff compares against, so it has a real cost: it is
- * stored on the search document and rewritten whenever it changes. A criteria
- * set matching forty thousand parcels is a browsing query rather than a watch
- * list, and the pass records that it capped rather than silently narrowing.
- */
-export const TRACKED_MATCH_CAP = 2_000;
 
 /** One matched parcel, as produced by whichever engine evaluated the criteria. */
 export interface EvaluatedMatch {
@@ -106,6 +97,15 @@ export interface SearchOutcome {
   alertsCreated: number;
   alertsSuppressed: number;
   truncated: boolean;
+  /**
+   * How many of `matched` this search now watches, and whether that is all of
+   * them. `matched` is what the criteria select; `trackedMatches` is what the
+   * next pass can diff against. When they differ, a change to anything outside
+   * the tracked set raises nothing, and a screen showing `matched` on its own
+   * is describing a watch that is not happening.
+   */
+  trackedMatches: number;
+  matchesTruncated: boolean;
   error?: string;
 }
 
@@ -125,6 +125,43 @@ export interface MatcherResult {
   error?: string;
 }
 
+/**
+ * The identity of the logical pass, as distinct from the identity of this
+ * attempt at it.
+ *
+ * `matcherRunId` is minted per attempt, which is right for the evidence record -
+ * a retry is a second run and gets its own row - and wrong for the alert key.
+ * With the attempt id in the key, a pass that delivered some alerts and then
+ * timed out before writing the search snapshot would, on retry, mint new ids for
+ * the same findings and notify a second time. The alert key has to name the pass
+ * the alert is evidence OF.
+ *
+ * A logical pass is one trigger reading one generation of the data, so that is
+ * the key: the artifact run id, which already accounts for an overlay
+ * republishing values under an unchanged parquet, falling back to the pipeline
+ * run id. Retrying a cron pass over the same artifact therefore recomputes the
+ * same alert ids, and the existing-document check ahead of `deliverAlert` turns
+ * the retry into a no-op.
+ *
+ * What this does NOT guarantee, stated plainly because the previous comment
+ * overstated it:
+ *
+ * - A pass with no run id to name - a manual or browser pass against a source
+ *   that publishes none - has no stable identity, so it falls back to the
+ *   attempt id and a retry of it CAN notify twice. There is nothing to key on;
+ *   inventing one from the clock would only make the duplicate harder to see.
+ * - Delivery itself is at-least-once. A crash between `deliverAlert` returning
+ *   and the alert document being written loses the record of a notification that
+ *   was already sent, and the retry will send it again.
+ * - Two different triggers over the same artifact are two logical passes and are
+ *   keyed apart on purpose, so a manual "check now" pressed after a cron pass
+ *   still tells the person who pressed it what it found.
+ */
+function logicalPassId(input: EvaluateInput, attemptId: string): string {
+  const generation = input.dataSource.artifactRunId ?? input.pipelineRunId;
+  return generation ? `${input.trigger}-${generation}` : attemptId;
+}
+
 export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherResult> {
   const store = crmStore();
   const startedAt = (input.now ?? new Date()).toISOString();
@@ -136,6 +173,7 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
   const pipelineRunIsNew = runId ? !(await hasSeenPipelineRun(runId)) : false;
 
   const matcherRunId = newId();
+  const passId = logicalPassId(input, matcherRunId);
   const outcomes: SearchOutcome[] = [];
   let alertsCreated = 0;
   let alertsSuppressed = 0;
@@ -161,6 +199,10 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         alertsCreated: 0,
         alertsSuppressed: 0,
         truncated: evaluation.truncated,
+        // Carried from the last pass until this one replaces them, so a search
+        // that errored still reports the watch it currently has.
+        trackedMatches: Object.keys(search.matches ?? {}).length,
+        matchesTruncated: search.matchesTruncated,
         error: evaluation.error,
       };
 
@@ -225,10 +267,11 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         alertsSuppressed += outcome.alertsSuppressed;
 
         for (const item of toRaise) {
-          const id = alertId(matcherRunId, search.id, item.match.propertyId);
+          const id = alertId(passId, search.id, item.match.propertyId);
 
-          // The key is the constraint: a retried pass writes the same document
-          // rather than a second alert.
+          // The key is the constraint: a retry of this logical pass recomputes
+          // the same id, finds the document already there and delivers nothing.
+          // See logicalPassId() for what that does and does not cover.
           if (await store.get<AlertDoc>("alerts", id)) continue;
 
           const notifications = await deliverAlert({
@@ -266,7 +309,8 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         }
 
         // Replace the snapshot with what was just observed. Capped, because this
-        // is stored on the document and rewritten whenever it changes.
+        // is stored on the document and rewritten whenever it changes, and the
+        // cap is reported rather than applied quietly: see TRACKED_MATCH_CAP.
         const tracked = evaluation.rows.slice(0, TRACKED_MATCH_CAP);
         const matches: Record<string, MatchSnapshot> = {};
         for (const match of tracked) {
@@ -284,10 +328,18 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
 
         outcome.leftMatches = Object.keys(previous).filter((id) => !matches[id]).length;
 
+        // Two caps sit between "matches" and "watched": the evaluation cap the
+        // engine applied before this module saw a row, and TRACKED_MATCH_CAP
+        // here. Comparing the tracked set against the full match count covers
+        // both, where comparing it against the rows that survived the first cap
+        // reported only the second and called a partial watch complete.
+        outcome.trackedMatches = tracked.length;
+        outcome.matchesTruncated = evaluation.matched > tracked.length;
+
         await store.put<SavedSearchDoc>("searches", {
           ...search,
           matches,
-          matchesTruncated: evaluation.rows.length > tracked.length,
+          matchesTruncated: outcome.matchesTruncated,
           lastEvaluatedAt: startedAt,
           lastPipelineRunId: runId,
           lastMatchCount: evaluation.matched,
@@ -356,3 +408,5 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
     error: fatal,
   };
 }
+
+export { TRACKED_MATCH_CAP };

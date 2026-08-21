@@ -73,6 +73,8 @@ export interface SavedSearch {
   lastEvaluatedAt: string | null;
   lastPipelineRunId: string | null;
   lastMatchCount: number | null;
+  /** True when the pass matched more than the notifier tracks. Disclosed on screen. */
+  matchesTruncated?: boolean;
   createdAt: string;
 }
 
@@ -225,6 +227,47 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
 
 export function post<T>(path: string, body: unknown): Promise<T> {
   return api<T>(path, { method: "POST", body: JSON.stringify(body) });
+}
+
+/** Bodies above this are compressed before sending. Below it, not worth a stream. */
+const COMPRESS_ABOVE_BYTES = 512 * 1024;
+
+/**
+ * POST, compressed when the body is large enough to need it.
+ *
+ * The matcher posts what the browser's query engine found: up to 2,000 matches
+ * per saved search, each carrying its material snapshot and its display record.
+ * That is 1,442 bytes a row measured against the real artifact - 2.75 MB for one
+ * search, 8.25 MB for three - and the platform refuses a request body over
+ * 4.5 MB. So "Check for matches now" and both simulate buttons answered 413 and
+ * did nothing, on the deployed runtime, which is two steps of the demo script.
+ *
+ * gzip is the smallest honest fix: the same payload, the same one request, the
+ * same single evidence row for the pass. JSON of this shape compresses about
+ * twelve to one, so the ceiling stops being reachable rather than being moved a
+ * little further away. Splitting the post per search would also have fitted, at
+ * the cost of writing three matcher-run records for one pass and making the
+ * evidence table lie about how many passes happened.
+ *
+ * Falls back to sending it uncompressed where CompressionStream is missing, so
+ * an older browser degrades to the previous behaviour rather than failing.
+ */
+export async function postLarge<T>(path: string, body: unknown): Promise<T> {
+  const json = JSON.stringify(body);
+  const bytes = new TextEncoder().encode(json);
+
+  if (bytes.byteLength < COMPRESS_ABOVE_BYTES || typeof CompressionStream === "undefined") {
+    return api<T>(path, { method: "POST", body: json });
+  }
+
+  const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream("gzip"));
+  const gzipped = await new Response(stream).arrayBuffer();
+
+  return api<T>(path, {
+    method: "POST",
+    body: gzipped,
+    headers: { "content-type": "application/json", "content-encoding": "gzip" },
+  });
 }
 
 export function patch<T>(path: string, body: unknown): Promise<T> {

@@ -202,6 +202,74 @@ describe("buildSearch", () => {
   });
 });
 
+describe("how ties are broken", () => {
+  const order = (
+    orderBy: "score" | "assessed_value" | "roof_age" | "tenure",
+    filters: CriteriaSet["filters"] = {},
+  ) => {
+    const { sql } = buildSearch({
+      criteria: criteria(filters),
+      limit: 50,
+      offset: 0,
+      orderBy,
+      courtJoinAvailable: false,
+    });
+    const start = sql.lastIndexOf("ORDER BY");
+    const end = sql.indexOf("LIMIT", start);
+    return sql.slice(start, end).trim();
+  };
+
+  it("does not fall back to cheapest first when scores tie", () => {
+    // The whole defect in one assertion. Nothing ranked means every row scores
+    // 100, so the tiebreak WAS the ordering, and cheapest first put fifteen
+    // dollar-assessed condominium shells at the top of the default search.
+    const unranked = buildScore(criteria({ residentialOnly: true, dwellingsOnly: true }), false);
+    expect(unranked.unranked).toBe(true);
+    expect(order("score", { residentialOnly: true, dwellingsOnly: true })).not.toContain(
+      "assessed_value ASC",
+    );
+  });
+
+  it("sorts a parcel the roll has not priced as a dwelling behind one it has", () => {
+    // A dollar-assessed unit with a real floor area clears `assessed_value > 0`
+    // and is still not a price, so the ordering says so even when the filter
+    // that would have removed it is switched off.
+    expect(TIEBREAK_SQL).toContain("assessed_value >= livable_floor_area");
+    expect(order("score")).toContain("assessed_value >= livable_floor_area");
+  });
+
+  it("breaks a remaining tie on a stable key rather than inventing a ranking", () => {
+    // Deterministic ordering is what pagination and the matcher's tracked set
+    // both need: without it, LIMIT/OFFSET can repeat or skip a row, and the
+    // 2,000 matches a saved search watches can change between passes on
+    // identical data.
+    expect(TIEBREAK_SQL.trimEnd().endsWith("property_id")).toBe(true);
+    for (const key of ["score", "assessed_value", "roof_age", "tenure"] as const) {
+      expect(order(key).trimEnd().endsWith("property_id")).toBe(true);
+    }
+  });
+
+  it("keeps cheapest first as an explicit choice", () => {
+    // Choosing "Cheapest" is a deliberate sort, not a tiebreak. It still leads
+    // on assessed value, dollar units included: that is the honest answer to
+    // the question the button asks.
+    const cheapest = order("assessed_value");
+    expect(cheapest).toContain("ORDER BY assessed_value ASC NULLS LAST");
+    expect(cheapest.indexOf("assessed_value ASC")).toBeLessThan(cheapest.indexOf("property_id"));
+  });
+
+  it("leads on the requested column for the other explicit sorts", () => {
+    expect(order("roof_age")).toContain("ORDER BY roof_age_years DESC NULLS LAST");
+    expect(order("tenure")).toContain("ORDER BY years_since_last_sale DESC NULLS LAST");
+  });
+
+  it("still ranks by score first when the criteria can rank", () => {
+    const ranked = order("score", { minRoofAge: 15 });
+    expect(ranked).toContain("ORDER BY match_score DESC");
+    expect(ranked.indexOf("match_score DESC")).toBeLessThan(ranked.indexOf("property_id"));
+  });
+});
+
 describe("criteria validation", () => {
   it("fills the default weights so a stored set without them still scores", () => {
     const parsed = criteriaSetSchema.parse({ name: "x", filters: {} });

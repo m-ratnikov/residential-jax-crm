@@ -21,11 +21,21 @@ import { materialSnapshot } from "@/lib/criteria/score";
 import { displayAddress } from "@/lib/data/map";
 import type { ScoredProperty } from "@/lib/data/types";
 import { fetchOverlay, propertySource } from "@/lib/data/client-source";
-import { post, type SavedSearch } from "@/lib/client";
-import type { MatcherResult } from "./evaluate";
+import { postLarge, type SavedSearch } from "@/lib/client";
+import { TRACKED_MATCH_CAP, type MatcherResult } from "./evaluate";
 
 /** Matches the server-side cap, so a pass from either side sees the same set. */
-export const MATCH_EVALUATION_CAP = 5_000;
+/**
+ * How many matches the browser evaluates and sends per saved search.
+ *
+ * Aligned to what the server actually tracks. It was 5,000 while the server
+ * kept the best 2,000, so three fifths of every payload was transferred and
+ * then discarded - and the payload was the problem: all searches went up in one
+ * request, and the deployed runtime answered `413 Payload Too Large`. Pressing
+ * "Check for matches now" or either simulate button did nothing at all, which
+ * is two steps of the demo script.
+ */
+export const MATCH_EVALUATION_CAP = TRACKED_MATCH_CAP;
 
 function alertSnapshot(scored: ScoredProperty): Record<string, unknown> {
   const property = scored.property;
@@ -142,7 +152,7 @@ export async function runMatcherPass(options: RunPassOptions = {}): Promise<Matc
 
   options.onProgress?.(wanted.length, wanted.length, "");
 
-  return post<MatcherResult>("/api/matcher/run", {
+  return postLarge<MatcherResult>("/api/matcher/run", {
     trigger: options.trigger ?? "browser",
     pipelineRunId,
     pipelineRunStartedAt: latest?.startedAt ?? null,

@@ -554,8 +554,7 @@ export interface BuildSearchOptions {
  * decides what is in the result, and adding a second hidden guard there would be
  * the "raise the threshold until the bad rows disappear" move rather than a fix.
  */
-const PRICED_DWELLING_SQL =
-  `livable_floor_area >= ${DWELLING_MIN_SQFT} AND assessed_value >= livable_floor_area`;
+const PRICED_DWELLING_SQL = `livable_floor_area >= ${DWELLING_MIN_SQFT} AND assessed_value >= livable_floor_area`;
 
 /**
  * How an equal sort key is broken, appended to every ordering.
