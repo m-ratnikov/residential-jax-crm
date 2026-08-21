@@ -15,7 +15,6 @@
  * the common path costs nothing.
  */
 
-import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { DuckDBInstance, type DuckDBConnection, type DuckDBValue } from "@duckdb/node-api";
@@ -331,12 +330,4 @@ export function createDuckDbSource(): DuckDbPropertyDataSource {
     stateCode: cfg.stateCode,
     runHistoryUrl: cfg.runHistoryUrl,
   });
-}
-
-export function localFileExists(path: string): boolean {
-  try {
-    return existsSync(path);
-  } catch {
-    return false;
-  }
 }

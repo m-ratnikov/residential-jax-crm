@@ -12,7 +12,6 @@
  * on a subset and not saying so.
  */
 
-import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 export const SAMPLE_QUERY_TABLE = "public/sample/query-table.parquet";
@@ -65,14 +64,6 @@ function firstConfigured(...candidates: (string | undefined)[]): string | null {
   return null;
 }
 
-function existsLocally(relative: string): boolean {
-  try {
-    return existsSync(join(process.cwd(), relative));
-  } catch {
-    return false;
-  }
-}
-
 export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
   const countyName = env.NEXT_PUBLIC_COUNTY_NAME?.trim() || "Duval";
   const stateCode = env.NEXT_PUBLIC_STATE_CODE?.trim() || "FL";
@@ -89,11 +80,14 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
   if (configured && /^https?:\/\//i.test(configured)) {
     queryTableSource = resolveArtifactUrl(configured, QUERY_TABLE_OBJECT);
     isSample = false;
-  } else if (configured && !configured.startsWith("/sample/") && existsSync(configured)) {
-    // Passed through unresolved on purpose. Calling path.resolve on a value the
-    // bundler cannot see statically makes Next trace the entire project into the
-    // serverless output; DuckDB reads a relative path from the working directory
-    // perfectly well.
+  } else if (configured && !configured.startsWith("/sample/")) {
+    // A configured local path is used exactly as given, and is neither resolved
+    // nor checked for existence. Both of those touch the filesystem with a value
+    // the bundler cannot see statically, which makes Next trace the ENTIRE
+    // project - node_modules and the public folder included - into every
+    // serverless function, and the resulting upload is rejected. DuckDB reads a
+    // relative path from the working directory perfectly well, and reports a
+    // clear error if it is wrong.
     queryTableSource = configured;
     isSample = false;
   } else if (env.VERCEL_URL?.trim()) {
@@ -120,9 +114,7 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
       : runHistoryConfigured
     : env.VERCEL_URL?.trim()
       ? `https://${env.VERCEL_URL.trim()}/sample/run-history.json`
-      : existsLocally(SAMPLE_RUN_HISTORY)
-        ? join(process.cwd(), SAMPLE_RUN_HISTORY)
-        : null;
+      : join(process.cwd(), SAMPLE_RUN_HISTORY);
 
   return {
     queryTableSource,

@@ -26,6 +26,13 @@ import type { NextConfig } from "next";
  * what the platform would accept. Only the routes that actually read parcel
  * data carry them.
  *
+ * One more thing has to stay out of the way: nothing on this path may call
+ * existsSync or path.resolve on a value the bundler cannot see statically.
+ * Next's static analysis responds by tracing the ENTIRE project - node_modules
+ * and the public folder included - into every function, and the platform then
+ * rejects the upload. See lib/data/config.ts, which resolves paths without
+ * touching the filesystem for exactly this reason.
+ *
  * The bundled sample parquet is deliberately NOT traced. When no artifact URL
  * is configured, a serverless deployment reads the sample over HTTP from its own
  * static output instead (see lib/data/config.ts), which keeps a 9 MB file out of
