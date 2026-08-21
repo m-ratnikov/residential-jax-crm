@@ -12,8 +12,13 @@ import type { NextConfig } from "next";
  *    next to it (`libduckdb.so` on Linux). Next traces the `.node` it can see in
  *    the require() call but not the `.so` the loader pulls in afterwards, so the
  *    route dies at module load with "libduckdb.so: cannot open shared object
- *    file". The whole Linux platform package has to be traced, under both
- *    spellings, because pnpm installs it as a symlink into `.pnpm`.
+ *    file". The whole Linux platform package has to be traced.
+ *
+ *    Related: the install uses pnpm's hoisted node linker (pnpm-workspace.yaml).
+ *    With the default symlinked layout the platform rejects the upload outright
+ *    with "the framework produced an invalid deployment package ... files in
+ *    symlinked directories", because the traced package is a symlink into
+ *    `.pnpm` rather than a real directory.
  *
  * The trace is declared per route rather than across the whole `/api` tree.
  * DuckDB's bindings are tens of megabytes; attaching them to every function -
@@ -27,10 +32,7 @@ import type { NextConfig } from "next";
  * every function for a fallback path that a configured deployment never takes.
  */
 
-const DUCKDB_BINDINGS = [
-  "./node_modules/@duckdb/node-bindings-linux-x64/**/*",
-  "./node_modules/.pnpm/@duckdb+node-bindings-linux-x64@*/node_modules/@duckdb/node-bindings-linux-x64/**/*",
-];
+const DUCKDB_BINDINGS = ["./node_modules/@duckdb/node-bindings-linux-x64/**/*"];
 
 /** Every route that opens a DuckDB connection over the parcel data. */
 const PARCEL_ROUTES = [

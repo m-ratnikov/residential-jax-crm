@@ -1,5 +1,7 @@
 # Residential Property Acquisition CRM (Jacksonville / Duval County Focus)
 
+> **Implementation:** see [SOLUTION.md](SOLUTION.md) for how to run it, what the data can and cannot answer, and the test plan that doubles as the demo script. The user story below is unchanged.
+
 ## Context
 
 Residential acquisition teams (investors, wholesalers, and buy-and-hold operators) need a practical CRM for identifying and acting on distressed or target-fit properties in Jacksonville and greater Duval County, Florida. The immediate requirement is a map-based CRM that consumes the continuous / incremental Duval County Oracle pipeline (property, permit, ownership, location, and related public-source data) so teams can quickly search for properties that match their criteria and be proactively notified when new or updated records match those criteria.
