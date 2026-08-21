@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": 186000,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello HALL LORNE,\n\nCounty records suggest the roof at 1532 W 6TH ST, JACKSONVILLE, 32209 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $20,062.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3hihmj4hv35xyd",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-21T21:51:52.507Z",
+      "createdById": "0mt3hheabkk9k25gy",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-05108600@example.invalid",
+          "occurredAt": "2026-08-21T21:51:52.507Z",
+          "providerEventId": "sim_email_bc9a62bd3bc3d31fc157:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T21:53:27.507Z",
+          "providerEventId": "sim_email_bc9a62bd3bc3d31fc157:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-21T21:55:50.507Z",
+          "providerEventId": "sim_email_bc9a62bd3bc3d31fc157:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt3hihmjiwhwjxzm",
+      "providerMessageId": "sim_email_bc9a62bd3bc3d31fc157",
+      "status": "queued",
+      "statusAt": "2026-08-21T21:51:52.507Z",
+      "subject": "About the roof at 1532 W 6TH ST, JACKSONVILLE, 32209",
+      "templateId": "roof-condition",
+      "toAddress": "owner-05108600@example.invalid"
+    }
+  ],
   "ownerId": "0mt3hic8bc8vbjhac",
   "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "HALL LORNE",
@@ -95,5 +131,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-21T21:51:51.668Z"
+  "updatedAt": "2026-08-21T21:51:52.507Z"
 }
