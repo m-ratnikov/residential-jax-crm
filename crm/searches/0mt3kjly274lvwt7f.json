@@ -1,0 +1,39 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-21T23:16:43.610Z",
+  "criteria": {
+    "filters": {
+      "distress": {
+        "absenteeOwner": true,
+        "noHomestead": true
+      },
+      "dwellingsOnly": true,
+      "minRoofAge": 15,
+      "minYearsSinceSale": 10,
+      "residentialOnly": true
+    },
+    "name": "EVAL tired landlord 2026-08-22",
+    "weights": {
+      "amenity": 0,
+      "distress": 3,
+      "geography": 0,
+      "roofAge": 3,
+      "tenure": 3,
+      "value": 1
+    }
+  },
+  "description": null,
+  "id": "0mt3kjly274lvwt7f",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "EVAL tired landlord 2026-08-22",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-21T23:16:43.610Z"
+}
