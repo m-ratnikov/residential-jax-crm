@@ -1,0 +1,18 @@
+{
+  "id": "0764890000R",
+  "parcelIdentifier": "0764890000R",
+  "propertyId": "0764890000R",
+  "records": [
+    {
+      "amount": 2750,
+      "caseNumber": "2026-SIM-90000R-2",
+      "caseType": "code_enforcement",
+      "fetchedAt": "2026-08-21T21:17:14.110Z",
+      "filedDate": "2026-08-21",
+      "partyName": "THOMPSON OWITA E",
+      "sourceSystem": "simulated_court_feed",
+      "sourceUrl": null,
+      "status": "open"
+    }
+  ]
+}
