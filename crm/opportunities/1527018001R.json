@@ -6,7 +6,7 @@
   "askingPrice": null,
   "assessedValue": 0,
   "assigneeId": "0mt34qrentckaguhg",
-  "closedAt": "2026-08-21T15:56:18.951Z",
+  "closedAt": null,
   "createdAt": "2026-08-21T15:56:15.429Z",
   "id": "1527018001R",
   "latitude": 30.2343721,
@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34t55gtgdq3dh2",
-  "ownerInterest": null,
+  "ownerInterest": "Went to market",
   "ownerNameSnapshot": "VILLAGE GREEN AT BAYMEADOWS TW",
   "parcelIdentifier": "1527018001R",
   "propertyId": "1527018001R",
@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 41
   },
   "savedSearchId": "0mt34qwmnq7mw3qcj",
-  "stage": "dead",
+  "stage": "identified",
   "stageEvents": [
     {
       "actorId": "0mt34qrentckaguhg",
@@ -59,16 +59,8 @@
       "id": "0mt34t5txdj435wg4",
       "note": "Created from search",
       "toStage": "identified"
-    },
-    {
-      "actorId": "0mt34qrentckaguhg",
-      "createdAt": "2026-08-21T15:56:18.951Z",
-      "fromStage": "identified",
-      "id": "0mt34t8jr763iyofx",
-      "note": "Owner listed with an agent two days after our letter. Not our deal.",
-      "toStage": "dead"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:56:18.951Z"
+  "updatedAt": "2026-08-21T15:56:20.345Z"
 }
