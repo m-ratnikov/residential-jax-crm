@@ -12,7 +12,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import {
   Badge,
@@ -29,6 +29,7 @@ import {
   money,
 } from "@/components/ui";
 import { ApiError, api, patch, post, type OpportunityRow } from "@/lib/client";
+import { NEIGHBOURHOODS } from "@/lib/criteria/areas";
 import { storeWarning, useServerStatus } from "@/lib/data/status";
 import {
   ACQUISITION_STAGES,
@@ -46,14 +47,43 @@ const BOARD_STAGES: AcquisitionStage[] = [
   "closed",
 ];
 
+/**
+ * Match strength as bands rather than a free number, because the question an
+ * acquisitions lead asks is "show me the strong ones", not "show me 63 and up".
+ * The cut points are the ones ScoreBadge already colours, so the filter and the
+ * badge tell the same story.
+ */
+const MATCH_BANDS = [
+  { value: "0", label: "Any match strength" },
+  { value: "45", label: "45+ moderate" },
+  { value: "60", label: "60+ promising" },
+  { value: "75", label: "75+ strong" },
+  { value: "90", label: "90+ exceptional" },
+] as const;
+
+type MatchBand = (typeof MATCH_BANDS)[number]["value"];
+
+/** A control with the thing it filters written above it, so the row reads as filters. */
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-ink-500">
+        {label}
+      </span>
+      {children}
+    </label>
+  );
+}
+
 export default function OpportunitiesPage() {
   const [rows, setRows] = useState<OpportunityRow[] | null>(null);
   const [status] = useServerStatus();
   const warning = storeWarning(status?.crmStore);
   const [view, setView] = useState<"board" | "table">("board");
   const [stageFilter, setStageFilter] = useState<AcquisitionStage | "all">("all");
-  const [minScore, setMinScore] = useState("");
-  const [city, setCity] = useState("");
+  const [minScore, setMinScore] = useState<MatchBand>("0");
+  const [areaId, setAreaId] = useState("all");
+  const [place, setPlace] = useState("");
   const [signal, setSignal] = useState<"any" | "absentee" | "court">("any");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [campaignOpen, setCampaignOpen] = useState(false);
@@ -66,14 +96,28 @@ export default function OpportunitiesPage() {
 
   useEffect(load, [load]);
 
+  /**
+   * A spoken area name is a ZIP list, not a city: every ZIP in Arlington is
+   * JACKSONVILLE on the county roll, so filtering geography on the city column
+   * alone can never answer "the Arlington ones".
+   */
+  const areaZips = useMemo(() => {
+    const area = NEIGHBOURHOODS.find((candidate) => candidate.id === areaId);
+    return area ? new Set(area.zips) : null;
+  }, [areaId]);
+
   const filtered = useMemo(() => {
     const min = Number(minScore) || 0;
-    const needle = city.trim().toLowerCase();
+    const needle = place.trim().toLowerCase();
     return (rows ?? []).filter((row) => {
       if (stageFilter !== "all" && row.opportunity.stage !== stageFilter) return false;
       if (min && (row.opportunity.matchScore ?? 0) < min) return false;
-      if (needle && !(row.opportunity.addressCity ?? "").toLowerCase().includes(needle))
-        return false;
+      if (areaZips && !areaZips.has((row.opportunity.addressZip ?? "").trim())) return false;
+      if (needle) {
+        const cityText = (row.opportunity.addressCity ?? "").toLowerCase();
+        const zipText = (row.opportunity.addressZip ?? "").toLowerCase();
+        if (!cityText.includes(needle) && !zipText.includes(needle)) return false;
+      }
       const snapshot = (row.opportunity.propertySnapshot ?? {}) as {
         ownerOccupied?: boolean | null;
         courtDistressScore?: number | null;
@@ -82,7 +126,7 @@ export default function OpportunitiesPage() {
       if (signal === "court" && !(Number(snapshot.courtDistressScore ?? 0) > 0)) return false;
       return true;
     });
-  }, [rows, stageFilter, minScore, city, signal]);
+  }, [rows, stageFilter, minScore, areaZips, place, signal]);
 
   const byStage = useMemo(() => {
     const map = new Map<AcquisitionStage, OpportunityRow[]>();
@@ -155,41 +199,68 @@ export default function OpportunitiesPage() {
       )}
 
       <Panel bodyClassName="px-4 py-2.5">
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-          <Select
-            value={stageFilter}
-            onChange={setStageFilter}
-            options={[
-              { value: "all" as const, label: "All stages" },
-              ...ACQUISITION_STAGES.map((stage) => ({ value: stage, label: STAGE_LABELS[stage] })),
-            ]}
-          />
-          <TextInput
-            type="number"
-            value={minScore}
-            onChange={setMinScore}
-            placeholder="Minimum match score"
-          />
-          <TextInput value={city} onChange={setCity} placeholder="City contains" />
-          <Select
-            value={signal}
-            onChange={setSignal}
-            options={[
-              { value: "any" as const, label: "Any ownership signal" },
-              { value: "absentee" as const, label: "Absentee owner only" },
-              { value: "court" as const, label: "Court distress only" },
-            ]}
-          />
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+          <Field label="Stage">
+            <Select
+              value={stageFilter}
+              onChange={setStageFilter}
+              options={[
+                { value: "all" as const, label: "All stages" },
+                ...ACQUISITION_STAGES.map((stage) => ({
+                  value: stage,
+                  label: STAGE_LABELS[stage],
+                })),
+              ]}
+            />
+          </Field>
+          <Field label="Match strength">
+            <Select
+              value={minScore}
+              onChange={setMinScore}
+              options={MATCH_BANDS.map((band) => ({ value: band.value, label: band.label }))}
+            />
+          </Field>
+          <Field label="Area">
+            <Select
+              value={areaId}
+              onChange={setAreaId}
+              options={[
+                { value: "all", label: "All of Duval" },
+                ...NEIGHBOURHOODS.map((area) => ({ value: area.id, label: area.label })),
+              ]}
+            />
+          </Field>
+          <Field label="City or ZIP">
+            <TextInput value={place} onChange={setPlace} placeholder="e.g. Jacksonville or 32211" />
+          </Field>
+          <Field label="Ownership signal">
+            <Select
+              value={signal}
+              onChange={setSignal}
+              options={[
+                { value: "any" as const, label: "Any ownership signal" },
+                { value: "absentee" as const, label: "Absentee owner only" },
+                { value: "court" as const, label: "Court distress only" },
+              ]}
+            />
+          </Field>
         </div>
       </Panel>
 
       {rows === null ? (
         <Spinner label="Reading opportunities" />
       ) : filtered.length === 0 ? (
-        <Empty title="Nothing here">
-          Track a parcel from the search page or convert an alert, and it appears at the Identified
-          stage.
-        </Empty>
+        rows.length > 0 ? (
+          <Empty title="No opportunity matches these filters">
+            {count(rows.length)} tracked, none of them in this stage, band, area or ownership
+            signal. Widen a filter above.
+          </Empty>
+        ) : (
+          <Empty title="Nothing here">
+            Track a parcel from the search page or convert an alert, and it appears at the
+            Identified stage.
+          </Empty>
+        )
       ) : view === "board" ? (
         <div className="grid gap-3 lg:grid-cols-5">
           {BOARD_STAGES.map((stage) => {

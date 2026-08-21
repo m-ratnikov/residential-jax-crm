@@ -16,7 +16,9 @@
  */
 
 import { fail, handleError } from "@/lib/api";
-import { listOpportunities } from "@/lib/crm/repo";
+import { crmStore } from "@/lib/crm/db";
+import type { AlertDoc } from "@/lib/crm/documents";
+import { listOpportunities, type OpportunityView } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -49,6 +51,69 @@ function attachment(body: string, filename: string): Response {
   });
 }
 
+/**
+ * Where an exported row came from.
+ *
+ * The parcel snapshot the browser wrote when the opportunity was created is the
+ * authoritative record, so the source system and the pipeline run come from
+ * there. The alert the opportunity was converted from carries the matcher run
+ * that produced it, which is the other half of the lineage: which pipeline load
+ * the parcel came from, and which matcher pass decided it was worth tracking.
+ *
+ * Nothing here is invented. A field the row genuinely does not carry is emitted
+ * as an empty cell, because a placeholder in a provenance column is worse than
+ * a blank one: it reads as an answer.
+ */
+interface RowProvenance {
+  sourceSystem: string | null;
+  sourceUrl: string | null;
+  fetchedAt: string | null;
+  pipelineRunId: string | null;
+  alertId: string | null;
+  matcherRunId: string | null;
+}
+
+interface SnapshotProvenance {
+  sourceSystem?: string | null;
+  sourceUrl?: string | null;
+  fetchedAt?: string | null;
+  runId?: string | null;
+}
+
+function provenanceOf(row: OpportunityView, alert: AlertDoc | null): RowProvenance {
+  const snapshot = (row.opportunity.propertySnapshot ?? {}) as {
+    provenance?: SnapshotProvenance | null;
+  };
+  const carried = snapshot.provenance ?? {};
+  return {
+    // The owner document keeps the same source the parcel was read from, so it
+    // answers for rows written before the snapshot carried provenance.
+    sourceSystem: carried.sourceSystem ?? row.owner?.sourceSystem ?? null,
+    sourceUrl: carried.sourceUrl ?? row.owner?.sourceUrl ?? null,
+    fetchedAt: carried.fetchedAt ?? null,
+    pipelineRunId: carried.runId ?? alert?.pipelineRunId ?? null,
+    alertId: row.opportunity.alertId ?? null,
+    matcherRunId: alert?.matcherRunId ?? null,
+  };
+}
+
+/**
+ * The alerts an export needs, keyed by id.
+ *
+ * Read straight from the store rather than through `listAlerts`, which hides
+ * dismissed alerts and caps at 500: an opportunity converted from an alert that
+ * was later dismissed still came from that matcher run, and the export is about
+ * where the row came from, not what is still in the feed.
+ */
+async function alertsById(rows: readonly OpportunityView[]): Promise<Map<string, AlertDoc>> {
+  const wanted = new Set(
+    rows.map((row) => row.opportunity.alertId).filter((id): id is string => Boolean(id)),
+  );
+  if (wanted.size === 0) return new Map();
+  const alerts = await crmStore().list<AlertDoc>("alerts");
+  return new Map(alerts.filter((alert) => wanted.has(alert.id)).map((alert) => [alert.id, alert]));
+}
+
 const OPPORTUNITY_HEADERS = [
   "opportunity_id",
   "stage",
@@ -75,6 +140,12 @@ const OPPORTUNITY_HEADERS = [
   "next_step",
   "saved_search",
   "created_at",
+  "source_system",
+  "source_url",
+  "fetched_at",
+  "pipeline_run_id",
+  "alert_id",
+  "matcher_run_id",
 ] as const;
 
 const MAILING_HEADERS = [
@@ -87,6 +158,8 @@ const MAILING_HEADERS = [
   "situs_address",
   "stage",
   "match_score",
+  "source_system",
+  "pipeline_run_id",
 ] as const;
 
 export async function GET(request: Request): Promise<Response> {
@@ -97,6 +170,7 @@ export async function GET(request: Request): Promise<Response> {
 
     if (kind === "opportunities" || kind === "mailing") {
       const rows = await listOpportunities({ limit: MAX_ROWS });
+      const alerts = await alertsById(rows);
 
       if (kind === "mailing") {
         // Only rows that could actually be mailed. Exporting a row with no
@@ -105,17 +179,22 @@ export async function GET(request: Request): Promise<Response> {
         return attachment(
           csv(
             MAILING_HEADERS,
-            mailable.map((row) => [
-              row.owner?.name,
-              row.owner?.mailingAddress,
-              row.owner?.mailingCity,
-              row.owner?.mailingState,
-              row.owner?.mailingZip,
-              row.opportunity.propertyId,
-              row.opportunity.addressLine,
-              row.opportunity.stage,
-              row.opportunity.matchScore,
-            ]),
+            mailable.map((row) => {
+              const from = provenanceOf(row, alerts.get(row.opportunity.alertId ?? "") ?? null);
+              return [
+                row.owner?.name,
+                row.owner?.mailingAddress,
+                row.owner?.mailingCity,
+                row.owner?.mailingState,
+                row.owner?.mailingZip,
+                row.opportunity.propertyId,
+                row.opportunity.addressLine,
+                row.opportunity.stage,
+                row.opportunity.matchScore,
+                from.sourceSystem,
+                from.pipelineRunId,
+              ];
+            }),
           ),
           `duval-mailing-list-${stamp}.csv`,
         );
@@ -124,33 +203,42 @@ export async function GET(request: Request): Promise<Response> {
       return attachment(
         csv(
           OPPORTUNITY_HEADERS,
-          rows.map((row) => [
-            row.opportunity.id,
-            row.opportunity.stage,
-            row.opportunity.matchScore,
-            row.opportunity.matchRationale,
-            row.opportunity.propertyId,
-            row.opportunity.addressLine,
-            row.opportunity.addressCity,
-            row.opportunity.addressZip,
-            row.opportunity.latitude,
-            row.opportunity.longitude,
-            row.opportunity.assessedValue,
-            row.owner?.name ?? row.opportunity.ownerNameSnapshot,
-            row.owner?.email,
-            row.owner?.phone,
-            row.owner?.mailingAddress,
-            row.owner?.mailingCity,
-            row.owner?.mailingState,
-            row.owner?.mailingZip,
-            row.assignee?.name,
-            row.opportunity.askingPrice,
-            row.opportunity.offerPrice,
-            row.opportunity.ownerInterest,
-            row.opportunity.nextStep,
-            row.searchName,
-            row.opportunity.createdAt,
-          ]),
+          rows.map((row) => {
+            const from = provenanceOf(row, alerts.get(row.opportunity.alertId ?? "") ?? null);
+            return [
+              row.opportunity.id,
+              row.opportunity.stage,
+              row.opportunity.matchScore,
+              row.opportunity.matchRationale,
+              row.opportunity.propertyId,
+              row.opportunity.addressLine,
+              row.opportunity.addressCity,
+              row.opportunity.addressZip,
+              row.opportunity.latitude,
+              row.opportunity.longitude,
+              row.opportunity.assessedValue,
+              row.owner?.name ?? row.opportunity.ownerNameSnapshot,
+              row.owner?.email,
+              row.owner?.phone,
+              row.owner?.mailingAddress,
+              row.owner?.mailingCity,
+              row.owner?.mailingState,
+              row.owner?.mailingZip,
+              row.assignee?.name,
+              row.opportunity.askingPrice,
+              row.opportunity.offerPrice,
+              row.opportunity.ownerInterest,
+              row.opportunity.nextStep,
+              row.searchName,
+              row.opportunity.createdAt,
+              from.sourceSystem,
+              from.sourceUrl,
+              from.fetchedAt,
+              from.pipelineRunId,
+              from.alertId,
+              from.matcherRunId,
+            ];
+          }),
         ),
         `duval-opportunities-${stamp}.csv`,
       );
