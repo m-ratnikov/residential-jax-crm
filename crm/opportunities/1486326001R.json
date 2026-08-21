@@ -3,10 +3,10 @@
   "addressLine": "BELLE RIVE BLVD, JACKSONVILLE, 32256",
   "addressZip": "32256",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 142000,
   "assessedValue": 0,
   "assigneeId": "0mt34qv5ittgrk9jb",
-  "closedAt": "2026-08-21T15:56:09.438Z",
+  "closedAt": null,
   "createdAt": "2026-08-21T15:56:02.056Z",
   "id": "1486326001R",
   "latitude": 30.2085425,
@@ -16,7 +16,7 @@
   "nextStep": null,
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 131500,
   "outreach": [],
   "ownerId": "0mt34surt7pm91q2u",
   "ownerInterest": null,
@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 38
   },
   "savedSearchId": "0mt34qwmnq7mw3qcj",
-  "stage": "closed",
+  "stage": "identified",
   "stageEvents": [
     {
       "actorId": "0mt34qrentckaguhg",
@@ -59,16 +59,8 @@
       "id": "0mt34svigl4p3v4uy",
       "note": "Created from search",
       "toStage": "identified"
-    },
-    {
-      "actorId": "0mt34qv5ittgrk9jb",
-      "createdAt": "2026-08-21T15:56:09.438Z",
-      "fromStage": "identified",
-      "id": "0mt34t17iaofmrrpp",
-      "note": "Closed. Roof replaced before the tenant moved in.",
-      "toStage": "closed"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:56:09.438Z"
+  "updatedAt": "2026-08-21T15:56:10.754Z"
 }
