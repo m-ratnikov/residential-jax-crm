@@ -1,0 +1,62 @@
+{
+  "name": "residential-jax-crm",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Map based residential property acquisition CRM for Jacksonville / Duval County FL, driven by the continuous Duval Oracle pipeline",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "tsc --noEmit && eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "sample": "tsx scripts/make-sample.ts",
+    "matcher": "tsx scripts/run-matcher.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/amazon-bedrock": "^5.0.59",
+    "@ai-sdk/anthropic": "^4.0.40",
+    "@ai-sdk/cerebras": "^3.0.32",
+    "@ai-sdk/gateway": "^4.0.56",
+    "@ai-sdk/google": "^4.0.47",
+    "@ai-sdk/groq": "^4.0.29",
+    "@ai-sdk/openai-compatible": "^3.0.32",
+    "@duckdb/node-api": "1.5.5-r.4",
+    "@neondatabase/serverless": "^1.1.0",
+    "ai": "^7.0.70",
+    "drizzle-orm": "^0.45.2",
+    "maplibre-gl": "^6.5.0",
+    "next": "^16.3.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@ai-sdk/provider": "^4.0.7",
+    "@playwright/test": "^1.62.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^10.8.1",
+    "eslint-config-next": "^16.3.2",
+    "prettier": "^3.9.6",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

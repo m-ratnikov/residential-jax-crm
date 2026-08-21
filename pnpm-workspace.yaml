@@ -1,0 +1,12 @@
+# pnpm 11 refuses to run a dependency's install scripts unless the decision is
+# recorded here, and it fails the whole install rather than warning. Both of
+# these ship prebuilt native binaries and their scripts only select the right
+# one for the platform.
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - '@next/eslint-plugin-next@16.3.2'
+  - eslint-config-next@16.3.2
+  - maplibre-gl@6.5.0
