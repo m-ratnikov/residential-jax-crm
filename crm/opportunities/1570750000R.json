@@ -3,7 +3,7 @@
   "addressLine": "5776 HOEY TER, JACKSONVILLE, 32258",
   "addressZip": "32258",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 165000,
   "assessedValue": 22148,
   "assigneeId": "0mt3hhgitu0cc1xod",
   "closedAt": null,
@@ -13,10 +13,10 @@
   "longitude": -81.5542185,
   "matchRationale": "held 25 years (+33); roof about 56 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 149000,
   "outreach": [],
   "ownerId": "0mt3hint16g8pw36q",
   "ownerInterest": null,
@@ -86,5 +86,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T21:52:04.095Z"
+  "updatedAt": "2026-08-21T21:52:04.985Z"
 }
