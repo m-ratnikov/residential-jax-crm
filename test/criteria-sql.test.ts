@@ -231,3 +231,32 @@ describe("criteria validation", () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe("a court criterion with no court source", () => {
+  it("returns nothing rather than everything", () => {
+    // Silently dropping the predicate turned "parcels with a recorded lien"
+    // into "every residential dwelling in Duval" - 337,853 of them - under a
+    // heading that said court distress.
+    const filters = {
+      residentialOnly: true,
+      distress: { hasLien: true, hasForeclosure: true },
+    } as const;
+
+    const withCourt = buildWhere(filters, true);
+    expect(withCourt.sql).toContain("court_lien_count");
+    expect(withCourt.sql).not.toContain("false /*");
+
+    const without = buildWhere(filters, false);
+    expect(without.sql).toContain("false /*");
+    expect(without.sql).not.toContain("court_lien_count");
+  });
+
+  it("leaves roll-derived distress alone, which needs no court source", () => {
+    const without = buildWhere(
+      { residentialOnly: true, distress: { absenteeOwner: true, noHomestead: true } },
+      false,
+    );
+    expect(without.sql).not.toContain("false /*");
+    expect(without.sql).toContain("homestead_flag");
+  });
+});

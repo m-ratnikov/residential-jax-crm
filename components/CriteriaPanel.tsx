@@ -20,6 +20,7 @@ import {
   type Filters,
   type Weights,
 } from "@/lib/criteria/types";
+import { NEIGHBOURHOODS } from "@/lib/criteria/areas";
 import { Badge, Button, Field, Panel, Select, TextInput, Toggle, cx } from "./ui";
 
 const DUVAL_CITIES = [
@@ -28,22 +29,6 @@ const DUVAL_CITIES = [
   "ATLANTIC BEACH",
   "NEPTUNE BEACH",
   "BALDWIN",
-];
-
-/**
- * Named areas people actually say out loud. The assignment's own demo script
- * asks for "the Arlington area", and a ZIP list is how that becomes a query
- * against published data without inventing a neighbourhood boundary the county
- * does not publish.
- */
-export const NEIGHBOURHOODS: { id: string; label: string; zips: string[] }[] = [
-  { id: "arlington", label: "Arlington", zips: ["32211", "32277", "32225"] },
-  { id: "southside", label: "Southside", zips: ["32216", "32246", "32256"] },
-  { id: "riverside", label: "Riverside and Avondale", zips: ["32204", "32205"] },
-  { id: "northside", label: "Northside", zips: ["32208", "32209", "32218", "32219"] },
-  { id: "westside", label: "Westside", zips: ["32210", "32221", "32244"] },
-  { id: "beaches", label: "The Beaches", zips: ["32250", "32233", "32266"] },
-  { id: "mandarin", label: "Mandarin and San Jose", zips: ["32217", "32223", "32257", "32258"] },
 ];
 
 const PROPERTY_TYPES = [

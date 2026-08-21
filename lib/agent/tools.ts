@@ -18,6 +18,7 @@ import { tool } from "ai";
 import { z } from "zod";
 
 import { criteriaSetSchema, CRITERIA_PRESETS } from "@/lib/criteria/types";
+import { NEIGHBOURHOODS } from "@/lib/criteria/areas";
 import { displayAddress } from "@/lib/data/map";
 // From runs-parse, not runs: these tools run in the browser, and lib/data/runs
 // is the Node half of that split - it imports node:fs/promises for the local
@@ -200,6 +201,15 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
             name: preset.name,
             description: preset.description,
           })),
+          // The county publishes no neighbourhood boundary, so a spoken area
+          // name has to become a ZIP list. Without this the agent guessed
+          // `address_city = 'Arlington'`, which matches nothing: every one of
+          // these ZIPs is JACKSONVILLE on the roll.
+          named_areas: NEIGHBOURHOODS.map((area) => ({
+            name: area.label,
+            zips: area.zips,
+            use: `set filters.zips to ${JSON.stringify(area.zips)}; do not filter on address_city`,
+          })),
           columns: schema.map((column) => ({
             name: column.name,
             type: column.type,
@@ -213,7 +223,7 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
 
     search_properties: tool({
       description:
-        "Find parcels matching an acquisition criteria set. Takes the same criteria object the app's filter panel produces and returns a ranked list with a per-parcel rationale, using the same scoring the UI shows.",
+        "Find parcels matching an acquisition criteria set. `criteria` is an OBJECT of the same shape the app's filter panel produces - {name, filters:{...}, weights:{...}} - never a sentence. For a named area such as Arlington, put the ZIPs from get_schema's named_areas into filters.zips. Returns a ranked list with a per-parcel rationale, using the same scoring the UI shows.",
       inputSchema: z.object({
         criteria: criteriaSetSchema,
         limit: z.number().int().min(1).max(50).default(15),
@@ -221,6 +231,27 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
       }),
       execute: async ({ criteria, limit, orderBy }) => {
         const started = Date.now();
+
+        // A sentence where the object belongs is the failure mode that made the
+        // agent answer "no properties in Arlington" while the map answered
+        // 1,094: the search ran with nothing in it and returned zero, which
+        // reads exactly like a true negative. Refusing loudly is the whole
+        // point - a tool that answers a malformed question is worse than one
+        // that errors.
+        if (typeof criteria !== "object" || criteria === null || !("filters" in criteria)) {
+          const message =
+            "criteria must be an object shaped {name, filters, weights}, not a sentence. Describe the area with filters.zips (see named_areas from get_schema), the thresholds with filters, and call this again.";
+          record(
+            trace,
+            "search_properties",
+            { criteria: String(criteria) },
+            started,
+            0,
+            "rejected",
+            message,
+          );
+          throw new Error(message);
+        }
         const result = await source.search({
           criteria,
           limit,

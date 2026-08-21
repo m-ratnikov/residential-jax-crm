@@ -196,6 +196,13 @@ export function geometrySql(geometry: Geometry): string {
  * answer. The UI uses this to explain an empty result instead of leaving the
  * user to guess.
  */
+/** True when these distress filters ask for something only a court source has. */
+function courtRequested(d: NonNullable<Filters["distress"]>): boolean {
+  return Boolean(
+    d.hasLien || d.hasForeclosure || d.hasCodeEnforcement || d.hasProbate || d.minCourtScore,
+  );
+}
+
 export function needsCourtData(filters: Filters): boolean {
   const d = filters.distress;
   if (!d) return false;
@@ -297,6 +304,13 @@ export function buildWhere(filters: Filters, courtJoinAvailable: boolean): Where
       if (any.length) clauses.push(`(${any.join(" OR ")})`);
       if (d.minCourtScore !== undefined)
         clauses.push(`coalesce(court_distress_score, 0) >= ${num(d.minCourtScore)}`);
+    } else if (courtRequested(d)) {
+      // A requested predicate that cannot be evaluated must narrow to nothing,
+      // never be dropped. Dropping it turned "parcels with a recorded lien"
+      // into "every residential dwelling in Duval" - 337,853 of them - under a
+      // heading that said court distress. Zero is the truthful answer to a
+      // question this dataset cannot answer, and the UI says why alongside it.
+      clauses.push(`false /* court signals requested, no court source attached */`);
     }
   }
 
