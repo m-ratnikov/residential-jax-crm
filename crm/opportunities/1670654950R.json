@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello JGCC PROPERTY OWNERS ASSOCIATI,\n\nCounty records suggest the roof at 12777 N HUNT CLUB RD, JACKSONVILLE, 32224 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $0.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3629op3fsofmq2",
+      "campaignName": "Seed - identified",
+      "channel": "direct_mail",
+      "createdAt": "2026-08-21T16:31:19.946Z",
+      "createdById": "0mt361g5jw31ita5n",
+      "events": [
+        {
+          "detail": "Accepted by simulated-print-and-mail for CO VESTA ATT GWEN LEONHARDT",
+          "occurredAt": "2026-08-21T16:31:19.946Z",
+          "providerEventId": "sim_direct_mail_bf40c58a619ee87d78c3:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-23T15:16:05.946Z",
+          "providerEventId": "sim_direct_mail_bf40c58a619ee87d78c3:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt3629oq1rtzyqbr",
+      "providerMessageId": "sim_direct_mail_bf40c58a619ee87d78c3",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:31:19.946Z",
+      "subject": "About the roof at 12777 N HUNT CLUB RD, JACKSONVILLE, 32224",
+      "templateId": "roof-condition",
+      "toAddress": "CO VESTA ATT GWEN LEONHARDT"
+    }
+  ],
   "ownerId": "0mt3626mbgmpv4k1t",
   "ownerInterest": null,
   "ownerNameSnapshot": "JGCC PROPERTY OWNERS ASSOCIATI",
@@ -69,5 +99,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:31:18.879Z"
+  "updatedAt": "2026-08-21T16:31:19.946Z"
 }
