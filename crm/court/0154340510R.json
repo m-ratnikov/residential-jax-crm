@@ -1,0 +1,18 @@
+{
+  "id": "0154340510R",
+  "parcelIdentifier": "0154340510R",
+  "propertyId": "0154340510R",
+  "records": [
+    {
+      "amount": 148500,
+      "caseNumber": "2026-SIM-40510R-0",
+      "caseType": "foreclosure",
+      "fetchedAt": "2026-08-21T16:02:19.855Z",
+      "filedDate": "2026-08-21",
+      "partyName": "BENT CREEK HOMEOWNERS ASSOCIAT",
+      "sourceSystem": "simulated_court_feed",
+      "sourceUrl": null,
+      "status": "open"
+    }
+  ]
+}
