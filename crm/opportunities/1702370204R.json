@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello CASCONE ELIZABETH B TRUST,\n\nCounty records suggest the roof at 10 10TH ST 31, ATLANTIC BEACH, 32233 may be near the end of its service life. A re-roof in ATLANTIC BEACH is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $1.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36kybzeyp2kdmy",
+      "campaignName": "Seed - identified",
+      "channel": "direct_mail",
+      "createdAt": "2026-08-21T16:45:51.695Z",
+      "createdById": "0mt36kd4b90vbwf3t",
+      "events": [
+        {
+          "detail": "Accepted by simulated-print-and-mail for 8022 JAMES ISLAND TRL",
+          "occurredAt": "2026-08-21T16:45:51.695Z",
+          "providerEventId": "sim_direct_mail_7d348bc2c10b9adf782a:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Returned to sender: vacant",
+          "occurredAt": "2026-08-29T14:03:55.695Z",
+          "providerEventId": "sim_direct_mail_7d348bc2c10b9adf782a:returned",
+          "status": "returned"
+        }
+      ],
+      "id": "0mt36kybz66y0qo82",
+      "providerMessageId": "sim_direct_mail_7d348bc2c10b9adf782a",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:45:51.695Z",
+      "subject": "About the roof at 10 10TH ST 31, ATLANTIC BEACH, 32233",
+      "templateId": "roof-condition",
+      "toAddress": "8022 JAMES ISLAND TRL"
+    }
+  ],
   "ownerId": "0mt36kvcp1360xnzt",
   "ownerInterest": null,
   "ownerNameSnapshot": "CASCONE ELIZABETH B TRUST",
@@ -69,5 +99,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:45:50.805Z"
+  "updatedAt": "2026-08-21T16:45:51.695Z"
 }
