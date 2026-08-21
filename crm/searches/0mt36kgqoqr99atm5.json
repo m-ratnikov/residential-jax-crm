@@ -1,0 +1,36 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-21T16:45:28.896Z",
+  "criteria": {
+    "filters": {
+      "improvedOnly": true,
+      "maxAssessedValue": 250000,
+      "minAssessedValue": 80000,
+      "minRoofAge": 20,
+      "residentialOnly": true
+    },
+    "name": "Aging roof, entry price band",
+    "weights": {
+      "amenity": 0,
+      "distress": 1,
+      "geography": 0,
+      "roofAge": 3,
+      "tenure": 1,
+      "value": 3
+    }
+  },
+  "description": "Roof older than twenty years with an assessed value between 80k and 250k. Rehab candidates that still pencil.",
+  "id": "0mt36kgqoqr99atm5",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Aging roof, entry price band",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": "0mt36kd4b90vbwf3t",
+  "updatedAt": "2026-08-21T16:45:28.896Z"
+}
