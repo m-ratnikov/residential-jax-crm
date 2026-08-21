@@ -60,8 +60,8 @@
       ],
       "id": "0mt3jlhzjhe8drxai",
       "providerMessageId": "sim_sms_53f642816a0ef577ed67",
-      "status": "sent",
-      "statusAt": "2026-08-21T22:50:12.175Z",
+      "status": "replied",
+      "statusAt": "2026-08-21T22:50:52.175Z",
       "subject": null,
       "templateId": "cash-offer-intro",
       "toAddress": "+1-904-555-0000"
