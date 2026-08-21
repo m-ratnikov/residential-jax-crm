@@ -47,15 +47,15 @@
         },
         {
           "detail": "Recipient opened the message",
-          "occurredAt": "2026-08-21T23:26:01.797Z",
+          "occurredAt": "2026-08-21T23:28:11.952Z",
           "providerEventId": "sim_email_8f956bdd9173a4fcc560:opened",
           "status": "opened"
         }
       ],
       "id": "0mt3ktl08qbqjyzxq",
       "providerMessageId": "sim_email_8f956bdd9173a4fcc560",
-      "status": "opened",
-      "statusAt": "2026-08-21T23:26:01.797Z",
+      "status": "delivered",
+      "statusAt": "2026-08-21T23:25:57.952Z",
       "subject": "Interested in buying 1069 VILLAGE GREEN DR, JACKSONVILLE, 32234",
       "templateId": "cash-offer-intro",
       "toAddress": "owner-00097111@example.invalid"
