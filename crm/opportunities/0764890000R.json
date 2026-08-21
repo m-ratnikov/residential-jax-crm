@@ -85,13 +85,13 @@
     },
     {
       "actorId": null,
-      "createdAt": "2026-08-21T17:42:28.194Z",
+      "createdAt": "2026-08-21T17:42:27.925Z",
       "fromStage": "negotiating",
-      "id": "0mt38lr363x7cc6ly",
+      "id": "0mt38lqvp5ocjmvgo",
       "note": null,
       "toStage": "under_contract"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T17:42:28.194Z"
+  "updatedAt": "2026-08-21T17:42:27.925Z"
 }
