@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 47
   },
   "savedSearchId": "0mt3jkoyjgpfwcnfl",
-  "stage": "contacted",
+  "stage": "negotiating",
   "stageEvents": [
     {
       "actorId": "0mt3jkl2vzmjcfaed",
@@ -67,8 +67,16 @@
       "id": "0mt3jlkzjf5v5edta",
       "note": null,
       "toStage": "contacted"
+    },
+    {
+      "actorId": "0mt3jkl2vzmjcfaed",
+      "createdAt": "2026-08-21T22:50:17.012Z",
+      "fromStage": "contacted",
+      "id": "0mt3jllpwfqi1u3ex",
+      "note": "Owner wants 235k. Comps in the neighbourhood do not support it with this roof.",
+      "toStage": "negotiating"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:16.063Z"
+  "updatedAt": "2026-08-21T22:50:17.012Z"
 }
