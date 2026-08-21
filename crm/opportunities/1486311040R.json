@@ -3,7 +3,7 @@
   "addressLine": "DEERWOOD POINT PL, JACKSONVILLE, 32256",
   "addressZip": "32256",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 165000,
   "assessedValue": 0,
   "assigneeId": "0mt34qtq4qgfs1sye",
   "closedAt": null,
@@ -13,10 +13,10 @@
   "longitude": -81.5505434,
   "matchRationale": "held 126 years (+33); roof about 41 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 149000,
   "outreach": [],
   "ownerId": "0mt34sknkj1qxgphy",
   "ownerInterest": null,
@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 126
   },
   "savedSearchId": "0mt34qwmnq7mw3qcj",
-  "stage": "under_contract",
+  "stage": "identified",
   "stageEvents": [
     {
       "actorId": "0mt34qrentckaguhg",
@@ -59,16 +59,8 @@
       "id": "0mt34slg8okbn2csm",
       "note": "Created from search",
       "toStage": "identified"
-    },
-    {
-      "actorId": "0mt34qtq4qgfs1sye",
-      "createdAt": "2026-08-21T15:55:54.035Z",
-      "fromStage": "identified",
-      "id": "0mt34spbnfb9k5du2",
-      "note": "Signed at 149k. Inspection window closes in nine days.",
-      "toStage": "under_contract"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:55:54.035Z"
+  "updatedAt": "2026-08-21T15:55:55.408Z"
 }
