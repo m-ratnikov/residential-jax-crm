@@ -72,8 +72,7 @@ export const COLUMN_MEANINGS: Record<string, string> = {
   nearest_starbucks_m:
     "DERIVED. Great circle metres from the parcel centroid to the nearest Starbucks in the places table. Null means the places source was not loaded for this parcel yet.",
   nearest_starbucks_name: "DERIVED. Name of that nearest Starbucks place.",
-  source_system:
-    "PROVENANCE. Which source system the row was built from (for example duval_appraiser).",
+  source_system: "PROVENANCE. Which source system the row was built from (for example duval_appraiser).",
   source_url: "PROVENANCE. URL of the county record or dataset the row was built from.",
   fetched_at: "PROVENANCE. When the pipeline fetched the row from the source.",
   run_id: "PROVENANCE. The pipeline run that last touched the row.",

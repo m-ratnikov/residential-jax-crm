@@ -24,7 +24,8 @@
  *                         wins, in registry order.
  *        AGENT_MODEL      model id, optional. Must be listed for the provider.
  *        <provider key>   GOOGLE_GENERATIVE_AI_API_KEY, GROQ_API_KEY,
- *                         CEREBRAS_API_KEY, HF_TOKEN, AI_GATEWAY_API_KEY,
+ *                         OPENROUTER_API_KEY, CEREBRAS_API_KEY, HF_TOKEN,
+ *                         AI_GATEWAY_API_KEY,
  *                         ANTHROPIC_API_KEY, AWS_BEARER_TOKEN_BEDROCK, ...
  *
  * This deployment ships with NO server key set, on purpose: a public,
@@ -75,7 +76,7 @@ export interface ServerSelection {
  * Reported by GET /api/agent when nothing at all is configured, so the label
  * has something truthful to say about what the server would run.
  */
-export const FALLBACK_PROVIDER: AgentProvider = "google";
+export const FALLBACK_PROVIDER: AgentProvider = "openrouter";
 
 /** Kept for callers that only want a provider id. */
 export const DEFAULT_ANTHROPIC_MODEL = "claude-opus-5";
@@ -86,11 +87,7 @@ function firstConfiguredEnvKey(provider: ProviderDefinition, env: Env): string |
     if (env[key]?.trim()) return key;
   }
   // Bedrock also authenticates through a long lived access key pair.
-  if (
-    provider.id === "bedrock" &&
-    env.AWS_ACCESS_KEY_ID?.trim() &&
-    env.AWS_SECRET_ACCESS_KEY?.trim()
-  ) {
+  if (provider.id === "bedrock" && env.AWS_ACCESS_KEY_ID?.trim() && env.AWS_SECRET_ACCESS_KEY?.trim()) {
     return "AWS_ACCESS_KEY_ID";
   }
   return null;
@@ -106,9 +103,7 @@ function firstConfiguredEnvKey(provider: ProviderDefinition, env: Env): string |
  */
 export function serverSelection(env: Env = process.env): ServerSelection | null {
   const named = env.AGENT_PROVIDER?.trim().toLowerCase();
-  const candidates = named
-    ? [findProvider(named)].filter((p): p is ProviderDefinition => p !== null)
-    : [...PROVIDERS];
+  const candidates = named ? [findProvider(named)].filter((p): p is ProviderDefinition => p !== null) : [...PROVIDERS];
 
   for (const provider of candidates) {
     const envKey = firstConfiguredEnvKey(provider, env);
@@ -117,8 +112,7 @@ export function serverSelection(env: Env = process.env): ServerSelection | null 
     const requested = env.AGENT_MODEL?.trim();
     // An AGENT_MODEL that belongs to a different provider is ignored rather
     // than fatal, so setting the pair in the wrong order still boots.
-    const modelId =
-      requested && findModel(provider.id, requested) ? requested : defaultModelFor(provider.id);
+    const modelId = requested && findModel(provider.id, requested) ? requested : defaultModelFor(provider.id);
 
     return {
       provider: provider.id,
@@ -155,6 +149,50 @@ function instructionsFor(provider: AgentProvider): (system: string) => SystemMod
 }
 
 /**
+ * OpenRouter free models draw on a shared pool that returns 429 without
+ * warning. Measured on 2026-08-21: of six free models, four answered and two
+ * (GLM 5.2 and Gemma 4 31B) came back "temporarily rate-limited upstream"
+ * within the same minute, and which two it is rotates.
+ *
+ * A single free model is therefore not a dependable default, and retrying it is
+ * pointless because the pool, not the account, is exhausted. OpenRouter answers
+ * this with a `models` array: list alternates in priority order and it moves on
+ * by itself on rate limiting or downtime, billing whatever actually ran.
+ *
+ * The AI SDK has no first class field for a provider specific body parameter,
+ * so it is merged into the outgoing JSON here. Only `:free` models get the
+ * treatment: someone who brought a key and deliberately chose a paid model
+ * should get that model or an error, not a silent substitution.
+ */
+function openRouterFallbackFetch(modelId: string): typeof globalThis.fetch | undefined {
+  if (!modelId.endsWith(":free")) return undefined;
+
+  const alternates = (findProvider("openrouter")?.models ?? [])
+    .map((model) => model.id)
+    .filter((id) => id.endsWith(":free") && id !== modelId);
+  if (alternates.length === 0) return undefined;
+
+  // OpenRouter rejects more than three entries outright:
+  //   400 "'models' array must have 3 items or fewer."
+  // So it is the chosen model plus the next two free models in registry order,
+  // not the whole list. Registry order is therefore also the fallback order.
+  const chain = [modelId, ...alternates].slice(0, 3);
+
+  return async (input, init) => {
+    if (init?.body && typeof init.body === "string") {
+      try {
+        const body = JSON.parse(init.body) as Record<string, unknown>;
+        body.models = chain;
+        init = { ...init, body: JSON.stringify(body) };
+      } catch {
+        // Not JSON we understand. Send it untouched rather than break the call.
+      }
+    }
+    return globalThis.fetch(input, init);
+  };
+}
+
+/**
  * Build the provider client. One branch per registry entry.
  *
  * Every provider package here accepts a plain `apiKey` string, which is what
@@ -183,6 +221,27 @@ async function createProviderModel(
     case "cerebras": {
       const { createCerebras } = await import("@ai-sdk/cerebras");
       return createCerebras({ apiKey })(modelId);
+    }
+    case "openrouter": {
+      // OpenAI compatible, same reasoning as Hugging Face below: OpenRouter's
+      // own API is the OpenAI chat completions shape, and the per model
+      // `supported_parameters` list it publishes at
+      // https://openrouter.ai/api/v1/models describes that surface. There is a
+      // third party @openrouter/ai-sdk-provider, but it is not an @ai-sdk/*
+      // package, and this needs nothing it adds.
+      const { createOpenAICompatible } = await import("@ai-sdk/openai-compatible");
+      return createOpenAICompatible({
+        name: "openrouter",
+        baseURL: "https://openrouter.ai/api/v1",
+        apiKey,
+        // OpenRouter attributes traffic by these two headers and surfaces the
+        // app name on its dashboards. Neither carries anything sensitive.
+        headers: {
+          "HTTP-Referer": "https://duval-oracle-ui.vercel.app",
+          "X-Title": "Duval County property intelligence",
+        },
+        fetch: openRouterFallbackFetch(modelId),
+      })(modelId);
     }
     case "huggingface": {
       // Deliberately the OpenAI compatible client against the router's chat
@@ -213,19 +272,14 @@ async function createProviderModel(
       ]);
       // Without an apiKey the provider falls back to SigV4 over the ambient
       // AWS credentials, which is the only path here that is not a bare string.
-      const bedrock = createAmazonBedrock({
-        apiKey,
-        region: env.AWS_REGION?.trim() || "us-east-1",
-      });
+      const bedrock = createAmazonBedrock({ apiKey, region: env.AWS_REGION?.trim() || "us-east-1" });
       return withBedrockPromptCaching(bedrock(modelId));
     }
     default: {
       // Exhaustiveness: a new registry id with no branch fails loudly here
       // rather than silently answering with the wrong model.
       const unreachable: never = provider;
-      throw new AgentBadRequestError(
-        `Provider "${String(unreachable)}" is in the registry but has no client branch.`,
-      );
+      throw new AgentBadRequestError(`Provider "${String(unreachable)}" is in the registry but has no client branch.`);
     }
   }
 }
@@ -252,12 +306,7 @@ export async function resolveModel(
       provider: credential.provider,
       modelId: credential.modelId,
       source: "user",
-      model: await createProviderModel(
-        credential.provider,
-        credential.modelId,
-        credential.apiKey,
-        env,
-      ),
+      model: await createProviderModel(credential.provider, credential.modelId, credential.apiKey, env),
       instructions: instructionsFor(credential.provider),
     };
   }

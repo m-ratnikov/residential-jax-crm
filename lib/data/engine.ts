@@ -176,10 +176,24 @@ interface WasmBindings {
 
 async function openWasm(source: string, viewSql: (path: string) => string): Promise<QueryEngine> {
   const require = createRequire(import.meta.url);
+
+  // Required by specifier, not by a computed path: a computed require is a
+  // build error under webpack ("module not found"), and the package is listed
+  // in serverExternalPackages so this survives to runtime untouched.
   const entry = "@duckdb/duckdb-wasm/dist/duckdb-node-blocking.cjs";
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const duckdb = require(entry) as any;
-  const distDir = resolve(require.resolve(entry), "..");
+
+  // require.resolve is rewritten inside a Next build to return a numeric module
+  // id, and handing that to path.resolve fails with `"paths[0]" argument must
+  // be of type string`. Use it when it really is a path, and otherwise join
+  // from the working directory - the traced files land under the function root
+  // with their node_modules layout intact.
+  const resolved: unknown = require.resolve(entry);
+  const distDir =
+    typeof resolved === "string"
+      ? resolve(resolved, "..")
+      : join(process.cwd(), "node_modules", "@duckdb", "duckdb-wasm", "dist");
 
   // The bundle map is keyed by wasm feature set. createDuckDB takes the
   // exception-handling build when the runtime supports it, which Node does.

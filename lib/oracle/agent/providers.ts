@@ -19,7 +19,14 @@
  */
 
 export type AgentProvider =
-  "google" | "groq" | "cerebras" | "huggingface" | "vercel-ai-gateway" | "anthropic" | "bedrock";
+  | "openrouter"
+  | "google"
+  | "groq"
+  | "cerebras"
+  | "huggingface"
+  | "vercel-ai-gateway"
+  | "anthropic"
+  | "bedrock";
 
 export interface ProviderModel {
   id: string;
@@ -66,6 +73,65 @@ export const FREE_TIER_VERIFIED_ON = "2026-08-21";
 
 export const PROVIDERS: readonly ProviderDefinition[] = [
   {
+    id: "openrouter",
+    label: "OpenRouter",
+    envKeys: ["OPENROUTER_API_KEY"],
+    models: [
+      {
+        id: "nvidia/nemotron-3-super-120b-a12b:free",
+        label: "Nemotron 3 Super 120B (free)",
+        free: true,
+        notes:
+          "NVIDIA open weight, 262k context, $0.00 per token, tool calling confirmed against the live API on 2026-08-21. The default: the largest free model that answered on first try rather than a shared pool 429.",
+      },
+      {
+        id: "nvidia/nemotron-3.5-lightning:free",
+        label: "Nemotron 3.5 Lightning (free)",
+        free: true,
+        notes: "NVIDIA open weight, one million token context, $0.00 per token. Fastest of the set, confirmed answering live.",
+      },
+      {
+        id: "openai/gpt-oss-20b:free",
+        label: "GPT-OSS 20B (free)",
+        free: true,
+        notes:
+          "Apache 2.0, the most genuinely open licensed model here, 131k context, $0.00 per token, tool calling confirmed live. Smallest of the set, so weakest at planning a multi step loop.",
+      },
+      {
+        id: "nvidia/nemotron-3-ultra-550b-a55b:free",
+        label: "Nemotron 3 Ultra 550B (free)",
+        free: true,
+        notes: "NVIDIA open weight, one million token context, $0.00 per token. Biggest free model on the router and the slowest.",
+      },
+      {
+        id: "z-ai/glm-5.2:free",
+        label: "GLM 5.2 (free)",
+        free: true,
+        notes:
+          "Open weight, 256k context, $0.00 per token, tool calling confirmed live. Was rate limited in the shared free pool when this list was built, which is why it is not the default.",
+      },
+      {
+        id: "google/gemma-4-31b-it:free",
+        label: "Gemma 4 31B (free)",
+        free: true,
+        notes:
+          "Google open weight under the Gemma license, 262k context, $0.00 per token. Also rate limited in the shared free pool when this list was built.",
+      },
+    ],
+    docsUrl: "https://openrouter.ai/docs/api-reference/limits",
+    keyUrl: "https://openrouter.ai/settings/keys",
+    acceptsUserKey: true,
+    keyHint:
+      "An OpenRouter key. Starts with sk-or-v1-. Free models also need prompt training enabled at openrouter.ai/settings/privacy, otherwise every call fails with \"No endpoints found matching your data policy\".",
+    freeTier: {
+      available: true,
+      summary:
+        "The :free model variants cost $0.00 per token, capped at 50 requests a day, or 1,000 a day once $10 of credits has ever been purchased. This agent spends 3 to 6 model calls per question, so that is roughly 12 questions a day free, or 250 after the one time $10. Two conditions: free models route only to providers that may train on the prompt, which has to be enabled in account settings, and they draw on a shared pool that returns 429 without warning, so a free model here is sent with the rest of this list as fallbacks.",
+      source: "https://openrouter.ai/docs/api-reference/limits",
+      readOn: FREE_TIER_VERIFIED_ON,
+    },
+  },
+  {
     id: "google",
     label: "Google AI Studio (Gemini)",
     envKeys: ["GOOGLE_GENERATIVE_AI_API_KEY", "GOOGLE_API_KEY"],
@@ -87,8 +153,7 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "gemini-2.5-flash",
         label: "Gemini 2.5 Flash",
         free: true,
-        notes:
-          "Long lived, widely tested Flash. Free of charge, useful as a fallback if a newer id is rejected.",
+        notes: "Long lived, widely tested Flash. Free of charge, useful as a fallback if a newer id is rejected.",
       },
       {
         id: "gemini-2.5-pro",
@@ -120,21 +185,19 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         label: "GPT-OSS 120B",
         free: true,
         notes:
-          "Free tier published as 30 requests/min, 1,000 requests/day, 8,000 tokens/min, 200,000 tokens/day. The tokens per minute cap is the binding one for this agent, whose system prompt plus tool schemas are large.",
+          "Free tier published as 30 requests/min, 1,000 requests/day, 8,000 tokens/min, 200,000 tokens/day. MEASURED PROBLEM: by the third step of a typical answer this agent sends about 8,300 input tokens in a single request, which is already over the 8,000 per minute free tier ceiling, so a free Groq key cannot finish most questions. Usable on a paid Groq tier, not on the free one.",
       },
       {
         id: "openai/gpt-oss-20b",
         label: "GPT-OSS 20B",
         free: true,
-        notes:
-          "Same published free tier limits as the 120B, smaller and faster, weaker at multi step planning.",
+        notes: "Same published free tier limits as the 120B, smaller and faster, weaker at multi step planning.",
       },
       {
         id: "qwen/qwen3.6-27b",
         label: "Qwen 3.6 27B",
         free: true,
-        notes:
-          "Same published free tier limits: 30 requests/min, 1,000 requests/day, 8,000 tokens/min.",
+        notes: "Same published free tier limits: 30 requests/min, 1,000 requests/day, 8,000 tokens/min.",
       },
     ],
     docsUrl: "https://console.groq.com/docs/rate-limits",
@@ -144,7 +207,7 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
     freeTier: {
       available: true,
       summary:
-        "Free tier with published per model rate limits. The 8,000 tokens/min ceiling throttles a tool loop with a large system prompt well before the daily cap.",
+        "Free tier with published per model rate limits. The 8,000 tokens/min ceiling is below what one mid conversation request of this agent needs, so the free tier cannot complete most answers. See the model notes.",
       source: "https://console.groq.com/docs/rate-limits",
       readOn: FREE_TIER_VERIFIED_ON,
     },
@@ -242,15 +305,13 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "anthropic/claude-opus-5",
         label: "Claude Opus 5 (via Gateway)",
         free: false,
-        notes:
-          "Outside the free tier catalog. Needs purchased AI Gateway credits, billed at provider list price with no markup.",
+        notes: "Outside the free tier catalog. Needs purchased AI Gateway credits, billed at provider list price with no markup.",
       },
       {
         id: "google/gemini-3.7-flash",
         label: "Gemini 3.7 Flash (via Gateway)",
         free: false,
-        notes:
-          "Outside the free tier catalog. Cheaper per token than Opus, but still needs purchased credits.",
+        notes: "Outside the free tier catalog. Cheaper per token than Opus, but still needs purchased credits.",
       },
     ],
     docsUrl: "https://vercel.com/docs/ai-gateway/pricing",
@@ -274,15 +335,13 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "claude-opus-5",
         label: "Claude Opus 5",
         free: false,
-        notes:
-          "The quality option. Best multi step tool planning of anything here, and the most expensive per answer.",
+        notes: "The quality option. Best multi step tool planning of anything here, and the most expensive per answer.",
       },
       {
         id: "claude-sonnet-5",
         label: "Claude Sonnet 5",
         free: false,
-        notes:
-          "Trades some answer quality for latency, which matters when a turn already runs 30 to 90 seconds.",
+        notes: "Trades some answer quality for latency, which matters when a turn already runs 30 to 90 seconds.",
       },
       {
         id: "claude-haiku-4-5-20251001",
@@ -311,8 +370,7 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
         id: "anthropic.claude-opus-5",
         label: "Claude Opus 5 (Bedrock)",
         free: false,
-        notes:
-          "Bedrock ids carry an anthropic. prefix and no date suffix. Billed to the AWS account behind the token.",
+        notes: "Bedrock ids carry an anthropic. prefix and no date suffix. Billed to the AWS account behind the token.",
       },
       {
         id: "anthropic.claude-sonnet-5",
@@ -328,8 +386,7 @@ export const PROVIDERS: readonly ProviderDefinition[] = [
       "A Bedrock API key (bearer token). Long lived AWS access keys need SigV4 signing and cannot be pasted here; set them server side instead.",
     freeTier: {
       available: false,
-      summary:
-        "No free tier for these models. Usage bills to the AWS account that issued the token.",
+      summary: "No free tier for these models. Usage bills to the AWS account that issued the token.",
       source: "https://aws.amazon.com/bedrock/pricing/",
       readOn: FREE_TIER_VERIFIED_ON,
     },
@@ -343,10 +400,7 @@ export function findProvider(id: string | null | undefined): ProviderDefinition 
   return PROVIDERS.find((provider) => provider.id === id) ?? null;
 }
 
-export function findModel(
-  providerId: string | null | undefined,
-  modelId: string | null | undefined,
-) {
+export function findModel(providerId: string | null | undefined, modelId: string | null | undefined) {
   const provider = findProvider(providerId);
   if (!provider || !modelId) return null;
   return provider.models.find((model) => model.id === modelId) ?? null;

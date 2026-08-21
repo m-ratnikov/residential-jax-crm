@@ -1,7 +1,7 @@
+"use client";
 // VENDORED FILE - do not edit here without reading lib/oracle/VENDORED.md.
 // Origin: oracle-property-intelligence-platform-pipeline-duval-fl, ui/lib/agent/settings-client.ts, commit 28088d0.
 // Only the import paths differ from the original. Run scripts/sync-shared.mjs to check for drift.
-"use client";
 
 /**
  * Where a visitor's model credential lives: this browser, and nowhere else.
@@ -59,8 +59,7 @@ export function readSettings(): StoredSettings | null {
     const parsed = JSON.parse(raw) as Partial<StoredSettings>;
     if (typeof parsed.apiKey !== "string" || !parsed.apiKey.trim()) return null;
     if (typeof parsed.provider !== "string") return null;
-    const modelId =
-      typeof parsed.modelId === "string" ? parsed.modelId : defaultModelFor(parsed.provider);
+    const modelId = typeof parsed.modelId === "string" ? parsed.modelId : defaultModelFor(parsed.provider);
     if (!findModel(parsed.provider, modelId)) return null;
     return {
       provider: parsed.provider,
@@ -77,11 +76,7 @@ export function readSettings(): StoredSettings | null {
 
 export function writeSettings(settings: Omit<StoredSettings, "savedAt">): StoredSettings | null {
   if (!isBrowser()) return null;
-  const stored: StoredSettings = {
-    ...settings,
-    apiKey: settings.apiKey.trim(),
-    savedAt: new Date().toISOString(),
-  };
+  const stored: StoredSettings = { ...settings, apiKey: settings.apiKey.trim(), savedAt: new Date().toISOString() };
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
     window.dispatchEvent(new Event(CHANGE_EVENT));

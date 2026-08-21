@@ -15,9 +15,8 @@
  * re-export that moves nothing material raises no alerts.
  */
 
-import { createHash } from "node:crypto";
-
 import type { PropertyRecord, ScoreComponent } from "@/lib/data/types";
+import { fingerprint } from "./hash";
 
 /** The fields whose movement is worth waking someone up for. */
 export const MATERIAL_FIELDS = [
@@ -43,7 +42,7 @@ export function matchHashOf(property: PropertyRecord): string {
   const material = MATERIAL_FIELDS.map((field) => `${field}=${String(property[field] ?? "")}`).join(
     "|",
   );
-  return createHash("sha256").update(material).digest("hex").slice(0, 32);
+  return fingerprint(material);
 }
 
 /**

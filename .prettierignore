@@ -4,3 +4,7 @@ public/sample
 drizzle
 pnpm-lock.yaml
 .next
+
+# Vendored verbatim from the pipeline repository. Reformatting it here would
+# diverge the copies and make scripts/sync-shared.mjs report drift forever.
+lib/oracle

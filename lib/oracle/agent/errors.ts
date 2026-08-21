@@ -88,6 +88,29 @@ export function isAgentError(error: unknown): error is AgentError {
 }
 
 /**
+ * Provider specific gotchas that a generic "the call failed" hint cannot fix.
+ *
+ * There is exactly one so far and it is worth the special case, because it is
+ * the single most likely way a visitor's first OpenRouter attempt fails and the
+ * raw message does not tell them what to do. OpenRouter routes free models only
+ * to providers that may train on the prompt, and an account that has not opted
+ * into that gets "No endpoints found matching your data policy" on every call,
+ * which reads like a broken model id rather than a setting.
+ *
+ * Returns null when nothing specific applies, so the caller falls back to its
+ * normal hint.
+ */
+export function providerSpecificHint(safeText: string): string | null {
+  if (/data policy|no endpoints found/i.test(safeText)) {
+    return "OpenRouter routes its free models only to providers that may train on your prompt, so a free model needs prompt training enabled at openrouter.ai/settings/privacy. Turn it on, or pick a provider whose free tier does not have that condition.";
+  }
+  if (/rate-limited upstream|shared pool/i.test(safeText)) {
+    return "This is the free model pool being busy, not your key and not your daily quota. Free models are already sent with the rest of the free list as fallbacks, so every one of them was busy at once. Wait a moment and ask again, or bring a key for a provider with a dedicated free tier.";
+  }
+  return null;
+}
+
+/**
  * Classify a raw provider failure.
  *
  * The AI SDK surfaces provider HTTP failures as errors carrying `statusCode`,
@@ -95,11 +118,7 @@ export function isAgentError(error: unknown): error is AgentError {
  * for a bad key (Google does this) are caught by the message probe instead.
  * The message handed in here must already be redacted.
  */
-export function classifyProviderError(
-  error: unknown,
-  safeText: string,
-  source: "user" | "server",
-): AgentError {
+export function classifyProviderError(error: unknown, safeText: string, source: "user" | "server"): AgentError {
   const statusCode = (error as { statusCode?: unknown } | null)?.statusCode;
   const status = typeof statusCode === "number" ? statusCode : null;
 
@@ -113,7 +132,10 @@ export function classifyProviderError(
   if (looksLikeCredential) {
     return new AgentCredentialError(safeText, source);
   }
-  if (status === 429) {
+  // The status code does not always survive the SDK's retry wrapper, so the
+  // text is checked too. A shared pool 429 from OpenRouter arrives as a generic
+  // "Provider returned error" with the real reason in the response body.
+  if (status === 429 || /rate[\s-]?limit|too many requests|quota exceeded|\b429\b/i.test(safeText)) {
     return new AgentRateLimitError(safeText, 30);
   }
   return new AgentProviderError(safeText);

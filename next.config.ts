@@ -28,10 +28,11 @@ import type { NextConfig } from "next";
  *    without touching the filesystem for exactly this reason.
  */
 
-const DUCKDB_WASM = [
-  "./node_modules/@duckdb/duckdb-wasm/dist/duckdb-node-blocking.cjs",
-  "./node_modules/@duckdb/duckdb-wasm/dist/duckdb-node-eh.worker.cjs",
-  "./node_modules/@duckdb/duckdb-wasm/dist/duckdb-eh.wasm",
+const DUCKDB_NATIVE = [
+  "./node_modules/@duckdb/node-bindings-linux-x64/**/*",
+  // Both spellings, because pnpm installs the package as a symlink into .pnpm
+  // and the tracer needs the real path as well as the linked one.
+  "./node_modules/.pnpm/@duckdb+node-bindings-linux-x64@*/node_modules/@duckdb/node-bindings-linux-x64/**/*",
 ];
 
 /** Every route that opens a query engine over the parcel data. */
@@ -50,10 +51,12 @@ const PARCEL_ROUTES = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Native DuckDB stays external so its dynamic import can fail cleanly at
-  // runtime rather than being bundled; the engine then falls back to WASM.
-  serverExternalPackages: ["@duckdb/node-api"],
-  outputFileTracingIncludes: Object.fromEntries(PARCEL_ROUTES.map((route) => [route, DUCKDB_WASM])),
+  // Both DuckDB packages stay external. The native addon so its dynamic import
+  // can fail cleanly at runtime rather than being bundled; the WASM build so
+  // its require survives the bundler instead of becoming a build-time
+  // "module not found".
+  serverExternalPackages: ["@duckdb/node-api", "@duckdb/duckdb-wasm"],
+  outputFileTracingIncludes: Object.fromEntries(PARCEL_ROUTES.map((route) => [route, DUCKDB_NATIVE])),
   outputFileTracingExcludes: {
     "**": [
       // The sample path is a constant, so the tracer folds it and packs the

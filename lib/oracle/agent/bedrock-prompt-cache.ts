@@ -57,9 +57,7 @@ export function applyBedrockPromptCaching<T extends { role: string; providerOpti
   if (targets.size === 0) return { prompt, cachePointsAdded: 0 };
   return {
     prompt: prompt.map((message, index) =>
-      targets.has(index)
-        ? (withCachePoint(message as unknown as PromptMessage) as unknown as T)
-        : message,
+      targets.has(index) ? (withCachePoint(message as unknown as PromptMessage) as unknown as T) : message,
     ),
     cachePointsAdded: targets.size,
   };

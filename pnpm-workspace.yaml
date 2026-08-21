@@ -1,18 +1,14 @@
-# pnpm's default symlinked node_modules breaks the deployment package for any
-# serverless function that traces a native addon: the platform rejects it with
-# "the framework produced an invalid deployment package ... files in symlinked
-# directories". @duckdb/node-bindings is exactly that case, so this install uses
-# a flat, real-directory layout instead.
-nodeLinker: hoisted
-
-# pnpm 11 refuses to run a dependency's install scripts unless the decision is
+# pnpm refuses to run a dependency's install scripts unless the decision is
 # recorded here, and it fails the whole install rather than warning. Both of
-# these ship prebuilt native binaries and their scripts only select the right
-# one for the platform.
+# these ship prebuilt native binaries; their scripts only select the right one
+# for the platform.
 allowBuilds:
   esbuild: true
   unrs-resolver: true
 
+# Published inside the registry policy's minimum-release-age window when these
+# versions were pinned. Excluding them keeps the install reproducible instead of
+# blocked on a clock.
 minimumReleaseAgeExclude:
   - "@next/eslint-plugin-next@16.3.2"
   - eslint-config-next@16.3.2

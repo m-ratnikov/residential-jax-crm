@@ -51,7 +51,12 @@ export function osmLink(lat: number, lon: number, zoom = 17): string {
 const EARTH_RADIUS_M = 6371008.8;
 
 /** Great circle distance in metres, the same formula the pipeline uses. */
-export function haversineMetres(latA: number, lonA: number, latB: number, lonB: number): number {
+export function haversineMetres(
+  latA: number,
+  lonA: number,
+  latB: number,
+  lonB: number,
+): number {
   const toRad = (degrees: number) => (degrees * Math.PI) / 180;
   const dLat = toRad(latB - latA);
   const dLon = toRad(lonB - lonA);

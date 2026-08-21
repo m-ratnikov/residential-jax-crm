@@ -25,13 +25,12 @@ const origin = originIndex >= 0 ? args[originIndex + 1] : null;
 const pull = args.includes("--pull");
 
 if (!origin) {
-  console.error(
-    "usage: node scripts/sync-shared.mjs --origin <path to pipeline repo ui/> [--pull]",
-  );
+  console.error("usage: node scripts/sync-shared.mjs --origin <path to pipeline repo ui/> [--pull]");
   process.exit(2);
 }
 
 const VENDOR_ROOT = "lib/oracle";
+const HEADER_MARKER = "// VENDORED FILE";
 const HEADER_LINES = 3;
 
 /** Origin path for a vendored file: lib/oracle/agent/x.ts came from ui/lib/agent/x.ts. */
@@ -65,10 +64,44 @@ function headerFor(rel) {
   ].join("\n");
 }
 
-/** The vendored body with the provenance header removed, for comparison. */
+const CLIENT_DIRECTIVES = ['"use client";', "'use client';"];
+
+/**
+ * Split a leading "use client" directive off the front of a source file.
+ *
+ * The directive has to stay the first statement in the file, so the provenance
+ * header is written underneath it rather than above. Matched as a plain string
+ * rather than a pattern, because the escaping needed for a newline inside a
+ * regular expression is exactly the sort of thing that gets mangled on the way
+ * into this file.
+ */
+function splitDirective(source) {
+  for (const directive of CLIENT_DIRECTIVES) {
+    if (!source.startsWith(directive)) continue;
+    const newline = source.indexOf("\n", directive.length);
+    if (newline < 0) continue;
+    return { directive: source.slice(0, newline + 1), rest: source.slice(newline + 1) };
+  }
+  return { directive: "", rest: source };
+}
+
+/**
+ * The vendored body with the provenance header removed, for comparison.
+ *
+ * The header is not always at the top, so it is located by its marker rather
+ * than by position.
+ */
 function bodyOf(source) {
   const lines = source.split("\n");
-  return lines.slice(HEADER_LINES).join("\n");
+  const at = lines.findIndex((line) => line.startsWith(HEADER_MARKER));
+  if (at < 0) return source;
+  lines.splice(at, HEADER_LINES);
+  return lines.join("\n");
+}
+
+function stamp(rel, source) {
+  const { directive, rest } = splitDirective(source);
+  return directive + headerFor(rel) + rest;
 }
 
 function listVendored(dir = VENDOR_ROOT, out = []) {
@@ -101,7 +134,7 @@ for (const rel of listVendored()) {
   if (expected !== actual) {
     drifted.push(rel);
     if (pull) {
-      writeFileSync(vendoredPath, headerFor(rel) + expected);
+      writeFileSync(vendoredPath, stamp(rel, expected));
       console.log(`pulled  ${rel}`);
     } else {
       console.log(`DRIFT   ${rel}`);

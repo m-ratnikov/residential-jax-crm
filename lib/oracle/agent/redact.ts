@@ -37,6 +37,7 @@ const KEY_PATTERNS: readonly RegExp[] = [
   /csk-[A-Za-z0-9-]{20,}/g, // Cerebras
   /vck_[A-Za-z0-9]{20,}/g, // Vercel AI Gateway
   /hf_[A-Za-z0-9]{20,}/g, // Hugging Face user access token
+  /sk-or-v1-[A-Za-z0-9]{20,}/g, // OpenRouter
   /ABSK[A-Za-z0-9+/=]{20,}/g, // Bedrock bearer token
   /\bAKIA[0-9A-Z]{16}\b/g, // AWS access key id
 ];
@@ -53,10 +54,7 @@ function escapeLiteral(value: string): string {
  * not credentials, and blanket replacing a 3 character string would corrupt
  * unrelated text.
  */
-export function redactSecrets(
-  value: string,
-  secrets: Iterable<string | null | undefined> = [],
-): string {
+export function redactSecrets(value: string, secrets: Iterable<string | null | undefined> = []): string {
   let out = value;
   for (const secret of secrets) {
     const trimmed = secret?.trim();
@@ -76,16 +74,27 @@ export function redactSecrets(
  * routinely quote the request, so the whole error is serialised before being
  * scrubbed rather than only its top level `message`.
  */
-export function safeMessage(
-  error: unknown,
-  secrets: Iterable<string | null | undefined> = [],
-): string {
-  const base = error instanceof Error ? error.message : String(error);
-  const withCause =
-    error instanceof Error && error.cause instanceof Error && error.cause.message !== base
-      ? `${base}: ${error.cause.message}`
-      : base;
-  return redactSecrets(withCause, secrets).slice(0, 600);
+export function safeMessage(error: unknown, secrets: Iterable<string | null | undefined> = []): string {
+  const parts: string[] = [];
+
+  // Walk a short cause chain. The AI SDK wraps a provider failure in a retry
+  // error whose own message is only "Failed after 3 attempts", so the useful
+  // text is always one or two levels down.
+  let current: unknown = error;
+  for (let depth = 0; depth < 4 && current; depth += 1) {
+    const message = current instanceof Error ? current.message : String(current);
+    if (message && !parts.includes(message)) parts.push(message);
+
+    // `responseBody` is where an OpenAI compatible provider puts the reason it
+    // actually refused. Without it a shared pool 429 reads as the useless
+    // "Provider returned error", which tells a visitor nothing they can act on.
+    const body = (current as { responseBody?: unknown }).responseBody;
+    if (typeof body === "string" && body.trim() && !parts.includes(body)) parts.push(body.trim());
+
+    current = current instanceof Error ? current.cause : undefined;
+  }
+
+  return redactSecrets(parts.join(": "), secrets).slice(0, 600);
 }
 
 /**
