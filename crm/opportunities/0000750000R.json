@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello ONEAL LARRY W,\n\nCounty records suggest the roof at 132 LIMANN RD, JACKSONVILLE, 32234 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $80,789.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3jlcuxra2blxrp",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-21T22:50:05.529Z",
+      "createdById": "0mt3jkn62k63g6gkc",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-00007500@example.invalid",
+          "occurredAt": "2026-08-21T22:50:05.529Z",
+          "providerEventId": "sim_email_f3cd92fcf7236ba01e8f:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T22:51:09.529Z",
+          "providerEventId": "sim_email_f3cd92fcf7236ba01e8f:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-21T22:52:46.529Z",
+          "providerEventId": "sim_email_f3cd92fcf7236ba01e8f:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt3jlcuxmc3y7ea8",
+      "providerMessageId": "sim_email_f3cd92fcf7236ba01e8f",
+      "status": "queued",
+      "statusAt": "2026-08-21T22:50:05.529Z",
+      "subject": "About the roof at 132 LIMANN RD, JACKSONVILLE, 32234",
+      "templateId": "roof-condition",
+      "toAddress": "owner-00007500@example.invalid"
+    }
+  ],
   "ownerId": "0mt3jl8eqvsq73z7z",
   "ownerInterest": null,
   "ownerNameSnapshot": "ONEAL LARRY W",
@@ -87,5 +123,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-21T22:50:04.557Z"
+  "updatedAt": "2026-08-21T22:50:05.529Z"
 }
