@@ -29,6 +29,8 @@ export interface StoreStatus {
   location: string;
   writable: boolean;
   ephemeral: boolean;
+  /** Serving a cached copy because the upstream refused a read. */
+  degraded?: boolean;
 }
 
 export interface ServerStatus {
@@ -103,6 +105,9 @@ export function useDataset(): DataSourceInfo | null {
 /** One sentence about the store, for a banner. Null when there is nothing to say. */
 export function storeWarning(store: StoreStatus | undefined): string | null {
   if (!store) return null;
+  if (store.degraded) {
+    return "The CRM store is being rate limited upstream, so this is the last state it read rather than the current one. Reads recover on their own within the hour; writes will fail until then.";
+  }
   if (!store.writable) {
     return `The CRM store (${store.location}) is attached read only, so saved criteria, alerts and opportunities can be read but not changed. Set CRM_STORE_TOKEN to make it writable.`;
   }

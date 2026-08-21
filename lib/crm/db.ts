@@ -40,6 +40,13 @@ export interface StoreStatus {
   writable: boolean;
   /** True when state is lost on restart, which the UI says out loud. */
   ephemeral: boolean;
+  /**
+   * True when the store is serving a cached copy because the upstream refused a
+   * read - GitHub counts its 5,000 requests an hour per user, so every token
+   * this account owns shares one budget. Surfaced so the UI can say it is
+   * showing state a few minutes old instead of implying it is current.
+   */
+  degraded?: boolean;
 }
 
 export function storeStatus(env: NodeJS.ProcessEnv = process.env): StoreStatus {
@@ -49,5 +56,6 @@ export function storeStatus(env: NodeJS.ProcessEnv = process.env): StoreStatus {
     location: store.location,
     writable: store.writable,
     ephemeral: store.kind === "memory",
+    degraded: "degraded" in store ? Boolean((store as { degraded?: boolean }).degraded) : false,
   };
 }

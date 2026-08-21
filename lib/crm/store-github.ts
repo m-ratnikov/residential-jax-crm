@@ -80,6 +80,23 @@ export class GitHubCrmStore implements CrmStore {
   #cache = new Map<Collection, CacheEntry>();
   /** path -> blob sha for the whole branch, so a read costs one request. */
   #treeCache: { at: number; paths: Map<string, string> } | null = null;
+  /**
+   * The last tree that was successfully read, with no expiry.
+   *
+   * GitHub's 5,000 requests an hour are counted per USER, not per token, so
+   * every token this account owns shares one budget - a local script and the
+   * deployment drain the same pool. When it runs out, every read fails for the
+   * remainder of the hour, and a CRM that answers 500 to its own board is worse
+   * than one showing state a few minutes old. So an exhausted budget degrades
+   * to the last known-good copy and says so, instead of failing.
+   */
+  #lastGoodTree: Map<string, string> | null = null;
+  #rateLimitedUntil = 0;
+
+  /** True when the last read was served from a stale copy after a refusal. */
+  get degraded(): boolean {
+    return Date.now() < this.#rateLimitedUntil;
+  }
 
   constructor(private readonly options: GitHubStoreOptions) {}
 
@@ -140,6 +157,24 @@ export class GitHubCrmStore implements CrmStore {
       this.#treeCache = { at: now, paths: empty };
       return empty;
     }
+    if (response.status === 403 || response.status === 429) {
+      // Rate limited. Serve what was last read rather than taking the CRM down;
+      // the reset header says how long, and until then every read is refused so
+      // there is nothing to gain by asking again.
+      const reset = Number(response.headers.get("x-ratelimit-reset") ?? 0) * 1000;
+      this.#rateLimitedUntil = reset > now ? reset : now + 60_000;
+      logError("store.rate_limited", new Error(`${response.status}`), {
+        until: new Date(this.#rateLimitedUntil).toISOString(),
+        serving: this.#lastGoodTree ? "the last good tree" : "nothing",
+      });
+      if (this.#lastGoodTree) {
+        this.#treeCache = { at: now, paths: this.#lastGoodTree };
+        return this.#lastGoodTree;
+      }
+      throw new Error(
+        `the CRM store is rate limited by GitHub until ${new Date(this.#rateLimitedUntil).toISOString()} and has nothing cached to serve`,
+      );
+    }
     if (!response.ok) {
       throw new Error(`could not read the tree: ${response.status} ${await response.text()}`);
     }
@@ -164,6 +199,8 @@ export class GitHubCrmStore implements CrmStore {
     }
 
     this.#treeCache = { at: now, paths };
+    this.#lastGoodTree = paths;
+    this.#rateLimitedUntil = 0;
     return paths;
   }
 
@@ -211,7 +248,11 @@ export class GitHubCrmStore implements CrmStore {
         const held = known?.get(id);
         if (held && held.sha === sha) return { id, entry: held };
         const document = await this.#blob(sha);
-        return document ? { id, entry: { sha, document } } : null;
+        if (document) return { id, entry: { sha, document } };
+        // The blob could not be read - most often the same rate limit. An older
+        // copy of the document beats the document vanishing from the listing,
+        // which would read as "somebody deleted this deal".
+        return held ? { id, entry: held } : null;
       }),
     );
 
@@ -323,6 +364,12 @@ export class GitHubCrmStore implements CrmStore {
     const existing = entries.get(id);
     if (!existing) return;
 
+    await this.#delete(collection, id, existing.sha);
+    this.#invalidate(collection);
+  }
+
+  /** Delete one blob. Caller decides when to invalidate, so a bulk delete can. */
+  async #delete(collection: Collection, id: string, sha: string): Promise<void> {
     const response = await fetch(
       `${API}/repos/${this.options.repository}/contents/${this.#path(collection, id)}`,
       {
@@ -330,7 +377,7 @@ export class GitHubCrmStore implements CrmStore {
         headers: { ...this.#headers(), "content-type": "application/json" },
         body: JSON.stringify({
           message: `crm: remove ${collection}/${id}`,
-          sha: existing.sha,
+          sha,
           branch: this.options.branch,
           committer: { name: this.options.authorName, email: this.options.authorEmail },
         }),
@@ -340,15 +387,24 @@ export class GitHubCrmStore implements CrmStore {
     if (!response.ok && response.status !== 404) {
       throw new Error(`could not remove ${collection}/${id}: ${response.status}`);
     }
-
-    this.#invalidate(collection);
   }
 
   async clear(collection: Collection): Promise<void> {
+    if (!this.options.token) {
+      throw new CrmStoreNotWritableError("no GitHub token is configured for the document store");
+    }
+
+    // The tree is read once, before the loop, and invalidated once after it.
+    // Going through `remove` invalidated it on every deletion, so clearing a
+    // hundred alerts spent a hundred tree reads on top of a hundred deletes and
+    // walked the account into GitHub's hourly limit - the same amplification
+    // that took the deployment down, reintroduced by the cache that fixed it.
+    //
+    // Still sequential: the contents API serialises commits to a branch anyway,
+    // so firing them in parallel only produces conflicts to retry.
     const entries = await this.#load(collection);
-    // Sequential on purpose: the contents API serialises commits to a branch
-    // anyway, and firing them in parallel just produces conflicts to retry.
-    for (const id of entries.keys()) await this.remove(collection, id);
+    for (const [id, entry] of entries) await this.#delete(collection, id, entry.sha);
+    this.#invalidate(collection);
   }
 }
 
