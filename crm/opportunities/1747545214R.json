@@ -24,7 +24,49 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello DOHERTY JOANNE K,\nI am reaching out about 1901 N 1ST ST G005, JACKSONVILLE BEACH, 32250. We buy homes in JACKSONVILLE BEACH directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 43 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36rmb68xjs9jka",
+      "campaignName": "Seed - contacted",
+      "channel": "sms",
+      "createdAt": "2026-08-21T16:51:02.707Z",
+      "createdById": "0mt36qpvthrkbg04i",
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for +1-904-555-0000",
+          "occurredAt": "2026-08-21T16:51:02.707Z",
+          "providerEventId": "sim_sms_aaf834168f1e26188f71:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:51:13.707Z",
+          "providerEventId": "sim_sms_aaf834168f1e26188f71:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-21T16:51:22.707Z",
+          "providerEventId": "sim_sms_aaf834168f1e26188f71:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Recipient replied",
+          "occurredAt": "2026-08-21T16:51:30.707Z",
+          "providerEventId": "sim_sms_aaf834168f1e26188f71:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt36rmb7xy1dlh35",
+      "providerMessageId": "sim_sms_aaf834168f1e26188f71",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:51:02.707Z",
+      "subject": null,
+      "templateId": "cash-offer-intro",
+      "toAddress": "+1-904-555-0000"
+    }
+  ],
   "ownerId": "0mt36ri7ws28fh9h3",
   "ownerInterest": "Curious, not committed",
   "ownerNameSnapshot": "DOHERTY JOANNE K",
@@ -77,5 +119,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:51:01.742Z"
+  "updatedAt": "2026-08-21T16:51:02.707Z"
 }
