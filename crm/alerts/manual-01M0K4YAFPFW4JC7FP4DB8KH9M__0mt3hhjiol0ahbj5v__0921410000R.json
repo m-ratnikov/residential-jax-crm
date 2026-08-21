@@ -1,0 +1,54 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-21T22:26:48.851Z",
+  "dismissedAt": null,
+  "id": "manual-01M0K4YAFPFW4JC7FP4DB8KH9M__0mt3hhjiol0ahbj5v__0921410000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt3irfluowqw01ft",
+  "notifications": [
+    {
+      "body": "1436 WOLFE ST, JACKSONVILLE, 32205 now matches your saved search \"Transit infill\".\n\nMatch score: 97 / 100\nWhy: 42 m to Park St + Dancy St (+57); held 25 years (+40).\n\nOwner of record: BABINEAU MARGARET E\nAssessed value: $183,069\nParcel: 0921410000R\n\nTriggered by pipeline run 01M0K4YAFPFW4JC7FP4DB8KH9M.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-21T22:27:03.463Z",
+      "id": "0mt3irqg71dnlwke7",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-21T22:27:03.463Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 1436 WOLFE ST, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0K4YAFPFW4JC7FP4DB8KH9M",
+  "propertyId": "0921410000R",
+  "propertySnapshot": {
+    "address": "1436 WOLFE ST, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 183069,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3009395,
+    "longitude": -81.7106442,
+    "ownerName": "BABINEAU MARGARET E",
+    "ownerOccupied": true,
+    "propertyId": "0921410000R",
+    "provenance": {
+      "fetchedAt": "1787320736294",
+      "runId": "01M0K4YAFPFW4JC7FP4DB8KH9M",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 25
+  },
+  "rationale": "42 m to Park St + Dancy St (+57); held 25 years (+40).",
+  "readAt": null,
+  "savedSearchId": "0mt3hhjiol0ahbj5v",
+  "score": 96.9
+}
