@@ -1,0 +1,45 @@
+{
+  "alertsCreated": 3,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-wasm-browser",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "isSample": false,
+      "kind": "duckdb-wasm-browser",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 3,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 2,
+        "matched": 10207,
+        "matchesTruncated": true,
+        "name": "EVAL tired landlord 2026-08-22",
+        "newMatches": 2,
+        "savedSearchId": "0mt3kjly274lvwt7f",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": true,
+        "unstableReads": 0,
+        "updatedMatches": 1
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-21T23:17:36.039Z",
+  "id": "0mt3kkmu86xtqwhoh",
+  "notificationsSent": 6,
+  "pipelineRunId": "sim-20260821231726-b74c393a",
+  "pipelineRunIsNew": true,
+  "pipelineRunStartedAt": "2026-08-21 10:55:39.9",
+  "propertiesEvaluated": 2000,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-21T23:17:30.947Z",
+  "trigger": "simulation"
+}
