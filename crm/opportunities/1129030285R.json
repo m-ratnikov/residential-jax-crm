@@ -15,14 +15,7 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [
-    {
-      "authorId": "0mt34qrentckaguhg",
-      "body": "Owner wants 235k. Comps in the neighbourhood do not support it with this roof.",
-      "createdAt": "2026-08-21T15:55:33.306Z",
-      "id": "0mt34s9bu2h5w83cv"
-    }
-  ],
+  "notes": [],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34s3zoyu89uqi5",
@@ -68,6 +61,16 @@
       "toStage": "identified"
     }
   ],
-  "tasks": [],
-  "updatedAt": "2026-08-21T15:55:33.306Z"
+  "tasks": [
+    {
+      "assigneeId": "0mt34qrentckaguhg",
+      "completedAt": null,
+      "createdAt": "2026-08-21T15:55:35.255Z",
+      "dueAt": "2026-08-27T15:55:34.333Z",
+      "id": "0mt34satznwtzlurd",
+      "status": "open",
+      "title": "Get a re-roof quote"
+    }
+  ],
+  "updatedAt": "2026-08-21T15:55:35.255Z"
 }
