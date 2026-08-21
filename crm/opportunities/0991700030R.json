@@ -3,7 +3,7 @@
   "addressLine": "6000 SAN JOSE BLVD, JACKSONVILLE, 32217",
   "addressZip": "32217",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 142000,
   "assessedValue": 0,
   "assigneeId": "0mt361hpvtx5bozau",
   "closedAt": "2026-08-21T16:32:04.222Z",
@@ -16,7 +16,7 @@
   "nextStep": null,
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 131500,
   "outreach": [],
   "ownerId": "0mt362yw9rx3e5uwe",
   "ownerInterest": null,
@@ -94,5 +94,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:32:04.222Z"
+  "updatedAt": "2026-08-21T16:32:05.285Z"
 }
