@@ -1,0 +1,54 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-21T22:26:48.851Z",
+  "dismissedAt": null,
+  "id": "manual-01M0K4YAFPFW4JC7FP4DB8KH9M__0mt3hhjiol0ahbj5v__0415640000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt3irfluowqw01ft",
+  "notifications": [
+    {
+      "body": "5017 ANDREW ROBINSON DR, JACKSONVILLE, 32209 now matches your saved search \"Transit infill\".\n\nMatch score: 97 / 100\nWhy: 42 m to Richardson Rd + Grann LLoyd Dr (+57); held 26 years (+40).\n\nOwner of record: BRANNON ALPHA O SMITH\nAssessed value: $127,079\nParcel: 0415640000R\n\nTriggered by pipeline run 01M0K4YAFPFW4JC7FP4DB8KH9M.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-21T22:26:51.530Z",
+      "id": "0mt3irh8qhrk8ebfn",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-21T22:26:51.530Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 5017 ANDREW ROBINSON DR, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0K4YAFPFW4JC7FP4DB8KH9M",
+  "propertyId": "0415640000R",
+  "propertySnapshot": {
+    "address": "5017 ANDREW ROBINSON DR, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 127079,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3881271,
+    "longitude": -81.7252853,
+    "ownerName": "BRANNON ALPHA O SMITH",
+    "ownerOccupied": false,
+    "propertyId": "0415640000R",
+    "provenance": {
+      "fetchedAt": "1787320736294",
+      "runId": "01M0K4YAFPFW4JC7FP4DB8KH9M",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 62,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 26
+  },
+  "rationale": "42 m to Richardson Rd + Grann LLoyd Dr (+57); held 26 years (+40).",
+  "readAt": null,
+  "savedSearchId": "0mt3hhjiol0ahbj5v",
+  "score": 96.9
+}
