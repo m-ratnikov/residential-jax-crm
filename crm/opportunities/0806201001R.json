@@ -13,9 +13,16 @@
   "longitude": -81.6628565,
   "matchRationale": "held 126 years (+33); roof about 85 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": "Skip trace the mailing address",
+  "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt34qrentckaguhg",
+      "body": "Pulled from the tired landlord list. Roof is well past its life and the owner mails to another county.",
+      "createdAt": "2026-08-21T15:54:55.312Z",
+      "id": "0mt34rg0gn2axmadn"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34rcbrdckdvgwr",
@@ -62,5 +69,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:54:53.964Z"
+  "updatedAt": "2026-08-21T15:54:55.312Z"
 }
