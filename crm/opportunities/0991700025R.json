@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt361guosnl96xm7",
+      "body": "Signed at 149k. Inspection window closes in nine days.",
+      "createdAt": "2026-08-21T16:31:58.437Z",
+      "id": "0mt3633dxord90az4"
+    }
+  ],
   "offerPrice": 149000,
   "outreach": [],
   "ownerId": "0mt362yw9rx3e5uwe",
@@ -86,5 +93,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:31:57.296Z"
+  "updatedAt": "2026-08-21T16:31:58.437Z"
 }
