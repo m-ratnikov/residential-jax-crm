@@ -3,7 +3,7 @@
   "addressLine": "510 DUVAL CIRCLE ST, BALDWIN, 32234",
   "addressZip": "32234",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 235000,
   "assessedValue": 1450226,
   "assigneeId": "0mt3jkl2vzmjcfaed",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.9733626,
   "matchRationale": "held 47 years (last sale 1979-07-03) (+33); roof about 46 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Send the roof quote and re-offer",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 186000,
   "outreach": [],
   "ownerId": "0mt3jlj95snfalkk6",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "BALDWIN GROVES APTS INC",
   "parcelIdentifier": "0004880020R",
   "propertyId": "0004880020R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:17.012Z"
+  "updatedAt": "2026-08-21T22:50:17.899Z"
 }
