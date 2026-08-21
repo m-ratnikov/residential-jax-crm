@@ -24,7 +24,49 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello CASCONE ELIZABETH B TRUST,\n\nCounty records suggest the roof at 10 10TH ST 31, ATLANTIC BEACH, 32233 may be near the end of its service life. A re-roof in ATLANTIC BEACH is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $1.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36rb4cnaa9o2k3",
+      "campaignName": "Seed - identified",
+      "channel": "direct_mail",
+      "createdAt": "2026-08-21T16:50:48.204Z",
+      "createdById": "0mt36qoadjober5q5",
+      "events": [
+        {
+          "detail": "Accepted by simulated-print-and-mail for 8022 JAMES ISLAND TRL",
+          "occurredAt": "2026-08-21T16:50:48.204Z",
+          "providerEventId": "sim_direct_mail_2b9f5a0bab2ee8113720:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-24T02:48:09.204Z",
+          "providerEventId": "sim_direct_mail_2b9f5a0bab2ee8113720:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-25T22:16:09.204Z",
+          "providerEventId": "sim_direct_mail_2b9f5a0bab2ee8113720:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Response received via call-in number",
+          "occurredAt": "2026-08-27T17:44:10.204Z",
+          "providerEventId": "sim_direct_mail_2b9f5a0bab2ee8113720:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt36rb4chye52d9z",
+      "providerMessageId": "sim_direct_mail_2b9f5a0bab2ee8113720",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:50:48.204Z",
+      "subject": "About the roof at 10 10TH ST 31, ATLANTIC BEACH, 32233",
+      "templateId": "roof-condition",
+      "toAddress": "8022 JAMES ISLAND TRL"
+    }
+  ],
   "ownerId": "0mt36r82zlf7ics3n",
   "ownerInterest": null,
   "ownerNameSnapshot": "CASCONE ELIZABETH B TRUST",
@@ -69,5 +111,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:50:47.078Z"
+  "updatedAt": "2026-08-21T16:50:48.205Z"
 }
