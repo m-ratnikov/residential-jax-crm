@@ -110,13 +110,13 @@ describe("match fingerprint", () => {
 describe("changed fields", () => {
   it("names exactly what moved", () => {
     const before = materialSnapshot(property());
-    const after = property({ assessedValue: 210000, ownerName: "SMITH FAMILY TRUST" });
+    const after = materialSnapshot(property({ assessedValue: 210000, ownerName: "SMITH FAMILY TRUST" }));
     expect(changedFields(before, after).sort()).toEqual(["assessedValue", "ownerName"]);
   });
 
   it("returns nothing when nothing material moved", () => {
     const before = materialSnapshot(property());
-    expect(changedFields(before, property({ waterDistM: 12 }))).toEqual([]);
+    expect(changedFields(before, materialSnapshot(property({ waterDistM: 12 })))).toEqual([]);
   });
 
   it("ignores a field absent from the stored snapshot rather than reporting a false change", () => {
@@ -124,7 +124,7 @@ describe("changed fields", () => {
     // change on every pass forever after.
     const before = materialSnapshot(property());
     delete (before as Record<string, unknown>)["roofPermitCount"];
-    expect(changedFields(before, property({ roofPermitCount: 3 }))).toEqual([]);
+    expect(changedFields(before, materialSnapshot(property({ roofPermitCount: 3 })))).toEqual([]);
   });
 
   it("gives every material field a readable name", () => {

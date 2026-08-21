@@ -51,12 +51,14 @@ export function matchHashOf(property: PropertyRecord): string {
  */
 export function changedFields(
   before: Readonly<Record<string, unknown>>,
-  after: PropertyRecord,
+  after: Readonly<Record<string, unknown>>,
 ): string[] {
   const changed: string[] = [];
   for (const field of MATERIAL_FIELDS) {
     const wasValue = before[field];
     const nowValue = after[field];
+    // A field absent from the stored snapshot predates it being tracked.
+    // Reporting it as changed would make every pass alert forever after.
     if (wasValue === undefined) continue;
     if (String(wasValue ?? "") !== String(nowValue ?? "")) changed.push(field);
   }
