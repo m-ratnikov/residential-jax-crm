@@ -3,7 +3,7 @@
   "addressLine": "N COURAGEOUS CT, JACKSONVILLE, 32233",
   "addressZip": "32233",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 142000,
   "assessedValue": 0,
   "assigneeId": "0mt34x2ktgd0p304r",
   "closedAt": "2026-08-21T16:00:30.040Z",
@@ -16,7 +16,7 @@
   "nextStep": null,
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 131500,
   "outreach": [],
   "ownerId": "0mt34yi2ssdepm612",
   "ownerInterest": null,
@@ -94,5 +94,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:00:30.040Z"
+  "updatedAt": "2026-08-21T16:00:31.002Z"
 }
