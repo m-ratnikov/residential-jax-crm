@@ -442,22 +442,28 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
           rows.length,
           `${rows.length} opportunities`,
         );
-        return {
-          available: true,
-          opportunities: rows.map((row) => ({
-            id: row.opportunity.id,
-            property_id: row.opportunity.propertyId,
-            address: row.opportunity.addressLine,
-            stage: row.opportunity.stage,
-            match_score: row.opportunity.matchScore,
-            owner_name: row.owner?.name ?? row.opportunity.ownerNameSnapshot,
-            assignee: row.assignee?.name ?? null,
-            asking_price: row.opportunity.askingPrice,
-            offer_price: row.opportunity.offerPrice,
-            next_step: row.opportunity.nextStep,
-            from_search: row.searchName,
-          })),
-        };
+        const opportunities = rows.map((row) => ({
+          id: row.opportunity.id,
+          property_id: row.opportunity.propertyId,
+          address: row.opportunity.addressLine,
+          stage: row.opportunity.stage,
+          match_score: row.opportunity.matchScore,
+          owner_name: row.owner?.name ?? row.opportunity.ownerNameSnapshot,
+          assignee: row.assignee?.name ?? null,
+          asking_price: row.opportunity.askingPrice,
+          offer_price: row.opportunity.offerPrice,
+          next_step: row.opportunity.nextStep,
+          from_search: row.searchName,
+        }));
+
+        // These are evidence too. "You have two parcels at Negotiating" is a
+        // claim about specific deals, and the Rows panel exists so a reader can
+        // see which ones rather than take the count on faith. Asking about the
+        // board was previously the one way to get a confident answer with an
+        // empty evidence panel underneath it.
+        addEvidence(trace, opportunities, "list_opportunities");
+
+        return { available: true, opportunities };
       },
     }),
 
