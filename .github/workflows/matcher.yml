@@ -31,7 +31,11 @@ on:
         default: manual
 
 permissions:
-  contents: read
+  # The CRM store is a branch of this repository, so the pass writes documents
+  # with the run's own token. That is the whole credential story for the
+  # schedule: nothing to rotate, nothing to leak, and the scope ends when the
+  # run does.
+  contents: write
 
 concurrency:
   # A pass that is still running must not be raced by the next scheduled one.
@@ -48,7 +52,9 @@ jobs:
       CRM_STORE_REPO: ${{ vars.CRM_STORE_REPO }}
       CRM_STORE_BRANCH: ${{ vars.CRM_STORE_BRANCH }}
       CRM_STORE_ROOT: ${{ vars.CRM_STORE_ROOT }}
-      CRM_STORE_TOKEN: ${{ secrets.CRM_STORE_TOKEN }}
+      # The run's own token. Set the CRM_STORE_TOKEN secret instead when the
+      # store lives in a different repository from this workflow.
+      CRM_STORE_TOKEN: ${{ secrets.CRM_STORE_TOKEN || secrets.GITHUB_TOKEN }}
       CRM_STORE_AUTHOR_NAME: matcher (scheduled)
       # Set this instead to use the Postgres backend.
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -79,7 +85,7 @@ jobs:
             exit 1
           fi
           if [ -n "$CRM_STORE_REPO" ] && [ -z "$CRM_STORE_TOKEN" ]; then
-            echo "CRM_STORE_REPO is set but CRM_STORE_TOKEN is not; the store would be read only and the pass could raise no alerts." >&2
+            echo "CRM_STORE_REPO is set but no token reached the job; the store would be read only and the pass could raise no alerts." >&2
             exit 1
           fi
           if [ -z "$PROPERTY_DATA_URL" ]; then

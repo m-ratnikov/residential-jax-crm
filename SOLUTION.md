@@ -316,9 +316,11 @@ first use and there is no migration step.
 runner, with native DuckDB against the published artifact. On the repository
 running it set:
 
-- variables `CRM_STORE_REPO`, `CRM_STORE_BRANCH`, `CRM_STORE_ROOT` and secret
-  `CRM_STORE_TOKEN` - the same store the deployment writes to (or secret
-  `DATABASE_URL` for the Postgres backend)
+- variables `CRM_STORE_REPO`, `CRM_STORE_BRANCH`, `CRM_STORE_ROOT` - the same
+  store the deployment writes to (or secret `DATABASE_URL` for the Postgres
+  backend). No token secret is needed when the store is a branch of the
+  repository running the workflow: the pass writes with the run's own
+  `GITHUB_TOKEN`, which expires when the run ends
 - variables `PROPERTY_DATA_URL` and `RUN_HISTORY_URL` - the published artifacts
 
 It writes to the store directly rather than calling the deployment, so it needs
