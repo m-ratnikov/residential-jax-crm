@@ -84,6 +84,16 @@
       "toStage": "negotiating"
     }
   ],
-  "tasks": [],
-  "updatedAt": "2026-08-21T21:51:50.895Z"
+  "tasks": [
+    {
+      "assigneeId": "0mt3hheabkk9k25gy",
+      "completedAt": null,
+      "createdAt": "2026-08-21T21:51:51.668Z",
+      "dueAt": "2026-08-27T21:51:51.668Z",
+      "id": "0mt3higz8uvvhw80v",
+      "status": "open",
+      "title": "Get a re-roof quote"
+    }
+  ],
+  "updatedAt": "2026-08-21T21:51:51.668Z"
 }
