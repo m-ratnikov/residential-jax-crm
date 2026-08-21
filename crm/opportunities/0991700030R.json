@@ -15,14 +15,7 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [
-    {
-      "authorId": "0mt34qtq4qgfs1sye",
-      "body": "Letter went out last week. No reply yet.",
-      "createdAt": "2026-08-21T15:55:12.436Z",
-      "id": "0mt34rt845ua29tzg"
-    }
-  ],
+  "notes": [],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34rivb6vhvpafm",
@@ -68,6 +61,16 @@
       "toStage": "identified"
     }
   ],
-  "tasks": [],
-  "updatedAt": "2026-08-21T15:55:12.436Z"
+  "tasks": [
+    {
+      "assigneeId": "0mt34qtq4qgfs1sye",
+      "completedAt": null,
+      "createdAt": "2026-08-21T15:55:13.717Z",
+      "dueAt": "2026-08-25T15:55:13.326Z",
+      "id": "0mt34ru7pxa659jos",
+      "status": "open",
+      "title": "Follow up call"
+    }
+  ],
+  "updatedAt": "2026-08-21T15:55:13.717Z"
 }
