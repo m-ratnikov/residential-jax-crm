@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello CASCONE ELIZABETH B TRUST,\n\nCounty records suggest the roof at 10 10TH ST 32, ATLANTIC BEACH, 32233 may be near the end of its service life. A re-roof in ATLANTIC BEACH is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $1.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36rgrafvqswe23",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:50:55.510Z",
+      "createdById": "0mt36qp0v31cgd5zh",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-17023702@example.invalid",
+          "occurredAt": "2026-08-21T16:50:55.510Z",
+          "providerEventId": "sim_email_4fc75f656c6a4ffbac5e:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:52:28.510Z",
+          "providerEventId": "sim_email_4fc75f656c6a4ffbac5e:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt36rgra9budnjei",
+      "providerMessageId": "sim_email_4fc75f656c6a4ffbac5e",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:50:55.510Z",
+      "subject": "About the roof at 10 10TH ST 32, ATLANTIC BEACH, 32233",
+      "templateId": "roof-condition",
+      "toAddress": "owner-17023702@example.invalid"
+    }
+  ],
   "ownerId": "0mt36r82zlf7ics3n",
   "ownerInterest": null,
   "ownerNameSnapshot": "CASCONE ELIZABETH B TRUST",
@@ -87,5 +117,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-21T16:50:54.523Z"
+  "updatedAt": "2026-08-21T16:50:55.510Z"
 }
