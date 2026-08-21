@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3jm5xt53tk1wo8",
-  "ownerInterest": null,
+  "ownerInterest": "Went to market",
   "ownerNameSnapshot": "MANGUM MARK R",
   "parcelIdentifier": "0009711120R",
   "propertyId": "0009711120R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:46.649Z"
+  "updatedAt": "2026-08-21T22:50:47.887Z"
 }
