@@ -236,6 +236,26 @@ async function main(): Promise<void> {
   const occupied = counts.filter((n) => n > 0).length;
   check("deals are spread across the funnel", occupied >= 3, `${occupied} stages present`);
 
+  // 7b. The Ask page offers models without asking for a key.
+  //
+  // Deliberately not a real question: a turn costs tokens on the deployment's
+  // own account, and a smoke test that spends money every time it runs is a
+  // smoke test people stop running. What is checked is the part that breaks
+  // silently - whether this deployment still has a key and still publishes the
+  // models it will spend it on.
+  await page.goto(`${target}/agent`, { waitUntil: "domcontentloaded", timeout: 60_000 });
+  const models = page.locator("select option");
+  await models
+    .first()
+    .waitFor({ state: "visible", timeout: 30_000 })
+    .catch(() => undefined);
+  const offered = await models.count();
+  check("the agent offers models with no key to configure", offered > 0, `${offered} models`);
+  check(
+    "and does not ask the visitor to configure one",
+    (await page.getByText("No model is available", { exact: false }).count()) === 0,
+  );
+
   // 8. The store is attached and writable, which the header says out loud when
   //    it is not. Neither badge may be present on a correctly configured
   //    deployment.
