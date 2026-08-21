@@ -3,7 +3,7 @@
   "addressLine": "1651 GIRVIN RD, JACKSONVILLE, 32225",
   "addressZip": "32225",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 142000,
   "assessedValue": 23329,
   "assigneeId": "0mt36wjjjsvl3xgbt",
   "closedAt": "2026-08-21T16:56:01.092Z",
@@ -16,7 +16,7 @@
   "nextStep": null,
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 131500,
   "outreach": [],
   "ownerId": "0mt36xwy4s44ay3fm",
   "ownerInterest": null,
@@ -94,5 +94,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:56:01.092Z"
+  "updatedAt": "2026-08-21T16:56:02.151Z"
 }
