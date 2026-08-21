@@ -67,7 +67,10 @@ const COURT_CASE_TYPES = [
 
 /** A synthetic run id that can never be mistaken for a pipeline one. */
 export function newSimulationRunId(): string {
-  return `sim-${new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14)}-${randomUUID().slice(0, 8)}`;
+  return `sim-${new Date()
+    .toISOString()
+    .replace(/[-:.TZ]/g, "")
+    .slice(0, 14)}-${randomUUID().slice(0, 8)}`;
 }
 
 async function applyCourtFilings(
@@ -151,7 +154,12 @@ async function applyRollMovements(
           detail: `a re-roof permit was pulled, so the roof year is now ${thisYear} on permit evidence rather than a year-built proxy`,
         });
         writes.push({ column: "roof_age_years", value: "0", label: "roof permit", detail: "" });
-        writes.push({ column: "roof_age_basis", value: "PERMIT", label: "roof permit", detail: "" });
+        writes.push({
+          column: "roof_age_basis",
+          value: "PERMIT",
+          label: "roof permit",
+          detail: "",
+        });
         writes.push({
           column: "roof_permit_count",
           value: String((target.roofPermitCount ?? 0) + 1),

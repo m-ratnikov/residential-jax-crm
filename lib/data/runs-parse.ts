@@ -91,7 +91,6 @@ function toRun(raw: RawRun): PipelineRun | null {
   };
 }
 
-
 /**
  * Normalise a parsed run-history document into runs, newest first.
  *

@@ -90,7 +90,9 @@ async function openNative(source: string, viewSql: (path: string) => string): Pr
     if (isHttp(source)) {
       // A serverless filesystem is read only except the temp directory, and
       // httpfs has to be fetched once per cold start.
-      await setup.run(`SET extension_directory = ${sqlPath(resolve(tmpdir(), "duckdb-extensions"))}`);
+      await setup.run(
+        `SET extension_directory = ${sqlPath(resolve(tmpdir(), "duckdb-extensions"))}`,
+      );
       await setup.run("INSTALL httpfs");
       await setup.run("LOAD httpfs");
     }
@@ -150,7 +152,8 @@ async function materialise(source: string): Promise<string> {
 
   const started = Date.now();
   const response = await fetch(source);
-  if (!response.ok) throw new Error(`could not fetch the artifact: ${response.status} from ${source}`);
+  if (!response.ok)
+    throw new Error(`could not fetch the artifact: ${response.status} from ${source}`);
   const bytes = Buffer.from(await response.arrayBuffer());
 
   mkdirSync(dir, { recursive: true });
@@ -168,7 +171,10 @@ async function materialise(source: string): Promise<string> {
 interface WasmBindings {
   registerFileBuffer(name: string, buffer: Uint8Array): void;
   connect(): {
-    query(sql: string): { toArray(): Record<string, unknown>[]; schema: { fields: { name: string }[] } };
+    query(sql: string): {
+      toArray(): Record<string, unknown>[];
+      schema: { fields: { name: string }[] };
+    };
     close(): void;
   };
   terminate?(): Promise<void>;

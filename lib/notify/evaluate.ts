@@ -193,8 +193,11 @@ export async function evaluateAndAlert(
         const seeding = previous.length === 0;
         outcome.seeded = seeding;
 
-        const pending: { match: EvaluatedMatch; kind: "new_match" | "updated_match"; changed: string[] }[] =
-          [];
+        const pending: {
+          match: EvaluatedMatch;
+          kind: "new_match" | "updated_match";
+          changed: string[];
+        }[] = [];
 
         for (const match of evaluation.rows) {
           const before = previousById.get(match.propertyId);
@@ -362,10 +365,7 @@ export async function evaluateAndAlert(
  * Which stored material fields differ. Works on the plain snapshot objects
  * rather than a PropertyRecord, because that is what crosses the wire.
  */
-function changedFieldsBetween(
-  before: unknown,
-  after: Record<string, unknown>,
-): string[] {
+function changedFieldsBetween(before: unknown, after: Record<string, unknown>): string[] {
   const previous = (before ?? {}) as Record<string, unknown>;
   return changedFields(previous, after as never);
 }

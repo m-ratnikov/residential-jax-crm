@@ -18,7 +18,12 @@ import type { CriteriaSet } from "@/lib/criteria/types";
 import { needsCourtData } from "@/lib/criteria/sql";
 import { displayAddress } from "./map";
 import type { ScoredProperty } from "./types";
-import { fetchOverlay, propertySource, EMPTY_OVERLAY_STATUS, type OverlayStatus } from "./client-source";
+import {
+  fetchOverlay,
+  propertySource,
+  EMPTY_OVERLAY_STATUS,
+  type OverlayStatus,
+} from "./client-source";
 import type { SearchRow } from "@/lib/client";
 
 /** Plotting more than this makes the browser, not the query, the bottleneck. */
@@ -26,7 +31,10 @@ export const MAP_POINT_CAP = 4_000;
 
 const PAGE_SIZE = 100;
 
-export function toSearchRow(scored: ScoredProperty, opportunityId: string | null = null): SearchRow {
+export function toSearchRow(
+  scored: ScoredProperty,
+  opportunityId: string | null = null,
+): SearchRow {
   const property = scored.property;
   return {
     propertyId: property.propertyId,
@@ -204,12 +212,18 @@ export function useParcelSearch(criteria: CriteriaSet, orderBy: OrderBy): Search
     let cancelled = false;
     fetch("/api/opportunities?limit=1000")
       .then((response) => (response.ok ? response.json() : null))
-      .then((body: { opportunities?: { opportunity: { id: string; propertyId: string } }[] } | null) => {
-        if (cancelled || !body?.opportunities) return;
-        setTracked(
-          new Map(body.opportunities.map((row) => [row.opportunity.propertyId, row.opportunity.id])),
-        );
-      })
+      .then(
+        (
+          body: { opportunities?: { opportunity: { id: string; propertyId: string } }[] } | null,
+        ) => {
+          if (cancelled || !body?.opportunities) return;
+          setTracked(
+            new Map(
+              body.opportunities.map((row) => [row.opportunity.propertyId, row.opportunity.id]),
+            ),
+          );
+        },
+      )
       .catch(() => undefined);
     return () => {
       cancelled = true;

@@ -63,7 +63,11 @@ const bodySchema = z.object({
 
 export async function GET(): Promise<Response> {
   try {
-    const rows = await db().select().from(matcherRuns).orderBy(desc(matcherRuns.startedAt)).limit(10);
+    const rows = await db()
+      .select()
+      .from(matcherRuns)
+      .orderBy(desc(matcherRuns.startedAt))
+      .limit(10);
     return ok({ runs: rows, tokenRequired: Boolean(process.env.MATCHER_TOKEN?.trim()) });
   } catch (error: unknown) {
     return handleError("GET /api/matcher/run", error);

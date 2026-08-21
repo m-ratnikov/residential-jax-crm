@@ -17,7 +17,12 @@
 import { NextResponse } from "next/server";
 
 import { serverSelection } from "@/lib/agent/model";
-import { KEY_HEADER, MODEL_HEADER, PROVIDER_HEADER, readUserCredential } from "@/lib/agent/credentials";
+import {
+  KEY_HEADER,
+  MODEL_HEADER,
+  PROVIDER_HEADER,
+  readUserCredential,
+} from "@/lib/agent/credentials";
 import { AgentBadRequestError } from "@/lib/agent/errors";
 import { PROVIDERS } from "@/lib/agent/providers";
 
@@ -38,7 +43,8 @@ export async function GET(request: Request): Promise<NextResponse> {
       active = { provider: credential.provider, model: credential.modelId, source: "user" };
     }
   } catch (error: unknown) {
-    headerError = error instanceof AgentBadRequestError ? error.message : "credential headers rejected";
+    headerError =
+      error instanceof AgentBadRequestError ? error.message : "credential headers rejected";
   }
 
   return NextResponse.json({
@@ -61,7 +67,11 @@ export async function GET(request: Request): Promise<NextResponse> {
       free_tier: provider.freeTier,
       key_url: provider.keyUrl,
       accepts_user_key: provider.acceptsUserKey,
-      models: provider.models.map((model) => ({ id: model.id, label: model.label, free: model.free })),
+      models: provider.models.map((model) => ({
+        id: model.id,
+        label: model.label,
+        free: model.free,
+      })),
     })),
   });
 }

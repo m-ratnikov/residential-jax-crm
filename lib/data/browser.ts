@@ -139,7 +139,10 @@ export class BrowserPropertyDataSource implements PropertyDataSource {
 
     const [page, count] = await Promise.all([this.#query(built.sql), this.#query(built.countSql)]);
 
-    const totalWeight = built.score.components.reduce((sum, component) => sum + component.weight, 0);
+    const totalWeight = built.score.components.reduce(
+      (sum, component) => sum + component.weight,
+      0,
+    );
 
     const rows: ScoredProperty[] = page.rows.map((row) => {
       const property = toRecord(row);

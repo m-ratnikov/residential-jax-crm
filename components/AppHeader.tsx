@@ -140,6 +140,7 @@ export function AppHeader() {
             <>
               {data.isSample ? (
                 <Badge
+                  testId="dataset-badge"
                   tone="warn"
                   title={`Bundled sample extract: ${count(data.rowCount)} parcels over ${data.columnCount} columns. Set NEXT_PUBLIC_PROPERTY_DATA_URL to read the full published county artifact.`}
                 >
@@ -147,6 +148,7 @@ export function AppHeader() {
                 </Badge>
               ) : (
                 <Badge
+                  testId="dataset-badge"
                   tone="good"
                   title={`${data.label}: ${count(data.rowCount)} parcels over ${data.columnCount} columns, range read from the gateway in this tab.`}
                 >

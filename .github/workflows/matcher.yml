@@ -2,22 +2,26 @@ name: matcher
 
 # The continuous half of the notification story.
 #
-# The CRM has no server of its own that is awake between requests: it is a set
-# of serverless functions, so something outside has to decide when to look. That
-# is this. Every thirty minutes it calls the same /api/matcher/run endpoint the
-# "run now" button calls, which re-evaluates every active saved search against
-# whatever the pipeline has published since last time and raises alerts for what
-# moved.
+# The application has no server of its own that is awake between requests: the
+# parcel queries run in the visitor's browser and the API is a set of serverless
+# functions. So something outside has to decide when to look, and this is it.
 #
-# GitHub Actions is used rather than a platform cron because the Vercel Hobby
-# plan allows one cron invocation per day, which is not a notification service.
-# Actions minutes are unmetered on a public repository.
+# The pass runs HERE rather than calling the deployment, because a workflow
+# runner can use native DuckDB. That range reads the published parquet - a few
+# hundred kilobytes per query against a 50 MB artifact - where a serverless
+# function cannot carry the 70 MB shared library at all. It writes to the same
+# Postgres and goes through the same evaluateAndAlert as a pass started from the
+# app, so the alerts are indistinguishable.
+#
+# GitHub Actions rather than a platform cron because the Vercel Hobby plan
+# allows one cron invocation per day, and one a day is not a notification
+# service. Actions minutes are unmetered on a public repository.
 
 on:
   schedule:
     # Every 30 minutes. The pipeline publishes every six hours, so most passes
-    # will find nothing new - which is the point: the evidence table records
-    # them, so "nothing arrived last night" has an answer.
+    # find nothing new - which is the point: the evidence table records them, so
+    # "nothing arrived last night" has an answer.
     - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
@@ -37,57 +41,37 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      PROPERTY_DATA_URL: ${{ vars.PROPERTY_DATA_URL }}
+      RUN_HISTORY_URL: ${{ vars.RUN_HISTORY_URL }}
+      # Native DuckDB is available here, unlike on the serverless runtime.
+      PROPERTY_ENGINE: native
     steps:
-      - name: Call the matcher
-        id: call
-        env:
-          RUNTIME_URL: ${{ vars.RUNTIME_URL }}
-          MATCHER_TOKEN: ${{ secrets.MATCHER_TOKEN }}
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check the secrets are present
         run: |
-          if [ -z "$RUNTIME_URL" ]; then
-            echo "RUNTIME_URL is not set as a repository variable; nothing to call." >&2
+          if [ -z "$DATABASE_URL" ]; then
+            echo "DATABASE_URL is not set as a repository secret; there are no saved searches to evaluate." >&2
+            exit 1
+          fi
+          if [ -z "$PROPERTY_DATA_URL" ]; then
+            echo "PROPERTY_DATA_URL is not set as a repository variable; the pass would evaluate the bundled sample." >&2
             exit 1
           fi
 
-          # --fail-with-body so a non-2xx still prints what the server said,
-          # which is the difference between a diagnosable failure and a red X.
-          http_code=$(curl -sS -o response.json -w '%{http_code}' \
-            --max-time 300 \
-            -X POST "$RUNTIME_URL/api/matcher/run" \
-            -H 'content-type: application/json' \
-            -H "authorization: Bearer $MATCHER_TOKEN" \
-            -d '{}') || true
-
-          echo "HTTP $http_code"
-          cat response.json || true
-
-          if [ "$http_code" != "200" ]; then
-            echo "matcher pass failed with HTTP $http_code" >&2
-            exit 1
-          fi
-
-      - name: Summarise the pass
-        if: always()
-        run: |
-          if [ -f response.json ]; then
-            node -e '
-              const fs = require("fs");
-              let body;
-              try { body = JSON.parse(fs.readFileSync("response.json", "utf8")); }
-              catch { console.log("The response was not JSON."); process.exit(0); }
-              const lines = [
-                "| field | value |",
-                "| --- | --- |",
-                `| pipeline run | \`${body.pipelineRunId ?? "unknown"}\` |`,
-                `| new to the CRM | ${body.pipelineRunIsNew ? "yes" : "no"} |`,
-                `| searches evaluated | ${body.searchesEvaluated ?? 0} |`,
-                `| parcels evaluated | ${body.propertiesEvaluated ?? 0} |`,
-                `| alerts created | ${body.alertsCreated ?? 0} |`,
-                `| alerts suppressed | ${body.alertsSuppressed ?? 0} |`,
-                `| notifications sent | ${body.notificationsSent ?? 0} |`,
-              ];
-              if (body.error) lines.push(`| error | ${body.error} |`);
-              fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
-            '
-          fi
+      - name: Run the matcher
+        run: pnpm matcher

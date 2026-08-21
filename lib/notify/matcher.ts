@@ -111,7 +111,10 @@ export async function runMatcher(
     .from(savedSearches)
     .where(
       options.savedSearchIds?.length
-        ? and(eq(savedSearches.active, true), inArray(savedSearches.id, [...options.savedSearchIds]))
+        ? and(
+            eq(savedSearches.active, true),
+            inArray(savedSearches.id, [...options.savedSearchIds]),
+          )
         : eq(savedSearches.active, true),
     );
 

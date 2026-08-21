@@ -290,10 +290,13 @@ export function Badge({
   children,
   tone = "neutral",
   title,
+  testId,
 }: {
   children: ReactNode;
   tone?: "neutral" | "accent" | "good" | "warn" | "bad" | "outline";
   title?: string;
+  /** Stable hook for the deployed-runtime smoke check. */
+  testId?: string;
 }) {
   const tones = {
     neutral: "bg-ink-800 text-ink-300 border-transparent",
@@ -306,6 +309,7 @@ export function Badge({
   return (
     <span
       title={title}
+      data-testid={testId}
       className={cx(
         "inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap",
         tones,
