@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { fail, handleError, ok, readJson } from "@/lib/api";
 import { dismissAlert, markAlertRead } from "@/lib/crm/repo";
+import { guardMutation } from "@/lib/api-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,6 +17,9 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> },
 ): Promise<Response> {
   try {
+    const denied = guardMutation(request);
+    if (denied) return denied;
+
     const { id } = await context.params;
     const patch = patchSchema.parse(await readJson(request));
 

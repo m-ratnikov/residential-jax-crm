@@ -15,6 +15,7 @@ import {
   num,
   polygonSql,
   str,
+  TIEBREAK_SQL,
 } from "@/lib/criteria/sql";
 import { criteriaSetSchema, DEFAULT_WEIGHTS, type CriteriaSet } from "@/lib/criteria/types";
 

@@ -19,6 +19,7 @@
 import { z } from "zod";
 
 import { fail, handleError, matcherTokenValid, ok, readJson } from "@/lib/api";
+import { guardMutation } from "@/lib/api-auth";
 import { listMatcherRuns } from "@/lib/crm/repo";
 import { evaluateAndAlert } from "@/lib/notify/evaluate";
 import { advanceOutreach } from "@/lib/notify/outreach";
@@ -75,6 +76,15 @@ export async function POST(request: Request): Promise<Response> {
     if (!matcherTokenValid(request)) {
       return fail("unauthorised", "A valid matcher token is required.", 401);
     }
+
+    // A caller holding the configured MATCHER_TOKEN is trusted and skips the
+    // browser shaped checks; with no token configured this is an anonymous
+    // public write like any other, so it is bounded like one.
+    const denied = guardMutation(request, {
+      cost: "heavy",
+      secrets: [process.env.MATCHER_TOKEN],
+    });
+    if (denied) return denied;
 
     const input = bodySchema.parse(await readJson(request));
 

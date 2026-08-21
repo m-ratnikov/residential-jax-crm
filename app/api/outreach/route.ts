@@ -14,6 +14,7 @@
 import { z } from "zod";
 
 import { handleError, ok, readJson } from "@/lib/api";
+import { guardMutation } from "@/lib/api-auth";
 import {
   advanceOutreach,
   fastForwardOutreach,
@@ -55,6 +56,11 @@ export async function GET(): Promise<Response> {
 
 export async function POST(request: Request): Promise<Response> {
   try {
+    // A public runtime with no login: this bounds an anonymous write, it does
+    // not authenticate one. lib/api-auth.ts says exactly where the line is.
+    const denied = guardMutation(request, { cost: "heavy" });
+    if (denied) return denied;
+
     const input = sendSchema.parse(await readJson(request));
     const result = await sendOutreach({
       opportunityIds: input.opportunityIds,
@@ -71,6 +77,9 @@ export async function POST(request: Request): Promise<Response> {
 
 export async function PATCH(request: Request): Promise<Response> {
   try {
+    const denied = guardMutation(request, { cost: "heavy" });
+    if (denied) return denied;
+
     const input = advanceSchema.parse(await readJson(request));
     const result = input.fastForward ? await fastForwardOutreach() : await advanceOutreach();
     return ok(result);

@@ -533,11 +533,76 @@ export interface BuildSearchOptions {
   from?: string;
 }
 
+/**
+ * Whether the roll is describing a dwelling it has actually priced.
+ *
+ * Two separate ways the appraisal roll declines to price something that is
+ * nonetheless a residential parcel: no livable floor area at all (HOA common
+ * areas, retention ponds, garage and storage units), and a nominal entry that
+ * holds a place rather than states a value. The second is the one that gets
+ * through `dwellingsOnly`: a condominium unit with a real floor area and an
+ * assessed value of one dollar clears `assessed_value > 0` and is still not a
+ * price.
+ *
+ * The test is per square foot rather than an absolute floor, so it needs no
+ * invented threshold: of the 68,403 sample dwellings that clear the guard, not
+ * one is assessed below a dollar per livable square foot, and the cheapest real
+ * house in the sample sits at $1.70 per foot. A dollar-assessed 500 sq ft unit
+ * misses it by three orders of magnitude.
+ *
+ * This is used for ORDERING only. It is deliberately not a filter: `buildWhere`
+ * decides what is in the result, and adding a second hidden guard there would be
+ * the "raise the threshold until the bad rows disappear" move rather than a fix.
+ */
+const PRICED_DWELLING_SQL =
+  `livable_floor_area >= ${DWELLING_MIN_SQFT} AND assessed_value >= livable_floor_area`;
+
+/**
+ * How an equal sort key is broken, appended to every ordering.
+ *
+ * A tie means the sort key did not distinguish these parcels, so whatever
+ * decides between them is not a ranking anyone asked for. It was
+ * `assessed_value ASC`, and that is the worst available choice: the bottom of
+ * the value distribution is where the roll's placeholders live, so the hidden
+ * "cheapest first" rule reliably promoted the least real rows in the county.
+ *
+ * It mattered far more than a tiebreak usually does. With no ranking criteria
+ * set, `buildScore` honestly scores every row 100 - so every row is tied, and
+ * the tiebreak became the entire ordering of the default search. The first
+ * screen of the app was fifteen consecutive condominium units at 514 LOMAX ST
+ * assessed at a dollar each. The same ordering picks which matches the
+ * scheduled matcher tracks, so a saved search with no ranking criteria was
+ * watching the two thousand cheapest rows in Duval rather than a sample of what
+ * it matched.
+ *
+ * What replaces it:
+ *
+ * 1. Parcels the roll has priced as dwellings before the ones it has not. This
+ *    is the same judgement `dwellingsOnly` makes, applied as an ordering rather
+ *    than as a filter, so it still holds when a land buyer turns that guard off
+ *    to look for infill lots: the lots are in the result, they are simply not
+ *    the first thing on the screen.
+ * 2. `property_id` - stable, arbitrary, and carrying no opinion about price.
+ *    Ties are broken deterministically, which is what pagination and the
+ *    matcher's tracked set both need, without inventing a ranking from columns
+ *    the user never mentioned. Ranking is what criteria are for; the fix for a
+ *    featureless default list is to set one, not to smuggle a price preference
+ *    into ORDER BY.
+ */
+export const TIEBREAK_SQL = `CASE WHEN ${PRICED_DWELLING_SQL} THEN 0 ELSE 1 END, property_id`;
+
+/**
+ * `assessed_value` is the "Cheapest" button. That is a sort the user asked for
+ * out loud, so it keeps putting the cheapest row first - including the dollar
+ * units, which is the correct answer to the question "what is cheapest". The
+ * bug was never that the ordering exists; it was that it ran when nobody chose
+ * it.
+ */
 const ORDER_SQL: Record<BuildSearchOptions["orderBy"], string> = {
-  score: `${SCORE_ALIAS} DESC, assessed_value ASC NULLS LAST`,
-  assessed_value: `assessed_value ASC NULLS LAST`,
-  roof_age: `roof_age_years DESC NULLS LAST`,
-  tenure: `years_since_last_sale DESC NULLS LAST`,
+  score: `${SCORE_ALIAS} DESC, ${TIEBREAK_SQL}`,
+  assessed_value: `assessed_value ASC NULLS LAST, ${TIEBREAK_SQL}`,
+  roof_age: `roof_age_years DESC NULLS LAST, ${TIEBREAK_SQL}`,
+  tenure: `years_since_last_sale DESC NULLS LAST, ${TIEBREAK_SQL}`,
 };
 
 export interface BuiltSearch {

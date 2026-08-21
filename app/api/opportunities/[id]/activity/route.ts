@@ -9,6 +9,7 @@
 import { z } from "zod";
 
 import { fail, handleError, ok, readJson } from "@/lib/api";
+import { guardMutation } from "@/lib/api-auth";
 import { addNote, addTask, setTaskStatus } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
@@ -38,6 +39,11 @@ export async function POST(
   context: { params: Promise<{ id: string }> },
 ): Promise<Response> {
   try {
+    // A public runtime with no login: this bounds an anonymous write, it does
+    // not authenticate one. lib/api-auth.ts says exactly where the line is.
+    const denied = guardMutation(request);
+    if (denied) return denied;
+
     const { id } = await context.params;
     const input = bodySchema.parse(await readJson(request));
 

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { fail, handleError, ok, readJson } from "@/lib/api";
+import { guardMutation } from "@/lib/api-auth";
 import { criteriaSetSchema } from "@/lib/criteria/types";
 import { deleteSavedSearch, getSavedSearch, updateSavedSearch } from "@/lib/crm/repo";
 
@@ -37,6 +38,11 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> },
 ): Promise<Response> {
   try {
+    // A public runtime with no login: this bounds an anonymous write, it does
+    // not authenticate one. lib/api-auth.ts says exactly where the line is.
+    const denied = guardMutation(request);
+    if (denied) return denied;
+
     const { id } = await context.params;
     const patch = patchSchema.parse(await readJson(request));
     const updated = await updateSavedSearch(id, {
@@ -51,10 +57,13 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ id: string }> },
 ): Promise<Response> {
   try {
+    const denied = guardMutation(request);
+    if (denied) return denied;
+
     const { id } = await context.params;
     await deleteSavedSearch(id);
     return ok({ deleted: true });

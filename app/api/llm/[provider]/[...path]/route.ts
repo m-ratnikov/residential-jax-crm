@@ -16,10 +16,15 @@
  *  2. The model must be one the registry lists for that provider. Without this,
  *     a hand-written request could point this deployment's key at the most
  *     expensive model the provider sells.
- *  3. Every caller is rate limited by address, using the same limiter the agent
- *     route uses. The limiter is per process and says so - see its own comment
- *     - so this raises the cost of draining the key rather than making it
- *     impossible.
+ *  3. The forwarded path is validated segment by segment, and a `.` or `..`
+ *     segment is refused, so the path cannot climb out of the base URL and
+ *     reach an upstream endpoint that bound 2 never looked at.
+ *  4. The request has to come from this deployment's own pages, and every
+ *     caller is rate limited by address using the same limiter the agent route
+ *     uses. The limiter is per process and says so - see its own comment - so
+ *     this raises the cost of draining the key rather than making it
+ *     impossible, and the Origin check stops a bare request rather than a
+ *     determined one - see lib/api-auth.ts for exactly where that line is.
  *
  * The honest residual risk: a public runtime that answers questions on the
  * owner's key can have that key spent by strangers, and no amount of per
@@ -33,6 +38,7 @@ import { NextResponse } from "next/server";
 import { PROVIDERS } from "@/lib/agent/providers";
 import { isServerModel, serverKeyFor, upstreamFor } from "@/lib/agent/server-models";
 import { AGENT_RATE_LIMIT, clientAddress } from "@/lib/agent/ratelimit";
+import { isSafeProxyPath, sameOriginRequest } from "@/lib/api-auth";
 import { logAgent } from "@/lib/agent/log";
 import { safeMessage } from "@/lib/agent/redact";
 
@@ -92,6 +98,21 @@ export async function POST(
     return fail(404, `This deployment has no ${definition.label} key configured.`);
   }
 
+  // Checked before anything is spent: an unforwardable path costs nothing to
+  // reject and should not consume a caller's budget on the way out.
+  if (!isSafeProxyPath(path)) {
+    return fail(400, "That is not a path any supported provider uses.");
+  }
+
+  // The loop that calls this runs in a tab on this deployment's own origin, so
+  // a request from anywhere else is not the application asking. This stops a
+  // page elsewhere spending the key through a visitor's browser, and a request
+  // that carries no Origin at all; it does not stop a caller who sets the
+  // header by hand. lib/api-auth.ts states that boundary in full.
+  if (!sameOriginRequest(request)) {
+    return fail(403, "Model calls have to come from this application's own pages.");
+  }
+
   const limit = AGENT_RATE_LIMIT.check(clientAddress(request.headers));
   if (!limit.allowed) {
     return NextResponse.json(
@@ -118,14 +139,6 @@ export async function POST(
     if (!STRIPPED.has(name.toLowerCase())) headers.set(name, value);
   });
   for (const [name, value] of Object.entries(upstream.auth(key))) headers.set(name, value);
-
-  // Validated rather than escaped: Google's path is
-  // `models/gemini-3.5-flash:generateContent` and percent-encoding that colon
-  // makes it a 404. This charset admits every path any provider in the registry
-  // uses and nothing that could climb out of the base URL.
-  if (path.some((part) => !/^[A-Za-z0-9._:-]+$/.test(part))) {
-    return fail(400, "That is not a path any supported provider uses.");
-  }
 
   const target = `${upstream.baseUrl}/${path.join("/")}${new URL(request.url).search}`;
 

@@ -15,6 +15,7 @@
 import { z } from "zod";
 
 import { handleError, ok, readJson } from "@/lib/api";
+import { guardMutation } from "@/lib/api-auth";
 import { createOpportunityFromSnapshot, listOpportunities } from "@/lib/crm/repo";
 import { ACQUISITION_STAGES } from "@/lib/notify/types";
 
@@ -76,6 +77,11 @@ export async function GET(request: Request): Promise<Response> {
 
 export async function POST(request: Request): Promise<Response> {
   try {
+    // A public runtime with no login: this bounds an anonymous write, it does
+    // not authenticate one. lib/api-auth.ts says exactly where the line is.
+    const denied = guardMutation(request);
+    if (denied) return denied;
+
     const input = createSchema.parse(await readJson(request));
     const result = await createOpportunityFromSnapshot(input);
     return ok(

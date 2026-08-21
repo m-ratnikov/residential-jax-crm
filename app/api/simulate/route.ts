@@ -14,6 +14,7 @@
 import { z } from "zod";
 
 import { handleError, ok } from "@/lib/api";
+import { guardMutation } from "@/lib/api-auth";
 import { readJson } from "@/lib/api";
 import { applySimulation, clearSimulation } from "@/lib/crm/simulate";
 import { listSimulatedChanges } from "@/lib/crm/repo";
@@ -48,6 +49,11 @@ export async function GET(): Promise<Response> {
 
 export async function POST(request: Request): Promise<Response> {
   try {
+    // A public runtime with no login: this bounds an anonymous write, it does
+    // not authenticate one. lib/api-auth.ts says exactly where the line is.
+    const denied = guardMutation(request, { cost: "heavy" });
+    if (denied) return denied;
+
     const input = bodySchema.parse(await readJson(request));
     const simulation = await applySimulation(
       input.kind,
@@ -66,8 +72,11 @@ export async function POST(request: Request): Promise<Response> {
   }
 }
 
-export async function DELETE(): Promise<Response> {
+export async function DELETE(request: Request): Promise<Response> {
   try {
+    const denied = guardMutation(request, { cost: "heavy" });
+    if (denied) return denied;
+
     return ok(await clearSimulation());
   } catch (error: unknown) {
     return handleError("DELETE /api/simulate", error);

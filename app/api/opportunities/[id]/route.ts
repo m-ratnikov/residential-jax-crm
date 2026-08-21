@@ -11,6 +11,7 @@
 import { z } from "zod";
 
 import { fail, handleError, ok, readJson } from "@/lib/api";
+import { guardMutation } from "@/lib/api-auth";
 import { getOpportunityView, updateOpportunity } from "@/lib/crm/repo";
 import { advanceOutreach } from "@/lib/notify/outreach";
 import { ACQUISITION_STAGES } from "@/lib/notify/types";
@@ -54,6 +55,11 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> },
 ): Promise<Response> {
   try {
+    // A public runtime with no login: this bounds an anonymous write, it does
+    // not authenticate one. lib/api-auth.ts says exactly where the line is.
+    const denied = guardMutation(request);
+    if (denied) return denied;
+
     const { id } = await context.params;
     const patch = patchSchema.parse(await readJson(request));
 

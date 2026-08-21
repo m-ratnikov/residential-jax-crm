@@ -11,6 +11,7 @@
 import { z } from "zod";
 
 import { handleError, ok, readJson } from "@/lib/api";
+import { guardMutation } from "@/lib/api-auth";
 import { listAlerts, listSavedSearches, markAllAlertsRead } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
@@ -46,6 +47,11 @@ const patchSchema = z.object({ markAllRead: z.literal(true) });
 
 export async function PATCH(request: Request): Promise<Response> {
   try {
+    // A public runtime with no login: this bounds an anonymous write, it does
+    // not authenticate one. lib/api-auth.ts says exactly where the line is.
+    const denied = guardMutation(request);
+    if (denied) return denied;
+
     patchSchema.parse(await readJson(request));
     return ok({ ok: true, marked: await markAllAlertsRead() });
   } catch (error: unknown) {
