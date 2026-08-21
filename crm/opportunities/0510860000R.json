@@ -24,7 +24,49 @@
     }
   ],
   "offerPrice": 186000,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello HALL LORNE,\n\nCounty records suggest the roof at 1532 W 6TH ST, JACKSONVILLE, 32209 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $20,062.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36xlhm7y4m0elm",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:55:41.578Z",
+      "createdById": "0mt36wgohk1qdawvi",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-05108600@example.invalid",
+          "occurredAt": "2026-08-21T16:55:41.578Z",
+          "providerEventId": "sim_email_c909a2c9b10cce2e498b:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:56:41.578Z",
+          "providerEventId": "sim_email_c909a2c9b10cce2e498b:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-21T16:57:25.578Z",
+          "providerEventId": "sim_email_c909a2c9b10cce2e498b:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Recipient replied",
+          "occurredAt": "2026-08-21T16:58:10.578Z",
+          "providerEventId": "sim_email_c909a2c9b10cce2e498b:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt36xlhmo6ov99vm",
+      "providerMessageId": "sim_email_c909a2c9b10cce2e498b",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:55:41.578Z",
+      "subject": "About the roof at 1532 W 6TH ST, JACKSONVILLE, 32209",
+      "templateId": "roof-condition",
+      "toAddress": "owner-05108600@example.invalid"
+    }
+  ],
   "ownerId": "0mt36xgjax7iquuwz",
   "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "HALL LORNE",
@@ -95,5 +137,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-21T16:55:40.709Z"
+  "updatedAt": "2026-08-21T16:55:41.578Z"
 }
