@@ -146,3 +146,84 @@ describe("an overlay is a real change even though the artifact has not moved", (
     expect(simulated.alertsCreated).toBe(1);
   });
 });
+
+describe("a retried pass", () => {
+  it("does not notify twice for the same change", async () => {
+    setCrmStore(new MemoryCrmStore());
+    const preset = CRITERIA_PRESETS.find((entry) => entry.id === "tired-landlord")!;
+    const search = await createSavedSearch({
+      name: preset.name,
+      description: null,
+      criteria: preset.criteria,
+      ownerId: null,
+      notifyInApp: true,
+      notifyEmail: false,
+      notifySms: false,
+    });
+
+    await pass(search.id, "run-A", match("2003-11-26", "hash-1"));
+
+    // The artifact moves on: a real change, one alert.
+    const first = await pass(search.id, "run-B", match(null, "hash-2"));
+    expect(first.alertsCreated).toBe(1);
+
+    // The same pass runs again - a timeout retried, a workflow re-dispatched -
+    // over the same artifact. The alert id is derived from the logical pass
+    // rather than the attempt, so this writes the same document rather than a
+    // second one, and nobody is told twice about one change.
+    const retry = await pass(search.id, "run-B", match(null, "hash-2"));
+    expect(retry.alertsCreated).toBe(0);
+    expect(await listAlerts({ limit: 50 })).toHaveLength(1);
+  });
+
+  it("is idempotent whoever repeats it, not just the same trigger", async () => {
+    setCrmStore(new MemoryCrmStore());
+    const preset = CRITERIA_PRESETS.find((entry) => entry.id === "tired-landlord")!;
+    const search = await createSavedSearch({
+      name: preset.name,
+      description: null,
+      criteria: preset.criteria,
+      ownerId: null,
+      notifyInApp: true,
+      notifyEmail: false,
+      notifySms: false,
+    });
+    await pass(search.id, "run-A", match("2003-11-26", "hash-1"));
+
+    const cron = await evaluateAndAlert({
+      trigger: "cron",
+      pipelineRunId: "run-B",
+      dataSource: {
+        kind: "t",
+        location: "t",
+        rowCount: 1,
+        isSample: false,
+        artifactRunId: "run-B",
+      },
+      evaluations: [
+        { savedSearchId: search.id, matched: 1, rows: [match(null, "hash-2")], truncated: false },
+      ],
+    });
+    expect(cron.alertsCreated).toBe(1);
+
+    // A browser pass racing the cron over the same generation finds the same
+    // change. Keyed on the generation rather than the trigger, it writes the
+    // same document instead of telling the same person twice.
+    const browser = await evaluateAndAlert({
+      trigger: "browser",
+      pipelineRunId: "run-B",
+      dataSource: {
+        kind: "t",
+        location: "t",
+        rowCount: 1,
+        isSample: false,
+        artifactRunId: "run-B",
+      },
+      evaluations: [
+        { savedSearchId: search.id, matched: 1, rows: [match(null, "hash-2")], truncated: false },
+      ],
+    });
+    expect(browser.alertsCreated).toBe(0);
+    expect(await listAlerts({ limit: 50 })).toHaveLength(1);
+  });
+});

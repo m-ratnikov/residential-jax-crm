@@ -146,6 +146,52 @@ configured, and seeds what it needs first, so it is a single command against any
 of the three rather than a script that assumes somebody already ran the seed in
 the same process.
 
+### Who can write, on whose credential
+
+This deployment is public, has no login, and holds a write token. Those three
+facts together mean it writes on the owner's credential for whoever shows up,
+and no amount of configuration changes that while the runtime stays open. A
+login would close it and would also make the runtime unusable for its actual
+purpose, so what is here is a set of bounds, and
+[`lib/api-auth.ts`](lib/api-auth.ts) states them and their limits rather than
+implying more:
+
+- **A kill switch.** `CRM_READ_ONLY=1` refuses every mutation. An environment
+  variable rather than a code change, so a deployment under abuse is frozen from
+  a dashboard in seconds without a redeploy and without taking search offline.
+- **A lock, for deployments that are not demos.** `CRM_WRITE_TOKEN` makes
+  mutations require it. Unset here, which is what keeps a reviewer's browser
+  working with no setup.
+- **A same-origin gate.** A mutation must carry an `Origin` naming this
+  deployment and must not announce itself as cross-site. This is real protection
+  against one thing - another page driving a visitor's browser into writing here
+  - because a browser sets both headers itself and page script cannot forge
+    either. It also turns `curl -X POST` into a 403.
+- **Rate limits per address**, tighter on a matcher pass, an outreach campaign
+  or a simulation.
+
+**What it does not stop**, exactly: a caller who adds `-H "Origin: <this
+deployment>"` is through the gate, because that step reads a header and only a
+browser is obliged to be truthful in it. What remains is the rate limit, and
+that limiter counts per serverless instance rather than globally. So the
+boundary is: no cross-site writes, no drive-by writes from a bare request, and a
+bounded rate of writes for someone who reads the source and decides to write
+anyway.
+
+### The store survives being rate limited
+
+GitHub counts its 5,000 requests an hour **per user**, not per token, so a local
+script and the deployment draw on one budget. Two things keep the CRM inside it:
+the whole branch is read in a single `git/trees` request rather than a directory
+listing plus a blob per document, and that request is conditional - a `304 Not
+Modified` costs nothing, measured, so polling for changes is free and the budget
+is spent only when something is written.
+
+When it is exhausted anyway, a refused read serves the last good copy and the UI
+says it is showing state a few minutes old. A CRM answering 500 to its own board
+with the data perfectly intact is a worse outcome than one that is slightly
+behind.
+
 ---
 
 ## How the notification loop actually works
@@ -255,6 +301,47 @@ The rationale quotes the values behind the number:
 
 > held 35 years (+33); roof about 53 years old, estimated from year built (+33);
 > absentee owner, no homestead exemption (+33).
+
+### What breaks a tie, and why it mattered more than it looks
+
+With no ranking signals set, every row scores 100 - so the tiebreak decides the
+entire default list. It used to be `assessed_value ASC`, and the app opened on
+fifteen consecutive $1 condo shells at 514 LOMAX ST: the exact failure the
+dwelling filter exists to prevent, in the first screenshot anyone takes.
+
+It now breaks on **priced-dwelling class, then `property_id`**. Priced is
+measured per square foot rather than as an invented floor, and the threshold
+came from the data: of the 68,403 sample dwellings that clear the existing
+guard, **zero** are assessed below $1/sqft and the cheapest genuine house is
+$1.70/sqft, so a dollar-assessed shell misses by three orders of magnitude. It
+orders, it never filters. `property_id` after that, because a tie means the
+criteria did not distinguish the rows and choosing cheapest _or_ dearest is the
+same class of mistake - and because a stable order makes paging and the tracked
+set deterministic.
+
+Sorting descending was tried and rejected: it leads with $75M apartment
+complexes, which for an acquisitions team is worse than the shells. `Cheapest`
+survives as an explicit sort, because that is somebody answering a question
+rather than a machine guessing at one.
+
+The second-order effect is the one worth knowing. **The same ORDER BY decides
+which matches the scheduler watches**, since the tracked set is the top
+`TRACKED_MATCH_CAP` by that order. An unranked saved search was therefore
+watching the two thousand cheapest rows in Duval rather than a sample of what it
+matched.
+
+### The cap is on screen, not just in the code
+
+A thesis can match 151,856 parcels. The matcher fingerprints and watches the
+best 2,000 of them, because storing a snapshot of every match on the search
+document and diffing all of them every thirty minutes is not a trade worth
+making for the fifty-thousandth best match.
+
+The cost is real: **a change to a parcel ranked below the cap raises nothing,
+and never will.** Undisclosed that is a silent lie about what the notifier
+covers, so it is disclosed where the number is read - under the match count
+before you press save, and beside `Matched last pass` on every saved search that
+exceeded it.
 
 ---
 

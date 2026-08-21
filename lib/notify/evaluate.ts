@@ -153,13 +153,18 @@ export interface MatcherResult {
  * - Delivery itself is at-least-once. A crash between `deliverAlert` returning
  *   and the alert document being written loses the record of a notification that
  *   was already sent, and the retry will send it again.
- * - Two different triggers over the same artifact are two logical passes and are
- *   keyed apart on purpose, so a manual "check now" pressed after a cron pass
- *   still tells the person who pressed it what it found.
+ * The trigger is deliberately NOT part of the key. It was, on the reasoning that
+ * a manual "check now" after a cron pass is a different logical pass - but a
+ * second pass over an unchanged artifact can only differ if the read was
+ * unstable, and that case is already suppressed above. So including the trigger
+ * bought nothing and cost the guarantee: it meant a cron pass and a browser pass
+ * racing over the same generation could each raise the same change under
+ * different ids. Keyed on the generation alone, any pass repeating any other
+ * pass's work over the same data is a no-op, whoever started it.
  */
 function logicalPassId(input: EvaluateInput, attemptId: string): string {
   const generation = input.dataSource.artifactRunId ?? input.pipelineRunId;
-  return generation ? `${input.trigger}-${generation}` : attemptId;
+  return generation ?? attemptId;
 }
 
 export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherResult> {
