@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt36saff7gxrwi5b",
-  "ownerInterest": null,
+  "ownerInterest": "Went to market",
   "ownerNameSnapshot": "KENT SHIRLEY A",
   "parcelIdentifier": "1747545320R",
   "propertyId": "1747545320R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:51:36.846Z"
+  "updatedAt": "2026-08-21T16:51:37.826Z"
 }
