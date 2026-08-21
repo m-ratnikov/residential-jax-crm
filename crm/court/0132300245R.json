@@ -1,0 +1,18 @@
+{
+  "id": "0132300245R",
+  "parcelIdentifier": "0132300245R",
+  "propertyId": "0132300245R",
+  "records": [
+    {
+      "amount": 2750,
+      "caseNumber": "2026-SIM-00245R-2",
+      "caseType": "code_enforcement",
+      "fetchedAt": "2026-08-21T21:14:24.577Z",
+      "filedDate": "2026-08-21",
+      "partyName": "SMITHERMAN SCOTT TRACY",
+      "sourceSystem": "simulated_court_feed",
+      "sourceUrl": null,
+      "status": "open"
+    }
+  ]
+}
