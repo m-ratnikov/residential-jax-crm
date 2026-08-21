@@ -47,6 +47,7 @@ interface OpportunityListRow {
     addressLine: string;
     stage: string;
     matchScore: number | null;
+    assessedValue: number | null;
     ownerNameSnapshot: string | null;
     askingPrice: number | null;
     offerPrice: number | null;
@@ -448,6 +449,12 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
           address: row.opportunity.addressLine,
           stage: row.opportunity.stage,
           match_score: row.opportunity.matchScore,
+          // Carried here rather than left for the model to join. Without it a
+          // question like "total assessed value of the live ones" has no number
+          // in reach, and a model that will not admit that estimates one: the
+          // first run of this answered "approximately $420,000" with every row
+          // marked "(value not provided)". The store already holds the value.
+          assessed_value: row.opportunity.assessedValue,
           owner_name: row.owner?.name ?? row.opportunity.ownerNameSnapshot,
           assignee: row.assignee?.name ?? null,
           asking_price: row.opportunity.askingPrice,
