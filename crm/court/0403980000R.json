@@ -1,0 +1,18 @@
+{
+  "id": "0403980000R",
+  "parcelIdentifier": "0403980000R",
+  "propertyId": "0403980000R",
+  "records": [
+    {
+      "amount": 12400,
+      "caseNumber": "2026-SIM-80000R-1",
+      "caseType": "lien",
+      "fetchedAt": "2026-08-21T21:14:23.874Z",
+      "filedDate": "2026-08-21",
+      "partyName": "MCCLAIN GLORIA J",
+      "sourceSystem": "simulated_court_feed",
+      "sourceUrl": null,
+      "status": "open"
+    }
+  ]
+}
