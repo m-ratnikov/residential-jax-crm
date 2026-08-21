@@ -1,0 +1,68 @@
+{
+  "alertsCreated": 31,
+  "alertsSuppressed": 1675,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-parquet",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "isSample": false,
+      "kind": "duckdb-parquet",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 25,
+        "alertsSuppressed": 1675,
+        "evaluated": 2000,
+        "leftMatches": 1698,
+        "matched": 67399,
+        "name": "Transit infill",
+        "newMatches": 1698,
+        "savedSearchId": "0mt3hhjiol0ahbj5v",
+        "seeded": false,
+        "truncated": true,
+        "updatedMatches": 2
+      },
+      {
+        "alertsCreated": 3,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 0,
+        "matched": 151856,
+        "name": "Aging roof, entry price band",
+        "newMatches": 0,
+        "savedSearchId": "0mt3hhiquyk2xlkd7",
+        "seeded": false,
+        "truncated": true,
+        "updatedMatches": 3
+      },
+      {
+        "alertsCreated": 3,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 0,
+        "matched": 10209,
+        "name": "Tired landlord",
+        "newMatches": 0,
+        "savedSearchId": "0mt3hhi1i9fwbavl7",
+        "seeded": false,
+        "truncated": true,
+        "updatedMatches": 3
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-21T22:08:19.567Z",
+  "id": "0mt3i33e4zvncvswg",
+  "notificationsSent": 37,
+  "pipelineRunId": "01M0HZCKVT3PS6GMFV9CWV2M8V",
+  "pipelineRunIsNew": false,
+  "pipelineRunStartedAt": "2026-08-21 10:55:39.9",
+  "propertiesEvaluated": 6000,
+  "searchesEvaluated": 3,
+  "startedAt": "2026-08-21T22:07:53.498Z",
+  "trigger": "cron"
+}
