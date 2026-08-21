@@ -1,0 +1,68 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-08-21T20:41:44.998Z",
+  "dismissedAt": null,
+  "id": "0mt3f0bhfbb2wyoyq__0mt36wll7p0kdeftc__0010090007R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt3f0bhfbb2wyoyq",
+  "notifications": [
+    {
+      "body": "15450 FOREST TRAIL RD, JACKSONVILLE, 32234 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 99 / 100\nWhy: roof about 64 years old, estimated from year built (+50); assessed at $82,508 (+49).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: STARLING TERRY LAMAR ET AL\nAssessed value: $82,508\nParcel: 0010090007R\n\nTriggered by pipeline run 01M0HZCKVT3PS6GMFV9CWV2M8V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-21T20:41:52.096Z",
+      "id": "0mt3f0gkgk2wok8b1",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-21T20:41:52.096Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 15450 FOREST TRAIL RD, JACKSONVILLE, 32234"
+    },
+    {
+      "body": "15450 FOREST TRAIL RD, JACKSONVILLE, 32234 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 99 / 100\nWhy: roof about 64 years old, estimated from year built (+50); assessed at $82,508 (+49).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: STARLING TERRY LAMAR ET AL\nAssessed value: $82,508\nParcel: 0010090007R\n\nTriggered by pipeline run 01M0HZCKVT3PS6GMFV9CWV2M8V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-21T20:41:52.096Z",
+      "id": "0mt3f0gkgu26qpiuq",
+      "providerMessageId": "sim_email_980bf6b9d714c5e93be1",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-21T20:41:52.096Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 15450 FOREST TRAIL RD, JACKSONVILLE, 32234"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0HZCKVT3PS6GMFV9CWV2M8V",
+  "propertyId": "0010090007R",
+  "propertySnapshot": {
+    "address": "15450 FOREST TRAIL RD, JACKSONVILLE, 32234",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32234",
+    "assessedValue": 82508,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.1915085,
+    "longitude": -81.9590443,
+    "ownerName": "STARLING TERRY LAMAR ET AL",
+    "ownerOccupied": true,
+    "propertyId": "0010090007R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0K0NDCE8Z9ZDXNT9DR8ZM9A",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 64,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 27
+  },
+  "rationale": "roof about 64 years old, estimated from year built (+50); assessed at $82,508 (+49).",
+  "readAt": null,
+  "savedSearchId": "0mt36wll7p0kdeftc",
+  "score": 99.3
+}
