@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt361g5jw31ita5n",
+      "body": "Second on the same street as an existing deal. Worth a letter.",
+      "createdAt": "2026-08-21T16:31:18.879Z",
+      "id": "0mt3628v3d372rrxp"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3626mbgmpv4k1t",
@@ -62,5 +69,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:31:17.961Z"
+  "updatedAt": "2026-08-21T16:31:18.879Z"
 }
