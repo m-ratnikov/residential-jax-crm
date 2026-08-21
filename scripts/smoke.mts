@@ -110,10 +110,16 @@ async function main(): Promise<void> {
   await page.goto(`${target}/opportunities`, { waitUntil: "domcontentloaded", timeout: 60_000 });
 
   // The board is the default view and the table is behind a toggle, so read the
-  // count the page itself reports rather than counting DOM rows.
+  // count the page itself reports rather than counting DOM rows. Polled rather
+  // than read once: "0 of 0 shown" renders before the fetch resolves, so a
+  // single read is a race this loses about half the time.
   const shown = page.getByText(/[0-9]+ of [0-9]+ shown/).first();
-  await shown.waitFor({ state: "visible", timeout: 60_000 }).catch(() => undefined);
-  const shownText = ((await shown.textContent().catch(() => "")) ?? "").trim();
+  let shownText = "";
+  for (let attempt = 0; attempt < 30; attempt += 1) {
+    shownText = ((await shown.textContent().catch(() => "")) ?? "").trim();
+    if (/^[1-9]/.test(shownText)) break;
+    await page.waitForTimeout(1_000);
+  }
   const deals = Number(shownText.split(" of ")[0]);
   check("the acquisition board has worked deals", deals > 0, shownText || "no count");
 
