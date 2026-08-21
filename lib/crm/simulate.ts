@@ -25,14 +25,15 @@
 
 import { randomUUID } from "node:crypto";
 
-import { eq } from "drizzle-orm";
-
 import { OVERRIDABLE_COLUMNS, type OverridableColumn } from "@/lib/data/overlay";
 import { logEvent } from "@/lib/notify/log";
-import { db } from "./db";
-import { courtRecords, simulatedChanges } from "./schema";
+import { crmStore } from "./db";
+import { nowIso, type CourtDoc, type SimulatedDoc } from "./documents";
 
 const OVERRIDABLE = new Set<string>(OVERRIDABLE_COLUMNS);
+
+/** Marks a filing as simulated so clearing can strip exactly those. */
+export const SIMULATED_COURT_SOURCE = "simulated_court_feed";
 
 export type SimulationKind = "court_filing" | "roll_movement";
 
@@ -77,30 +78,41 @@ async function applyCourtFilings(
   targets: readonly SimulationTarget[],
   runId: string,
 ): Promise<SimulationChange[]> {
-  const database = db();
+  const store = crmStore();
   const changes: SimulationChange[] = [];
-  const filedDate = new Date();
+  const filedDate = nowIso().slice(0, 10);
 
   for (const [index, target] of targets.entries()) {
     const caseType = COURT_CASE_TYPES[index % COURT_CASE_TYPES.length];
     if (!caseType) continue;
-    const caseNumber = `${filedDate.getFullYear()}-SIM-${target.propertyId.slice(-6)}-${index}`;
+    const caseNumber = `${filedDate.slice(0, 4)}-SIM-${target.propertyId.slice(-6)}-${index}`;
 
-    await database
-      .insert(courtRecords)
-      .values({
-        propertyId: target.propertyId,
-        parcelIdentifier: target.parcelIdentifier ?? null,
-        caseNumber,
-        caseType: caseType.type,
-        filedDate,
-        partyName: target.ownerName ?? null,
-        amount: caseType.amount,
-        status: "open",
-        sourceSystem: "simulated_court_feed",
-        sourceUrl: null,
-      })
-      .onConflictDoNothing();
+    // One court document per parcel, holding its filings. Appending rather than
+    // replacing, so a simulation never erases a real filing that is already
+    // recorded against the same parcel.
+    const existing = await store.get<CourtDoc>("court", target.propertyId);
+    const records = existing?.records ?? [];
+    if (records.some((record) => record.caseNumber === caseNumber)) continue;
+
+    await store.put<CourtDoc>("court", {
+      id: target.propertyId,
+      propertyId: target.propertyId,
+      parcelIdentifier: target.parcelIdentifier ?? existing?.parcelIdentifier ?? null,
+      records: [
+        ...records,
+        {
+          caseNumber,
+          caseType: caseType.type,
+          filedDate,
+          partyName: target.ownerName ?? null,
+          amount: caseType.amount,
+          status: "open",
+          sourceSystem: SIMULATED_COURT_SOURCE,
+          sourceUrl: null,
+          fetchedAt: nowIso(),
+        },
+      ],
+    });
 
     changes.push({
       propertyId: target.propertyId,
@@ -118,7 +130,7 @@ async function applyRollMovements(
   targets: readonly SimulationTarget[],
   runId: string,
 ): Promise<SimulationChange[]> {
-  const database = db();
+  const store = crmStore();
   const changes: SimulationChange[] = [];
   const thisYear = new Date().getFullYear();
 
@@ -193,21 +205,23 @@ async function applyRollMovements(
       }
     }
 
+    // One simulated document per parcel, holding every column it overrides.
+    const values: Record<string, string | null> = {};
     for (const write of writes) {
       if (!OVERRIDABLE.has(write.column)) continue;
-      await database
-        .insert(simulatedChanges)
-        .values({
-          propertyId: target.propertyId,
-          runId,
-          column: write.column,
-          value: write.value,
-          label: write.label,
-        })
-        .onConflictDoUpdate({
-          target: [simulatedChanges.propertyId, simulatedChanges.column],
-          set: { value: write.value, runId, label: write.label },
-        });
+      values[write.column] = write.value;
+    }
+
+    if (Object.keys(values).length) {
+      const existing = await store.get<SimulatedDoc>("simulated", target.propertyId);
+      await store.put<SimulatedDoc>("simulated", {
+        id: target.propertyId,
+        propertyId: target.propertyId,
+        runId,
+        label: writes[0]?.label ?? null,
+        values: { ...(existing?.values ?? {}), ...values },
+        createdAt: existing?.createdAt ?? nowIso(),
+      });
     }
 
     const headline = writes.find((write) => write.detail);
@@ -237,19 +251,24 @@ export async function applySimulation(
 
 /** Remove every simulated change and every simulated court filing. */
 export async function clearSimulation(): Promise<{ changes: number; courtRecords: number }> {
-  const database = db();
-  const removedChanges = await database
-    .delete(simulatedChanges)
-    .returning({ id: simulatedChanges.id });
-  const removedCourt = await database
-    .delete(courtRecords)
-    .where(eq(courtRecords.sourceSystem, "simulated_court_feed"))
-    .returning({ id: courtRecords.id });
+  const store = crmStore();
 
-  logEvent("simulate.cleared", {
-    changes: removedChanges.length,
-    courtRecords: removedCourt.length,
-  });
+  const simulated = await store.list<SimulatedDoc>("simulated");
+  for (const doc of simulated) await store.remove("simulated", doc.id);
 
-  return { changes: removedChanges.length, courtRecords: removedCourt.length };
+  // Court documents can hold real filings alongside simulated ones, so this
+  // strips the simulated records rather than deleting the document.
+  const court = await store.list<CourtDoc>("court");
+  let removedRecords = 0;
+
+  for (const doc of court) {
+    const kept = doc.records.filter((record) => record.sourceSystem !== SIMULATED_COURT_SOURCE);
+    if (kept.length === doc.records.length) continue;
+    removedRecords += doc.records.length - kept.length;
+    if (kept.length) await store.put<CourtDoc>("court", { ...doc, records: kept });
+    else await store.remove("court", doc.id);
+  }
+
+  logEvent("simulate.cleared", { changes: simulated.length, courtRecords: removedRecords });
+  return { changes: simulated.length, courtRecords: removedRecords };
 }

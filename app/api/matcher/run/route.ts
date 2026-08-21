@@ -16,12 +16,10 @@
  * be checked without triggering work.
  */
 
-import { desc } from "drizzle-orm";
 import { z } from "zod";
 
 import { fail, handleError, matcherTokenValid, ok, readJson } from "@/lib/api";
-import { db } from "@/lib/crm/db";
-import { matcherRuns } from "@/lib/crm/schema";
+import { listMatcherRuns } from "@/lib/crm/repo";
 import { evaluateAndAlert } from "@/lib/notify/evaluate";
 import { advanceOutreach } from "@/lib/notify/outreach";
 
@@ -51,7 +49,7 @@ const bodySchema = z.object({
   evaluations: z
     .array(
       z.object({
-        savedSearchId: z.string().uuid(),
+        savedSearchId: z.string().min(1),
         matched: z.number().int().min(0),
         rows: z.array(matchSchema).max(5_000),
         truncated: z.boolean().default(false),
@@ -63,12 +61,10 @@ const bodySchema = z.object({
 
 export async function GET(): Promise<Response> {
   try {
-    const rows = await db()
-      .select()
-      .from(matcherRuns)
-      .orderBy(desc(matcherRuns.startedAt))
-      .limit(10);
-    return ok({ runs: rows, tokenRequired: Boolean(process.env.MATCHER_TOKEN?.trim()) });
+    return ok({
+      runs: await listMatcherRuns(10),
+      tokenRequired: Boolean(process.env.MATCHER_TOKEN?.trim()),
+    });
   } catch (error: unknown) {
     return handleError("GET /api/matcher/run", error);
   }
@@ -82,7 +78,7 @@ export async function POST(request: Request): Promise<Response> {
 
     const input = bodySchema.parse(await readJson(request));
 
-    const result = await evaluateAndAlert(db(), {
+    const result = await evaluateAndAlert({
       trigger: input.trigger,
       pipelineRunId: input.pipelineRunId ?? null,
       pipelineRunStartedAt: input.pipelineRunStartedAt ?? null,

@@ -14,10 +14,10 @@
 import { z } from "zod";
 
 import { handleError, ok, readJson } from "@/lib/api";
-import { listCampaigns } from "@/lib/crm/repo";
 import {
   advanceOutreach,
   fastForwardOutreach,
+  listAllOutreach,
   OUTREACH_TEMPLATES,
   sendOutreach,
 } from "@/lib/notify/outreach";
@@ -28,11 +28,11 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 120;
 
 const sendSchema = z.object({
-  opportunityIds: z.array(z.string().uuid()).min(1).max(500),
+  opportunityIds: z.array(z.string().min(1)).min(1).max(500),
   channel: z.enum(OUTREACH_CHANNELS),
   templateId: z.string().min(1),
   campaignName: z.string().max(200).optional(),
-  createdById: z.string().uuid().nullish(),
+  createdById: z.string().nullish(),
 });
 
 const advanceSchema = z.object({ fastForward: z.boolean().default(false) });
@@ -46,7 +46,7 @@ export async function GET(): Promise<Response> {
         channels: template.channels,
         description: template.description,
       })),
-      campaigns: await listCampaigns(),
+      messages: await listAllOutreach(),
     });
   } catch (error: unknown) {
     return handleError("GET /api/outreach", error);

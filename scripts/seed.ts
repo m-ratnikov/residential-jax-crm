@@ -12,8 +12,8 @@
  * opportunity points at a parcel that exists in the published data, and every
  * value shown about that parcel is read from it.
  *
- *   DATABASE_URL=postgres://... pnpm db:seed
- *   DATABASE_URL=postgres://... pnpm db:seed -- --reset
+ *   PROPERTY_DATA_URL=... pnpm db:seed
+ *   PROPERTY_DATA_URL=... pnpm db:seed -- --reset
  */
 
 import { readFileSync } from "node:fs";
@@ -21,29 +21,19 @@ import { resolve } from "node:path";
 
 import { CRITERIA_PRESETS, type CriteriaSet } from "@/lib/criteria/types";
 import { getPropertyDataSource } from "@/lib/data/source";
-import { db } from "@/lib/crm/db";
-import {
-  alerts,
-  courtRecords,
-  matcherRuns,
-  notes,
-  notifications,
-  opportunities,
-  outreachCampaigns,
-  outreachEvents,
-  outreachMessages,
-  owners,
-  savedSearches,
-  searchMatches,
-  simulatedChanges,
-  stageEvents,
-  tasks,
-  teamMembers,
-} from "@/lib/crm/schema";
-import { createOpportunityFromSnapshot, updateOpportunity } from "@/lib/crm/repo";
-import { sendOutreach } from "@/lib/notify/outreach";
-import { alertSnapshot, runMatcher } from "@/lib/notify/matcher";
 import { displayAddress } from "@/lib/data/map";
+import { crmStore, storeStatus } from "@/lib/crm/db";
+import { COLLECTIONS } from "@/lib/crm/store";
+import {
+  addNote,
+  addTask,
+  createOpportunityFromSnapshot,
+  createSavedSearch,
+  createTeamMember,
+  updateOpportunity,
+} from "@/lib/crm/repo";
+import { alertSnapshot, runMatcher } from "@/lib/notify/matcher";
+import { sendOutreach } from "@/lib/notify/outreach";
 import type { AcquisitionStage } from "@/lib/notify/types";
 
 function loadEnvFile(): void {
@@ -100,7 +90,7 @@ const JOURNEYS: {
   },
   {
     stage: "identified",
-    note: "Second in the same street as an existing deal. Worth a letter.",
+    note: "Second on the same street as an existing deal. Worth a letter.",
     outreach: "direct_mail",
   },
   {
@@ -156,76 +146,61 @@ const JOURNEYS: {
 ];
 
 async function reset(): Promise<void> {
-  const database = db();
-  // Order matters: children before parents, since some references are set null
-  // rather than cascade.
-  await database.delete(outreachEvents);
-  await database.delete(outreachMessages);
-  await database.delete(outreachCampaigns);
-  await database.delete(notifications);
-  await database.delete(alerts);
-  await database.delete(searchMatches);
-  await database.delete(matcherRuns);
-  await database.delete(tasks);
-  await database.delete(notes);
-  await database.delete(stageEvents);
-  await database.delete(opportunities);
-  await database.delete(owners);
-  await database.delete(savedSearches);
-  await database.delete(simulatedChanges);
-  await database.delete(courtRecords);
-  await database.delete(teamMembers);
+  const store = crmStore();
+  for (const collection of COLLECTIONS) await store.clear(collection);
   console.log("cleared existing CRM state");
 }
 
 async function main(): Promise<void> {
   loadEnvFile();
 
-  if (!process.env.DATABASE_URL?.trim()) {
-    console.error("DATABASE_URL is not set. See .env.example.");
+  const status = storeStatus();
+  console.log(`crm store: ${status.kind} (${status.location})`);
+
+  if (!status.writable) {
+    console.error("The store is read only. Set CRM_STORE_TOKEN, or DATABASE_URL for Postgres.");
     process.exit(2);
+  }
+  if (status.ephemeral) {
+    console.warn(
+      "WARNING: the store is in-process only, so anything seeded here disappears when this script exits.",
+    );
   }
 
   if (process.argv.includes("--reset")) await reset();
 
-  const database = db();
   const { source } = getPropertyDataSource();
   const info = await source.info();
   console.log(`seeding against ${info.label}: ${info.rowCount.toLocaleString("en-US")} parcels`);
 
-  // Team
-  const members = await database.insert(teamMembers).values(TEAM).returning();
+  const members = [];
+  for (const member of TEAM) members.push(await createTeamMember(member));
   console.log(`created ${members.length} team members`);
 
-  // Saved searches
   const created: { id: string; criteria: CriteriaSet }[] = [];
   for (const [index, watched] of WATCHED.entries()) {
     const preset = CRITERIA_PRESETS.find((entry) => entry.id === watched.presetId);
     if (!preset) continue;
-    const [row] = await database
-      .insert(savedSearches)
-      .values({
-        name: preset.name,
-        description: preset.description,
-        criteria: preset.criteria,
-        ownerId: members[index % members.length]?.id ?? null,
-        notifyInApp: true,
-        notifyEmail: watched.email,
-        notifySms: watched.sms,
-      })
-      .returning();
-    if (row) created.push({ id: row.id, criteria: preset.criteria });
+    const search = await createSavedSearch({
+      name: preset.name,
+      description: preset.description,
+      criteria: preset.criteria,
+      ownerId: members[index % members.length]?.id ?? null,
+      notifyInApp: true,
+      notifyEmail: watched.email,
+      notifySms: watched.sms,
+    });
+    created.push({ id: search.id, criteria: preset.criteria });
   }
   console.log(`saved ${created.length} criteria sets`);
 
-  // Baseline every saved search, so the board is populated but the alert feed
-  // is not full of parcels that have simply always matched.
+  // Baseline every saved search, so the board is populated but the alert feed is
+  // not full of parcels that have simply always matched.
   const baseline = await runMatcher(source, { trigger: "manual" });
   console.log(
     `baselined ${baseline.searchesEvaluated} searches over ${baseline.propertiesEvaluated.toLocaleString("en-US")} parcels`,
   );
 
-  // Opportunities, drawn from the top of the first saved search.
   const lead = created[0];
   if (!lead) {
     console.log("no saved searches to draw opportunities from");
@@ -246,8 +221,9 @@ async function main(): Promise<void> {
     const scored = matches.rows[index];
     if (!scored) break;
 
-    const assignee = members[index % members.length];
     const property = scored.property;
+    const assignee = members[index % members.length];
+
     const { opportunity } = await createOpportunityFromSnapshot({
       propertyId: property.propertyId,
       parcelIdentifier: property.parcelIdentifier,
@@ -281,17 +257,16 @@ async function main(): Promise<void> {
       "under_contract",
       "closed",
     ];
-    const target = journey.stage === "dead" ? "dead" : journey.stage;
     const steps =
-      target === "dead"
+      journey.stage === "dead"
         ? (["contacted", "dead"] as AcquisitionStage[])
-        : path.slice(1, path.indexOf(target) + 1);
+        : path.slice(1, path.indexOf(journey.stage) + 1);
 
     for (const step of steps) {
       await updateOpportunity(opportunity.id, {
         stage: step,
         actorId: assignee?.id ?? null,
-        stageNote: step === target ? journey.note : null,
+        stageNote: step === journey.stage ? journey.note : null,
       });
     }
 
@@ -303,18 +278,14 @@ async function main(): Promise<void> {
       assigneeId: assignee?.id ?? null,
     });
 
-    await database.insert(notes).values({
-      opportunityId: opportunity.id,
-      authorId: assignee?.id ?? null,
-      body: journey.note,
-    });
+    await addNote(opportunity.id, journey.note, assignee?.id ?? null);
 
     if (journey.task) {
-      await database.insert(tasks).values({
-        opportunityId: opportunity.id,
+      await addTask({
+        propertyId: opportunity.id,
         title: journey.task,
         assigneeId: assignee?.id ?? null,
-        dueAt: new Date(Date.now() + (index + 2) * 86_400_000),
+        dueAt: new Date(Date.now() + (index + 2) * 86_400_000).toISOString(),
       });
     }
 

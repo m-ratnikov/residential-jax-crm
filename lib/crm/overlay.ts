@@ -6,23 +6,18 @@
  * producing a genuine data movement rather than a staged notification. Both end
  * up in the same relation, so the criteria builder cannot tell them apart and
  * nothing about the alert path is special-cased for the demo.
- *
- * Without a CRM store there is no overlay, and court-derived criteria are
- * disabled in the filter panel rather than quietly matching nothing.
  */
-
-import { sql } from "drizzle-orm";
 
 import {
   courtDistressScore,
-  EMPTY_OVERLAY,
   OVERRIDABLE_COLUMNS,
   type CourtAggregate,
   type OverridableColumn,
   type Overlay,
   type PropertyOverride,
 } from "@/lib/data/overlay";
-import { tryDb } from "./db";
+import { crmStore } from "./db";
+import type { CourtDoc, SimulatedDoc } from "./documents";
 
 const OVERRIDABLE = new Set<string>(OVERRIDABLE_COLUMNS);
 
@@ -53,6 +48,9 @@ function parseValue(
   return raw;
 }
 
+/** A filing that is finished is not a distress signal any more. */
+const CLOSED_STATUSES = new Set(["dismissed", "satisfied", "closed"]);
+
 export interface OverlaySummary {
   overlay: Overlay;
   /** True when court predicates can be evaluated at all. */
@@ -64,87 +62,66 @@ export interface OverlaySummary {
 }
 
 export const EMPTY_OVERLAY_SUMMARY: OverlaySummary = {
-  overlay: EMPTY_OVERLAY,
+  overlay: { court: [], overrides: [] },
   courtDataAvailable: false,
   courtPropertyCount: 0,
   simulatedPropertyCount: 0,
   simulatedRunIds: [],
 };
 
-/**
- * Read both overlay sources in one round trip each.
- *
- * The aggregation is done in Postgres rather than in TypeScript because the
- * court table grows with filings while the aggregate stays one row per parcel,
- * and it is the aggregate the query needs.
- */
 export async function loadOverlay(): Promise<OverlaySummary> {
-  const database = tryDb();
-  if (!database) return EMPTY_OVERLAY_SUMMARY;
+  const store = crmStore();
 
-  const [courtRows, simulatedRows] = await Promise.all([
-    database.execute(sql`
-      SELECT
-        property_id,
-        count(*) FILTER (WHERE case_type = 'lien')             AS lien_count,
-        count(*) FILTER (WHERE case_type = 'foreclosure')      AS foreclosure_count,
-        count(*) FILTER (WHERE case_type = 'code_enforcement') AS code_enforcement_count,
-        count(*) FILTER (WHERE case_type = 'probate')          AS probate_count,
-        max(filed_date)                                        AS latest_filed
-      FROM court_records
-      WHERE property_id IS NOT NULL
-        AND coalesce(status, '') NOT IN ('dismissed', 'satisfied', 'closed')
-      GROUP BY property_id
-    `),
-    database.execute(sql`
-      SELECT property_id, run_id, "column", value
-      FROM simulated_changes
-      ORDER BY created_at
-    `),
-  ]);
+  let courtDocs: CourtDoc[] = [];
+  let simulatedDocs: SimulatedDoc[] = [];
+
+  try {
+    [courtDocs, simulatedDocs] = await Promise.all([
+      store.list<CourtDoc>("court"),
+      store.list<SimulatedDoc>("simulated"),
+    ]);
+  } catch {
+    // A store that cannot be read is a CRM without an overlay, not a broken
+    // search: the parcels are read in the browser and need none of this.
+    return EMPTY_OVERLAY_SUMMARY;
+  }
 
   const court: CourtAggregate[] = [];
-  for (const row of asRows(courtRows)) {
-    const propertyId = String(row["property_id"] ?? "");
-    if (!propertyId) continue;
-    const latest = row["latest_filed"];
-    const latestFilingDate =
-      latest instanceof Date
-        ? latest.toISOString().slice(0, 10)
-        : latest
-          ? String(latest).slice(0, 10)
-          : null;
+  for (const doc of courtDocs) {
+    const open = doc.records.filter(
+      (record) => !CLOSED_STATUSES.has((record.status ?? "").toLowerCase()),
+    );
+    if (!open.length) continue;
+
     const counts = {
-      lienCount: Number(row["lien_count"] ?? 0),
-      foreclosureCount: Number(row["foreclosure_count"] ?? 0),
-      codeEnforcementCount: Number(row["code_enforcement_count"] ?? 0),
-      probateCount: Number(row["probate_count"] ?? 0),
-      latestFilingDate,
+      lienCount: open.filter((record) => record.caseType === "lien").length,
+      foreclosureCount: open.filter((record) => record.caseType === "foreclosure").length,
+      codeEnforcementCount: open.filter((record) => record.caseType === "code_enforcement").length,
+      probateCount: open.filter((record) => record.caseType === "probate").length,
+      latestFilingDate:
+        open
+          .map((record) => record.filedDate)
+          .filter((date): date is string => Boolean(date))
+          .sort()
+          .at(-1) ?? null,
     };
+
     court.push({
-      propertyId,
+      propertyId: doc.propertyId,
       ...counts,
       distressScore: courtDistressScore(counts),
     });
   }
 
-  const byProperty = new Map<string, PropertyOverride>();
-  for (const row of asRows(simulatedRows)) {
-    const propertyId = String(row["property_id"] ?? "");
-    const column = String(row["column"] ?? "");
-    if (!propertyId || !OVERRIDABLE.has(column)) continue;
-    const typed = column as OverridableColumn;
-    const existing = byProperty.get(propertyId) ?? {
-      propertyId,
-      values: {},
-      runId: String(row["run_id"] ?? ""),
-    };
-    existing.values[typed] = parseValue(typed, row["value"] === null ? null : String(row["value"]));
-    existing.runId = String(row["run_id"] ?? existing.runId);
-    byProperty.set(propertyId, existing);
-  }
-
-  const overrides = [...byProperty.values()];
+  const overrides: PropertyOverride[] = simulatedDocs.map((doc) => {
+    const values: PropertyOverride["values"] = {};
+    for (const [column, raw] of Object.entries(doc.values)) {
+      if (!OVERRIDABLE.has(column)) continue;
+      const typed = column as OverridableColumn;
+      values[typed] = parseValue(typed, raw);
+    }
+    return { propertyId: doc.propertyId, values, runId: doc.runId };
+  });
 
   return {
     overlay: { court, overrides },
@@ -156,11 +133,4 @@ export async function loadOverlay(): Promise<OverlaySummary> {
     simulatedPropertyCount: overrides.length,
     simulatedRunIds: [...new Set(overrides.map((entry) => entry.runId).filter(Boolean))],
   };
-}
-
-/** Drizzle's execute() returns different shapes per driver; normalise to rows. */
-function asRows(result: unknown): Record<string, unknown>[] {
-  if (Array.isArray(result)) return result as Record<string, unknown>[];
-  const rows = (result as { rows?: unknown })?.rows;
-  return Array.isArray(rows) ? (rows as Record<string, unknown>[]) : [];
 }

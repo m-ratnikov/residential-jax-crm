@@ -11,16 +11,18 @@
  * and an alert raised from the app cannot differ.
  */
 
-import { and, eq, inArray, sql } from "drizzle-orm";
-
 import { criteriaSetSchema, type CriteriaSet } from "@/lib/criteria/types";
 import { materialSnapshot } from "@/lib/criteria/score";
 import { displayAddress } from "@/lib/data/map";
 import type { PropertyDataSource, ScoredProperty } from "@/lib/data/types";
 import { loadOverlay } from "@/lib/crm/overlay";
-import { db } from "@/lib/crm/db";
-import { alerts, savedSearches } from "@/lib/crm/schema";
-import { evaluateAndAlert, type MatcherResult, type SearchEvaluation } from "./evaluate";
+import { listSavedSearches } from "@/lib/crm/repo";
+import {
+  evaluateAndAlert,
+  TRACKED_MATCH_CAP,
+  type MatcherResult,
+  type SearchEvaluation,
+} from "./evaluate";
 import { logEvent } from "./log";
 
 export type { MatcherResult, SearchOutcome } from "./evaluate";
@@ -30,7 +32,7 @@ export type { MatcherResult, SearchOutcome } from "./evaluate";
  * broader than this is a browsing query rather than a watch list, and the pass
  * records that it was truncated rather than silently narrowing.
  */
-export const MATCH_EVALUATION_CAP = 5_000;
+export const MATCH_EVALUATION_CAP = TRACKED_MATCH_CAP;
 
 export type MatcherTrigger = "cron" | "manual" | "simulation";
 
@@ -91,7 +93,6 @@ export async function runMatcher(
   source: PropertyDataSource,
   options: MatcherOptions = {},
 ): Promise<MatcherResult> {
-  const database = db();
   const trigger = options.trigger ?? "cron";
 
   const [info, overlaySummary, runs] = await Promise.all([
@@ -106,17 +107,10 @@ export async function runMatcher(
   const latest = runs[0] ?? null;
   const pipelineRunId = simulated ?? latest?.runId ?? info.runId ?? null;
 
-  const searches = await database
-    .select()
-    .from(savedSearches)
-    .where(
-      options.savedSearchIds?.length
-        ? and(
-            eq(savedSearches.active, true),
-            inArray(savedSearches.id, [...options.savedSearchIds]),
-          )
-        : eq(savedSearches.active, true),
-    );
+  const all = await listSavedSearches();
+  const searches = options.savedSearchIds?.length
+    ? all.filter((search) => options.savedSearchIds?.includes(search.id))
+    : all.filter((search) => search.active);
 
   const evaluations: SearchEvaluation[] = [];
 
@@ -157,7 +151,7 @@ export async function runMatcher(
     }
   }
 
-  return evaluateAndAlert(database, {
+  return evaluateAndAlert({
     trigger,
     pipelineRunId,
     pipelineRunStartedAt: latest?.startedAt ?? null,
@@ -172,12 +166,4 @@ export async function runMatcher(
   });
 }
 
-/** Count of unread alerts, for the header badge. */
-export async function unreadAlertCount(): Promise<number> {
-  const database = db();
-  const [row] = await database
-    .select({ count: sql<number>`count(*)::int` })
-    .from(alerts)
-    .where(sql`${alerts.readAt} IS NULL AND ${alerts.dismissedAt} IS NULL`);
-  return row?.count ?? 0;
-}
+export { unreadAlertCount } from "@/lib/crm/repo";

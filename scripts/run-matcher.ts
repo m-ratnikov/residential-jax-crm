@@ -20,7 +20,7 @@ import { resolve } from "node:path";
 
 import { getPropertyDataSource } from "@/lib/data/source";
 import { dataConfig } from "@/lib/data/config";
-import { hasDatabase } from "@/lib/crm/db";
+import { storeStatus } from "@/lib/crm/db";
 import { runMatcher } from "@/lib/notify/matcher";
 import { advanceOutreach } from "@/lib/notify/outreach";
 
@@ -54,8 +54,19 @@ function summarise(lines: string[]): void {
 async function main(): Promise<void> {
   loadEnvFile();
 
-  if (!hasDatabase()) {
-    console.error("DATABASE_URL is not set, so there are no saved searches to evaluate.");
+  const store = storeStatus();
+  console.log(`crm store: ${store.kind} (${store.location})`);
+
+  if (!store.writable) {
+    console.error("The CRM store is read only, so a pass could not record anything.");
+    process.exit(2);
+  }
+  if (store.ephemeral) {
+    // A scheduled pass against an in-process store would evaluate an empty set
+    // and record a pass that proves nothing.
+    console.error(
+      "The CRM store is in-process only, so a scheduled pass has no saved searches to evaluate. Set CRM_STORE_REPO or DATABASE_URL.",
+    );
     process.exit(2);
   }
 

@@ -19,13 +19,29 @@
  * not it fired.
  */
 
-import { and, eq, inArray } from "drizzle-orm";
-
 import { changedFields } from "@/lib/criteria/score";
-import type { CrmDatabase } from "@/lib/crm/db";
-import { alerts, matcherRuns, savedSearches, searchMatches } from "@/lib/crm/schema";
+import { crmStore } from "@/lib/crm/db";
+import {
+  newId,
+  nowIso,
+  type AlertDoc,
+  type MatcherRunDoc,
+  type MatchSnapshot,
+  type SavedSearchDoc,
+} from "@/lib/crm/documents";
+import { alertId, hasSeenPipelineRun } from "@/lib/crm/repo";
 import { deliverAlert } from "./deliver";
 import { logEvent } from "./log";
+
+/**
+ * How many matching parcels one saved search tracks between passes.
+ *
+ * The snapshot is what the diff compares against, so it has a real cost: it is
+ * stored on the search document and rewritten whenever it changes. A criteria
+ * set matching forty thousand parcels is a browsing query rather than a watch
+ * list, and the pass records that it capped rather than silently narrowing.
+ */
+export const TRACKED_MATCH_CAP = 2_000;
 
 /** One matched parcel, as produced by whichever engine evaluated the criteria. */
 export interface EvaluatedMatch {
@@ -45,7 +61,6 @@ export interface SearchEvaluation {
   savedSearchId: string;
   /** Total matching before any cap. */
   matched: number;
-  /** How many were actually returned and are present in `rows`. */
   rows: EvaluatedMatch[];
   truncated: boolean;
   error?: string;
@@ -98,48 +113,16 @@ export interface MatcherResult {
   error?: string;
 }
 
-/**
- * Diff every supplied evaluation against the stored snapshot, raise alerts, and
- * record the pass.
- */
-export async function evaluateAndAlert(
-  database: CrmDatabase,
-  input: EvaluateInput,
-): Promise<MatcherResult> {
-  const startedAt = input.now ?? new Date();
+export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherResult> {
+  const store = crmStore();
+  const startedAt = (input.now ?? new Date()).toISOString();
   const runId = input.pipelineRunId;
 
-  // "New" is what makes an alert attributable to a county refresh rather than
-  // to the matcher simply waking up.
-  const seen = runId
-    ? await database
-        .select({ id: matcherRuns.id })
-        .from(matcherRuns)
-        .where(eq(matcherRuns.pipelineRunId, runId))
-        .limit(1)
-    : [];
-  const pipelineRunIsNew = Boolean(runId) && seen.length === 0;
+  // "New" is what makes an alert attributable to a county refresh rather than to
+  // the matcher simply waking up.
+  const pipelineRunIsNew = runId ? !(await hasSeenPipelineRun(runId)) : false;
 
-  const [created] = await database
-    .insert(matcherRuns)
-    .values({
-      startedAt,
-      trigger: input.trigger,
-      pipelineRunId: runId,
-      pipelineRunStartedAt: input.pipelineRunStartedAt
-        ? new Date(input.pipelineRunStartedAt)
-        : null,
-      pipelineRunIsNew,
-      dataSourceKind: input.dataSource.kind,
-      dataSourceLocation: input.dataSource.location,
-      dataSourceRowCount: input.dataSource.rowCount,
-      dataSourceIsSample: input.dataSource.isSample,
-    })
-    .returning({ id: matcherRuns.id });
-
-  const matcherRunId = created?.id;
-  if (!matcherRunId) throw new Error("could not open a matcher run");
-
+  const matcherRunId = newId();
   const outcomes: SearchOutcome[] = [];
   let alertsCreated = 0;
   let alertsSuppressed = 0;
@@ -148,14 +131,8 @@ export async function evaluateAndAlert(
   let fatal: string | undefined;
 
   try {
-    const ids = input.evaluations.map((evaluation) => evaluation.savedSearchId);
-    const searches = ids.length
-      ? await database.select().from(savedSearches).where(inArray(savedSearches.id, ids))
-      : [];
-    const byId = new Map(searches.map((search) => [search.id, search]));
-
     for (const evaluation of input.evaluations) {
-      const search = byId.get(evaluation.savedSearchId);
+      const search = await store.get<SavedSearchDoc>("searches", evaluation.savedSearchId);
       if (!search) continue;
 
       const outcome: SearchOutcome = {
@@ -181,16 +158,11 @@ export async function evaluateAndAlert(
       try {
         propertiesEvaluated += evaluation.rows.length;
 
-        const previous = await database
-          .select()
-          .from(searchMatches)
-          .where(eq(searchMatches.savedSearchId, search.id));
-        const previousById = new Map(previous.map((row) => [row.propertyId, row]));
-
+        const previous = search.matches ?? {};
         // A search the matcher has never evaluated is seeded, not announced.
         // Otherwise saving "roofs over fifteen years" fires three hundred
         // thousand alerts about houses that have sat there for a decade.
-        const seeding = previous.length === 0;
+        const seeding = Object.keys(previous).length === 0;
         outcome.seeded = seeding;
 
         const pending: {
@@ -200,14 +172,14 @@ export async function evaluateAndAlert(
         }[] = [];
 
         for (const match of evaluation.rows) {
-          const before = previousById.get(match.propertyId);
+          const before = previous[match.propertyId];
           if (!before) {
             if (!seeding) {
               pending.push({ match, kind: "new_match", changed: [] });
               outcome.newMatches += 1;
             }
           } else if (before.matchHash !== match.matchHash) {
-            const changed = changedFieldsBetween(before.snapshot, match.snapshot);
+            const changed = changedFields(before.snapshot, match.snapshot);
             // A fingerprint that moved on no named field is an alert nobody can
             // act on, so it is counted but not raised.
             if (changed.length) {
@@ -222,29 +194,14 @@ export async function evaluateAndAlert(
         alertsSuppressed += outcome.alertsSuppressed;
 
         for (const item of toRaise) {
-          const [alert] = await database
-            .insert(alerts)
-            .values({
-              savedSearchId: search.id,
-              matcherRunId,
-              kind: item.kind,
-              propertyId: item.match.propertyId,
-              propertySnapshot: item.match.propertySnapshot,
-              score: item.match.score,
-              rationale: item.match.rationale,
-              changedFields: item.changed,
-              pipelineRunId: runId,
-            })
-            // Unique on (search, property, pass): a retry cannot double notify.
-            .onConflictDoNothing()
-            .returning({ id: alerts.id });
+          const id = alertId(matcherRunId, search.id, item.match.propertyId);
 
-          if (!alert) continue;
-          outcome.alertsCreated += 1;
-          alertsCreated += 1;
+          // The key is the constraint: a retried pass writes the same document
+          // rather than a second alert.
+          if (await store.get<AlertDoc>("alerts", id)) continue;
 
-          notificationsSent += await deliverAlert(database, {
-            alertId: alert.id,
+          const notifications = await deliverAlert({
+            alertId: id,
             search,
             kind: item.kind,
             changed: item.changed,
@@ -253,58 +210,57 @@ export async function evaluateAndAlert(
             rationale: item.match.rationale,
             propertySnapshot: item.match.propertySnapshot,
           });
+
+          await store.put<AlertDoc>("alerts", {
+            id,
+            savedSearchId: search.id,
+            matcherRunId,
+            kind: item.kind,
+            propertyId: item.match.propertyId,
+            propertySnapshot: item.match.propertySnapshot,
+            score: item.match.score,
+            rationale: item.match.rationale,
+            changedFields: item.changed,
+            pipelineRunId: runId,
+            readAt: null,
+            dismissedAt: null,
+            opportunityId: null,
+            createdAt: startedAt,
+            notifications,
+          });
+
+          outcome.alertsCreated += 1;
+          alertsCreated += 1;
+          notificationsSent += notifications.length;
         }
 
-        // Replace the snapshot with what was just observed.
-        const currentIds = new Set(evaluation.rows.map((row) => row.propertyId));
-        const gone = previous.filter((row) => !currentIds.has(row.propertyId));
-        outcome.leftMatches = gone.length;
-
-        if (gone.length) {
-          await database.delete(searchMatches).where(
-            and(
-              eq(searchMatches.savedSearchId, search.id),
-              inArray(
-                searchMatches.propertyId,
-                gone.map((row) => row.propertyId),
-              ),
-            ),
-          );
+        // Replace the snapshot with what was just observed. Capped, because this
+        // is stored on the document and rewritten whenever it changes.
+        const tracked = evaluation.rows.slice(0, TRACKED_MATCH_CAP);
+        const matches: Record<string, MatchSnapshot> = {};
+        for (const match of tracked) {
+          const before = previous[match.propertyId];
+          matches[match.propertyId] = {
+            matchHash: match.matchHash,
+            snapshot: match.snapshot,
+            score: match.score,
+            firstSeenAt: before?.firstSeenAt ?? startedAt,
+            lastSeenAt: startedAt,
+            lastRunId: runId,
+          };
         }
 
-        for (const match of evaluation.rows) {
-          await database
-            .insert(searchMatches)
-            .values({
-              savedSearchId: search.id,
-              propertyId: match.propertyId,
-              matchHash: match.matchHash,
-              snapshot: match.snapshot,
-              score: match.score,
-              lastSeenAt: startedAt,
-              lastRunId: runId,
-            })
-            .onConflictDoUpdate({
-              target: [searchMatches.savedSearchId, searchMatches.propertyId],
-              set: {
-                matchHash: match.matchHash,
-                snapshot: match.snapshot,
-                score: match.score,
-                lastSeenAt: startedAt,
-                lastRunId: runId,
-              },
-            });
-        }
+        outcome.leftMatches = Object.keys(previous).filter((id) => !matches[id]).length;
 
-        await database
-          .update(savedSearches)
-          .set({
-            lastEvaluatedAt: startedAt,
-            lastPipelineRunId: runId,
-            lastMatchCount: evaluation.matched,
-            updatedAt: startedAt,
-          })
-          .where(eq(savedSearches.id, search.id));
+        await store.put<SavedSearchDoc>("searches", {
+          ...search,
+          matches,
+          matchesTruncated: evaluation.rows.length > tracked.length,
+          lastEvaluatedAt: startedAt,
+          lastPipelineRunId: runId,
+          lastMatchCount: evaluation.matched,
+          updatedAt: startedAt,
+        });
       } catch (error: unknown) {
         outcome.error = error instanceof Error ? error.message : String(error);
         logEvent("matcher.search_failed", { savedSearchId: search.id, error: outcome.error });
@@ -317,21 +273,30 @@ export async function evaluateAndAlert(
     logEvent("matcher.failed", { error: fatal });
   }
 
-  const finishedAt = new Date();
+  const finishedAt = nowIso();
 
-  await database
-    .update(matcherRuns)
-    .set({
-      finishedAt,
-      searchesEvaluated: outcomes.length,
-      propertiesEvaluated,
-      alertsCreated,
-      alertsSuppressed,
-      notificationsSent,
-      detail: { outcomes, dataSource: input.dataSource },
-      error: fatal ?? null,
-    })
-    .where(eq(matcherRuns.id, matcherRunId));
+  // Written last and once, so the evidence row reflects the pass that happened
+  // rather than one that was still in progress.
+  await store.put<MatcherRunDoc>("matcher-runs", {
+    id: matcherRunId,
+    startedAt,
+    finishedAt,
+    trigger: input.trigger,
+    pipelineRunId: runId,
+    pipelineRunStartedAt: input.pipelineRunStartedAt ?? null,
+    pipelineRunIsNew,
+    dataSourceKind: input.dataSource.kind,
+    dataSourceLocation: input.dataSource.location,
+    dataSourceRowCount: input.dataSource.rowCount,
+    dataSourceIsSample: input.dataSource.isSample,
+    searchesEvaluated: outcomes.length,
+    propertiesEvaluated,
+    alertsCreated,
+    alertsSuppressed,
+    notificationsSent,
+    detail: { outcomes, dataSource: input.dataSource },
+    error: fatal ?? null,
+  });
 
   logEvent("matcher.finished", {
     matcherRunId,
@@ -341,7 +306,6 @@ export async function evaluateAndAlert(
     alertsCreated,
     alertsSuppressed,
     notificationsSent,
-    ms: finishedAt.getTime() - startedAt.getTime(),
   });
 
   return {
@@ -355,17 +319,8 @@ export async function evaluateAndAlert(
     alertsSuppressed,
     notificationsSent,
     outcomes,
-    startedAt: startedAt.toISOString(),
-    finishedAt: finishedAt.toISOString(),
+    startedAt,
+    finishedAt,
     error: fatal,
   };
-}
-
-/**
- * Which stored material fields differ. Works on the plain snapshot objects
- * rather than a PropertyRecord, because that is what crosses the wire.
- */
-function changedFieldsBetween(before: unknown, after: Record<string, unknown>): string[] {
-  const previous = (before ?? {}) as Record<string, unknown>;
-  return changedFields(previous, after as never);
 }

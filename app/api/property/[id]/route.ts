@@ -6,11 +6,8 @@
  * filings recorded against it, and whether it is already being worked.
  */
 
-import { desc, eq } from "drizzle-orm";
-
 import { handleError, ok } from "@/lib/api";
-import { tryDb } from "@/lib/crm/db";
-import { courtRecords, opportunities } from "@/lib/crm/schema";
+import { getOpportunity, listCourtRecords } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,28 +18,11 @@ export async function GET(
 ): Promise<Response> {
   try {
     const { id } = await context.params;
-    const database = tryDb();
-
-    if (!database) return ok({ opportunity: null, court: [] });
-
-    try {
-      const [opportunity] = await database
-        .select()
-        .from(opportunities)
-        .where(eq(opportunities.propertyId, id))
-        .limit(1);
-
-      const court = await database
-        .select()
-        .from(courtRecords)
-        .where(eq(courtRecords.propertyId, id))
-        .orderBy(desc(courtRecords.filedDate));
-
-      return ok({ opportunity: opportunity ?? null, court });
-    } catch {
-      // A configured but unmigrated store must not break the detail view.
-      return ok({ opportunity: null, court: [] });
-    }
+    const [opportunity, court] = await Promise.all([
+      getOpportunity(id).catch(() => null),
+      listCourtRecords(id).catch(() => null),
+    ]);
+    return ok({ opportunity, court: court?.records ?? [] });
   } catch (error: unknown) {
     return handleError("GET /api/property/[id]", error);
   }

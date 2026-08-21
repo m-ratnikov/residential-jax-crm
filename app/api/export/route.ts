@@ -149,7 +149,7 @@ export async function GET(request: Request): Promise<Response> {
             row.opportunity.ownerInterest,
             row.opportunity.nextStep,
             row.searchName,
-            row.opportunity.createdAt?.toISOString?.() ?? row.opportunity.createdAt,
+            row.opportunity.createdAt,
           ]),
         ),
         `duval-opportunities-${stamp}.csv`,

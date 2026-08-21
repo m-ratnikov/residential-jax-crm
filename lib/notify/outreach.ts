@@ -14,18 +14,16 @@
  * is pressed. Direct mail is slower than SMS on purpose.
  */
 
-import { and, eq, inArray, lte, sql } from "drizzle-orm";
-
 import { displayAddress } from "@/lib/data/map";
 import type { PropertyRecord } from "@/lib/data/types";
-import { db, type CrmDatabase } from "@/lib/crm/db";
+import { crmStore } from "@/lib/crm/db";
 import {
-  opportunities,
-  outreachCampaigns,
-  outreachEvents,
-  outreachMessages,
-  owners,
-} from "@/lib/crm/schema";
+  newId,
+  nowIso,
+  type OpportunityDoc,
+  type OutreachMessageDoc,
+  type OwnerDoc,
+} from "@/lib/crm/documents";
 import { providerFor } from "./providers";
 import { supersedes, type OutreachChannel, type OutreachStatus } from "./types";
 import { logEvent, logError } from "./log";
@@ -214,7 +212,7 @@ export interface SendOutreachResult {
 }
 
 export async function sendOutreach(input: SendOutreachInput): Promise<SendOutreachResult> {
-  const database = db();
+  const store = crmStore();
   const template = templateById(input.templateId);
   if (!template) throw new Error(`unknown template: ${input.templateId}`);
   if (!template.channels.includes(input.channel)) {
@@ -224,33 +222,28 @@ export async function sendOutreach(input: SendOutreachInput): Promise<SendOutrea
     return { campaignId: null, sent: 0, skipped: [], messageIds: [] };
   }
 
-  const rows = await database
-    .select({ opportunity: opportunities, owner: owners })
-    .from(opportunities)
-    .leftJoin(owners, eq(opportunities.ownerId, owners.id))
-    .where(inArray(opportunities.id, [...input.opportunityIds]));
+  const ownerDocs = await store.list<OwnerDoc>("owners");
+  const ownerById = new Map(ownerDocs.map((owner) => [owner.id, owner]));
 
-  const [campaign] = await database
-    .insert(outreachCampaigns)
-    .values({
-      name: input.campaignName ?? `${template.name} - ${new Date().toISOString().slice(0, 10)}`,
-      channel: input.channel,
-      templateId: template.id,
-      createdById: input.createdById ?? null,
-    })
-    .returning({ id: outreachCampaigns.id });
-
-  const campaignId = campaign?.id ?? null;
+  const campaignId = newId();
+  const campaignName = input.campaignName ?? `${template.name} - ${nowIso().slice(0, 10)}`;
   const provider = providerFor(input.channel);
+
   const skipped: { opportunityId: string; reason: string }[] = [];
   const messageIds: string[] = [];
 
-  for (const row of rows) {
-    const opportunity = row.opportunity;
-    const snapshot = (opportunity.propertySnapshot ?? {}) as Record<string, unknown>;
+  for (const opportunityId of input.opportunityIds) {
+    const opportunity = await store.get<OpportunityDoc>("opportunities", opportunityId);
+    if (!opportunity) {
+      skipped.push({ opportunityId, reason: "no such opportunity" });
+      continue;
+    }
+
+    const owner = opportunity.ownerId ? ownerById.get(opportunity.ownerId) : undefined;
+    const snapshot = opportunity.propertySnapshot ?? {};
 
     const context = contextFor({
-      ownerName: row.owner?.name ?? opportunity.ownerNameSnapshot,
+      ownerName: owner?.name ?? opportunity.ownerNameSnapshot,
       addressLine: opportunity.addressLine,
       city: opportunity.addressCity,
       assessedValue: opportunity.assessedValue,
@@ -262,79 +255,71 @@ export async function sendOutreach(input: SendOutreachInput): Promise<SendOutrea
 
     const to =
       input.channel === "email"
-        ? (row.owner?.email ?? fallbackAddress("email", opportunity.id))
+        ? (owner?.email ?? fallbackAddress("email", opportunity.id))
         : input.channel === "sms"
-          ? (row.owner?.phone ?? fallbackAddress("sms", opportunity.id))
-          : (row.owner?.mailingAddress ?? fallbackAddress("direct_mail", opportunity.id));
+          ? (owner?.phone ?? fallbackAddress("sms", opportunity.id))
+          : (owner?.mailingAddress ?? fallbackAddress("direct_mail", opportunity.id));
 
     const subject = input.channel === "sms" ? null : template.subject(context);
     const body = template.body(context);
+    const messageId = newId();
 
     try {
-      const [message] = await database
-        .insert(outreachMessages)
-        .values({
-          campaignId,
-          opportunityId: opportunity.id,
-          channel: input.channel,
-          templateId: template.id,
-          toAddress: to,
-          subject,
-          body,
-          // Replaced immediately below with the provider's own id; a message row
-          // must never exist without one, so it is written in the same insert.
-          providerMessageId: `pending:${opportunity.id}:${campaignId ?? "none"}:${input.channel}`,
-          status: "queued",
-          createdById: input.createdById ?? null,
-        })
-        .returning({ id: outreachMessages.id });
-
-      if (!message) {
-        skipped.push({ opportunityId: opportunity.id, reason: "could not create the message" });
-        continue;
-      }
-
       const accepted = await provider.send({
         channel: input.channel,
         to,
         subject,
         body,
-        idempotencyKey: message.id,
+        idempotencyKey: messageId,
       });
 
-      await database
-        .update(outreachMessages)
-        .set({ providerMessageId: accepted.providerMessageId, status: "queued" })
-        .where(eq(outreachMessages.id, message.id));
-
       // The whole timeline is written up front with its scheduled time. Nothing
-      // is applied to the message until that time passes.
+      // is applied until that time passes, which is what makes a direct mail
+      // piece visibly slower than an SMS rather than pretending both land at
+      // once.
       const lifecycle = provider.lifecycle(accepted, {
         channel: input.channel,
         to,
         subject,
         body,
-        idempotencyKey: message.id,
+        idempotencyKey: messageId,
       });
 
-      for (const event of lifecycle) {
-        await database
-          .insert(outreachEvents)
-          .values({
-            messageId: message.id,
-            providerEventId: event.providerEventId,
-            status: event.status,
-            detail: event.detail,
-            occurredAt: new Date(accepted.acceptedAt.getTime() + event.afterSeconds * 1000),
-          })
-          .onConflictDoNothing();
-      }
+      const message: OutreachMessageDoc = {
+        id: messageId,
+        campaignId,
+        campaignName,
+        channel: input.channel,
+        templateId: template.id,
+        toAddress: to,
+        subject,
+        body,
+        providerMessageId: accepted.providerMessageId,
+        status: "queued",
+        statusAt: accepted.acceptedAt.toISOString(),
+        createdById: input.createdById ?? null,
+        createdAt: accepted.acceptedAt.toISOString(),
+        events: lifecycle.map((event) => ({
+          providerEventId: event.providerEventId,
+          status: event.status,
+          detail: event.detail,
+          occurredAt: new Date(
+            accepted.acceptedAt.getTime() + event.afterSeconds * 1000,
+          ).toISOString(),
+        })),
+      };
 
-      messageIds.push(message.id);
+      await store.put<OpportunityDoc>("opportunities", {
+        ...opportunity,
+        outreach: [...opportunity.outreach, message],
+        updatedAt: nowIso(),
+      });
+
+      messageIds.push(messageId);
     } catch (error: unknown) {
-      logError("outreach.send_failed", error, { opportunityId: opportunity.id });
+      logError("outreach.send_failed", error, { opportunityId });
       skipped.push({
-        opportunityId: opportunity.id,
+        opportunityId,
         reason: error instanceof Error ? error.message : "send failed",
       });
     }
@@ -364,80 +349,89 @@ export interface AdvanceResult {
 }
 
 /**
- * Apply every provider event whose scheduled time has passed to its message.
+ * Apply every provider event whose scheduled time has passed.
  *
- * Called after a send, by the matcher pass, and by the UI when the outreach
- * view is opened. It is idempotent: an event that has already been applied
- * cannot advance the status again, and a status that would move backwards is
- * ignored rather than written.
+ * Called after a send, by the matcher pass, and when an opportunity is opened.
+ * Idempotent: an event already applied cannot advance the status again, and a
+ * status that would move backwards is ignored rather than written. That is what
+ * `supersedes` enforces, and it is why a redelivered event is harmless.
  */
 export async function advanceOutreach(now: Date = new Date()): Promise<AdvanceResult> {
-  const database = db();
+  const store = crmStore();
+  const opportunities = await store.list<OpportunityDoc>("opportunities");
+  const cutoff = now.toISOString();
 
-  const due = await database
-    .select({
-      messageId: outreachEvents.messageId,
-      status: outreachEvents.status,
-      occurredAt: outreachEvents.occurredAt,
-      currentStatus: outreachMessages.status,
-    })
-    .from(outreachEvents)
-    .innerJoin(outreachMessages, eq(outreachEvents.messageId, outreachMessages.id))
-    .where(lte(outreachEvents.occurredAt, now))
-    .orderBy(outreachEvents.occurredAt);
+  let messagesAdvanced = 0;
+  let eventsApplied = 0;
 
-  const latest = new Map<string, { status: OutreachStatus; at: Date; current: OutreachStatus }>();
-  for (const event of due) {
-    const existing = latest.get(event.messageId);
-    const candidate = event.status as OutreachStatus;
-    const current = (existing?.status ?? event.currentStatus) as OutreachStatus;
-    if (!existing || supersedes(candidate, current)) {
-      latest.set(event.messageId, {
-        status: candidate,
-        at: event.occurredAt,
-        current: event.currentStatus as OutreachStatus,
-      });
+  for (const opportunity of opportunities) {
+    if (!opportunity.outreach.length) continue;
+    let changed = false;
+
+    const outreach = opportunity.outreach.map((message) => {
+      const due = message.events.filter((event) => event.occurredAt <= cutoff);
+      eventsApplied += due.length;
+
+      let status = message.status;
+      let statusAt = message.statusAt;
+
+      for (const event of due) {
+        if (!supersedes(event.status, status)) continue;
+        status = event.status;
+        statusAt = event.occurredAt;
+      }
+
+      if (status === message.status) return message;
+      changed = true;
+      messagesAdvanced += 1;
+      return { ...message, status, statusAt };
+    });
+
+    if (changed) {
+      await store.put<OpportunityDoc>("opportunities", { ...opportunity, outreach });
     }
   }
 
-  let advanced = 0;
-  for (const [messageId, entry] of latest) {
-    if (!supersedes(entry.status, entry.current)) continue;
-    await database
-      .update(outreachMessages)
-      .set({ status: entry.status, statusAt: entry.at })
-      .where(eq(outreachMessages.id, messageId));
-    advanced += 1;
-  }
-
-  return { messagesAdvanced: advanced, eventsApplied: due.length };
+  return { messagesAdvanced, eventsApplied };
 }
 
 /**
- * Bring every pending event forward so a demo does not have to wait days for a
- * direct mail piece to be scanned. Explicitly user-triggered and labelled; the
- * events themselves are unchanged, only their scheduled time is pulled in.
+ * Bring every pending event forward, so a demo does not wait days for a direct
+ * mail piece to be scanned. Explicitly user-triggered and labelled; the events
+ * themselves are unchanged, only their scheduled time is pulled in.
  */
 export async function fastForwardOutreach(): Promise<AdvanceResult> {
-  const database = db();
-  await database
-    .update(outreachEvents)
-    .set({ occurredAt: sql`now()` })
-    .where(sql`${outreachEvents.occurredAt} > now()`);
+  const store = crmStore();
+  const opportunities = await store.list<OpportunityDoc>("opportunities");
+  const at = nowIso();
+
+  for (const opportunity of opportunities) {
+    if (!opportunity.outreach.length) continue;
+    const outreach = opportunity.outreach.map((message) => ({
+      ...message,
+      events: message.events.map((event) =>
+        event.occurredAt > at ? { ...event, occurredAt: at } : event,
+      ),
+    }));
+    await store.put<OpportunityDoc>("opportunities", { ...opportunity, outreach });
+  }
+
   logEvent("outreach.fast_forward", {});
   return advanceOutreach();
 }
 
-/** Messages whose lifecycle has not reached a terminal status yet. */
-export async function pendingOutreachCount(database: CrmDatabase): Promise<number> {
-  const [row] = await database
-    .select({ count: sql<number>`count(*)::int` })
-    .from(outreachMessages)
-    .where(
-      and(
-        sql`${outreachMessages.status} NOT IN ('replied', 'bounced', 'returned', 'failed')`,
-        sql`true`,
-      ),
-    );
-  return row?.count ?? 0;
+/** Every message across the pipeline, newest first, for the campaign view. */
+export async function listAllOutreach(): Promise<
+  { opportunityId: string; addressLine: string; message: OutreachMessageDoc }[]
+> {
+  const opportunities = await crmStore().list<OpportunityDoc>("opportunities");
+  return opportunities
+    .flatMap((opportunity) =>
+      opportunity.outreach.map((message) => ({
+        opportunityId: opportunity.id,
+        addressLine: opportunity.addressLine,
+        message,
+      })),
+    )
+    .sort((a, b) => (a.message.createdAt < b.message.createdAt ? 1 : -1));
 }

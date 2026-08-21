@@ -9,13 +9,10 @@
  * route needs no query engine.
  */
 
-import { desc } from "drizzle-orm";
-
 import { handleError, ok } from "@/lib/api";
 import { dataConfig } from "@/lib/data/config";
 import { loadRunHistory, runDelta } from "@/lib/data/runs";
-import { tryDb } from "@/lib/crm/db";
-import { matcherRuns } from "@/lib/crm/schema";
+import { listMatcherRuns } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,19 +24,9 @@ export async function GET(request: Request): Promise<Response> {
 
     const runs = await loadRunHistory(dataConfig().runHistoryUrl, limit);
 
-    const database = tryDb();
-    let passes: unknown[] = [];
-    if (database) {
-      try {
-        passes = await database
-          .select()
-          .from(matcherRuns)
-          .orderBy(desc(matcherRuns.startedAt))
-          .limit(limit);
-      } catch {
-        // Unmigrated store: the pipeline half of this page still renders.
-      }
-    }
+    // An unreadable store degrades this page to its pipeline half rather than
+    // failing it.
+    const passes = await listMatcherRuns(limit).catch(() => []);
 
     return ok({
       pipelineRuns: runs.map((run) => ({ ...run, delta: runDelta(run) })),

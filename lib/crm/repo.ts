@@ -1,53 +1,78 @@
 /**
  * Reads and writes against the CRM store.
  *
- * Every query the application makes against Postgres is here, so the API routes
- * stay thin and the invariants - one live opportunity per parcel, a stage change
- * always writes a stage event, an outreach status never walks backwards - live
- * in one place rather than being re-derived at each call site.
+ * Every access the application makes to CRM state is here, so the routes stay
+ * thin and the invariants live in one place rather than being re-derived at each
+ * call site.
+ *
+ * Filtering and sorting happen in TypeScript rather than in a query language,
+ * because these collections are small and bounded by what a team creates:
+ * hundreds of opportunities, not hundreds of thousands. The 404,023 parcels are
+ * on the other side of the system entirely, queried with DuckDB, and never
+ * copied here. That asymmetry is the whole design.
  */
 
-import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
-
 import { criteriaSetSchema, type CriteriaSet } from "@/lib/criteria/types";
-import type { AcquisitionStage, OutreachChannel } from "@/lib/notify/types";
-import { db, type CrmDatabase } from "./db";
+import type { AcquisitionStage } from "@/lib/notify/types";
+import { crmStore } from "./db";
 import {
-  alerts,
-  matcherRuns,
-  notes,
-  notifications,
-  opportunities,
-  outreachCampaigns,
-  outreachEvents,
-  outreachMessages,
-  owners,
-  savedSearches,
-  simulatedChanges,
-  stageEvents,
-  tasks,
-  teamMembers,
-} from "./schema";
+  newId,
+  nowIso,
+  type AlertDoc,
+  type CourtDoc,
+  type MatcherRunDoc,
+  type OpportunityDoc,
+  type OwnerDoc,
+  type SavedSearchDoc,
+  type SimulatedDoc,
+  type TeamMemberDoc,
+} from "./documents";
+import { documentId } from "./store";
+
+/** Newest first, on an ISO timestamp field. */
+function byNewest<T>(pick: (item: T) => string | null): (a: T, b: T) => number {
+  return (a, b) => {
+    const left = pick(a) ?? "";
+    const right = pick(b) ?? "";
+    return left < right ? 1 : left > right ? -1 : 0;
+  };
+}
 
 /* ------------------------------------------------------------------ */
 /* Team                                                                 */
 /* ------------------------------------------------------------------ */
 
-export async function listTeamMembers() {
-  return db().select().from(teamMembers).orderBy(teamMembers.name);
+export async function listTeamMembers(): Promise<TeamMemberDoc[]> {
+  const members = await crmStore().list<TeamMemberDoc>("team");
+  return members.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function createTeamMember(input: {
+  name: string;
+  email: string;
+  role?: string;
+}): Promise<TeamMemberDoc> {
+  const member: TeamMemberDoc = {
+    id: newId(),
+    name: input.name,
+    email: input.email,
+    role: input.role ?? "acquisitions",
+    createdAt: nowIso(),
+  };
+  return crmStore().put("team", member);
 }
 
 /* ------------------------------------------------------------------ */
 /* Saved searches                                                       */
 /* ------------------------------------------------------------------ */
 
-export async function listSavedSearches() {
-  return db().select().from(savedSearches).orderBy(desc(savedSearches.createdAt));
+export async function listSavedSearches(): Promise<SavedSearchDoc[]> {
+  const searches = await crmStore().list<SavedSearchDoc>("searches");
+  return searches.sort(byNewest((search) => search.createdAt));
 }
 
-export async function getSavedSearch(id: string) {
-  const [row] = await db().select().from(savedSearches).where(eq(savedSearches.id, id)).limit(1);
-  return row ?? null;
+export async function getSavedSearch(id: string): Promise<SavedSearchDoc | null> {
+  return crmStore().get<SavedSearchDoc>("searches", id);
 }
 
 export interface SaveSearchInput {
@@ -61,53 +86,69 @@ export interface SaveSearchInput {
   alertLimitPerRun?: number;
 }
 
-export async function createSavedSearch(input: SaveSearchInput) {
+export async function createSavedSearch(input: SaveSearchInput): Promise<SavedSearchDoc> {
   const criteria = criteriaSetSchema.parse(input.criteria);
-  const [row] = await db()
-    .insert(savedSearches)
-    .values({
-      name: input.name,
-      description: input.description ?? null,
-      criteria,
-      ownerId: input.ownerId ?? null,
-      notifyInApp: input.notifyInApp ?? true,
-      notifyEmail: input.notifyEmail ?? false,
-      notifySms: input.notifySms ?? false,
-      alertLimitPerRun: input.alertLimitPerRun ?? 25,
-    })
-    .returning();
-  return row ?? null;
+  const now = nowIso();
+  const search: SavedSearchDoc = {
+    id: newId(),
+    name: input.name,
+    description: input.description ?? null,
+    criteria,
+    ownerId: input.ownerId ?? null,
+    notifyInApp: input.notifyInApp ?? true,
+    notifyEmail: input.notifyEmail ?? false,
+    notifySms: input.notifySms ?? false,
+    active: true,
+    alertLimitPerRun: input.alertLimitPerRun ?? 25,
+    lastEvaluatedAt: null,
+    lastPipelineRunId: null,
+    lastMatchCount: null,
+    matches: {},
+    matchesTruncated: false,
+    createdAt: now,
+    updatedAt: now,
+  };
+  return crmStore().put("searches", search);
 }
 
 export async function updateSavedSearch(
   id: string,
   patch: Partial<SaveSearchInput> & { active?: boolean },
-) {
-  const values: Record<string, unknown> = { updatedAt: new Date() };
-  if (patch.name !== undefined) values.name = patch.name;
-  if (patch.description !== undefined) values.description = patch.description;
-  if (patch.criteria !== undefined) values.criteria = criteriaSetSchema.parse(patch.criteria);
-  if (patch.notifyInApp !== undefined) values.notifyInApp = patch.notifyInApp;
-  if (patch.notifyEmail !== undefined) values.notifyEmail = patch.notifyEmail;
-  if (patch.notifySms !== undefined) values.notifySms = patch.notifySms;
-  if (patch.alertLimitPerRun !== undefined) values.alertLimitPerRun = patch.alertLimitPerRun;
-  if (patch.active !== undefined) values.active = patch.active;
+): Promise<SavedSearchDoc | null> {
+  const existing = await getSavedSearch(id);
+  if (!existing) return null;
 
-  const [row] = await db()
-    .update(savedSearches)
-    .set(values)
-    .where(eq(savedSearches.id, id))
-    .returning();
-  return row ?? null;
+  const next: SavedSearchDoc = {
+    ...existing,
+    name: patch.name ?? existing.name,
+    description:
+      patch.description === undefined ? existing.description : (patch.description ?? null),
+    criteria: patch.criteria ? criteriaSetSchema.parse(patch.criteria) : existing.criteria,
+    notifyInApp: patch.notifyInApp ?? existing.notifyInApp,
+    notifyEmail: patch.notifyEmail ?? existing.notifyEmail,
+    notifySms: patch.notifySms ?? existing.notifySms,
+    alertLimitPerRun: patch.alertLimitPerRun ?? existing.alertLimitPerRun,
+    active: patch.active ?? existing.active,
+    updatedAt: nowIso(),
+  };
+  return crmStore().put("searches", next);
 }
 
-export async function deleteSavedSearch(id: string) {
-  await db().delete(savedSearches).where(eq(savedSearches.id, id));
+export async function deleteSavedSearch(id: string): Promise<void> {
+  await crmStore().remove("searches", id);
 }
 
 /* ------------------------------------------------------------------ */
 /* Alerts                                                               */
 /* ------------------------------------------------------------------ */
+
+/**
+ * One alert per (search, parcel, pass). The key IS the constraint, so a matcher
+ * retried after a timeout writes the same document rather than a second alert.
+ */
+export function alertId(matcherRunId: string, savedSearchId: string, propertyId: string): string {
+  return documentId(matcherRunId, savedSearchId, propertyId);
+}
 
 export interface AlertFilter {
   savedSearchId?: string;
@@ -115,85 +156,114 @@ export interface AlertFilter {
   limit?: number;
 }
 
-export async function listAlerts(filter: AlertFilter = {}) {
-  const conditions = [];
-  if (filter.savedSearchId) conditions.push(eq(alerts.savedSearchId, filter.savedSearchId));
-  if (filter.unreadOnly) conditions.push(isNull(alerts.readAt));
-
-  return db()
-    .select({
-      alert: alerts,
-      searchName: savedSearches.name,
-      matcherTrigger: matcherRuns.trigger,
-      matcherStartedAt: matcherRuns.startedAt,
-    })
-    .from(alerts)
-    .leftJoin(savedSearches, eq(alerts.savedSearchId, savedSearches.id))
-    .leftJoin(matcherRuns, eq(alerts.matcherRunId, matcherRuns.id))
-    .where(conditions.length ? and(...conditions) : undefined)
-    .orderBy(desc(alerts.createdAt))
-    .limit(Math.min(filter.limit ?? 100, 500));
+export async function listAlerts(filter: AlertFilter = {}): Promise<AlertDoc[]> {
+  const alerts = await crmStore().list<AlertDoc>("alerts");
+  return alerts
+    .filter((alert) => !filter.savedSearchId || alert.savedSearchId === filter.savedSearchId)
+    .filter((alert) => !filter.unreadOnly || alert.readAt === null)
+    .filter((alert) => alert.dismissedAt === null)
+    .sort(byNewest((alert) => alert.createdAt))
+    .slice(0, Math.min(filter.limit ?? 100, 500));
 }
 
-export async function getAlert(id: string) {
-  const [row] = await db().select().from(alerts).where(eq(alerts.id, id)).limit(1);
-  return row ?? null;
+export async function getAlert(id: string): Promise<AlertDoc | null> {
+  return crmStore().get<AlertDoc>("alerts", id);
 }
 
-export async function listAlertNotifications(alertIds: readonly string[]) {
-  if (!alertIds.length) return [];
-  return db()
-    .select()
-    .from(notifications)
-    .where(inArray(notifications.alertId, [...alertIds]))
-    .orderBy(notifications.createdAt);
+export async function markAlertRead(id: string, read = true): Promise<AlertDoc | null> {
+  const alert = await getAlert(id);
+  if (!alert) return null;
+  return crmStore().put("alerts", { ...alert, readAt: read ? nowIso() : null });
 }
 
-export async function markAlertRead(id: string, read = true) {
-  const [row] = await db()
-    .update(alerts)
-    .set({ readAt: read ? new Date() : null })
-    .where(eq(alerts.id, id))
-    .returning();
-  return row ?? null;
+export async function markAllAlertsRead(): Promise<number> {
+  const alerts = await crmStore().list<AlertDoc>("alerts");
+  const unread = alerts.filter((alert) => alert.readAt === null);
+  const at = nowIso();
+  for (const alert of unread) await crmStore().put("alerts", { ...alert, readAt: at });
+  return unread.length;
 }
 
-export async function markAllAlertsRead() {
-  await db().update(alerts).set({ readAt: new Date() }).where(isNull(alerts.readAt));
+export async function dismissAlert(id: string): Promise<AlertDoc | null> {
+  const alert = await getAlert(id);
+  if (!alert) return null;
+  return crmStore().put("alerts", { ...alert, dismissedAt: nowIso() });
 }
 
-export async function dismissAlert(id: string) {
-  const [row] = await db()
-    .update(alerts)
-    .set({ dismissedAt: new Date() })
-    .where(eq(alerts.id, id))
-    .returning();
-  return row ?? null;
+export async function unreadAlertCount(): Promise<number> {
+  const alerts = await crmStore().list<AlertDoc>("alerts");
+  return alerts.filter((alert) => alert.readAt === null && alert.dismissedAt === null).length;
 }
 
 /* ------------------------------------------------------------------ */
 /* Matcher evidence                                                     */
 /* ------------------------------------------------------------------ */
 
-export async function listMatcherRuns(limit = 25) {
-  return db().select().from(matcherRuns).orderBy(desc(matcherRuns.startedAt)).limit(limit);
+export async function listMatcherRuns(limit = 25): Promise<MatcherRunDoc[]> {
+  const runs = await crmStore().list<MatcherRunDoc>("matcher-runs");
+  return runs.sort(byNewest((run) => run.startedAt)).slice(0, limit);
+}
+
+export async function hasSeenPipelineRun(pipelineRunId: string): Promise<boolean> {
+  const runs = await crmStore().list<MatcherRunDoc>("matcher-runs");
+  return runs.some((run) => run.pipelineRunId === pipelineRunId);
 }
 
 /* ------------------------------------------------------------------ */
 /* Owners                                                               */
 /* ------------------------------------------------------------------ */
 
+export async function getOwner(id: string): Promise<OwnerDoc | null> {
+  return crmStore().get<OwnerDoc>("owners", id);
+}
+
 export async function updateOwner(
   id: string,
   patch: { email?: string | null; phone?: string | null; notes?: string | null },
-) {
-  const [row] = await db().update(owners).set(patch).where(eq(owners.id, id)).returning();
-  return row ?? null;
+): Promise<OwnerDoc | null> {
+  const owner = await getOwner(id);
+  if (!owner) return null;
+  return crmStore().put("owners", {
+    ...owner,
+    email: patch.email === undefined ? owner.email : patch.email,
+    phone: patch.phone === undefined ? owner.phone : patch.phone,
+    notes: patch.notes === undefined ? owner.notes : patch.notes,
+  });
 }
 
-export async function getOwner(id: string) {
-  const [row] = await db().select().from(owners).where(eq(owners.id, id)).limit(1);
-  return row ?? null;
+/**
+ * Owners of record are published on the roll, so this upserts on the name and
+ * mailing address rather than inventing an identity. Contact details a team adds
+ * by hand live on the same document and are never overwritten by a later roll
+ * value.
+ */
+async function upsertOwner(input: CreateOpportunityInput): Promise<string | null> {
+  if (!input.ownerName) return null;
+
+  const owners = await crmStore().list<OwnerDoc>("owners");
+  const existing = owners.find(
+    (owner) =>
+      owner.name === input.ownerName &&
+      (owner.mailingAddress ?? null) === (input.ownerMailingAddress ?? null),
+  );
+  if (existing) return existing.id;
+
+  const owner: OwnerDoc = {
+    id: newId(),
+    name: input.ownerName,
+    mailingAddress: input.ownerMailingAddress ?? null,
+    mailingCity: input.ownerMailingCity ?? null,
+    mailingState: input.ownerMailingState ?? null,
+    mailingZip: input.ownerMailingZip ?? null,
+    email: null,
+    phone: null,
+    sourceSystem: input.sourceSystem ?? null,
+    sourceUrl: input.sourceUrl ?? null,
+    notes: null,
+    createdAt: nowIso(),
+  };
+  await crmStore().put("owners", owner);
+  return owner.id;
 }
 
 /* ------------------------------------------------------------------ */
@@ -205,7 +275,7 @@ export async function getOwner(id: string) {
  *
  * The browser holds the query engine, so it holds the authoritative record. The
  * owner of record and the provenance travel with it so the CRM can create the
- * owner row and keep the audit trail without a second read.
+ * owner document and keep the audit trail without a second read.
  */
 export interface CreateOpportunityInput {
   propertyId: string;
@@ -233,118 +303,82 @@ export interface CreateOpportunityInput {
   actorId?: string | null;
 }
 
-/**
- * Owners of record are published on the roll, so the CRM upserts on the name
- * and mailing address rather than inventing an identity. Contact details a team
- * adds by hand live on the same row and are never overwritten by a later roll
- * value.
- */
-async function upsertOwner(
-  database: CrmDatabase,
-  input: CreateOpportunityInput,
-): Promise<string | null> {
-  if (!input.ownerName) return null;
-
-  const [existing] = await database
-    .select({ id: owners.id })
-    .from(owners)
-    .where(
-      and(
-        eq(owners.name, input.ownerName),
-        input.ownerMailingAddress
-          ? eq(owners.mailingAddress, input.ownerMailingAddress)
-          : isNull(owners.mailingAddress),
-      ),
-    )
-    .limit(1);
-
-  if (existing) return existing.id;
-
-  const [created] = await database
-    .insert(owners)
-    .values({
-      name: input.ownerName,
-      mailingAddress: input.ownerMailingAddress ?? null,
-      mailingCity: input.ownerMailingCity ?? null,
-      mailingState: input.ownerMailingState ?? null,
-      mailingZip: input.ownerMailingZip ?? null,
-      sourceSystem: input.sourceSystem ?? null,
-      sourceUrl: input.sourceUrl ?? null,
-    })
-    .returning({ id: owners.id });
-
-  return created?.id ?? null;
+export async function getOpportunity(propertyId: string): Promise<OpportunityDoc | null> {
+  return crmStore().get<OpportunityDoc>("opportunities", propertyId);
 }
 
 /**
  * Convert a matched parcel into a tracked opportunity.
  *
- * Idempotent on the parcel: two analysts working the same alert feed must not
- * create two records for the same house. The second call returns the existing
- * opportunity and links the alert to it.
+ * Idempotent on the parcel because the document key IS the parcel: two analysts
+ * working the same alert feed cannot create two records for the same house. The
+ * second call returns the existing opportunity and links the alert to it.
  */
-export async function createOpportunityFromSnapshot(input: CreateOpportunityInput) {
-  const database = db();
-
-  const [existing] = await database
-    .select()
-    .from(opportunities)
-    .where(eq(opportunities.propertyId, input.propertyId))
-    .limit(1);
+export async function createOpportunityFromSnapshot(
+  input: CreateOpportunityInput,
+): Promise<{ opportunity: OpportunityDoc; created: boolean }> {
+  const existing = await getOpportunity(input.propertyId);
 
   if (existing) {
-    if (input.alertId) {
-      await database
-        .update(alerts)
-        .set({ opportunityId: existing.id })
-        .where(eq(alerts.id, input.alertId));
-    }
+    if (input.alertId) await linkAlertToOpportunity(input.alertId, existing.id);
     return { opportunity: existing, created: false };
   }
 
-  const ownerId = await upsertOwner(database, input);
+  const ownerId = await upsertOwner(input);
+  const now = nowIso();
 
-  const [created] = await database
-    .insert(opportunities)
-    .values({
-      propertyId: input.propertyId,
-      parcelIdentifier: input.parcelIdentifier ?? null,
-      addressLine: input.addressLine,
-      addressCity: input.addressCity ?? null,
-      addressZip: input.addressZip ?? null,
-      latitude: input.latitude ?? null,
-      longitude: input.longitude ?? null,
-      assessedValue: input.assessedValue ?? null,
-      ownerNameSnapshot: input.ownerName ?? null,
-      propertySnapshot: input.propertySnapshot ?? {},
-      ownerId,
-      savedSearchId: input.savedSearchId ?? null,
-      alertId: input.alertId ?? null,
-      matchScore: input.matchScore ?? null,
-      matchRationale: input.matchRationale ?? null,
-      assigneeId: input.assigneeId ?? null,
-      stage: "identified",
-    })
-    .returning();
+  const opportunity: OpportunityDoc = {
+    id: input.propertyId,
+    propertyId: input.propertyId,
+    parcelIdentifier: input.parcelIdentifier ?? null,
+    addressLine: input.addressLine,
+    addressCity: input.addressCity ?? null,
+    addressZip: input.addressZip ?? null,
+    latitude: input.latitude ?? null,
+    longitude: input.longitude ?? null,
+    assessedValue: input.assessedValue ?? null,
+    ownerNameSnapshot: input.ownerName ?? null,
+    propertySnapshot: input.propertySnapshot ?? {},
+    ownerId,
+    stage: "identified",
+    savedSearchId: input.savedSearchId ?? null,
+    alertId: input.alertId ?? null,
+    matchScore: input.matchScore ?? null,
+    matchRationale: input.matchRationale ?? null,
+    assigneeId: input.assigneeId ?? null,
+    ownerInterest: null,
+    askingPrice: null,
+    offerPrice: null,
+    nextStep: null,
+    nextStepDueAt: null,
+    stageEvents: [
+      {
+        id: newId(),
+        fromStage: null,
+        toStage: "identified",
+        actorId: input.actorId ?? null,
+        note: input.alertId ? "Created from an alert" : "Created from search",
+        createdAt: now,
+      },
+    ],
+    notes: [],
+    tasks: [],
+    outreach: [],
+    createdAt: now,
+    updatedAt: now,
+    closedAt: null,
+  };
 
-  if (!created) throw new Error("could not create the opportunity");
+  await crmStore().put("opportunities", opportunity);
+  if (input.alertId) await linkAlertToOpportunity(input.alertId, opportunity.id);
 
-  await database.insert(stageEvents).values({
-    opportunityId: created.id,
-    fromStage: null,
-    toStage: "identified",
-    actorId: input.actorId ?? null,
-    note: input.alertId ? "Created from an alert" : "Created from search",
-  });
+  return { opportunity, created: true };
+}
 
-  if (input.alertId) {
-    await database
-      .update(alerts)
-      .set({ opportunityId: created.id })
-      .where(eq(alerts.id, input.alertId));
-  }
-
-  return { opportunity: created, created: true };
+async function linkAlertToOpportunity(id: string, opportunityId: string): Promise<void> {
+  const alert = await getAlert(id);
+  if (!alert || alert.opportunityId === opportunityId) return;
+  await crmStore().put("alerts", { ...alert, opportunityId });
 }
 
 export interface OpportunityFilter {
@@ -356,55 +390,71 @@ export interface OpportunityFilter {
   limit?: number;
 }
 
-export async function listOpportunities(filter: OpportunityFilter = {}) {
-  const conditions = [];
-  if (filter.stages?.length) conditions.push(inArray(opportunities.stage, [...filter.stages]));
-  if (filter.assigneeId) conditions.push(eq(opportunities.assigneeId, filter.assigneeId));
-  if (filter.savedSearchId) conditions.push(eq(opportunities.savedSearchId, filter.savedSearchId));
-  if (filter.minScore !== undefined)
-    conditions.push(sql`${opportunities.matchScore} >= ${filter.minScore}`);
-  if (filter.city) conditions.push(eq(opportunities.addressCity, filter.city));
-
-  return db()
-    .select({
-      opportunity: opportunities,
-      owner: owners,
-      assignee: teamMembers,
-      searchName: savedSearches.name,
-    })
-    .from(opportunities)
-    .leftJoin(owners, eq(opportunities.ownerId, owners.id))
-    .leftJoin(teamMembers, eq(opportunities.assigneeId, teamMembers.id))
-    .leftJoin(savedSearches, eq(opportunities.savedSearchId, savedSearches.id))
-    .where(conditions.length ? and(...conditions) : undefined)
-    .orderBy(desc(opportunities.matchScore), desc(opportunities.updatedAt))
-    .limit(Math.min(filter.limit ?? 500, 2_000));
+export interface OpportunityView {
+  opportunity: OpportunityDoc;
+  owner: OwnerDoc | null;
+  assignee: TeamMemberDoc | null;
+  searchName: string | null;
 }
 
-export async function getOpportunity(id: string) {
-  const [row] = await db()
-    .select({
-      opportunity: opportunities,
-      owner: owners,
-      assignee: teamMembers,
-      searchName: savedSearches.name,
+/** Joined in memory, which is what a document store trades a JOIN for. */
+export async function listOpportunities(
+  filter: OpportunityFilter = {},
+): Promise<OpportunityView[]> {
+  const store = crmStore();
+  const [opportunities, owners, team, searches] = await Promise.all([
+    store.list<OpportunityDoc>("opportunities"),
+    store.list<OwnerDoc>("owners"),
+    store.list<TeamMemberDoc>("team"),
+    store.list<SavedSearchDoc>("searches"),
+  ]);
+
+  const ownerById = new Map(owners.map((owner) => [owner.id, owner]));
+  const memberById = new Map(team.map((member) => [member.id, member]));
+  const searchById = new Map(searches.map((search) => [search.id, search]));
+
+  return opportunities
+    .filter((row) => !filter.stages?.length || filter.stages.includes(row.stage))
+    .filter((row) => !filter.assigneeId || row.assigneeId === filter.assigneeId)
+    .filter((row) => !filter.savedSearchId || row.savedSearchId === filter.savedSearchId)
+    .filter((row) => filter.minScore === undefined || (row.matchScore ?? 0) >= filter.minScore)
+    .filter((row) => !filter.city || (row.addressCity ?? "") === filter.city)
+    .sort((a, b) => {
+      const score = (b.matchScore ?? 0) - (a.matchScore ?? 0);
+      return score !== 0 ? score : b.updatedAt < a.updatedAt ? -1 : 1;
     })
-    .from(opportunities)
-    .leftJoin(owners, eq(opportunities.ownerId, owners.id))
-    .leftJoin(teamMembers, eq(opportunities.assigneeId, teamMembers.id))
-    .leftJoin(savedSearches, eq(opportunities.savedSearchId, savedSearches.id))
-    .where(eq(opportunities.id, id))
-    .limit(1);
-  return row ?? null;
+    .slice(0, Math.min(filter.limit ?? 500, 2_000))
+    .map((opportunity) => ({
+      opportunity,
+      owner: opportunity.ownerId ? (ownerById.get(opportunity.ownerId) ?? null) : null,
+      assignee: opportunity.assigneeId ? (memberById.get(opportunity.assigneeId) ?? null) : null,
+      searchName: opportunity.savedSearchId
+        ? (searchById.get(opportunity.savedSearchId)?.name ?? null)
+        : null,
+    }));
 }
 
-export async function getOpportunityByProperty(propertyId: string) {
-  const [row] = await db()
-    .select()
-    .from(opportunities)
-    .where(eq(opportunities.propertyId, propertyId))
-    .limit(1);
-  return row ?? null;
+export async function getOpportunityView(propertyId: string): Promise<OpportunityView | null> {
+  const opportunity = await getOpportunity(propertyId);
+  if (!opportunity) return null;
+
+  const store = crmStore();
+  const [owner, team, search] = await Promise.all([
+    opportunity.ownerId ? store.get<OwnerDoc>("owners", opportunity.ownerId) : null,
+    store.list<TeamMemberDoc>("team"),
+    opportunity.savedSearchId
+      ? store.get<SavedSearchDoc>("searches", opportunity.savedSearchId)
+      : null,
+  ]);
+
+  return {
+    opportunity,
+    owner: owner ?? null,
+    assignee: opportunity.assigneeId
+      ? (team.find((member) => member.id === opportunity.assigneeId) ?? null)
+      : null,
+    searchName: search?.name ?? null,
+  };
 }
 
 export interface UpdateOpportunityInput {
@@ -414,225 +464,157 @@ export interface UpdateOpportunityInput {
   askingPrice?: number | null;
   offerPrice?: number | null;
   nextStep?: string | null;
-  nextStepDueAt?: Date | null;
+  nextStepDueAt?: string | null;
   actorId?: string | null;
   stageNote?: string | null;
 }
 
 /**
- * A stage change always writes a stage event. The history is what the story
- * asks to see, and reconstructing it from an updated_at column is not possible.
+ * A stage change always appends a stage event. The history is what the story
+ * asks to see, and reconstructing it from an updatedAt field is not possible.
  */
-export async function updateOpportunity(id: string, patch: UpdateOpportunityInput) {
-  const database = db();
-  const [current] = await database
-    .select()
-    .from(opportunities)
-    .where(eq(opportunities.id, id))
-    .limit(1);
+export async function updateOpportunity(
+  propertyId: string,
+  patch: UpdateOpportunityInput,
+): Promise<OpportunityDoc | null> {
+  const current = await getOpportunity(propertyId);
   if (!current) return null;
 
-  const values: Record<string, unknown> = { updatedAt: new Date() };
-  if (patch.assigneeId !== undefined) values.assigneeId = patch.assigneeId;
-  if (patch.ownerInterest !== undefined) values.ownerInterest = patch.ownerInterest;
-  if (patch.askingPrice !== undefined) values.askingPrice = patch.askingPrice;
-  if (patch.offerPrice !== undefined) values.offerPrice = patch.offerPrice;
-  if (patch.nextStep !== undefined) values.nextStep = patch.nextStep;
-  if (patch.nextStepDueAt !== undefined) values.nextStepDueAt = patch.nextStepDueAt;
-
   const stageChanged = patch.stage !== undefined && patch.stage !== current.stage;
-  if (patch.stage !== undefined) values.stage = patch.stage;
-  if (stageChanged && (patch.stage === "closed" || patch.stage === "dead")) {
-    values.closedAt = new Date();
-  }
-  if (stageChanged && patch.stage !== "closed" && patch.stage !== "dead") {
-    values.closedAt = null;
-  }
+  const now = nowIso();
 
-  const [updated] = await database
-    .update(opportunities)
-    .set(values)
-    .where(eq(opportunities.id, id))
-    .returning();
+  const next: OpportunityDoc = {
+    ...current,
+    stage: patch.stage ?? current.stage,
+    assigneeId: patch.assigneeId === undefined ? current.assigneeId : patch.assigneeId,
+    ownerInterest: patch.ownerInterest === undefined ? current.ownerInterest : patch.ownerInterest,
+    askingPrice: patch.askingPrice === undefined ? current.askingPrice : patch.askingPrice,
+    offerPrice: patch.offerPrice === undefined ? current.offerPrice : patch.offerPrice,
+    nextStep: patch.nextStep === undefined ? current.nextStep : patch.nextStep,
+    nextStepDueAt: patch.nextStepDueAt === undefined ? current.nextStepDueAt : patch.nextStepDueAt,
+    updatedAt: now,
+    closedAt: stageChanged
+      ? patch.stage === "closed" || patch.stage === "dead"
+        ? now
+        : null
+      : current.closedAt,
+    stageEvents: stageChanged
+      ? [
+          ...current.stageEvents,
+          {
+            id: newId(),
+            fromStage: current.stage,
+            toStage: patch.stage as AcquisitionStage,
+            actorId: patch.actorId ?? null,
+            note: patch.stageNote ?? null,
+            createdAt: now,
+          },
+        ]
+      : current.stageEvents,
+  };
 
-  if (stageChanged && patch.stage) {
-    await database.insert(stageEvents).values({
-      opportunityId: id,
-      fromStage: current.stage,
-      toStage: patch.stage,
-      actorId: patch.actorId ?? null,
-      note: patch.stageNote ?? null,
-    });
-  }
-
-  return updated ?? null;
-}
-
-export async function listStageEvents(opportunityId: string) {
-  return db()
-    .select({ event: stageEvents, actor: teamMembers })
-    .from(stageEvents)
-    .leftJoin(teamMembers, eq(stageEvents.actorId, teamMembers.id))
-    .where(eq(stageEvents.opportunityId, opportunityId))
-    .orderBy(desc(stageEvents.createdAt));
+  return crmStore().put("opportunities", next);
 }
 
 /* ------------------------------------------------------------------ */
 /* Notes and tasks                                                      */
 /* ------------------------------------------------------------------ */
 
-export async function addNote(opportunityId: string, body: string, authorId: string | null) {
-  const [row] = await db().insert(notes).values({ opportunityId, body, authorId }).returning();
-  return row ?? null;
-}
-
-export async function listNotes(opportunityId: string) {
-  return db()
-    .select({ note: notes, author: teamMembers })
-    .from(notes)
-    .leftJoin(teamMembers, eq(notes.authorId, teamMembers.id))
-    .where(eq(notes.opportunityId, opportunityId))
-    .orderBy(desc(notes.createdAt));
+export async function addNote(
+  propertyId: string,
+  body: string,
+  authorId: string | null,
+): Promise<OpportunityDoc | null> {
+  const current = await getOpportunity(propertyId);
+  if (!current) return null;
+  return crmStore().put("opportunities", {
+    ...current,
+    notes: [...current.notes, { id: newId(), authorId, body, createdAt: nowIso() }],
+    updatedAt: nowIso(),
+  });
 }
 
 export async function addTask(input: {
-  opportunityId: string;
+  propertyId: string;
   title: string;
   assigneeId?: string | null;
-  dueAt?: Date | null;
-}) {
-  const [row] = await db()
-    .insert(tasks)
-    .values({
-      opportunityId: input.opportunityId,
-      title: input.title,
-      assigneeId: input.assigneeId ?? null,
-      dueAt: input.dueAt ?? null,
-    })
-    .returning();
-  return row ?? null;
+  dueAt?: string | null;
+}): Promise<OpportunityDoc | null> {
+  const current = await getOpportunity(input.propertyId);
+  if (!current) return null;
+  return crmStore().put("opportunities", {
+    ...current,
+    tasks: [
+      ...current.tasks,
+      {
+        id: newId(),
+        title: input.title,
+        assigneeId: input.assigneeId ?? null,
+        status: "open" as const,
+        dueAt: input.dueAt ?? null,
+        completedAt: null,
+        createdAt: nowIso(),
+      },
+    ],
+    updatedAt: nowIso(),
+  });
 }
 
-export async function setTaskStatus(id: string, status: "open" | "done" | "cancelled") {
-  const [row] = await db()
-    .update(tasks)
-    .set({ status, completedAt: status === "done" ? new Date() : null })
-    .where(eq(tasks.id, id))
-    .returning();
-  return row ?? null;
-}
-
-export async function listTasks(opportunityId: string) {
-  return db()
-    .select({ task: tasks, assignee: teamMembers })
-    .from(tasks)
-    .leftJoin(teamMembers, eq(tasks.assigneeId, teamMembers.id))
-    .where(eq(tasks.opportunityId, opportunityId))
-    .orderBy(tasks.status, tasks.dueAt);
-}
-
-export async function listOpenTasks(limit = 50) {
-  return db()
-    .select({ task: tasks, assignee: teamMembers, opportunity: opportunities })
-    .from(tasks)
-    .leftJoin(teamMembers, eq(tasks.assigneeId, teamMembers.id))
-    .leftJoin(opportunities, eq(tasks.opportunityId, opportunities.id))
-    .where(eq(tasks.status, "open"))
-    .orderBy(tasks.dueAt)
-    .limit(limit);
+export async function setTaskStatus(
+  propertyId: string,
+  taskId: string,
+  status: "open" | "done" | "cancelled",
+): Promise<OpportunityDoc | null> {
+  const current = await getOpportunity(propertyId);
+  if (!current) return null;
+  return crmStore().put("opportunities", {
+    ...current,
+    tasks: current.tasks.map((task) =>
+      task.id === taskId
+        ? { ...task, status, completedAt: status === "done" ? nowIso() : null }
+        : task,
+    ),
+    updatedAt: nowIso(),
+  });
 }
 
 /* ------------------------------------------------------------------ */
-/* Outreach                                                             */
+/* Court records and simulation                                         */
 /* ------------------------------------------------------------------ */
 
-export async function listOutreach(opportunityId: string) {
-  const messages = await db()
-    .select()
-    .from(outreachMessages)
-    .where(eq(outreachMessages.opportunityId, opportunityId))
-    .orderBy(desc(outreachMessages.createdAt));
-
-  if (!messages.length) return [];
-
-  const events = await db()
-    .select()
-    .from(outreachEvents)
-    .where(
-      inArray(
-        outreachEvents.messageId,
-        messages.map((message) => message.id),
-      ),
-    )
-    .orderBy(outreachEvents.occurredAt);
-
-  return messages.map((message) => ({
-    message,
-    events: events.filter((event) => event.messageId === message.id),
-  }));
+export async function listCourtRecords(propertyId: string): Promise<CourtDoc | null> {
+  return crmStore().get<CourtDoc>("court", propertyId);
 }
 
-export async function listCampaigns(limit = 50) {
-  return db()
-    .select({
-      campaign: outreachCampaigns,
-      messageCount: sql<number>`count(${outreachMessages.id})::int`,
-    })
-    .from(outreachCampaigns)
-    .leftJoin(outreachMessages, eq(outreachMessages.campaignId, outreachCampaigns.id))
-    .groupBy(outreachCampaigns.id)
-    .orderBy(desc(outreachCampaigns.createdAt))
-    .limit(limit);
+export async function listSimulatedChanges(): Promise<SimulatedDoc[]> {
+  const changes = await crmStore().list<SimulatedDoc>("simulated");
+  return changes.sort(byNewest((change) => change.createdAt));
 }
 
 /* ------------------------------------------------------------------ */
 /* Dashboard aggregates                                                 */
 /* ------------------------------------------------------------------ */
 
-export interface PipelineFunnel {
+export interface StageFunnelRow {
   stage: AcquisitionStage;
   count: number;
   value: number;
 }
 
-export async function stageFunnel(): Promise<PipelineFunnel[]> {
-  const rows = await db()
-    .select({
-      stage: opportunities.stage,
-      count: sql<number>`count(*)::int`,
-      value: sql<number>`coalesce(sum(${opportunities.assessedValue}), 0)::float8`,
-    })
-    .from(opportunities)
-    .groupBy(opportunities.stage);
+export async function stageFunnel(): Promise<StageFunnelRow[]> {
+  const opportunities = await crmStore().list<OpportunityDoc>("opportunities");
+  const byStage = new Map<AcquisitionStage, StageFunnelRow>();
 
-  return rows.map((row) => ({
-    stage: row.stage as AcquisitionStage,
-    count: row.count,
-    value: row.value,
-  }));
+  for (const opportunity of opportunities) {
+    const row = byStage.get(opportunity.stage) ?? {
+      stage: opportunity.stage,
+      count: 0,
+      value: 0,
+    };
+    row.count += 1;
+    row.value += opportunity.assessedValue ?? 0;
+    byStage.set(opportunity.stage, row);
+  }
+
+  return [...byStage.values()];
 }
-
-export async function outreachStatusBreakdown() {
-  return db()
-    .select({
-      channel: outreachMessages.channel,
-      status: outreachMessages.status,
-      count: sql<number>`count(*)::int`,
-    })
-    .from(outreachMessages)
-    .groupBy(outreachMessages.channel, outreachMessages.status);
-}
-
-/* ------------------------------------------------------------------ */
-/* Simulated changes                                                    */
-/* ------------------------------------------------------------------ */
-
-export async function listSimulatedChanges() {
-  return db().select().from(simulatedChanges).orderBy(desc(simulatedChanges.createdAt));
-}
-
-export async function clearSimulatedChanges() {
-  await db().delete(simulatedChanges);
-}
-
-export type { OutreachChannel };

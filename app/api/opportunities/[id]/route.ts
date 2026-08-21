@@ -1,24 +1,17 @@
 /**
- * One opportunity, with everything a reviewer needs on one screen: the stage
- * history, notes, tasks, the outreach thread and its simulated lifecycle, and
- * the owner record.
+ * One opportunity, whole.
  *
- * The PATCH is the stage machine. A stage change always writes a stage event,
- * because reconstructing history from an updated_at column is not possible and
- * "stage history is recorded" is an acceptance criterion.
+ * Stage history, notes, tasks and the outreach thread are part of the same
+ * document, so this is one read rather than five joins. The PATCH is the stage
+ * machine: a stage change always appends a stage event, because reconstructing
+ * history from an updatedAt field is not possible and "stage history is
+ * recorded" is an acceptance criterion.
  */
 
 import { z } from "zod";
 
 import { fail, handleError, ok, readJson } from "@/lib/api";
-import {
-  getOpportunity,
-  listNotes,
-  listOutreach,
-  listStageEvents,
-  listTasks,
-  updateOpportunity,
-} from "@/lib/crm/repo";
+import { getOpportunityView, updateOpportunity } from "@/lib/crm/repo";
 import { advanceOutreach } from "@/lib/notify/outreach";
 import { ACQUISITION_STAGES } from "@/lib/notify/types";
 
@@ -27,13 +20,13 @@ export const dynamic = "force-dynamic";
 
 const patchSchema = z.object({
   stage: z.enum(ACQUISITION_STAGES).optional(),
-  assigneeId: z.string().uuid().nullish(),
+  assigneeId: z.string().nullish(),
   ownerInterest: z.string().max(2000).nullish(),
   askingPrice: z.number().min(0).nullish(),
   offerPrice: z.number().min(0).nullish(),
   nextStep: z.string().max(1000).nullish(),
   nextStepDueAt: z.string().datetime().nullish(),
-  actorId: z.string().uuid().nullish(),
+  actorId: z.string().nullish(),
   stageNote: z.string().max(1000).nullish(),
 });
 
@@ -48,17 +41,9 @@ export async function GET(
     // have come due, so the thread is current without a background worker.
     await advanceOutreach().catch(() => undefined);
 
-    const row = await getOpportunity(id);
-    if (!row) return fail("not_found", "No such opportunity.", 404);
-
-    const [stages, notes, tasks, outreach] = await Promise.all([
-      listStageEvents(id),
-      listNotes(id),
-      listTasks(id),
-      listOutreach(id),
-    ]);
-
-    return ok({ ...row, stageEvents: stages, notes, tasks, outreach });
+    const view = await getOpportunityView(id);
+    if (!view) return fail("not_found", "No such opportunity.", 404);
+    return ok(view);
   } catch (error: unknown) {
     return handleError("GET /api/opportunities/[id]", error);
   }
@@ -79,12 +64,7 @@ export async function PATCH(
       askingPrice: patch.askingPrice === undefined ? undefined : (patch.askingPrice ?? null),
       offerPrice: patch.offerPrice === undefined ? undefined : (patch.offerPrice ?? null),
       nextStep: patch.nextStep === undefined ? undefined : (patch.nextStep ?? null),
-      nextStepDueAt:
-        patch.nextStepDueAt === undefined
-          ? undefined
-          : patch.nextStepDueAt
-            ? new Date(patch.nextStepDueAt)
-            : null,
+      nextStepDueAt: patch.nextStepDueAt === undefined ? undefined : (patch.nextStepDueAt ?? null),
       actorId: patch.actorId ?? null,
       stageNote: patch.stageNote ?? null,
     });

@@ -15,7 +15,7 @@ import { handleError, ok } from "@/lib/api";
 import { dataConfig } from "@/lib/data/config";
 import { loadRunHistory } from "@/lib/data/runs";
 import { loadOverlay } from "@/lib/crm/overlay";
-import { hasDatabase } from "@/lib/crm/db";
+import { storeStatus } from "@/lib/crm/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,10 +31,7 @@ export async function GET(): Promise<Response> {
     const latest = runs[0] ?? null;
 
     return ok({
-      crmStore: {
-        configured: hasDatabase(),
-        provider: hasDatabase() ? "postgres" : null,
-      },
+      crmStore: storeStatus(),
       overlay: {
         courtDataAvailable: overlay.courtDataAvailable,
         courtProperties: overlay.courtPropertyCount,

@@ -7,8 +7,7 @@
  * one lifecycle model rather than two.
  */
 
-import type { CrmDatabase } from "@/lib/crm/db";
-import { notifications } from "@/lib/crm/schema";
+import { newId, nowIso, type NotificationDoc } from "@/lib/crm/documents";
 import { humanField } from "@/lib/criteria/score";
 import { providerFor } from "./providers";
 import type { NotifyChannel } from "./types";
@@ -95,26 +94,26 @@ export function alertBody(input: DeliverInput): string {
 }
 
 async function record(
-  database: CrmDatabase,
-  alertId: string,
+  input: DeliverInput,
   channel: NotifyChannel,
   recipient: string | null,
   subject: string | null,
   body: string,
-): Promise<number> {
+): Promise<NotificationDoc | null> {
   try {
     if (channel === "in_app") {
-      // Nothing to hand to a provider: the feed reads the row.
-      await database.insert(notifications).values({
-        alertId,
+      // Nothing to hand to a provider: the feed reads the alert document.
+      return {
+        id: newId(),
         channel,
         recipient: null,
         status: "delivered",
+        providerMessageId: null,
         subject,
         body,
-        sentAt: new Date(),
-      });
-      return 1;
+        sentAt: nowIso(),
+        createdAt: nowIso(),
+      };
     }
 
     const provider = providerFor(channel === "sms" ? "sms" : "email");
@@ -123,45 +122,58 @@ async function record(
       to: recipient ?? "",
       subject,
       body,
-      idempotencyKey: `${alertId}:${channel}`,
+      idempotencyKey: `${input.alertId}:${channel}`,
     });
 
-    await database.insert(notifications).values({
-      alertId,
+    return {
+      id: newId(),
       channel,
       recipient,
       status: sent.status,
       providerMessageId: sent.providerMessageId,
       subject,
       body,
-      sentAt: sent.acceptedAt,
-    });
-    return 1;
+      sentAt: sent.acceptedAt.toISOString(),
+      createdAt: nowIso(),
+    };
   } catch (error: unknown) {
-    // A notification that cannot be written must not lose the alert: the alert
-    // row is already committed and will still appear in the feed.
-    logError("notify.deliver_failed", error, { alertId, channel });
-    return 0;
+    // A notification that cannot be built must not lose the alert: the alert is
+    // written either way and will still appear in the feed.
+    logError("notify.deliver_failed", error, { alertId: input.alertId, channel });
+    return null;
   }
 }
 
-/** Returns how many notifications were written. */
-export async function deliverAlert(database: CrmDatabase, input: DeliverInput): Promise<number> {
+/**
+ * Build the notifications for one alert.
+ *
+ * Returned rather than written: they are embedded in the alert document, so the
+ * caller writes alert and deliveries together and there is no window where an
+ * alert exists without its channel record.
+ */
+export async function deliverAlert(input: DeliverInput): Promise<NotificationDoc[]> {
   const subject = alertSubject(input);
   const body = alertBody(input);
-  let sent = 0;
+  const built: (NotificationDoc | null)[] = [];
 
   if (input.search.notifyInApp) {
-    sent += await record(database, input.alertId, "in_app", null, subject, body);
+    built.push(await record(input, "in_app", null, subject, body));
   }
   if (input.search.notifyEmail) {
-    sent += await record(database, input.alertId, "email", DEMO_RECIPIENT_EMAIL, subject, body);
+    built.push(await record(input, "email", DEMO_RECIPIENT_EMAIL, subject, body));
   }
   if (input.search.notifySms) {
     // An SMS carries the first line only; the rest is what the app is for.
-    const short = `${subject} - score ${input.score.toFixed(0)}`;
-    sent += await record(database, input.alertId, "sms", DEMO_RECIPIENT_SMS, null, short);
+    built.push(
+      await record(
+        input,
+        "sms",
+        DEMO_RECIPIENT_SMS,
+        null,
+        `${subject} - score ${input.score.toFixed(0)}`,
+      ),
+    );
   }
 
-  return sent;
+  return built.filter((entry): entry is NotificationDoc => entry !== null);
 }
