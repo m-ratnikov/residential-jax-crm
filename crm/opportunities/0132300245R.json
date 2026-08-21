@@ -48,8 +48,8 @@
       ],
       "id": "0mt3hi5pa2of9q2pc",
       "providerMessageId": "sim_email_4ab24ff239c0ed083c83",
-      "status": "sent",
-      "statusAt": "2026-08-21T21:51:37.054Z",
+      "status": "delivered",
+      "statusAt": "2026-08-21T21:52:18.054Z",
       "subject": "About the roof at 8757 MC GLOTHLIN ST, JACKSONVILLE, 32210",
       "templateId": "roof-condition",
       "toAddress": "owner-01323002@example.invalid"
