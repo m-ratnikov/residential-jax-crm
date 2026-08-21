@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello SMITHERMAN SCOTT TRACY,\n\nCounty records suggest the roof at 8757 MC GLOTHLIN ST, JACKSONVILLE, 32210 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $18,938.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt36xaaac2y7epmj",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-21T16:55:27.058Z",
+      "createdById": "0mt36wiiel4uur28g",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-01323002@example.invalid",
+          "occurredAt": "2026-08-21T16:55:27.058Z",
+          "providerEventId": "sim_email_6c8899591f3f9f1f943b:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-21T16:56:42.058Z",
+          "providerEventId": "sim_email_6c8899591f3f9f1f943b:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt36xaaa8i58j25q",
+      "providerMessageId": "sim_email_6c8899591f3f9f1f943b",
+      "status": "queued",
+      "statusAt": "2026-08-21T16:55:27.058Z",
+      "subject": "About the roof at 8757 MC GLOTHLIN ST, JACKSONVILLE, 32210",
+      "templateId": "roof-condition",
+      "toAddress": "owner-01323002@example.invalid"
+    }
+  ],
   "ownerId": "0mt36x5yipnodom7e",
   "ownerInterest": null,
   "ownerNameSnapshot": "SMITHERMAN SCOTT TRACY",
@@ -87,5 +117,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-21T16:55:26.250Z"
+  "updatedAt": "2026-08-21T16:55:27.058Z"
 }
