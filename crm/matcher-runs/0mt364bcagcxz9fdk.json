@@ -1,0 +1,42 @@
+{
+  "alertsCreated": 3,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-parquet",
+  "dataSourceLocation": "../data/published-query-table.parquet",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "isSample": false,
+      "kind": "duckdb-parquet",
+      "location": "../data/published-query-table.parquet",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 3,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 1,
+        "matched": 68020,
+        "name": "Transit infill",
+        "newMatches": 1,
+        "savedSearchId": "0mt361knbc4fnfhgl",
+        "seeded": false,
+        "truncated": true,
+        "updatedMatches": 2
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-21T16:33:01.176Z",
+  "id": "0mt364bcagcxz9fdk",
+  "notificationsSent": 3,
+  "pipelineRunId": "sim-20260821163251-da4c9af3",
+  "pipelineRunIsNew": true,
+  "pipelineRunStartedAt": "2026-08-21 10:55:39.9",
+  "propertiesEvaluated": 2000,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-21T16:32:55.402Z",
+  "trigger": "simulation"
+}
