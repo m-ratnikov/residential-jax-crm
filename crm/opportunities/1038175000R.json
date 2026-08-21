@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34rwfzfxgghctc",
-  "ownerInterest": null,
+  "ownerInterest": "Curious, not committed",
   "ownerNameSnapshot": "SHADY COVE CONDOMINIUM ASSOCIA",
   "parcelIdentifier": "1038175000R",
   "propertyId": "1038175000R",
@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 41
   },
   "savedSearchId": "0mt34qwmnq7mw3qcj",
-  "stage": "contacted",
+  "stage": "identified",
   "stageEvents": [
     {
       "actorId": "0mt34qrentckaguhg",
@@ -59,16 +59,8 @@
       "id": "0mt34rxhaynfekxk3",
       "note": "Created from search",
       "toStage": "identified"
-    },
-    {
-      "actorId": "0mt34qv5ittgrk9jb",
-      "createdAt": "2026-08-21T15:55:19.876Z",
-      "fromStage": "identified",
-      "id": "0mt34ryys2d88askd",
-      "note": "Owner answered the SMS asking who we are. Warm enough to keep going.",
-      "toStage": "contacted"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:55:19.876Z"
+  "updatedAt": "2026-08-21T15:55:21.504Z"
 }
