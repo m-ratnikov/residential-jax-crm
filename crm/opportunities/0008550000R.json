@@ -6,7 +6,7 @@
   "askingPrice": null,
   "assessedValue": 94087,
   "assigneeId": "0mt3jko7rxun9qszv",
-  "closedAt": null,
+  "closedAt": "2026-08-21T22:50:40.317Z",
   "createdAt": "2026-08-21T22:50:36.627Z",
   "id": "0008550000R",
   "latitude": 30.2987039,
@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 30
   },
   "savedSearchId": "0mt3jkoyjgpfwcnfl",
-  "stage": "under_contract",
+  "stage": "closed",
   "stageEvents": [
     {
       "actorId": "0mt3jkl2vzmjcfaed",
@@ -83,8 +83,16 @@
       "id": "0mt3jm2zlj9wyc2jv",
       "note": null,
       "toStage": "under_contract"
+    },
+    {
+      "actorId": "0mt3jko7rxun9qszv",
+      "createdAt": "2026-08-21T22:50:40.317Z",
+      "fromStage": "under_contract",
+      "id": "0mt3jm3p9g5acshqw",
+      "note": "Closed. Roof replaced before the tenant moved in.",
+      "toStage": "closed"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:39.393Z"
+  "updatedAt": "2026-08-21T22:50:40.317Z"
 }
