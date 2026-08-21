@@ -13,7 +13,7 @@
   "longitude": -81.9962772,
   "matchRationale": "held 33 years (last sale 1992-11-17) (+33); roof about 42 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Skip trace the mailing address",
   "nextStepDueAt": null,
   "notes": [],
   "offerPrice": null,
@@ -62,5 +62,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:49:49.495Z"
+  "updatedAt": "2026-08-21T22:49:50.575Z"
 }
