@@ -26,9 +26,9 @@
   },
   "description": null,
   "id": "0mt3aatgybgi617r6",
-  "lastEvaluatedAt": null,
-  "lastMatchCount": null,
-  "lastPipelineRunId": null,
+  "lastEvaluatedAt": "2026-08-21T18:30:21.668Z",
+  "lastMatchCount": 0,
+  "lastPipelineRunId": "01M0HZCKVT3PS6GMFV9CWV2M8V",
   "matches": {},
   "matchesTruncated": false,
   "name": "Tired landlord",
@@ -36,5 +36,5 @@
   "notifyInApp": true,
   "notifySms": true,
   "ownerId": null,
-  "updatedAt": "2026-08-21T18:29:57.297Z"
+  "updatedAt": "2026-08-21T18:30:21.668Z"
 }
