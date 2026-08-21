@@ -197,6 +197,13 @@ function AlertsFeed() {
                     </div>
                   )}
 
+                  {/* Labelled rather than left implicit: these are the values
+                      that were read when the alert was raised, not a live
+                      lookup. A parcel can move on afterwards, and an alert that
+                      silently re-read would stop being a record of anything. */}
+                  <p className="text-[10px] uppercase tracking-wide text-ink-600">
+                    the parcel as it was when this was raised
+                  </p>
                   <dl className="tabular grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] sm:grid-cols-4">
                     <Row label="Owner" value={snapshot.ownerName ?? "not published"} />
                     <Row label="Assessed" value={money(snapshot.assessedValue ?? null)} />
@@ -226,6 +233,20 @@ function AlertsFeed() {
                     </span>
                     {alert.matcherTrigger && (
                       <Badge tone="outline">matcher: {alert.matcherTrigger}</Badge>
+                    )}
+                    {/* A simulated run can be cleared after it raised an alert,
+                        and then the parcel no longer holds the values quoted
+                        above. The alert is still a true record of what was
+                        observed - it is history, not a live reading - but a
+                        reader comparing the two would otherwise just see two
+                        different numbers and no explanation. */}
+                    {alert.pipelineRunId?.startsWith("sim-") && (
+                      <Badge
+                        tone="warn"
+                        title="A simulated pipeline update raised this. The values above are what was observed at the time; if the simulation has since been cleared, the parcel now shows its published values again."
+                      >
+                        simulated run
+                      </Badge>
                     )}
                   </div>
 
