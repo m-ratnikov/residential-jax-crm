@@ -3,7 +3,7 @@
   "addressLine": "1219 S RAILROAD AVE, BALDWIN, 32234",
   "addressZip": "32234",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 165000,
   "assessedValue": 103274,
   "assigneeId": "0mt3jkn62k63g6gkc",
   "closedAt": null,
@@ -13,10 +13,10 @@
   "longitude": -81.9870004,
   "matchRationale": "held 25 years (+33); roof about 39 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 149000,
   "outreach": [],
   "ownerId": "0mt3jludvh1kec97s",
   "ownerInterest": null,
@@ -86,5 +86,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T22:50:31.728Z"
+  "updatedAt": "2026-08-21T22:50:33.203Z"
 }
