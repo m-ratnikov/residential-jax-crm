@@ -41,13 +41,17 @@ function SearchWorkspace() {
   const router = useRouter();
   const params = useSearchParams();
 
-  const [criteria, setCriteria] = useState<CriteriaSet>(EMPTY_CRITERIA);
-  const [orderBy, setOrderBy] = useState<OrderBy>("score");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [saveOpen, setSaveOpen] = useState(false);
-
   const savedSearchId = params.get("saved");
   const focusId = params.get("focus");
+
+  const [criteria, setCriteria] = useState<CriteriaSet>(EMPTY_CRITERIA);
+  const [orderBy, setOrderBy] = useState<OrderBy>("score");
+  // A parcel id in the query string opens that parcel's drawer, which is how an
+  // alert links to the thing it is about. Initial state rather than an effect:
+  // as an effect it would also re-select the linked parcel after the user had
+  // clicked away from it.
+  const [selectedId, setSelectedId] = useState<string | null>(focusId);
+  const [saveOpen, setSaveOpen] = useState(false);
 
   // Load a saved search when one is named in the URL, so an alert or the saved
   // criteria page can link straight into a live search.
@@ -64,10 +68,6 @@ function SearchWorkspace() {
       cancelled = true;
     };
   }, [savedSearchId]);
-
-  useEffect(() => {
-    if (focusId) setSelectedId(focusId);
-  }, [focusId]);
 
   const search = useParcelSearch(criteria, orderBy);
   const { rows, total, loading, error } = search;
@@ -131,6 +131,7 @@ function SearchWorkspace() {
       </div>
 
       <PropertyDrawer
+        key={selectedId}
         propertyId={selectedId}
         onClose={() => setSelectedId(null)}
         score={selectedRow?.score ?? null}
@@ -195,8 +196,8 @@ function SaveSearchDialog({
       onSaved(body.search);
     } catch (cause: unknown) {
       setError(
-        cause instanceof ApiError && cause.isStoreMissing
-          ? "No CRM store is attached to this deployment, so searches cannot be saved. Set DATABASE_URL and run the migration."
+        cause instanceof ApiError && cause.isStoreReadOnly
+          ? "The CRM store on this deployment is attached read only, so criteria cannot be saved. Search itself is unaffected."
           : cause instanceof Error
             ? cause.message
             : "Could not save the search.",

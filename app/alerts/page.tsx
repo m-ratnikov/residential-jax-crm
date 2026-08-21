@@ -29,6 +29,7 @@ import {
 } from "@/components/ui";
 import { ApiError, api, patch, post, type AlertRow } from "@/lib/client";
 import { humanField } from "@/lib/criteria/score";
+import { storeWarning, useServerStatus } from "@/lib/data/status";
 
 export default function AlertsPage() {
   return (
@@ -44,7 +45,8 @@ function AlertsFeed() {
   const focus = params.get("focus");
 
   const [alerts, setAlerts] = useState<AlertRow[] | null>(null);
-  const [storeMissing, setStoreMissing] = useState(false);
+  const [status] = useServerStatus();
+  const warning = storeWarning(status?.crmStore);
   const [unreadOnly, setUnreadOnly] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(focus);
   const [converting, setConverting] = useState<string | null>(null);
@@ -54,14 +56,8 @@ function AlertsFeed() {
     if (savedSearchId) query.set("savedSearchId", savedSearchId);
     if (unreadOnly) query.set("unread", "true");
     api<{ alerts: AlertRow[] }>(`/api/alerts?${query.toString()}`)
-      .then((body) => {
-        setAlerts(body.alerts);
-        setStoreMissing(false);
-      })
-      .catch((cause: ApiError) => {
-        setAlerts([]);
-        setStoreMissing(cause.isStoreMissing);
-      });
+      .then((body) => setAlerts(body.alerts))
+      .catch(() => setAlerts([]));
   }, [savedSearchId, unreadOnly]);
 
   useEffect(load, [load]);
@@ -132,16 +128,15 @@ function AlertsFeed() {
         </div>
       </div>
 
-      {storeMissing && (
+      {warning && (
         <div className="rounded-lg border border-warn-500/40 bg-warn-500/10 px-4 py-3 text-xs text-warn-500">
-          No CRM store is attached, so no alerts can be recorded. Set DATABASE_URL and run
-          <span className="mono"> pnpm db:migrate</span>.
+          {warning}
         </div>
       )}
 
       {alerts === null ? (
         <Spinner label="Reading the notification history" />
-      ) : alerts.length === 0 && !storeMissing ? (
+      ) : alerts.length === 0 ? (
         <Empty title="No alerts yet">
           Save a set of criteria, then either wait for the scheduled matcher or use the simulate
           buttons on the saved criteria page to drive the whole loop now.

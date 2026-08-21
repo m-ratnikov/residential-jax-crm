@@ -27,23 +27,8 @@ import {
   money,
 } from "@/components/ui";
 import { api, type AlertRow, type MatcherRunRow, type OpportunityRow } from "@/lib/client";
+import { storeWarning, useDataset, useServerStatus } from "@/lib/data/status";
 import { STAGE_LABELS, type AcquisitionStage } from "@/lib/notify/types";
-
-interface DataSourceStatus {
-  dataSource: {
-    label: string;
-    location: string;
-    isSample: boolean;
-    rowCount: number;
-    columnCount: number;
-    countyName: string;
-    runId: string | null;
-    generatedAt: string | null;
-  };
-  crmStore: { configured: boolean };
-  overlay: { courtDataAvailable: boolean; courtProperties: number; simulatedProperties: number };
-  pipeline: { runId: string; status: string; startedAt: string; finishedAt: string | null } | null;
-}
 
 const STAGE_ORDER: AcquisitionStage[] = [
   "identified",
@@ -54,23 +39,16 @@ const STAGE_ORDER: AcquisitionStage[] = [
 ];
 
 export default function DashboardPage() {
-  const [status, setStatus] = useState<DataSourceStatus | null>(null);
+  const [status] = useServerStatus();
+  const dataset = useDataset();
   const [alerts, setAlerts] = useState<AlertRow[] | null>(null);
   const [opportunities, setOpportunities] = useState<OpportunityRow[] | null>(null);
   const [passes, setPasses] = useState<MatcherRunRow[] | null>(null);
-  const [storeMissing, setStoreMissing] = useState(false);
 
   useEffect(() => {
-    api<DataSourceStatus>("/api/datasource")
-      .then(setStatus)
-      .catch(() => undefined);
-
     api<{ alerts: AlertRow[] }>("/api/alerts?limit=8")
       .then((body) => setAlerts(body.alerts))
-      .catch(() => {
-        setAlerts([]);
-        setStoreMissing(true);
-      });
+      .catch(() => setAlerts([]));
 
     api<{ opportunities: OpportunityRow[] }>("/api/opportunities?limit=500")
       .then((body) => setOpportunities(body.opportunities))
@@ -93,6 +71,7 @@ export default function DashboardPage() {
     (row) => row.opportunity.stage !== "closed" && row.opportunity.stage !== "dead",
   );
   const lastPass = passes?.[0] ?? null;
+  const warning = storeWarning(status?.crmStore);
 
   return (
     <div className="space-y-4">
@@ -100,8 +79,8 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-lg font-semibold tracking-tight">Acquisitions dashboard</h1>
           <p className="text-xs text-ink-500">
-            {status
-              ? `${status.dataSource.label} - ${count(status.dataSource.rowCount)} parcels over ${status.dataSource.columnCount} published columns`
+            {dataset
+              ? `${dataset.label} - ${count(dataset.rowCount)} parcels over ${dataset.columnCount} published columns`
               : "Reading the data source"}
           </p>
         </div>
@@ -115,13 +94,12 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {storeMissing && (
+      {warning && (
         <div className="rounded-lg border border-warn-500/40 bg-warn-500/10 px-4 py-3 text-xs text-warn-500">
-          <p className="font-medium">No CRM store is attached to this deployment.</p>
+          <p className="font-medium">{warning}</p>
           <p className="mt-1 text-warn-500/80">
-            The map, search, criteria and the agent all work without one. Saved searches, alerts,
-            opportunities and outreach need a Postgres connection: set DATABASE_URL and run
-            <span className="mono"> pnpm db:migrate</span>.
+            The map, search, criteria and the agent are unaffected: they read the published parcel
+            data in this tab and need no store at all.
           </p>
         </div>
       )}
@@ -273,24 +251,20 @@ export default function DashboardPage() {
             </Link>
           }
         >
-          {!status ? (
+          {!status || !dataset ? (
             <Spinner />
           ) : (
             <dl className="space-y-1.5 text-[11px]">
-              <Row label="Dataset" value={status.dataSource.label} />
+              <Row label="Dataset" value={dataset.label} />
               <Row
                 label="Scale"
-                value={`${count(status.dataSource.rowCount)} parcels, ${status.dataSource.columnCount} columns`}
+                value={`${count(dataset.rowCount)} parcels, ${dataset.columnCount} columns`}
               />
               <Row
                 label="Kind"
-                value={
-                  status.dataSource.isSample
-                    ? "bundled sample extract"
-                    : "published county query table"
-                }
+                value={dataset.isSample ? "bundled sample extract" : "published county query table"}
               />
-              <Row label="Location" value={status.dataSource.location} mono />
+              <Row label="Location" value={dataset.location} mono />
               <Row label="Latest pipeline run" value={status.pipeline?.runId ?? "unknown"} mono />
               <Row
                 label="Ran"

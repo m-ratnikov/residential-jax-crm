@@ -85,21 +85,20 @@ export function PropertyDrawer({
   savedSearchId,
   onTracked,
 }: PropertyDrawerProps) {
+  // The parent mounts this with `key={propertyId}`, so a different parcel is a
+  // different component instance. That is what makes these initialisers the
+  // whole reset: without the key, opening a second parcel would show the first
+  // one's values until the fetch came back, and clearing the four of them at
+  // the top of the effect would render the stale parcel once first anyway.
   const [detail, setDetail] = useState<PropertyDetail | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(Boolean(propertyId));
   const [error, setError] = useState<string | null>(null);
   const [tracking, setTracking] = useState(false);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    if (!propertyId) {
-      setDetail(null);
-      return;
-    }
+    if (!propertyId) return;
     let cancelled = false;
-    setLoading(true);
-    setError(null);
-    setShowAll(false);
 
     // The parcel comes from the engine in this tab; the CRM's view of it - court
     // filings, and whether it is already being worked - comes from the server.

@@ -192,9 +192,9 @@ export class ApiError extends Error {
     this.name = "ApiError";
   }
 
-  /** True when the failure is "no CRM store attached", which pages render specially. */
-  get isStoreMissing(): boolean {
-    return this.code === "crm_store_not_configured";
+  /** True when the store is attached but cannot be written, which pages render specially. */
+  get isStoreReadOnly(): boolean {
+    return this.code === "crm_store_not_writable";
   }
 }
 

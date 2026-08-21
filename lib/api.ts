@@ -10,7 +10,7 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
-import { CrmStoreNotConfiguredError } from "@/lib/crm/db";
+import { CrmStoreNotWritableError } from "@/lib/crm/db";
 import { logError } from "@/lib/notify/log";
 
 export interface ApiErrorBody {
@@ -37,12 +37,12 @@ export function fail(
 /**
  * One place that decides what an exception means to a caller.
  *
- * A missing CRM store is 503 with a code the UI recognises, because it is a
- * deployment state rather than a bug, and the affected pages render an
+ * A store attached read only is 503 with a code the UI recognises, because it
+ * is a deployment state rather than a bug, and the affected pages render an
  * explanation instead of an error.
  */
 export function handleError(route: string, error: unknown): NextResponse {
-  if (error instanceof CrmStoreNotConfiguredError) {
+  if (error instanceof CrmStoreNotWritableError) {
     return fail(error.code, error.message, 503);
   }
   if (error instanceof ZodError) {

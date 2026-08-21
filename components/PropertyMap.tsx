@@ -155,9 +155,14 @@ export function PropertyMap({
   const [circleAnchor, setCircleAnchor] = useState<{ lat: number; lng: number } | null>(null);
 
   // Handlers change identity on every render; the map listeners are registered
-  // once, so they read the current values through a ref instead.
+  // once, so they read the current values through a ref instead. Written in an
+  // effect rather than during render: a render can be discarded, and a ref
+  // updated by a discarded render would hand the listeners state that never
+  // reached the screen.
   const stateRef = useRef({ mode, draftRing, circleAnchor, onGeometryChange, onSelect });
-  stateRef.current = { mode, draftRing, circleAnchor, onGeometryChange, onSelect };
+  useEffect(() => {
+    stateRef.current = { mode, draftRing, circleAnchor, onGeometryChange, onSelect };
+  }, [mode, draftRing, circleAnchor, onGeometryChange, onSelect]);
 
   const geojson = useMemo<GeoJSON.FeatureCollection>(
     () => ({

@@ -87,16 +87,6 @@ export class CrmStoreNotWritableError extends Error {
   }
 }
 
-export class CrmStoreNotConfiguredError extends Error {
-  readonly code = "crm_store_not_configured";
-  constructor() {
-    super(
-      "No CRM store is attached. Search, the map, the criteria panel and the agent all work without one; saved searches, alerts and opportunities need a store. See .env.example.",
-    );
-    this.name = "CrmStoreNotConfiguredError";
-  }
-}
-
 /**
  * Stable JSON, so an unchanged document serialises byte-identically and the
  * write can be skipped. Key order from `JSON.stringify` follows insertion order,

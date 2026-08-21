@@ -221,7 +221,6 @@ async function openWasm(source: string, viewSql: (path: string) => string): Prom
   // build error under webpack ("module not found"), and the package is listed
   // in serverExternalPackages so this survives to runtime untouched.
   const entry = "@duckdb/duckdb-wasm/dist/duckdb-node-blocking.cjs";
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   const duckdb = require(entry) as any;
 
   // require.resolve is rewritten inside a Next build to return a numeric module
@@ -254,7 +253,6 @@ async function openWasm(source: string, viewSql: (path: string) => string): Prom
     duckdb.NODE_RUNTIME,
   )) as WasmBindings & { instantiate(progress: () => void): Promise<void> };
   await db.instantiate(() => {});
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   const local = await materialise(source);
   const registered = "parcels.parquet";

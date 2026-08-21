@@ -16,6 +16,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Badge, Button, Empty, Panel, Spinner, Stat, ago, count, when } from "@/components/ui";
 import { api, del, type MatcherRunRow } from "@/lib/client";
+import { useDataset, useServerStatus } from "@/lib/data/status";
 import { runMatcherPass } from "@/lib/notify/client-matcher";
 
 interface PipelineRunRow {
@@ -41,27 +42,9 @@ interface PipelineRunRow {
   }[];
 }
 
-interface DataSourceStatus {
-  dataSource: {
-    label: string;
-    location: string;
-    isSample: boolean;
-    rowCount: number;
-    columnCount: number;
-    runId: string | null;
-    generatedAt: string | null;
-  };
-  crmStore: { configured: boolean };
-  overlay: {
-    courtDataAvailable: boolean;
-    courtProperties: number;
-    simulatedProperties: number;
-    simulatedRunIds: string[];
-  };
-}
-
 export default function PipelinePage() {
-  const [status, setStatus] = useState<DataSourceStatus | null>(null);
+  const [status, reloadStatus] = useServerStatus();
+  const dataset = useDataset();
   const [runs, setRuns] = useState<PipelineRunRow[] | null>(null);
   const [passes, setPasses] = useState<MatcherRunRow[]>([]);
   const [busy, setBusy] = useState(false);
@@ -69,16 +52,14 @@ export default function PipelinePage() {
   const [expanded, setExpanded] = useState<string | null>(null);
 
   const load = useCallback(() => {
-    api<DataSourceStatus>("/api/datasource")
-      .then(setStatus)
-      .catch(() => undefined);
+    reloadStatus();
     api<{ pipelineRuns: PipelineRunRow[]; matcherRuns: MatcherRunRow[] }>("/api/runs?limit=25")
       .then((body) => {
         setRuns(body.pipelineRuns);
         setPasses(body.matcherRuns);
       })
       .catch(() => setRuns([]));
-  }, []);
+  }, [reloadStatus]);
 
   useEffect(load, [load]);
 
@@ -150,13 +131,13 @@ export default function PipelinePage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat
           label="Parcels loaded"
-          value={status ? count(status.dataSource.rowCount) : "-"}
-          hint={status?.dataSource.isSample ? "bundled sample extract" : "published county table"}
-          tone={status?.dataSource.isSample ? "warn" : "good"}
+          value={dataset ? count(dataset.rowCount) : "-"}
+          hint={dataset?.isSample ? "bundled sample extract" : "published county table"}
+          tone={dataset?.isSample ? "warn" : "good"}
         />
         <Stat
           label="Published columns"
-          value={status ? count(status.dataSource.columnCount) : "-"}
+          value={dataset ? count(dataset.columnCount) : "-"}
           hint="all readable on a parcel"
         />
         <Stat
@@ -180,21 +161,23 @@ export default function PipelinePage() {
           <Spinner />
         ) : (
           <dl className="space-y-1.5 text-[11px]">
-            <Row label="Label" value={status.dataSource.label} />
-            <Row label="Location" value={status.dataSource.location} mono />
+            <Row label="Label" value={dataset?.label ?? "attaching"} />
+            <Row label="Location" value={dataset?.location ?? "attaching"} mono />
             <Row
               label="Kind"
               value={
-                status.dataSource.isSample
+                dataset?.isSample
                   ? "bundled sample extract - set PROPERTY_DATA_URL to read the full published artifact"
                   : "published county query table read over HTTP range requests"
               }
             />
-            <Row label="Produced by run" value={status.dataSource.runId ?? "unknown"} mono />
-            <Row label="As of" value={status.dataSource.generatedAt ?? "unknown"} />
+            <Row label="Produced by run" value={dataset?.runId ?? "unknown"} mono />
+            <Row label="As of" value={dataset?.generatedAt ?? "unknown"} />
             <Row
               label="CRM store"
-              value={status.crmStore.configured ? "attached" : "not configured"}
+              value={`${status.crmStore.kind} - ${status.crmStore.location}${
+                status.crmStore.writable ? "" : " (read only)"
+              }`}
             />
             <Row
               label="Court records"
@@ -271,7 +254,7 @@ export default function PipelinePage() {
           <Spinner />
         ) : runs.length === 0 ? (
           <Empty title="No run history reachable">
-            Set RUN_HISTORY_URL to the pipeline's published run-history.json.
+            Set RUN_HISTORY_URL to the pipeline&apos;s published run-history.json.
           </Empty>
         ) : (
           <ul className="space-y-2">

@@ -29,6 +29,7 @@ import {
   money,
 } from "@/components/ui";
 import { ApiError, api, patch, post, type OpportunityRow } from "@/lib/client";
+import { storeWarning, useServerStatus } from "@/lib/data/status";
 import {
   ACQUISITION_STAGES,
   CHANNEL_LABELS,
@@ -47,7 +48,8 @@ const BOARD_STAGES: AcquisitionStage[] = [
 
 export default function OpportunitiesPage() {
   const [rows, setRows] = useState<OpportunityRow[] | null>(null);
-  const [storeMissing, setStoreMissing] = useState(false);
+  const [status] = useServerStatus();
+  const warning = storeWarning(status?.crmStore);
   const [view, setView] = useState<"board" | "table">("board");
   const [stageFilter, setStageFilter] = useState<AcquisitionStage | "all">("all");
   const [minScore, setMinScore] = useState("");
@@ -58,14 +60,8 @@ export default function OpportunitiesPage() {
 
   const load = useCallback(() => {
     api<{ opportunities: OpportunityRow[] }>("/api/opportunities?limit=1000")
-      .then((body) => {
-        setRows(body.opportunities);
-        setStoreMissing(false);
-      })
-      .catch((cause: ApiError) => {
-        setRows([]);
-        setStoreMissing(cause.isStoreMissing);
-      });
+      .then((body) => setRows(body.opportunities))
+      .catch(() => setRows([]));
   }, []);
 
   useEffect(load, [load]);
@@ -152,10 +148,9 @@ export default function OpportunitiesPage() {
         </div>
       </div>
 
-      {storeMissing && (
+      {warning && (
         <div className="rounded-lg border border-warn-500/40 bg-warn-500/10 px-4 py-3 text-xs text-warn-500">
-          No CRM store is attached, so opportunities cannot be tracked. Set DATABASE_URL and run
-          <span className="mono"> pnpm db:migrate</span>.
+          {warning}
         </div>
       )}
 

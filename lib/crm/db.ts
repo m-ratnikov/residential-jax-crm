@@ -17,7 +17,7 @@ import { memoryStore } from "./store-memory";
 import { postgresStoreFromEnv } from "./store-postgres";
 
 export type { CrmStore } from "./store";
-export { CrmStoreNotConfiguredError, CrmStoreNotWritableError } from "./store";
+export { CrmStoreNotWritableError } from "./store";
 
 const globalCache = globalThis as unknown as { __jaxCrmStore?: CrmStore };
 

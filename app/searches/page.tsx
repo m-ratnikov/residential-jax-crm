@@ -20,6 +20,7 @@ import { runMatcherPass } from "@/lib/notify/client-matcher";
 import { criteriaSetSchema } from "@/lib/criteria/types";
 import { fetchOverlay, propertySource } from "@/lib/data/client-source";
 import { displayAddress } from "@/lib/data/map";
+import { storeWarning, useServerStatus } from "@/lib/data/status";
 
 interface SimulationResponse {
   simulation: {
@@ -31,7 +32,8 @@ interface SimulationResponse {
 
 export default function SavedSearchesPage() {
   const [searches, setSearches] = useState<SavedSearch[] | null>(null);
-  const [storeMissing, setStoreMissing] = useState(false);
+  const [status] = useServerStatus();
+  const warning = storeWarning(status?.crmStore);
   const [busy, setBusy] = useState<string | null>(null);
   const [outcome, setOutcome] = useState<{ id: string; text: string; tone: "good" | "bad" } | null>(
     null,
@@ -39,14 +41,8 @@ export default function SavedSearchesPage() {
 
   const load = useCallback(() => {
     api<{ searches: SavedSearch[] }>("/api/searches")
-      .then((body) => {
-        setSearches(body.searches);
-        setStoreMissing(false);
-      })
-      .catch((cause: ApiError) => {
-        setSearches([]);
-        setStoreMissing(cause.isStoreMissing);
-      });
+      .then((body) => setSearches(body.searches))
+      .catch(() => setSearches([]));
   }, []);
 
   useEffect(load, [load]);
@@ -186,16 +182,15 @@ export default function SavedSearchesPage() {
         </Link>
       </div>
 
-      {storeMissing && (
+      {warning && (
         <div className="rounded-lg border border-warn-500/40 bg-warn-500/10 px-4 py-3 text-xs text-warn-500">
-          No CRM store is attached, so criteria cannot be saved. Set DATABASE_URL and run
-          <span className="mono"> pnpm db:migrate</span>. Ad hoc search still works.
+          {warning}
         </div>
       )}
 
       {searches === null ? (
         <Spinner label="Reading saved criteria" />
-      ) : searches.length === 0 && !storeMissing ? (
+      ) : searches.length === 0 ? (
         <Empty title="Nothing saved yet">
           Build a set of criteria on the search page and save it. The first pass records what
           already matches as a baseline; after that you are told about changes.

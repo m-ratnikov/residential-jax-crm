@@ -46,11 +46,15 @@ export default function SettingsPage() {
   const [testing, setTesting] = useState(false);
   const [result, setResult] = useState<{ ok: boolean; text: string } | null>(null);
 
-  useEffect(() => {
-    if (!loaded || !settings) return;
+  // Seeded from what is stored, once. Adjusting state during render is the
+  // documented way to do this: an effect would render the default form first
+  // and replace it a frame later, which shows as a flicker on every visit.
+  const [seeded, setSeeded] = useState(false);
+  if (loaded && settings && !seeded) {
+    setSeeded(true);
     setProvider(settings.provider);
     setModelId(settings.modelId);
-  }, [loaded, settings]);
+  }
 
   useEffect(() => {
     fetch("/api/agent")

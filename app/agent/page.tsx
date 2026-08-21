@@ -40,14 +40,12 @@ export default function AgentPage() {
   const [question, setQuestion] = useState("");
   const [turns, setTurns] = useState<Turn[]>([]);
   const [busy, setBusy] = useState(false);
-  const [configured, setConfigured] = useState<boolean | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // Configuration is now a purely local question: the loop runs in this tab
-  // with the key stored in this browser.
-  useEffect(() => {
-    if (loaded) setConfigured(Boolean(settings));
-  }, [loaded, settings]);
+  // Configuration is a purely local question: the loop runs in this tab with
+  // the key stored in this browser. Derived rather than stored, so it cannot be
+  // a render behind the settings it describes. Null means "still reading".
+  const configured = loaded ? Boolean(settings) : null;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
