@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt361hpvtx5bozau",
+      "body": "Owner answered the SMS asking who we are. Warm enough to keep going.",
+      "createdAt": "2026-08-21T16:31:34.507Z",
+      "id": "0mt362kx76gfo5sh6"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt362hpn2vvddgkl",
@@ -70,5 +77,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:31:33.244Z"
+  "updatedAt": "2026-08-21T16:31:34.507Z"
 }
