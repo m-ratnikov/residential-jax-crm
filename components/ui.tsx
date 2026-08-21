@@ -388,10 +388,53 @@ export function count(value: number | null | undefined): string {
   return value.toLocaleString("en-US");
 }
 
-export function when(value: string | Date | null | undefined): string {
-  if (!value) return "never";
-  const date = typeof value === "string" ? new Date(value) : value;
-  if (Number.isNaN(date.getTime())) return String(value);
+/**
+ * A year is an ordinal, not a quantity, so it never takes a thousands
+ * separator: 1916, not 1,916. Anything that is not a number falls back to the
+ * raw value, because showing what was published beats showing "NaN".
+ */
+export function year(value: unknown): string {
+  if (value === null || value === undefined || value === "") return "";
+  const parsed =
+    typeof value === "bigint"
+      ? Number(value)
+      : typeof value === "number"
+        ? value
+        : Number(String(value).trim());
+  if (!Number.isFinite(parsed)) return String(value);
+  return String(Math.trunc(parsed));
+}
+
+/**
+ * A timestamp in any of the shapes the pipeline hands one over in: a Date, an
+ * ISO string, or epoch milliseconds arriving as a number, a bigint or a numeric
+ * string - which is what a parquet TIMESTAMP column becomes once it has crossed
+ * Arrow into the browser. Returns null when the value is not a timestamp at
+ * all, so a caller can show what it actually got rather than "Invalid Date".
+ *
+ * Epoch detection is deliberately narrow (11 to 14 digits, so 1973 to 2972). A
+ * four digit year is never mistaken for an epoch, and neither is a parcel
+ * number.
+ */
+export function toDate(value: unknown): Date | null {
+  if (value === null || value === undefined || value === "") return null;
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+  if (typeof value === "bigint") return finite(new Date(Number(value)));
+  if (typeof value === "number") return Number.isFinite(value) ? finite(new Date(value)) : null;
+  if (typeof value !== "string") return null;
+  const text = value.trim();
+  if (/^\d{11,14}$/.test(text)) return finite(new Date(Number(text)));
+  return finite(new Date(text));
+}
+
+function finite(date: Date): Date | null {
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+export function when(value: string | number | Date | null | undefined): string {
+  if (value === null || value === undefined || value === "") return "never";
+  const date = toDate(value);
+  if (!date) return String(value);
   return date.toLocaleString("en-US", {
     year: "numeric",
     month: "short",
@@ -401,10 +444,10 @@ export function when(value: string | Date | null | undefined): string {
   });
 }
 
-export function ago(value: string | Date | null | undefined): string {
-  if (!value) return "never";
-  const date = typeof value === "string" ? new Date(value) : value;
-  if (Number.isNaN(date.getTime())) return String(value);
+export function ago(value: string | number | Date | null | undefined): string {
+  if (value === null || value === undefined || value === "") return "never";
+  const date = toDate(value);
+  if (!date) return String(value);
   const seconds = Math.max(0, (Date.now() - date.getTime()) / 1000);
   if (seconds < 60) return "just now";
   const minutes = seconds / 60;

@@ -229,9 +229,24 @@ export default function PipelinePage() {
                         {pass.trigger}
                       </Badge>
                     </td>
-                    <td className="mono max-w-[220px] truncate px-2 py-1.5 text-ink-400">
-                      {pass.pipelineRunId ?? "unknown"}
-                      {pass.pipelineRunIsNew && <span className="ml-1 text-good-500">new</span>}
+                    {/* The run id and the new-run marker are separate elements
+                        with a gap between them. Rendered as adjacent text they
+                        read as one identifier - "…CWV2M8Vnew" - which is the
+                        one thing a provenance column must never do. */}
+                    <td className="px-2 py-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className="mono max-w-[200px] truncate text-ink-400"
+                          title={pass.pipelineRunId ?? undefined}
+                        >
+                          {pass.pipelineRunId ?? "unknown"}
+                        </span>
+                        {pass.pipelineRunIsNew && (
+                          <Badge tone="good" title="A pipeline run this CRM had not seen before.">
+                            new
+                          </Badge>
+                        )}
+                      </div>
                     </td>
                     <td className="px-2 py-1.5 text-ink-300">{count(pass.searchesEvaluated)}</td>
                     <td className="px-2 py-1.5 text-ink-300">{count(pass.propertiesEvaluated)}</td>

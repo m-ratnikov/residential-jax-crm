@@ -20,7 +20,19 @@ import { COLUMN_GROUPS, ungroupedColumns } from "@/lib/oracle/columns";
 import { displayAddress } from "@/lib/data/map";
 import { fetchOverlay, propertySource } from "@/lib/data/client-source";
 import type { PropertyRecord } from "@/lib/data/types";
-import { Badge, Button, Empty, Panel, ScoreBadge, Spinner, cx, money, when } from "./ui";
+import {
+  Badge,
+  Button,
+  Empty,
+  Panel,
+  ScoreBadge,
+  Spinner,
+  cx,
+  money,
+  toDate,
+  when,
+  year,
+} from "./ui";
 
 interface CourtRecordRow {
   id: string;
@@ -56,9 +68,41 @@ const CURRENCY = new Set([
 
 const METRES = new Set(["water_dist_m", "nearest_transit_stop_m", "nearest_starbucks_m"]);
 
-function renderValue(column: string, value: unknown): string {
+/**
+ * Columns whose number is a year rather than a quantity. Thousands separators
+ * belong on assessed_value and livable_floor_area; on a year they turn 1916
+ * into "1,916", which reads as a typo in a record a reviewer is checking.
+ *
+ * Note this is the calendar-year columns only. years_since_last_sale and
+ * roof_age_years are durations, and stay in the ordinary number branch.
+ */
+export const YEAR_COLUMNS = new Set([
+  "built_year",
+  "eff_year_built",
+  "pa_actual_year_built",
+  "roof_year_est",
+  "last_roof_permit_year",
+]);
+
+/**
+ * Columns published as a parquet TIMESTAMP. Those cross Arrow into the browser
+ * as epoch milliseconds, so without this they render as "1,787,320,736,294".
+ * source_fetched_at and features_as_of are published as text and are left as
+ * published: features_as_of is a bare date, and turning it into a local
+ * timestamp would move it a day in every negative UTC offset.
+ */
+export const TIMESTAMP_COLUMNS = new Set(["fetched_at"]);
+
+export function renderValue(column: string, value: unknown): string {
   if (value === null || value === undefined || value === "") return "not published";
   if (typeof value === "boolean") return value ? "yes" : "no";
+  // Both of these are checked before the number branch, because the value
+  // arrives as a number and would otherwise be formatted as a quantity.
+  if (YEAR_COLUMNS.has(column)) return year(value);
+  if (TIMESTAMP_COLUMNS.has(column)) {
+    const at = toDate(value);
+    return at ? when(at) : String(value);
+  }
   if (typeof value === "number") {
     if (CURRENCY.has(column)) return money(value);
     if (METRES.has(column)) return `${Math.round(value).toLocaleString("en-US")} m`;
