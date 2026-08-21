@@ -406,7 +406,7 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
 
     list_opportunities: tool({
       description:
-        "Opportunities the team is working, with stage, assignee, match score and owner. Use this to tell a parcel nobody has touched from one already in play.",
+        "Opportunities the team is working, with stage, assignee, match score, owner and assessed value. Use this to tell a parcel nobody has touched from one already in play. The `summary` block already contains the per-stage counts and assessed-value totals: quote those rather than adding the rows up yourself.",
       inputSchema: z.object({
         stage: z
           .array(
@@ -470,7 +470,42 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
         // empty evidence panel underneath it.
         addEvidence(trace, opportunities, "list_opportunities");
 
-        return { available: true, opportunities };
+        // Counted and summed here, not by the model.
+        //
+        // "How many in each stage and what are the live ones worth" is the most
+        // obvious question anyone asks a CRM, and a language model doing the
+        // arithmetic gets it nearly right: asked this, GPT-4.1 mini listed five
+        // parcels of the six and reported a total 34 dollars off the rows it had
+        // just printed. Arithmetic is not what it is for. The numbers below are
+        // computed from the same rows the evidence panel shows, so the answer
+        // and the table under it cannot disagree.
+        const LIVE = new Set(["identified", "contacted", "negotiating", "under_contract"]);
+        const byStage = new Map<string, { stage: string; count: number; assessed_value: number }>();
+        for (const row of opportunities) {
+          const entry = byStage.get(row.stage) ?? { stage: row.stage, count: 0, assessed_value: 0 };
+          entry.count += 1;
+          entry.assessed_value += row.assessed_value ?? 0;
+          byStage.set(row.stage, entry);
+        }
+        const live = opportunities.filter((row) => LIVE.has(row.stage));
+
+        return {
+          available: true,
+          summary: {
+            // Stated so an answer can say what it counted rather than implying
+            // it saw everything, when a stage filter or the limit cut the set.
+            counted: opportunities.length,
+            truncated: opportunities.length >= limit,
+            by_stage: [...byStage.values()],
+            live_stages: [...LIVE],
+            live_count: live.length,
+            live_assessed_value_total: live.reduce(
+              (sum, row) => sum + (row.assessed_value ?? 0),
+              0,
+            ),
+          },
+          opportunities,
+        };
       },
     }),
 
