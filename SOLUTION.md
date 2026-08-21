@@ -21,13 +21,13 @@ Everything below exists to make that one sentence true and checkable.
 | ---------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | Runtime          | Next.js 16 / React 19 / TypeScript on Vercel                                                   | no always-on server to pay for                                 |
 | Property queries | DuckDB-WASM **in the visitor's tab**, range reading the published parquet off the IPFS gateway | 404,023 parcels queryable with no database and no query server |
-| CRM state        | Postgres (Neon free tier) via Drizzle                                                          | thousands of rows, not hundreds of thousands                   |
+| CRM state        | JSON documents committed to a git branch (Postgres and in-process are drop-in alternatives)    | thousands of rows, and no database to provision or pay for     |
 | Map              | MapLibre GL, raster basemap declared inline                                                    | no API key, no style-document dependency                       |
 | Agent            | Vercel AI SDK, bring-your-own-key across seven providers, loop runs in the tab                 | its tools need the parcel data, which is in the tab            |
 | Schedule         | GitHub Actions cron every 30 minutes, native DuckDB                                            | Vercel Hobby allows one cron a day, which is not a notifier    |
 
-The property corpus is never copied into Postgres, and no server in this system
-holds a query engine. That is not a convenience: the story's cost criterion is
+The property corpus is never copied into a database, and no server in this
+system holds a query engine. That is not a convenience: the story's cost criterion is
 _"without requiring Oracle to carry ongoing hosted-database cost beyond the
 existing Duval pipeline + DuckDB / Elephant IPFS pattern"_, and that sentence
 names an architecture. DuckDB-WASM range reading the published artifact from the
@@ -40,7 +40,7 @@ redeploy.
 | Runs in          | What                                                                                              | Why there                                                                |
 | ---------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | The tab          | every parcel query: map, list, detail, scoring, the property CSV, the agent's tools               | the query engine is here, so this is where the authoritative record is   |
-| Vercel functions | the CRM store: saved searches, alerts, opportunities, outreach, tasks, court records, the overlay | Postgres, and nothing else                                               |
+| Vercel functions | the CRM store: saved searches, alerts, opportunities, outreach, tasks, court records, the overlay | the store's credential lives here, and nothing else does                 |
 | GitHub Actions   | the scheduled matcher, with native DuckDB                                                         | a runner can use the better engine, and a cron belongs outside a request |
 
 Producing matches and deciding what to alert on are separated
@@ -93,6 +93,54 @@ the five Arlington and Southside ZIP codes (32211, 32277, 32225, 32246, 32216),
 cut from the artifact the pipeline published. It exists so `git clone && pnpm
 install && pnpm dev` works with no network and no credentials. It is not the
 deliverable dataset.
+
+---
+
+## The CRM store is swappable too, and its default has no database
+
+The story asks for a CRM that runs _"without requiring Oracle to carry ongoing
+hosted-database cost beyond the existing Duval pipeline + DuckDB / Elephant IPFS
+pattern"_. A managed Postgres on a free tier satisfies the invoice and not the
+sentence: it is still a hosted database, still an account somebody owns, still a
+thing that suspends, expires, or starts costing money when the row count or the
+company changes. So the default backend is not a database at all.
+
+Everything the CRM writes goes through one interface, `CrmStore`
+([`lib/crm/store.ts`](lib/crm/store.ts)) - `list`, `get`, `put`, `remove`,
+`clear` over JSON documents in named collections. Three implementations:
+
+| Backend                                                          | Used when                             | What it costs                       |
+| ---------------------------------------------------------------- | ------------------------------------- | ----------------------------------- |
+| **Git documents** ([`store-github.ts`](lib/crm/store-github.ts)) | `CRM_STORE_REPO` is set (the default) | nothing; a repository, not a server |
+| Postgres ([`store-postgres.ts`](lib/crm/store-postgres.ts))      | `DATABASE_URL` is set                 | whatever the database costs         |
+| In process ([`store-memory.ts`](lib/crm/store-memory.ts))        | neither is set                        | nothing, and it forgets on restart  |
+
+The git backend commits one JSON document per aggregate to a branch, which is
+the same mechanism the Duval pipeline already uses to commit its run history.
+It is deliberately a narrow bet, and the constraints that make it safe are:
+
+- **The document key carries the invariants** a schema would spend unique indexes
+  on: `opportunities/<propertyId>`, `alerts/<runId>__<searchId>__<parcelId>`. Two
+  writers cannot open a second opportunity on the same parcel or double-notify
+  the same match, because they would be writing the same path.
+- **Aggregates are stored whole.** An opportunity carries its stage history,
+  notes, tasks and outreach inside it, so a deal is one read and one write, not
+  a join.
+- **Unchanged documents are not written.** The matcher runs every thirty minutes
+  and most passes change nothing; a `put` matching what is stored returns without
+  a commit, so steady state produces no history at all.
+- **Reads are content addressed.** Documents are fetched by blob sha, not from
+  `download_url`, because the raw host is a CDN that serves a stale copy for
+  minutes after a write. That is not a theoretical concern: it silently dropped a
+  note during seeding, where a read-modify-write read the pre-note document.
+- **A write updates the read cache in place** rather than invalidating it, so the
+  process that wrote a document always reads back what it wrote.
+
+Where it stops: writes are serialised per branch and cost a round trip, so this
+suits a small acquisitions team, not a call centre. That is why the interface
+exists and why the Postgres backend is kept working - the swap is one
+environment variable, with no code change and no data model change. The same
+verification script (`pnpm verify`) passes against all three.
 
 ---
 
@@ -246,13 +294,21 @@ pnpm dev
 
 ### The CRM half
 
-Any Postgres. Neon's free tier needs no card.
+Nothing is required. With no store configured the whole loop works in process
+and is lost on restart, which the app says on screen rather than leaving to be
+discovered. To keep it, point it at a repository:
 
 ```bash
-echo 'DATABASE_URL=postgresql://...' >> .env.local
-pnpm db:migrate
-pnpm db:seed        # a team, three theses, nine worked opportunities
+cat >> .env.local <<'EOF'
+CRM_STORE_REPO=owner/residential-jax-crm
+CRM_STORE_TOKEN=github_pat_...        # fine-grained, one repo, contents: write
+EOF
+pnpm seed           # a team, three theses, nine worked opportunities
 ```
+
+The branch (`crm-state`) and directory (`crm`) are created on the first write.
+Set `DATABASE_URL` instead for the Postgres backend; the table is created on
+first use and there is no migration step.
 
 ### The scheduler
 
@@ -260,11 +316,15 @@ pnpm db:seed        # a team, three theses, nine worked opportunities
 runner, with native DuckDB against the published artifact. On the repository
 running it set:
 
-- secret `DATABASE_URL` - the same Postgres the deployment uses
-- variable `PROPERTY_DATA_URL` and `RUN_HISTORY_URL` - the published artifacts
+- variables `CRM_STORE_REPO`, `CRM_STORE_BRANCH`, `CRM_STORE_ROOT` and secret
+  `CRM_STORE_TOKEN` - the same store the deployment writes to (or secret
+  `DATABASE_URL` for the Postgres backend)
+- variables `PROPERTY_DATA_URL` and `RUN_HISTORY_URL` - the published artifacts
 
-It writes to Postgres directly rather than calling the deployment, so it needs
-no runtime URL and no token.
+It writes to the store directly rather than calling the deployment, so it needs
+no runtime URL. The workflow refuses to start when no store is configured: a
+pass that silently evaluated an in-process store would report green having
+alerted nobody.
 
 To run one by hand:
 
@@ -346,13 +406,13 @@ Each step states what to look for. All of it runs against the deployed URL.
 The kit's `apply-engineering-guidelines` was loaded and followed where it does
 not conflict with the story. Deviations, stated rather than hidden:
 
-| Rule                                      | What was done                                                                       | Why                                                                        |
-| ----------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `cloud-aws-primary`, CDK-only IaC         | No AWS. Vercel plus GitHub Actions.                                                 | The story explicitly forbids ongoing hosted infrastructure cost.           |
-| Powertools / X-Ray / CloudWatch           | Structured JSON logs to stdout; metrics surfaced in-app on `/pipeline`.             | No Lambda and no CloudWatch to publish to.                                 |
-| PagerDuty on critical failure, DLQ alarms | Matcher failures are recorded on `matcher_runs` with the error and shown in the UI. | No on-call rotation exists for a take-home.                                |
-| Lexicon metric registration               | Not done.                                                                           | That repository is not part of this deliverable.                           |
-| `integrate-ci-cd`                         | Plain GitHub Actions workflows.                                                     | That skill's contract is a justfile of `cdk synth` / `cdk deploy` recipes. |
+| Rule                                      | What was done                                                                                 | Why                                                                        |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `cloud-aws-primary`, CDK-only IaC         | No AWS. Vercel plus GitHub Actions.                                                           | The story explicitly forbids ongoing hosted infrastructure cost.           |
+| Powertools / X-Ray / CloudWatch           | Structured JSON logs to stdout; metrics surfaced in-app on `/pipeline`.                       | No Lambda and no CloudWatch to publish to.                                 |
+| PagerDuty on critical failure, DLQ alarms | Matcher failures are recorded as `matcher-runs` documents with the error and shown in the UI. | No on-call rotation exists for a take-home.                                |
+| Lexicon metric registration               | Not done.                                                                                     | That repository is not part of this deliverable.                           |
+| `integrate-ci-cd`                         | Plain GitHub Actions workflows.                                                               | That skill's contract is a justfile of `cdk synth` / `cdk deploy` recipes. |
 
 Kept in full: TypeScript everywhere, all LLM interaction through the Vercel AI
 SDK with zod tool schemas and no `any` on any LLM path, Vitest, Prettier,

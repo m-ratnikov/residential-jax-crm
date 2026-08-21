@@ -10,7 +10,7 @@ name: matcher
 # runner can use native DuckDB. That range reads the published parquet - a few
 # hundred kilobytes per query against a 50 MB artifact - where a serverless
 # function cannot carry the 70 MB shared library at all. It writes to the same
-# Postgres and goes through the same evaluateAndAlert as a pass started from the
+# store and goes through the same evaluateAndAlert as a pass started from the
 # app, so the alerts are indistinguishable.
 #
 # GitHub Actions rather than a platform cron because the Vercel Hobby plan
@@ -43,6 +43,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
+      # The CRM store. These are the deployment's values, so a scheduled pass
+      # and a pass started from the app write to the same documents.
+      CRM_STORE_REPO: ${{ vars.CRM_STORE_REPO }}
+      CRM_STORE_BRANCH: ${{ vars.CRM_STORE_BRANCH }}
+      CRM_STORE_ROOT: ${{ vars.CRM_STORE_ROOT }}
+      CRM_STORE_TOKEN: ${{ secrets.CRM_STORE_TOKEN }}
+      CRM_STORE_AUTHOR_NAME: matcher (scheduled)
+      # Set this instead to use the Postgres backend.
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       PROPERTY_DATA_URL: ${{ vars.PROPERTY_DATA_URL }}
       RUN_HISTORY_URL: ${{ vars.RUN_HISTORY_URL }}
@@ -62,10 +70,16 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Check the secrets are present
+      - name: Check the configuration is present
+        # Fail loudly rather than run against an in-process store, which would
+        # report a green pass that evaluated nothing and alerted nobody.
         run: |
-          if [ -z "$DATABASE_URL" ]; then
-            echo "DATABASE_URL is not set as a repository secret; there are no saved searches to evaluate." >&2
+          if [ -z "$CRM_STORE_REPO" ] && [ -z "$DATABASE_URL" ]; then
+            echo "No CRM store is configured. Set the CRM_STORE_* repository variables and the CRM_STORE_TOKEN secret, or DATABASE_URL for Postgres." >&2
+            exit 1
+          fi
+          if [ -n "$CRM_STORE_REPO" ] && [ -z "$CRM_STORE_TOKEN" ]; then
+            echo "CRM_STORE_REPO is set but CRM_STORE_TOKEN is not; the store would be read only and the pass could raise no alerts." >&2
             exit 1
           fi
           if [ -z "$PROPERTY_DATA_URL" ]; then
