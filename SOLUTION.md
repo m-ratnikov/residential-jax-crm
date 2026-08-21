@@ -445,16 +445,24 @@ Each step states what to look for. All of it runs against the deployed URL.
    under `Detail` - the mocked email body that would have gone out.
 10. **Convert one to an opportunity.** It lands at Identified with the owner
     attached and the match rationale preserved.
-11. **Open `/opportunities`.** Board and table views. Filter by stage, match
-    score, city and ownership signal. Select rows in the table and launch a
-    mocked campaign.
+11. **Open `/opportunities`.** Board and table views, and five named filters:
+    stage, match strength, area, city or ZIP, and ownership signal. Set **Area**
+    to Arlington - that is the one control a city column cannot answer, because
+    Arlington is three ZIPs and every one of them says JACKSONVILLE on the roll.
+    Select rows in the table and launch a mocked campaign.
 12. **Open an opportunity.** Advance the stage and watch the stage history
     record it. Add a note and a task. In the outreach thread, scheduled provider
     events are dimmed until their time arrives; `Fast forward lifecycle` pulls
     them to now, and the status walks sent → delivered → opened → replied or
     bounced.
 13. **Export.** `Export CSV` for the opportunity set, `Mailing list` for owners
-    with a mailing address. Both carry the source system and pipeline run id.
+    with a mailing address. Open either in a text editor: the opportunity set
+    carries `source_system`, `source_url`, `fetched_at`, `pipeline_run_id`,
+    `alert_id` and `matcher_run_id`; the mailing list carries `source_system`
+    and `pipeline_run_id`. A row whose provenance is genuinely unknown has empty
+    cells rather than an invented value. Provenance travelling with the data is
+    the argument this whole application makes, and a CSV that leaves the
+    building without it is where that argument would break.
 14. **Open `/pipeline`.** Upstream pipeline runs with their real per-source
     counts and declared limitations, next to every matcher pass including the
     ones that raised nothing. Press `Run matcher now`; a new pass appears.
