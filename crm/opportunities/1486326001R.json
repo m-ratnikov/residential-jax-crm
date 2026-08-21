@@ -3,7 +3,7 @@
   "addressLine": "BELLE RIVE BLVD, JACKSONVILLE, 32256",
   "addressZip": "32256",
   "alertId": null,
-  "askingPrice": 142000,
+  "askingPrice": null,
   "assessedValue": 0,
   "assigneeId": "0mt34qv5ittgrk9jb",
   "closedAt": null,
@@ -15,8 +15,15 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
-  "offerPrice": 131500,
+  "notes": [
+    {
+      "authorId": "0mt34qv5ittgrk9jb",
+      "body": "Closed. Roof replaced before the tenant moved in.",
+      "createdAt": "2026-08-21T15:56:12.303Z",
+      "id": "0mt34t3f34deip7q5"
+    }
+  ],
+  "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt34surt7pm91q2u",
   "ownerInterest": null,
@@ -62,5 +69,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T15:56:10.754Z"
+  "updatedAt": "2026-08-21T15:56:12.303Z"
 }
