@@ -21,6 +21,7 @@ import { ApiError, post, type SavedSearch } from "@/lib/client";
 import { useParcelSearch, type OrderBy } from "@/lib/data/use-search";
 import { publicDataConfig } from "@/lib/data/public-config";
 import { EMPTY_CRITERIA, type CriteriaSet, type Geometry } from "@/lib/criteria/types";
+import type { MapViewport } from "@/lib/criteria/sql";
 
 /**
  * useSearchParams opts a route out of static prerendering unless it sits under
@@ -53,6 +54,13 @@ function SearchWorkspace() {
   const [selectedId, setSelectedId] = useState<string | null>(focusId);
   const [saveOpen, setSaveOpen] = useState(false);
 
+  // What the map is currently showing, when the user has asked results to
+  // follow it. Held here rather than in the criteria set on purpose: it narrows
+  // what is displayed and is deliberately absent from anything that gets saved,
+  // because where the map is pointing is not part of an acquisition thesis.
+  const [followView, setFollowView] = useState(false);
+  const [viewport, setViewport] = useState<MapViewport | null>(null);
+
   // Load a saved search when one is named in the URL, so an alert or the saved
   // criteria page can link straight into a live search.
   useEffect(() => {
@@ -69,7 +77,7 @@ function SearchWorkspace() {
     };
   }, [savedSearchId]);
 
-  const search = useParcelSearch(criteria, orderBy);
+  const search = useParcelSearch(criteria, orderBy, viewport);
   const { rows, total, loading, error } = search;
 
   const setGeometry = useCallback((geometry: Geometry | null) => {
@@ -82,8 +90,8 @@ function SearchWorkspace() {
   const selectedRow = rows.find((row) => row.propertyId === selectedId) ?? null;
 
   return (
-    <div className="grid h-[calc(100vh-104px)] grid-cols-1 gap-3 lg:grid-cols-[320px_minmax(0,1fr)_400px]">
-      <div className="flex min-h-0 flex-col">
+    <div className="grid h-[calc(100vh-104px)] min-h-0 grid-cols-1 gap-3 lg:grid-cols-[340px_minmax(0,1fr)_420px]">
+      <div className="flex min-h-0 flex-col overflow-hidden">
         <CriteriaPanel
           criteria={criteria}
           onChange={setCriteria}
@@ -92,18 +100,21 @@ function SearchWorkspace() {
         />
       </div>
 
-      <div className="min-h-0">
+      <div className="flex min-h-0 flex-col overflow-hidden">
         {error && (
           <div className="mb-2 rounded-md border border-bad-500/40 bg-bad-500/10 px-3 py-2 text-xs text-bad-500">
             {error}
           </div>
         )}
-        <div className={error ? "h-[calc(100%-38px)]" : "h-full"}>
+        <div className="min-h-0 flex-1">
           <PropertyMap
             points={search.mapPoints}
             center={publicDataConfig.center}
             geometry={criteria.filters.geometry ?? null}
             onGeometryChange={setGeometry}
+            onViewportChange={setViewport}
+            followView={followView}
+            onFollowViewChange={setFollowView}
             onSelect={setSelectedId}
             selectedId={selectedId}
             truncated={search.mapTruncated}
@@ -113,7 +124,7 @@ function SearchWorkspace() {
         </div>
       </div>
 
-      <div className="min-h-0">
+      <div className="flex min-h-0 flex-col overflow-hidden">
         <ResultList
           rows={rows}
           total={total}
@@ -127,6 +138,7 @@ function SearchWorkspace() {
           orderBy={orderBy}
           onOrderChange={setOrderBy}
           criteria={criteria}
+          limitedToView={followView}
         />
       </div>
 

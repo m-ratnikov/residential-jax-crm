@@ -169,6 +169,9 @@ export function polygonSql(ring: readonly (readonly [number, number])[]): string
   return `((${crossings.join(" + ")}) % 2 = 1)`;
 }
 
+/** The map's visible rectangle. A bbox geometry, but never a saved filter. */
+export type MapViewport = Extract<Geometry, { type: "bbox" }>;
+
 export function geometrySql(geometry: Geometry): string {
   const hasPoint = "latitude IS NOT NULL AND longitude IS NOT NULL";
   switch (geometry.type) {
@@ -498,6 +501,16 @@ export interface BuildSearchOptions {
   /** Restrict to a known id set, used by the matcher when rechecking hits. */
   propertyIds?: readonly string[];
   /**
+   * The map's current view, when the user has asked results to follow it.
+   *
+   * Deliberately NOT part of the criteria set. Where you happen to have scrolled
+   * the map is not part of an acquisition thesis, and a saved search that had
+   * quietly captured a bounding box would evaluate against it forever - the
+   * scheduled matcher would keep alerting on whatever was on screen the moment
+   * somebody pressed Save. This narrows what is displayed; it never travels.
+   */
+  viewport?: MapViewport | null;
+  /**
    * A `WITH ...` prefix and the relation to read, supplied by the overlay when
    * court records or a simulated pipeline update sit on top of the parquet.
    * Defaults to the plain published view.
@@ -525,6 +538,7 @@ export function buildSearch(options: BuildSearchOptions): BuiltSearch {
   const score = buildScore(options.criteria, options.courtJoinAvailable);
 
   const clauses = [where.sql];
+  if (options.viewport) clauses.push(geometrySql(options.viewport));
   if (options.propertyIds?.length) {
     clauses.push(`property_id IN (${options.propertyIds.map(str).join(", ")})`);
   }

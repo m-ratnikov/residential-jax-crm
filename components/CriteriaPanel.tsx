@@ -182,7 +182,7 @@ export function CriteriaPanel({
     <Panel
       title="Target criteria"
       subtitle={`${activeCount} active ${activeCount === 1 ? "filter" : "filters"}`}
-      bodyClassName="p-0"
+      bodyClassName="panel-scroll p-0"
       actions={
         onSave && (
           <Button size="sm" variant="primary" onClick={onSave} disabled={saving}>
@@ -190,9 +190,9 @@ export function CriteriaPanel({
           </Button>
         )
       }
-      className="flex min-h-0 flex-col"
+      className="flex h-full min-h-0 flex-col"
     >
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <>
         <Section title="Start from a thesis" hint="Each one states the rule it applies.">
           <div className="flex flex-wrap gap-1.5">
             {CRITERIA_PRESETS.map((preset) => (
@@ -510,7 +510,7 @@ export function CriteriaPanel({
             </div>
           )}
         </Section>
-      </div>
+      </>
     </Panel>
   );
 }

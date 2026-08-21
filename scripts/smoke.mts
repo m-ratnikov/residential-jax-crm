@@ -52,20 +52,46 @@ async function main(): Promise<void> {
   check("county scale, not a toy", parcels >= 50_000, `${parcels.toLocaleString("en-US")} parcels`);
 
   // 3. A criteria search returns scored rows with a rationale.
+  //
+  // The count is read by waiting for it to CHANGE, not merely to be non-zero:
+  // the unfiltered county count is on screen before the thesis is applied, and
+  // a check that accepts the first number it sees passes on the wrong one.
+  const heading = page
+    .locator("h2")
+    .filter({ hasText: /matches|Searching/ })
+    .first();
+
+  const settledCount = async (): Promise<number> => {
+    for (let attempt = 0; attempt < 40; attempt += 1) {
+      const text = ((await heading.textContent().catch(() => "")) ?? "").trim();
+      if (!/searching/i.test(text)) {
+        const digits = text.replace(/[^0-9]/g, "");
+        if (digits && Number(digits) > 0) return Number(digits);
+      }
+      await page.waitForTimeout(1_000);
+    }
+    return 0;
+  };
+
+  const changedCount = async (from: number): Promise<number> => {
+    for (let attempt = 0; attempt < 40; attempt += 1) {
+      const value = await settledCount();
+      if (value !== from) return value;
+      await page.waitForTimeout(1_000);
+    }
+    return from;
+  };
+
+  await heading.waitFor({ state: "visible", timeout: 120_000 }).catch(() => undefined);
+  const unfiltered = await settledCount();
+
   await page.getByRole("button", { name: "Tired landlord" }).click();
-
-  const matches = page.locator("h2", { hasText: /matches/ }).first();
-  await matches.waitFor({ state: "visible", timeout: 120_000 }).catch(() => undefined);
-
-  // Give the debounced search time to settle on a non-zero count.
-  let matchText = "";
-  for (let attempt = 0; attempt < 40; attempt += 1) {
-    matchText = (await matches.textContent().catch(() => ""))?.trim() ?? "";
-    if (/[1-9]/.test(matchText) && !/searching/i.test(matchText)) break;
-    await page.waitForTimeout(1_000);
-  }
-  const matched = Number(matchText.replace(/[^0-9]/g, ""));
-  check("criteria search returns matches", matched > 0, matchText || "no count");
+  const matched = await changedCount(unfiltered);
+  check(
+    "criteria search returns matches",
+    matched > 0 && matched < unfiltered,
+    `${matched.toLocaleString("en-US")} of ${unfiltered.toLocaleString("en-US")}`,
+  );
 
   // 4. The first result carries a rationale naming real values.
   const rationale = page.locator("li button p").last();
@@ -106,6 +132,41 @@ async function main(): Promise<void> {
     await page.waitForTimeout(1_000);
   }
   check("the map drew the matches", plotted > 0, `${plotted} parcels on screen`);
+
+  // 4d. The map drives the search.
+  //
+  // Turning on "Search this view" and zooming in has to narrow the result set,
+  // because the point of a map-driven CRM is that the thing on screen is the
+  // thing being counted.
+  const countyWide = await settledCount();
+  await page.getByRole("button", { name: "Search this view" }).click();
+  await page.waitForTimeout(3_000);
+  for (let step = 0; step < 3; step += 1) {
+    await page
+      .getByRole("button", { name: "Zoom in" })
+      .click()
+      .catch(() => undefined);
+    await page.waitForTimeout(1_200);
+  }
+  const inView = await changedCount(countyWide);
+
+  check(
+    "zooming the map narrows the search",
+    inView > 0 && inView < countyWide,
+    `${countyWide.toLocaleString("en-US")} county wide, ${inView.toLocaleString("en-US")} in view`,
+  );
+  check(
+    "the list says the view is what narrowed it",
+    await page
+      .getByText("in this view", { exact: true })
+      .first()
+      .isVisible()
+      .catch(() => false),
+  );
+
+  // Back to the whole county for the checks that follow.
+  await page.getByRole("button", { name: "Search this view" }).click();
+  await page.waitForTimeout(2_000);
 
   // 5. The SQL behind the result is on the page, so the count is arguable.
   const sqlToggle = page.getByText("Show the SQL behind this result");

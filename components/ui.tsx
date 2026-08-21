@@ -55,7 +55,11 @@ export function Panel({
           {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
         </header>
       )}
-      <div className={cx("px-4 py-3", bodyClassName)}>{children}</div>
+      {/* min-h-0 flex-1 so that a Panel given `flex h-full flex-col` lets its
+          body take the remaining height and scroll, rather than growing past
+          the panel and being clipped. Inert on a panel that is not a flex
+          column, which is most of them. */}
+      <div className={cx("min-h-0 flex-1 px-4 py-3", bodyClassName)}>{children}</div>
     </section>
   );
 }

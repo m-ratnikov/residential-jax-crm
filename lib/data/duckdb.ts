@@ -140,6 +140,7 @@ export class DuckDbPropertyDataSource implements PropertyDataSource {
       orderBy: query.orderBy ?? "score",
       courtJoinAvailable: overlay.courtAvailable,
       propertyIds: query.propertyIds,
+      viewport: query.viewport,
       prefix: overlay.prefix,
       from: overlay.from,
     });

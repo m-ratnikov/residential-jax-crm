@@ -32,6 +32,12 @@ export interface ResultListProps {
   onOrderChange: (value: "score" | "assessed_value" | "roof_age" | "tenure") => void;
   /** Passed so the export can re-run the same query for the full match set. */
   criteria: CriteriaSet;
+  /**
+   * True when results are restricted to the map's current view. Worth saying:
+   * otherwise a count that dropped from 337,853 to 4,100 because somebody
+   * zoomed in reads as criteria that stopped working.
+   */
+  limitedToView?: boolean;
 }
 
 const ORDER_OPTIONS = [
@@ -54,15 +60,19 @@ export function ResultList({
   orderBy,
   onOrderChange,
   criteria,
+  limitedToView = false,
 }: ResultListProps) {
   const [exporting, setExporting] = useState(false);
 
   return (
-    <div className="flex min-h-0 flex-col rounded-xl border border-[var(--line)] bg-[var(--panel)]">
+    <div className="flex h-full min-h-0 flex-col rounded-xl border border-[var(--line)] bg-[var(--panel)]">
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line)] px-3 py-2.5">
         <div>
           <h2 className="text-sm font-semibold">
             {loading ? "Searching" : `${count(total)} matches`}
+            {limitedToView && !loading && (
+              <span className="ml-1.5 text-[11px] font-normal text-ink-500">in this view</span>
+            )}
           </h2>
           <p className="text-[11px] text-ink-500">
             {rows.length ? `Showing ${count(rows.length)}` : "No parcels match these criteria"}
@@ -104,7 +114,7 @@ export function ResultList({
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="panel-scroll min-h-0 flex-1">
         {rows.length === 0 && !loading && (
           <div className="px-4 py-10 text-center text-xs text-ink-500">
             Nothing matched. Loosen a threshold, widen the area, or start from one of the theses at

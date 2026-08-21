@@ -35,6 +35,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "maplibre-gl/dist/maplibre-gl.css";
 
+import type { MapViewport } from "@/lib/criteria/sql";
 import type { Geometry } from "@/lib/criteria/types";
 import { Badge, Button, cx, count } from "./ui";
 
@@ -69,6 +70,14 @@ export interface PropertyMapProps {
   /** The geometry currently applied to the search, drawn as an overlay. */
   geometry: Geometry | null;
   onGeometryChange: (geometry: Geometry | null) => void;
+  /**
+   * The visible rectangle, reported whenever the user finishes moving or
+   * zooming, and null while results are not following the map.
+   */
+  onViewportChange: (viewport: MapViewport | null) => void;
+  /** Whether results are currently restricted to what is on screen. */
+  followView: boolean;
+  onFollowViewChange: (follow: boolean) => void;
   onSelect: (propertyId: string) => void;
   selectedId?: string | null;
   truncated?: boolean;
@@ -158,6 +167,9 @@ export function PropertyMap({
   center,
   geometry,
   onGeometryChange,
+  onViewportChange,
+  followView,
+  onFollowViewChange,
   onSelect,
   selectedId,
   truncated,
@@ -177,10 +189,26 @@ export function PropertyMap({
   // effect rather than during render: a render can be discarded, and a ref
   // updated by a discarded render would hand the listeners state that never
   // reached the screen.
-  const stateRef = useRef({ mode, draftRing, circleAnchor, onGeometryChange, onSelect });
+  const stateRef = useRef({
+    mode,
+    draftRing,
+    circleAnchor,
+    onGeometryChange,
+    onSelect,
+    onViewportChange,
+    followView,
+  });
   useEffect(() => {
-    stateRef.current = { mode, draftRing, circleAnchor, onGeometryChange, onSelect };
-  }, [mode, draftRing, circleAnchor, onGeometryChange, onSelect]);
+    stateRef.current = {
+      mode,
+      draftRing,
+      circleAnchor,
+      onGeometryChange,
+      onSelect,
+      onViewportChange,
+      followView,
+    };
+  }, [mode, draftRing, circleAnchor, onGeometryChange, onSelect, onViewportChange, followView]);
 
   const geojson = useMemo<GeoJSON.FeatureCollection>(
     () => ({
@@ -270,6 +298,23 @@ export function PropertyMap({
       });
 
       setReady(true);
+    });
+
+    // Panning and zooming re-run the search when the user has asked for it.
+    // `moveend` rather than `move`: the latter fires on every animation frame of
+    // a drag, and a 404,023 row query per frame is not a feature. The search
+    // itself is debounced on top of this, so a flick across the county costs one
+    // query rather than one per gesture.
+    map.on("moveend", () => {
+      if (!stateRef.current.followView) return;
+      const bounds = map.getBounds();
+      stateRef.current.onViewportChange({
+        type: "bbox",
+        west: bounds.getWest(),
+        south: bounds.getSouth(),
+        east: bounds.getEast(),
+        north: bounds.getNorth(),
+      });
     });
 
     map.on("click", "parcels", (event: MapLayerMouseEvent) => {
@@ -433,12 +478,19 @@ export function PropertyMap({
           </Button>
           <Button
             size="sm"
-            variant="default"
+            variant={followView ? "primary" : "default"}
             onClick={() => {
               const map = mapRef.current;
-              if (!map) return;
+              const next = !followView;
+              onFollowViewChange(next);
+              if (!next || !map) {
+                onViewportChange(null);
+                return;
+              }
+              // Report immediately rather than waiting for the next gesture, so
+              // switching it on narrows the results there and then.
               const bounds = map.getBounds();
-              onGeometryChange({
+              onViewportChange({
                 type: "bbox",
                 west: bounds.getWest(),
                 south: bounds.getSouth(),
@@ -446,9 +498,13 @@ export function PropertyMap({
                 north: bounds.getNorth(),
               });
             }}
-            title="Use the current view as the search area."
+            title={
+              followView
+                ? "Results are limited to what is on screen. Click to search the whole county again."
+                : "Limit results to what is on screen, and re-search whenever the map moves. This narrows what you see; it is not saved with the criteria."
+            }
           >
-            This view
+            Search this view
           </Button>
           {geometry && (
             <Button

@@ -98,6 +98,35 @@ a {
   background-clip: content-box;
 }
 
+/*
+ * The two columns either side of the map.
+ *
+ * They are the only things on the page tall enough to scroll on their own, and
+ * the default thumb is nearly the panel's own colour: content simply stopped at
+ * the bottom edge with nothing to say there was more. Brighter, always present,
+ * and with the gutter reserved so the list does not shift sideways by ten pixels
+ * the moment it becomes scrollable.
+ */
+.panel-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--color-ink-600) color-mix(in oklab, var(--color-ink-900) 60%, transparent);
+}
+
+.panel-scroll::-webkit-scrollbar-track {
+  background: color-mix(in oklab, var(--color-ink-900) 60%, transparent);
+  border-radius: 99px;
+}
+
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-ink-600);
+}
+
+.panel-scroll:hover::-webkit-scrollbar-thumb {
+  background: var(--color-ink-500);
+}
+
 /* MapLibre's own chrome, toned to match the panels. */
 .maplibregl-ctrl-group {
   background: var(--panel-raised) !important;

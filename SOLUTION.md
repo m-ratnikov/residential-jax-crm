@@ -366,42 +366,47 @@ Each step states what to look for. All of it runs against the deployed URL.
 3. **Draw an area.** `Radius`, click a centre, click again for the radius. The
    count drops to what is inside it. `Polygon` works the same way; double click
    closes it.
-4. **Open a parcel.** Confirm the grouped published columns, and the Provenance
+4. **Press `Search this view`,** then pan and zoom. Every move re-runs the query
+   against what is on screen and the header says "in this view". It is a display
+   filter and not part of the criteria: saving the search does not capture where
+   the map happened to be pointing, because the scheduled matcher would then
+   alert forever on that rectangle.
+5. **Open a parcel.** Confirm the grouped published columns, and the Provenance
    block with a clickable source URL, the collection timestamp and the pipeline
    run id.
-5. **Save the search.** The dialog states that the first pass records a baseline
+6. **Save the search.** The dialog states that the first pass records a baseline
    without alerting. Enable in-app and mocked email.
-6. **Go to `/searches`.** The saved search shows when it was last evaluated,
+7. **Go to `/searches`.** The saved search shows when it was last evaluated,
    against which pipeline run, and how many matched.
-7. **Press `Simulate: new court filings`.** This writes real court records
+8. **Press `Simulate: new court filings`.** This writes real court records
    against parcels that fit everything else, then runs the ordinary matcher. The
    result line names the synthetic run id and how many alerts it raised.
-8. **Go to `/alerts`.** Each alert shows the search that raised it, the pipeline
+9. **Go to `/alerts`.** Each alert shows the search that raised it, the pipeline
    run id that triggered it, the fields that changed, the score rationale, and -
    under `Detail` - the mocked email body that would have gone out.
-9. **Convert one to an opportunity.** It lands at Identified with the owner
-   attached and the match rationale preserved.
-10. **Open `/opportunities`.** Board and table views. Filter by stage, match
+10. **Convert one to an opportunity.** It lands at Identified with the owner
+    attached and the match rationale preserved.
+11. **Open `/opportunities`.** Board and table views. Filter by stage, match
     score, city and ownership signal. Select rows in the table and launch a
     mocked campaign.
-11. **Open an opportunity.** Advance the stage and watch the stage history
+12. **Open an opportunity.** Advance the stage and watch the stage history
     record it. Add a note and a task. In the outreach thread, scheduled provider
     events are dimmed until their time arrives; `Fast forward lifecycle` pulls
     them to now, and the status walks sent → delivered → opened → replied or
     bounced.
-12. **Export.** `Export CSV` for the opportunity set, `Mailing list` for owners
+13. **Export.** `Export CSV` for the opportunity set, `Mailing list` for owners
     with a mailing address. Both carry the source system and pipeline run id.
-13. **Open `/pipeline`.** Upstream pipeline runs with their real per-source
+14. **Open `/pipeline`.** Upstream pipeline runs with their real per-source
     counts and declared limitations, next to every matcher pass including the
     ones that raised nothing. Press `Run matcher now`; a new pass appears.
     `Clear simulation` removes the simulated rows. The passes marked `cron` were
     run by GitHub Actions on a runner nobody was watching, which is the point of
     the whole exercise.
-14. **Open `/agent`.** Add a free-tier key on `/settings` first. Ask _"Which
+15. **Open `/agent`.** Add a free-tier key on `/settings` first. Ask _"Which
     residential properties in the Arlington area match my distressed criteria and
     have not been contacted yet?"_ Check the `Tools` and `Rows` tabs under the
     answer, and the caveats block.
-15. **Scroll to the bottom of `/opportunities`.** Disposition, portfolio tracking
+16. **Scroll to the bottom of `/opportunities`.** Disposition, portfolio tracking
     and live messaging are visible and disabled, with the reason each is out of
     scope for this milestone.
 

@@ -10,6 +10,7 @@
  * is a new implementation of this interface and nothing else.
  */
 
+import type { MapViewport } from "@/lib/criteria/sql";
 import type { CriteriaSet } from "@/lib/criteria/types";
 import type { Overlay } from "./overlay";
 
@@ -161,6 +162,11 @@ export interface PropertySearchQuery {
   readonly orderBy?: "score" | "assessed_value" | "roof_age" | "tenure";
   /** Restrict to these ids. Used by the matcher when re-checking known hits. */
   readonly propertyIds?: readonly string[];
+  /**
+   * Narrow to the map's current view. Display only: it is not part of the
+   * criteria set, is never saved, and the scheduled matcher never sets it.
+   */
+  readonly viewport?: MapViewport | null;
   /**
    * Court records and simulated pipeline updates to apply on top of the
    * published parquet for this query. See lib/data/overlay.ts.

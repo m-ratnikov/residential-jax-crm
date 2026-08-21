@@ -15,7 +15,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { CriteriaSet } from "@/lib/criteria/types";
-import { needsCourtData } from "@/lib/criteria/sql";
+import { needsCourtData, type MapViewport } from "@/lib/criteria/sql";
 import { displayAddress } from "./map";
 import type { ScoredProperty } from "./types";
 import {
@@ -90,7 +90,19 @@ export interface SearchState {
   refresh: () => void;
 }
 
-export function useParcelSearch(criteria: CriteriaSet, orderBy: OrderBy): SearchState {
+export function useParcelSearch(
+  criteria: CriteriaSet,
+  orderBy: OrderBy,
+  /**
+   * The map's current view, when results are following it.
+   *
+   * A separate argument rather than a filter inside the criteria set, because
+   * where the map happens to be pointing is not part of an acquisition thesis.
+   * Saving a search must not capture it: the scheduled matcher would then alert
+   * forever on whatever was on screen when somebody pressed Save.
+   */
+  viewport: MapViewport | null = null,
+): SearchState {
   const [scored, setScored] = useState<ScoredProperty[]>([]);
   const [total, setTotal] = useState(0);
   const [sql, setSql] = useState("");
@@ -128,9 +140,22 @@ export function useParcelSearch(criteria: CriteriaSet, orderBy: OrderBy): Search
     };
   }, [source]);
 
+  // The viewport is rounded into the key at about a metre of precision. Panning
+  // a map produces a continuous stream of slightly different rectangles, and
+  // without this every pixel of drift would count as a new search.
   const queryKey = useMemo(
-    () => JSON.stringify({ filters: criteria.filters, weights: criteria.weights, orderBy }),
-    [criteria.filters, criteria.weights, orderBy],
+    () =>
+      JSON.stringify({
+        filters: criteria.filters,
+        weights: criteria.weights,
+        orderBy,
+        viewport: viewport
+          ? [viewport.west, viewport.south, viewport.east, viewport.north].map((value) =>
+              value.toFixed(5),
+            )
+          : null,
+      }),
+    [criteria.filters, criteria.weights, orderBy, viewport],
   );
 
   const run = useCallback(
@@ -148,6 +173,7 @@ export function useParcelSearch(criteria: CriteriaSet, orderBy: OrderBy): Search
 
         const page = await source.search({
           criteria,
+          viewport,
           limit: PAGE_SIZE,
           offset: nextOffset,
           orderBy,
@@ -165,6 +191,7 @@ export function useParcelSearch(criteria: CriteriaSet, orderBy: OrderBy): Search
         if (!append) {
           const plotted = await source.search({
             criteria,
+            viewport,
             limit: MAP_POINT_CAP,
             offset: 0,
             orderBy: "score",
@@ -194,7 +221,7 @@ export function useParcelSearch(criteria: CriteriaSet, orderBy: OrderBy): Search
         if (id === requestId.current) setLoading(false);
       }
     },
-    [criteria, orderBy, overlay, source],
+    [criteria, orderBy, overlay, source, viewport],
   );
 
   useEffect(() => {
