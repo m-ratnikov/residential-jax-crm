@@ -3,7 +3,7 @@
   "addressLine": "1592 PALM AVE, JACKSONVILLE, 32207",
   "addressZip": "32207",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 168000,
   "assessedValue": 0,
   "assigneeId": "0mt361g5jw31ita5n",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.6628565,
   "matchRationale": "held 126 years (+33); roof about 85 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 152000,
   "outreach": [],
   "ownerId": "0mt362ubqnfa1wkp1",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "ALEXANDRIA CONDOMINIUM ASSOCIA",
   "parcelIdentifier": "0806201001R",
   "propertyId": "0806201001R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:31:49.650Z"
+  "updatedAt": "2026-08-21T16:31:50.558Z"
 }
