@@ -15,7 +15,14 @@
   "matchScore": 100,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt36wjjjsvl3xgbt",
+      "body": "Closed. Roof replaced before the tenant moved in.",
+      "createdAt": "2026-08-21T16:56:03.149Z",
+      "id": "0mt36y24tft93ptr9"
+    }
+  ],
   "offerPrice": 131500,
   "outreach": [],
   "ownerId": "0mt36xwy4s44ay3fm",
@@ -94,5 +101,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:56:02.151Z"
+  "updatedAt": "2026-08-21T16:56:03.149Z"
 }
