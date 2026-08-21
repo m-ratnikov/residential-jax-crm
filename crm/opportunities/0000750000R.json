@@ -54,8 +54,8 @@
       ],
       "id": "0mt3jlcuxmc3y7ea8",
       "providerMessageId": "sim_email_f3cd92fcf7236ba01e8f",
-      "status": "sent",
-      "statusAt": "2026-08-21T22:50:05.529Z",
+      "status": "opened",
+      "statusAt": "2026-08-21T22:52:46.529Z",
       "subject": "About the roof at 132 LIMANN RD, JACKSONVILLE, 32234",
       "templateId": "roof-condition",
       "toAddress": "owner-00007500@example.invalid"
