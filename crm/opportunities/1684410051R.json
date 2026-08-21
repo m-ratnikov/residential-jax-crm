@@ -3,7 +3,7 @@
   "addressLine": "SEMINOLE RD, ATLANTIC BEACH, 32233",
   "addressZip": "32233",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 165000,
   "assessedValue": 0,
   "assigneeId": "0mt34x1vttigoz6ji",
   "closedAt": null,
@@ -13,10 +13,10 @@
   "longitude": -81.3988229,
   "matchRationale": "held 126 years (+33); roof about 38 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
   "matchScore": 100,
-  "nextStep": null,
+  "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 149000,
   "outreach": [],
   "ownerId": "0mt34yblbkulfbyxl",
   "ownerInterest": null,
@@ -86,5 +86,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-21T16:00:20.264Z"
+  "updatedAt": "2026-08-21T16:00:21.075Z"
 }
