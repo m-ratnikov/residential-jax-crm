@@ -1,0 +1,50 @@
+{
+  "alertsCreated": 0,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-wasm-browser",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "sim-20260822024148-9fb02fc1",
+      "isSample": false,
+      "kind": "duckdb-wasm-browser",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 0,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "knownMatches": 21580,
+        "knownMatchesTruncated": false,
+        "leftMatches": 0,
+        "matchIdsSeeded": true,
+        "matched": 21580,
+        "matchesTruncated": true,
+        "name": "EVAL 2026-08-22 aging roof Arlington",
+        "newMatches": 0,
+        "newMatchesWithoutDetail": 0,
+        "savedSearchId": "0mt3sbizmx1kn1quk",
+        "seeded": true,
+        "trackedMatches": 2000,
+        "truncated": false,
+        "unstableReads": 0,
+        "updatedMatches": 0
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-22T02:54:56.320Z",
+  "id": "0mt3sc72l038v1evx",
+  "notificationsSent": 0,
+  "pipelineRunId": "sim-20260822024148-9fb02fc1",
+  "pipelineRunIsNew": false,
+  "pipelineRunStartedAt": "2026-08-21T23:43:16.590Z",
+  "propertiesEvaluated": 2000,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-22T02:54:54.287Z",
+  "trigger": "manual"
+}
