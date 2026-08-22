@@ -6,7 +6,7 @@
   "askingPrice": null,
   "assessedValue": 42155,
   "assigneeId": "0mt3v3p9v4cw2aqxd",
-  "closedAt": null,
+  "closedAt": "2026-08-22T07:44:59.317Z",
   "createdAt": "2026-08-22T04:20:30.365Z",
   "id": "1266680000R",
   "latitude": 30.2798514,
@@ -60,7 +60,7 @@
     "yearsSinceLastSale": 66
   },
   "savedSearchId": "0mt3v3sjckfr92p5g",
-  "stage": "under_contract",
+  "stage": "closed",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -93,6 +93,14 @@
       "id": "0mt42p039rd8d75ia",
       "note": null,
       "toStage": "under_contract"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-22T07:44:59.317Z",
+      "fromStage": "under_contract",
+      "id": "0mt42p924rmq0r0wa",
+      "note": null,
+      "toStage": "closed"
     }
   ],
   "tasks": [
@@ -106,5 +114,5 @@
       "title": "Skip trace owner"
     }
   ],
-  "updatedAt": "2026-08-22T07:44:48.309Z"
+  "updatedAt": "2026-08-22T07:44:59.317Z"
 }
