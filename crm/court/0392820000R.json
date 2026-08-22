@@ -2,17 +2,5 @@
   "id": "0392820000R",
   "parcelIdentifier": "0392820000R",
   "propertyId": "0392820000R",
-  "records": [
-    {
-      "amount": 2750,
-      "caseNumber": "2026-SIM-20000R-5",
-      "caseType": "code_enforcement",
-      "fetchedAt": "2026-08-22T04:21:46.476Z",
-      "filedDate": "2026-08-22",
-      "partyName": "WILEY ELLEAN ESTATE",
-      "sourceSystem": "simulated_court_feed",
-      "sourceUrl": null,
-      "status": "open"
-    }
-  ]
+  "records": []
 }
