@@ -70,8 +70,8 @@
       ],
       "id": "0mt49ftshlzed5de2",
       "providerMessageId": "sim_email_03999d755e470616881a",
-      "status": "sent",
-      "statusAt": "2026-08-22T10:53:37.553Z",
+      "status": "bounced",
+      "statusAt": "2026-08-22T10:55:39.553Z",
       "subject": "About the roof at 6062 PARK ST, JACKSONVILLE, 32205",
       "templateId": "roof-condition",
       "toAddress": "owner-5fae5c87e1@mocked-skip-trace.invalid"
