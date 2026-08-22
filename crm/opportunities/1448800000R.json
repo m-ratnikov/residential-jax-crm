@@ -15,7 +15,14 @@
   "matchScore": 96.35,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": null,
+      "body": "EVAL note: evaluator test, left the roof quote voicemail. Safe to delete.",
+      "createdAt": "2026-08-22T02:57:32.048Z",
+      "id": "0mt3sfki8mw9s00z2"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3sduvqu62ur2sw",
@@ -73,5 +80,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T02:57:07.425Z"
+  "updatedAt": "2026-08-22T02:57:32.048Z"
 }
