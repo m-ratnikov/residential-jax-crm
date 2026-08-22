@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "assessedValue"
+  ],
+  "createdAt": "2026-08-22T10:40:45.641Z",
+  "dismissedAt": null,
+  "id": "sim-20260822103648-653e208f__0mt489sx800untfkj__1470660000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt48zalytii4du6i",
+  "notifications": [
+    {
+      "body": "2002 S MERCER CIR, JACKSONVILLE, 32217 already matched \"Waterfront long hold - TEST\" and has changed.\n\nMatch score: 94 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 4 m from the water, 186 m to University Blvd + Colgate Rd (+48.8); held 54 years (+45.3).\n\nChanged since the last pass: assessed value.\n\nOwner of record: COLLINS VIRGINIA C\nAssessed value: $240,749\nParcel: 1470660000R\n\nTriggered by pipeline run sim-20260822103648-653e208f.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T10:40:51.103Z",
+      "id": "0mt48zee7zzz70ak2",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T10:40:51.103Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Waterfront long hold - TEST\": 2002 S MERCER CIR, JACKSONVILLE, 32217"
+    },
+    {
+      "body": "2002 S MERCER CIR, JACKSONVILLE, 32217 already matched \"Waterfront long hold - TEST\" and has changed.\n\nMatch score: 94 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 4 m from the water, 186 m to University Blvd + Colgate Rd (+48.8); held 54 years (+45.3).\n\nChanged since the last pass: assessed value.\n\nOwner of record: COLLINS VIRGINIA C\nAssessed value: $240,749\nParcel: 1470660000R\n\nTriggered by pipeline run sim-20260822103648-653e208f.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:40:51.103Z",
+      "id": "0mt48zee7wm9d0bbo",
+      "providerMessageId": "sim_email_22f9ad148c8e6b8990b1",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T10:40:51.103Z",
+      "status": "sent",
+      "subject": "Updated match for \"Waterfront long hold - TEST\": 2002 S MERCER CIR, JACKSONVILLE, 32217"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822103648-653e208f",
+  "propertyId": "1470660000R",
+  "propertySnapshot": {
+    "address": "2002 S MERCER CIR, JACKSONVILLE, 32217",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32217",
+    "assessedValue": 240749,
+    "builtYear": 1954,
+    "courtDistressScore": 0,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2545559,
+    "longitude": -81.6387541,
+    "ownerName": "COLLINS VIRGINIA C",
+    "ownerOccupied": false,
+    "propertyId": "1470660000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0M3W127H00WF7SGSCX6D41A",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 54
+  },
+  "rationale": "water view of Jacksonville rivers (COJ Jax_River) 4 m from the water, 186 m to University Blvd + Colgate Rd (+48.8); held 54 years (+45.3).",
+  "readAt": null,
+  "savedSearchId": "0mt489sx800untfkj",
+  "score": 94.11
+}
