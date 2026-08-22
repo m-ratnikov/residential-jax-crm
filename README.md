@@ -1,6 +1,6 @@
 # Residential Property Acquisition CRM (Jacksonville / Duval County Focus)
 
-> **Implementation:** see [SOLUTION.md](SOLUTION.md) for how to run it, what the data can and cannot answer, and the test plan that doubles as the demo script. The user story below is unchanged.
+> **Implementation:** see [SOLUTION.md](SOLUTION.md) for how to run it, what the data can and cannot answer, and the test plan that doubles as the demo script. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the data structures and flows: the matcher's diff mechanism, the CRM store's document map, and the three read paths (browser, scheduled matcher, agent). The user story below is unchanged.
 
 ## Context
 
