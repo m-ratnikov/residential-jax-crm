@@ -1,0 +1,35 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T10:36:07.606Z",
+  "criteria": {
+    "filters": {
+      "dwellingsOnly": true,
+      "residentialOnly": true,
+      "waterView": true
+    },
+    "name": "WATER VIEW TEST",
+    "weights": {
+      "amenity": 1,
+      "distress": 2,
+      "geography": 1,
+      "roofAge": 3,
+      "tenure": 3,
+      "value": 1
+    }
+  },
+  "description": null,
+  "id": "0mt48tbnahf883tej",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "WATER VIEW TEST",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T10:36:07.606Z"
+}
