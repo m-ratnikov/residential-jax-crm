@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": 919500,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello ST VINCENTS HOSPITAL INC,\n\nJust following up on my note about 2573 RIVERSIDE AVE, JACKSONVILLE, 32204. If the timing is wrong, tell me and I will not write again.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3sjm24crwf1gge",
+      "campaignName": "Follow up - 2026-08-22",
+      "channel": "sms",
+      "createdAt": "2026-08-22T03:00:42.027Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for (904) 555-0124",
+          "occurredAt": "2026-08-22T03:00:42.027Z",
+          "providerEventId": "sim_sms_a8e828090adac4c51ce3:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T03:00:52.027Z",
+          "providerEventId": "sim_sms_a8e828090adac4c51ce3:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt3sjn3flbe2vlyg",
+      "providerMessageId": "sim_sms_a8e828090adac4c51ce3",
+      "status": "queued",
+      "statusAt": "2026-08-22T03:00:42.027Z",
+      "subject": null,
+      "templateId": "follow-up",
+      "toAddress": "(904) 555-0124"
+    }
+  ],
   "ownerId": "0mt3ry11tr9wdk19y",
   "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "ST VINCENTS HOSPITAL INC",
@@ -88,5 +118,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T02:43:58.429Z"
+  "updatedAt": "2026-08-22T03:00:42.027Z"
 }
