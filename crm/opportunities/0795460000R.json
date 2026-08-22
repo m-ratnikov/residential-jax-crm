@@ -41,19 +41,19 @@
         },
         {
           "detail": "Delivered",
-          "occurredAt": "2026-08-22T03:01:18.787Z",
+          "occurredAt": "2026-08-22T03:01:11.949Z",
           "providerEventId": "sim_sms_c63ddab139ba6875d343:delivered",
           "status": "delivered"
         },
         {
           "detail": "Opened",
-          "occurredAt": "2026-08-22T03:01:44.787Z",
+          "occurredAt": "2026-08-22T03:01:11.949Z",
           "providerEventId": "sim_sms_c63ddab139ba6875d343:opened",
           "status": "opened"
         },
         {
           "detail": "Recipient replied",
-          "occurredAt": "2026-08-22T03:02:11.787Z",
+          "occurredAt": "2026-08-22T03:01:11.949Z",
           "providerEventId": "sim_sms_c63ddab139ba6875d343:replied",
           "status": "replied"
         }
