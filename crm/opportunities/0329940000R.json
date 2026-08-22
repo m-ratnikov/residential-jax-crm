@@ -53,7 +53,7 @@
     "yearsSinceLastSale": 23
   },
   "savedSearchId": "0mt3v3t85fmff026j",
-  "stage": "identified",
+  "stage": "contacted",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -62,8 +62,16 @@
       "id": "0mt3vf0sl5g6t53sw",
       "note": "Created from search",
       "toStage": "identified"
+    },
+    {
+      "actorId": "0mt3v3p9v4cw2aqxd",
+      "createdAt": "2026-08-22T04:21:06.253Z",
+      "fromStage": "identified",
+      "id": "0mt3vf1hpe818iaeq",
+      "note": null,
+      "toStage": "contacted"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T04:21:05.349Z"
+  "updatedAt": "2026-08-22T04:21:06.253Z"
 }
