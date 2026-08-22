@@ -30,7 +30,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello PARKS ROBERT M REVOCABLE TRUST,\n\nCounty records suggest the roof at 6854 OAKWOOD DR, JACKSONVILLE, 32211 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $82,848.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3shgm8v9b4zcfj",
+      "campaignName": "Aging roof angle - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T02:59:00.345Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-1bd1879158@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T02:59:00.345Z",
+          "providerEventId": "sim_email_6daf780d492574e374fb:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T02:59:08.345Z",
+          "providerEventId": "sim_email_6daf780d492574e374fb:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt3shgmxfvemsofy",
+      "providerMessageId": "sim_email_6daf780d492574e374fb",
+      "status": "queued",
+      "statusAt": "2026-08-22T02:59:00.345Z",
+      "subject": "About the roof at 6854 OAKWOOD DR, JACKSONVILLE, 32211",
+      "templateId": "roof-condition",
+      "toAddress": "owner-1bd1879158@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt3sduvqu62ur2sw",
   "ownerInterest": null,
   "ownerNameSnapshot": "PARKS ROBERT M REVOCABLE TRUST",
@@ -96,5 +126,5 @@
       "title": "EVAL task: confirm trust signatory before offer"
     }
   ],
-  "updatedAt": "2026-08-22T02:57:57.453Z"
+  "updatedAt": "2026-08-22T02:59:00.346Z"
 }
