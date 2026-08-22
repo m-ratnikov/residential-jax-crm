@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-22T12:08:24.518Z",
+  "dismissedAt": null,
+  "id": "01M0M3W127H00WF7SGSCX6D41A__0mt3v3t85fmff026j__0667050000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt4c40gqjg141sud",
+  "notifications": [
+    {
+      "body": "6062 PARK ST, JACKSONVILLE, 32205 now matches your saved search \"Aging roof, entry price band\".\n\nMatch score: 58 / 100\nWhy: assessed at $145,495 (+30.7); roof about 46 years old, estimated from year built (+27.1).\n\nOwner of record: LARSON KEVIN G ET AL\nAssessed value: $145,495\nParcel: 0667050000R\n\nTriggered by pipeline run 01M0M3W127H00WF7SGSCX6D41A.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T12:08:35.323Z",
+      "id": "0mt4c48ajztsom53z",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T12:08:35.323Z",
+      "status": "delivered",
+      "subject": "New match for \"Aging roof, entry price band\": 6062 PARK ST, JACKSONVILLE, 32205"
+    },
+    {
+      "body": "6062 PARK ST, JACKSONVILLE, 32205 now matches your saved search \"Aging roof, entry price band\".\n\nMatch score: 58 / 100\nWhy: assessed at $145,495 (+30.7); roof about 46 years old, estimated from year built (+27.1).\n\nOwner of record: LARSON KEVIN G ET AL\nAssessed value: $145,495\nParcel: 0667050000R\n\nTriggered by pipeline run 01M0M3W127H00WF7SGSCX6D41A.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T12:08:35.323Z",
+      "id": "0mt4c48ajf7ixvj10",
+      "providerMessageId": "sim_email_ca118f90d559bc804667",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T12:08:35.323Z",
+      "status": "sent",
+      "subject": "New match for \"Aging roof, entry price band\": 6062 PARK ST, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0M3W127H00WF7SGSCX6D41A",
+  "propertyId": "0667050000R",
+  "propertySnapshot": {
+    "address": "6062 PARK ST, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 145495,
+    "builtYear": 1959,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2933677,
+    "longitude": -81.745836,
+    "ownerName": "LARSON KEVIN G ET AL",
+    "ownerOccupied": true,
+    "propertyId": "0667050000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0M3W127H00WF7SGSCX6D41A",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 46,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 26
+  },
+  "rationale": "assessed at $145,495 (+30.7); roof about 46 years old, estimated from year built (+27.1).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 57.84
+}
