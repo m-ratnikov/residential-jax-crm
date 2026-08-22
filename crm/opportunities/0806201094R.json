@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello BROWN PAMELA C,\nI am reaching out about 1530 PALM AVE 1530, JACKSONVILLE, 32207. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 33 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt48j1rhqajxayou",
+      "campaignName": "Cash offer introduction - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:28:08.237Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-365e0f672c@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T10:28:08.237Z",
+          "providerEventId": "sim_email_3cd2828354fe767399fa:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T10:28:21.237Z",
+          "providerEventId": "sim_email_3cd2828354fe767399fa:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-22T10:28:40.237Z",
+          "providerEventId": "sim_email_3cd2828354fe767399fa:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt48j1rh69p8c5sx",
+      "providerMessageId": "sim_email_3cd2828354fe767399fa",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:28:08.237Z",
+      "subject": "Interested in buying 1530 PALM AVE 1530, JACKSONVILLE, 32207",
+      "templateId": "cash-offer-intro",
+      "toAddress": "owner-365e0f672c@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt42pg3wmjbbjaxa",
   "ownerInterest": null,
   "ownerNameSnapshot": "BROWN PAMELA C",
@@ -72,5 +108,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T07:47:07.498Z"
+  "updatedAt": "2026-08-22T10:28:08.238Z"
 }
