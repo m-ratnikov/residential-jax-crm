@@ -1,0 +1,42 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T00:36:00.494Z",
+  "criteria": {
+    "filters": {
+      "distress": {
+        "absenteeOwner": true,
+        "noHomestead": true
+      },
+      "dwellingsOnly": true,
+      "minRoofAge": 15,
+      "minYearsSinceSale": 10,
+      "ownerRegionClasses": [
+        "NATIONAL"
+      ],
+      "residentialOnly": true
+    },
+    "name": "EVAL2 national absentee",
+    "weights": {
+      "amenity": 0,
+      "distress": 3,
+      "geography": 0,
+      "roofAge": 3,
+      "tenure": 3,
+      "value": 1
+    }
+  },
+  "description": null,
+  "id": "0mt3ndkdq5bbwylel",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "EVAL2 national absentee",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T00:36:00.494Z"
+}
