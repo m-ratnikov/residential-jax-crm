@@ -89,8 +89,8 @@
       ],
       "id": "0mt431dieb8u594ej",
       "providerMessageId": "sim_email_0895878bf4a00a7a047c",
-      "status": "delivered",
-      "statusAt": "2026-08-22T07:55:24.575Z",
+      "status": "opened",
+      "statusAt": "2026-08-22T07:56:52.575Z",
       "subject": "Interested in buying 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
       "templateId": "cash-offer-intro",
       "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
