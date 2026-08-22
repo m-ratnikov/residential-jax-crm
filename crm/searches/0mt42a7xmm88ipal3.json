@@ -1,0 +1,97 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T07:33:18.634Z",
+  "criteria": {
+    "filters": {
+      "distress": {
+        "absenteeOwner": true,
+        "noHomestead": true
+      },
+      "dwellingsOnly": true,
+      "geometry": {
+        "ring": [
+          [
+            -81.65781597605294,
+            30.29214848178627
+          ],
+          [
+            -81.65849165553144,
+            30.291390963580213
+          ],
+          [
+            -81.66268086829731,
+            30.30101708400929
+          ],
+          [
+            -81.66301870803632,
+            30.313442133010895
+          ],
+          [
+            -81.64443752238172,
+            30.31408375943792
+          ],
+          [
+            -81.63207258792764,
+            30.308833965250884
+          ],
+          [
+            -81.6384915429722,
+            30.30125043277279
+          ],
+          [
+            -81.64592401723385,
+            30.292207761997744
+          ],
+          [
+            -81.6490321428341,
+            30.285964915709272
+          ],
+          [
+            -81.65524839403514,
+            30.283747734509106
+          ],
+          [
+            -81.6583565196354,
+            30.291624335250603
+          ],
+          [
+            -81.65842408758341,
+            30.291682678081216
+          ],
+          [
+            -81.65849165553144,
+            30.291682678081216
+          ]
+        ],
+        "type": "polygon"
+      },
+      "minRoofAge": 15,
+      "minYearsSinceSale": 10,
+      "residentialOnly": true
+    },
+    "name": "Tired landlord",
+    "weights": {
+      "amenity": 0,
+      "distress": 3,
+      "geography": 0,
+      "roofAge": 3,
+      "tenure": 3,
+      "value": 1
+    }
+  },
+  "description": null,
+  "id": "0mt42a7xmm88ipal3",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Tired landlord",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T07:33:18.634Z"
+}
