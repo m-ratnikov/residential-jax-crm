@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "roofPermitCount"
+  ],
+  "createdAt": "2026-08-22T10:15:30.905Z",
+  "dismissedAt": null,
+  "id": "sim-20260822101518-c2ec881e__0mt481bfug7op8tyz__0252510000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt482tj7dpmb0eqe",
+  "notifications": [
+    {
+      "body": "6645 RHONE DR, JACKSONVILLE, 32208 already matched \"Waterfront long hold\" and has changed.\n\nMatch score: 94 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 5 m from the water, 179 m to Soutel Dr + Livingston Ave (+48.4); held 53 years (+45.2).\n\nChanged since the last pass: roof permit count.\n\nOwner of record: BROOKS EARL\nAssessed value: $93,959\nParcel: 0252510000R\n\nTriggered by pipeline run sim-20260822101518-c2ec881e.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T10:15:32.630Z",
+      "id": "0mt482uqexodga2tx",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T10:15:32.630Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Waterfront long hold\": 6645 RHONE DR, JACKSONVILLE, 32208"
+    },
+    {
+      "body": "6645 RHONE DR, JACKSONVILLE, 32208 already matched \"Waterfront long hold\" and has changed.\n\nMatch score: 94 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 5 m from the water, 179 m to Soutel Dr + Livingston Ave (+48.4); held 53 years (+45.2).\n\nChanged since the last pass: roof permit count.\n\nOwner of record: BROOKS EARL\nAssessed value: $93,959\nParcel: 0252510000R\n\nTriggered by pipeline run sim-20260822101518-c2ec881e.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:15:32.630Z",
+      "id": "0mt482uqec3723gwp",
+      "providerMessageId": "sim_email_672ef561d5ae72c7fc67",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T10:15:32.630Z",
+      "status": "sent",
+      "subject": "Updated match for \"Waterfront long hold\": 6645 RHONE DR, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822101518-c2ec881e",
+  "propertyId": "0252510000R",
+  "propertySnapshot": {
+    "address": "6645 RHONE DR, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 93959,
+    "builtYear": 1959,
+    "courtDistressScore": 0,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.393806,
+    "longitude": -81.6996076,
+    "ownerName": "BROOKS EARL",
+    "ownerOccupied": true,
+    "propertyId": "0252510000R",
+    "provenance": {
+      "fetchedAt": "1787320736294",
+      "runId": "01M0M3W127H00WF7SGSCX6D41A",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "PERMIT",
+    "roofAgeYears": 0,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 53
+  },
+  "rationale": "water view of Jacksonville rivers (COJ Jax_River) 5 m from the water, 179 m to Soutel Dr + Livingston Ave (+48.4); held 53 years (+45.2).",
+  "readAt": null,
+  "savedSearchId": "0mt481bfug7op8tyz",
+  "score": 93.61
+}
