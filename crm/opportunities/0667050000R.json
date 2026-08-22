@@ -17,7 +17,37 @@
   "nextStepDueAt": null,
   "notes": [],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello LARSON KEVIN G ET AL,\n\nJust following up on my note about 6062 PARK ST, JACKSONVILLE, 32205. If the timing is wrong, tell me and I will not write again.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt48vkmrm8x35ezu",
+      "campaignName": "Follow up - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:37:52.563Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-5fae5c87e1@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T10:37:52.563Z",
+          "providerEventId": "sim_email_5a969f53fd2a307bc8eb:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T10:39:20.563Z",
+          "providerEventId": "sim_email_5a969f53fd2a307bc8eb:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt48vkmr7ues6zuu",
+      "providerMessageId": "sim_email_5a969f53fd2a307bc8eb",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:37:52.563Z",
+      "subject": "Following up on 6062 PARK ST, JACKSONVILLE, 32205",
+      "templateId": "follow-up",
+      "toAddress": "owner-5fae5c87e1@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt48v4gevbpeghjz",
   "ownerInterest": null,
   "ownerNameSnapshot": "LARSON KEVIN G ET AL",
@@ -65,5 +95,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T10:37:32.313Z"
+  "updatedAt": "2026-08-22T10:37:52.563Z"
 }
