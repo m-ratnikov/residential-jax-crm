@@ -90,7 +90,7 @@
     "yearsSinceLastSale": 68
   },
   "savedSearchId": "0mt3v3sjckfr92p5g",
-  "stage": "negotiating",
+  "stage": "under_contract",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -115,8 +115,16 @@
       "id": "0mt42ouzwivpk2qve",
       "note": null,
       "toStage": "negotiating"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-22T07:44:44.538Z",
+      "fromStage": "negotiating",
+      "id": "0mt42ox6iwiobybzc",
+      "note": null,
+      "toStage": "under_contract"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T07:44:39.543Z"
+  "updatedAt": "2026-08-22T07:44:44.538Z"
 }
