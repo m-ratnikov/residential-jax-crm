@@ -15,7 +15,14 @@
   "matchScore": 95.17,
   "nextStep": "Send the roof quote and re-offer",
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt3v3p9v4cw2aqxd",
+      "body": "Owner wants $108,000. Comps in the neighbourhood do not support it with this roof, so we are at $84,000.",
+      "createdAt": "2026-08-22T04:21:08.640Z",
+      "id": "0mt3vf3c0ebmz5w9r"
+    }
+  ],
   "offerPrice": 84000,
   "outreach": [],
   "ownerId": "0mt3vf02m01l9odj6",
@@ -81,5 +88,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T04:21:07.828Z"
+  "updatedAt": "2026-08-22T04:21:08.640Z"
 }
