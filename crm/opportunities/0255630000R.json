@@ -3,7 +3,7 @@
   "addressLine": "6756 HELSTON CT, JACKSONVILLE, 32208",
   "addressZip": "32208",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 128500,
   "assessedValue": 116863,
   "assigneeId": "0mt3rt37pteb7fl8e",
   "closedAt": null,
@@ -13,10 +13,10 @@
   "longitude": -81.6984993,
   "matchRationale": "held 54 years (+30.2); roof about 70 years old, estimated from year built (+29.6); absentee owner mailing from out of state (+28.3).",
   "matchScore": 88.15,
-  "nextStep": null,
+  "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 113000,
   "outreach": [],
   "ownerId": "0mt3ry6dflr3lyhm9",
   "ownerInterest": null,
@@ -89,5 +89,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T02:44:04.534Z"
+  "updatedAt": "2026-08-22T02:44:05.428Z"
 }
