@@ -6,7 +6,7 @@
   "askingPrice": null,
   "assessedValue": 165937,
   "assigneeId": "0mt3rt1ahlex93axa",
-  "closedAt": null,
+  "closedAt": "2026-08-22T02:44:20.227Z",
   "createdAt": "2026-08-22T02:44:17.832Z",
   "id": "0795460000R",
   "latitude": 30.3017089,
@@ -53,7 +53,7 @@
     "yearsSinceLastSale": 54
   },
   "savedSearchId": "0mt3rt6if01p1vc5p",
-  "stage": "contacted",
+  "stage": "dead",
   "stageEvents": [
     {
       "actorId": "0mt3rt1ahlex93axa",
@@ -70,8 +70,16 @@
       "id": "0mt3rykv8f8sspl1o",
       "note": null,
       "toStage": "contacted"
+    },
+    {
+      "actorId": "0mt3rt1ahlex93axa",
+      "createdAt": "2026-08-22T02:44:20.227Z",
+      "fromStage": "contacted",
+      "id": "0mt3rylj73r6o3b8s",
+      "note": "Owner listed with an agent two days after our letter. Not our deal.",
+      "toStage": "dead"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T02:44:19.364Z"
+  "updatedAt": "2026-08-22T02:44:20.227Z"
 }
