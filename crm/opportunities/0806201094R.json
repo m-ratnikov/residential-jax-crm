@@ -5,7 +5,7 @@
   "alertId": "sim-20260822073952-d3232bae__0mt3v3sjckfr92p5g__0806201094R",
   "askingPrice": null,
   "assessedValue": 221491,
-  "assigneeId": null,
+  "assigneeId": "0mt3v3r4hz2k56t5t",
   "closedAt": null,
   "createdAt": "2026-08-22T07:45:09.744Z",
   "id": "0806201094R",
@@ -72,5 +72,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T07:46:04.449Z"
+  "updatedAt": "2026-08-22T07:47:07.498Z"
 }
