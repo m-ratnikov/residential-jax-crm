@@ -1,0 +1,46 @@
+{
+  "alertsCreated": 0,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-wasm-browser",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "01M0KBA53DPMHRGXV66NQ0GRY5",
+      "isSample": false,
+      "kind": "duckdb-wasm-browser",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 0,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 0,
+        "matched": 4169,
+        "matchesTruncated": true,
+        "name": "EVAL2 national absentee",
+        "newMatches": 0,
+        "savedSearchId": "0mt3ndkdq5bbwylel",
+        "seeded": true,
+        "trackedMatches": 2000,
+        "truncated": true,
+        "unstableReads": 0,
+        "updatedMatches": 0
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-22T00:36:29.264Z",
+  "id": "0mt3ne52bjkr7cezi",
+  "notificationsSent": 0,
+  "pipelineRunId": "01M0KBA53DPMHRGXV66NQ0GRY5",
+  "pipelineRunIsNew": true,
+  "pipelineRunStartedAt": "2026-08-21T21:51:57.432Z",
+  "propertiesEvaluated": 2000,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-22T00:36:26.826Z",
+  "trigger": "manual"
+}
