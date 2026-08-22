@@ -83,8 +83,8 @@
       ],
       "id": "0mt49fups4g2z5cmx",
       "providerMessageId": "sim_email_7f259f49643d21535ea0",
-      "status": "sent",
-      "statusAt": "2026-08-22T10:53:38.752Z",
+      "status": "delivered",
+      "statusAt": "2026-08-22T10:54:23.752Z",
       "subject": "About the roof at 1530 PALM AVE 1530, JACKSONVILLE, 32207",
       "templateId": "roof-condition",
       "toAddress": "owner-365e0f672c@mocked-skip-trace.invalid"
