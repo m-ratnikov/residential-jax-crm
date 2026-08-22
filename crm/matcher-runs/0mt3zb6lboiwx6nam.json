@@ -1,0 +1,50 @@
+{
+  "alertsCreated": 0,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-parquet",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "sim-20260822060922-6a02aef5",
+      "isSample": false,
+      "kind": "duckdb-parquet",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 0,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "knownMatches": 67399,
+        "knownMatchesTruncated": false,
+        "leftMatches": 0,
+        "matchIdsSeeded": false,
+        "matched": 67399,
+        "matchesTruncated": true,
+        "name": "Transit infill",
+        "newMatches": 0,
+        "newMatchesWithoutDetail": 0,
+        "savedSearchId": "0mt3v3tx5y3x93mqx",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": false,
+        "unstableReads": 0,
+        "updatedMatches": 0
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-22T06:10:10.016Z",
+  "id": "0mt3zb6lboiwx6nam",
+  "notificationsSent": 0,
+  "pipelineRunId": "sim-20260822060922-6a02aef5",
+  "pipelineRunIsNew": false,
+  "pipelineRunStartedAt": "2026-08-22T03:01:49.097Z",
+  "propertiesEvaluated": 2000,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-22T06:10:04.050Z",
+  "trigger": "simulation"
+}
