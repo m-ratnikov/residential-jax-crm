@@ -48,7 +48,7 @@
       ],
       "id": "0mt3sjn3flbe2vlyg",
       "providerMessageId": "sim_sms_a8e828090adac4c51ce3",
-      "status": "queued",
+      "status": "sent",
       "statusAt": "2026-08-22T03:00:42.027Z",
       "subject": null,
       "templateId": "follow-up",
