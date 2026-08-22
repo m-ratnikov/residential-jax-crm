@@ -54,8 +54,8 @@
       ],
       "id": "0mt3veqhw4nsy81ca",
       "providerMessageId": "sim_email_59eee550b7f0dc832b48",
-      "status": "delivered",
-      "statusAt": "2026-08-22T04:22:19.004Z",
+      "status": "opened",
+      "statusAt": "2026-08-22T04:24:30.004Z",
       "subject": "About the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
       "templateId": "roof-condition",
       "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
