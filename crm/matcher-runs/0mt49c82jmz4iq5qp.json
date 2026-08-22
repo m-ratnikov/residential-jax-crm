@@ -1,0 +1,50 @@
+{
+  "alertsCreated": 0,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-wasm-browser",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "sim-20260822105028-388146e3",
+      "isSample": false,
+      "kind": "duckdb-wasm-browser",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 0,
+        "alertsSuppressed": 0,
+        "evaluated": 171,
+        "knownMatches": 171,
+        "knownMatchesTruncated": false,
+        "leftMatches": 1,
+        "matchIdsSeeded": false,
+        "matched": 171,
+        "matchesTruncated": false,
+        "name": "Waterfront long hold - TEST",
+        "newMatches": 0,
+        "newMatchesWithoutDetail": 0,
+        "savedSearchId": "0mt49aub1wm7oux11",
+        "seeded": false,
+        "trackedMatches": 171,
+        "truncated": false,
+        "unstableReads": 2,
+        "updatedMatches": 0
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-22T10:50:50.417Z",
+  "id": "0mt49c82jmz4iq5qp",
+  "notificationsSent": 0,
+  "pipelineRunId": "sim-20260822105028-388146e3",
+  "pipelineRunIsNew": false,
+  "pipelineRunStartedAt": "2026-08-22T06:52:28.105Z",
+  "propertiesEvaluated": 171,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-22T10:50:49.268Z",
+  "trigger": "simulation"
+}
