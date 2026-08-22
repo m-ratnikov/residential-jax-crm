@@ -6,7 +6,7 @@
   "askingPrice": 1021500,
   "assessedValue": 972946,
   "assigneeId": "0mt3v3qdzqpzl4w3h",
-  "closedAt": null,
+  "closedAt": "2026-08-22T07:44:42.516Z",
   "createdAt": "2026-08-22T04:21:15.856Z",
   "id": "0906050000R",
   "latitude": 30.3093847,
@@ -60,7 +60,7 @@
     "yearsSinceLastSale": 55
   },
   "savedSearchId": "0mt3v3tx5y3x93mqx",
-  "stage": "under_contract",
+  "stage": "closed",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -93,8 +93,16 @@
       "id": "0mt42orsw7evhrflx",
       "note": null,
       "toStage": "under_contract"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-22T07:44:42.516Z",
+      "fromStage": "under_contract",
+      "id": "0mt42owmn6nip682b",
+      "note": null,
+      "toStage": "closed"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T07:44:37.568Z"
+  "updatedAt": "2026-08-22T07:44:42.516Z"
 }
