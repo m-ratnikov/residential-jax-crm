@@ -17,7 +17,37 @@
   "nextStepDueAt": null,
   "notes": [],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello BROOKS EARL,\nI am reaching out about 6645 RHONE DR, JACKSONVILLE, 32208. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 53 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt48j1rhqajxayou",
+      "campaignName": "Cash offer introduction - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:28:08.929Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-26ae35babb@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T10:28:08.929Z",
+          "providerEventId": "sim_email_5e6fb54e6b8c9b8f9b30:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T10:29:22.929Z",
+          "providerEventId": "sim_email_5e6fb54e6b8c9b8f9b30:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt48j2ap3bcbqx23",
+      "providerMessageId": "sim_email_5e6fb54e6b8c9b8f9b30",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:28:08.929Z",
+      "subject": "Interested in buying 6645 RHONE DR, JACKSONVILLE, 32208",
+      "templateId": "cash-offer-intro",
+      "toAddress": "owner-26ae35babb@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt48dvs9jbxhyyke",
   "ownerInterest": null,
   "ownerNameSnapshot": "BROOKS EARL",
@@ -73,5 +103,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T10:27:25.812Z"
+  "updatedAt": "2026-08-22T10:28:08.929Z"
 }
