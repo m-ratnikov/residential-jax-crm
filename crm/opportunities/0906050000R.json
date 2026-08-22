@@ -15,7 +15,14 @@
   "matchScore": 95.63,
   "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt3rt2hh2h4vvic4",
+      "body": "Probate is the driver here. Two heirs, one out of state, both want it gone. Asking $1,021,500, we are at $919,500.",
+      "createdAt": "2026-08-22T02:43:58.429Z",
+      "id": "0mt3ry4ppv02280dr"
+    }
+  ],
   "offerPrice": 919500,
   "outreach": [],
   "ownerId": "0mt3ry11tr9wdk19y",
@@ -81,5 +88,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T02:43:57.618Z"
+  "updatedAt": "2026-08-22T02:43:58.429Z"
 }
