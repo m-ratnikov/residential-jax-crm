@@ -1,0 +1,54 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-22T02:26:16.693Z",
+  "dismissedAt": null,
+  "id": "sim-20260822013847-731873da__0mt3plj8xcu0xv5m4__0278430020R",
+  "kind": "new_match",
+  "matcherRunId": "0mt3rbdl27h4d2tnj",
+  "notifications": [
+    {
+      "body": "5407 C ST, JACKSONVILLE, 32209 now matches your saved search \"Transit infill\".\n\nMatch score: 99 / 100\nWhy: 9 m to 45th St + Avenue C St (+59); held 28 years (+40).\n\nOwner of record: YOUNG RHODIA MAE ESTATE\nAssessed value: $57,769\nParcel: 0278430020R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T02:26:28.235Z",
+      "id": "0mt3rbmdna0o7plun",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T02:26:28.235Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 5407 C ST, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822013847-731873da",
+  "propertyId": "0278430020R",
+  "propertySnapshot": {
+    "address": "5407 C ST, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 57769,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3710928,
+    "longitude": -81.7011413,
+    "ownerName": "YOUNG RHODIA MAE ESTATE",
+    "ownerOccupied": false,
+    "propertyId": "0278430020R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0KBA53DPMHRGXV66NQ0GRY5",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 69,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 28
+  },
+  "rationale": "9 m to 45th St + Avenue C St (+59); held 28 years (+40).",
+  "readAt": null,
+  "savedSearchId": "0mt3plj8xcu0xv5m4",
+  "score": 99.4
+}
