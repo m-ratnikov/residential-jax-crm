@@ -1,0 +1,50 @@
+{
+  "alertsCreated": 1,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-wasm-browser",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "sim-20260822073952-d3232bae",
+      "isSample": false,
+      "kind": "duckdb-wasm-browser",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 1,
+        "alertsSuppressed": 0,
+        "evaluated": 68,
+        "knownMatches": 68,
+        "knownMatchesTruncated": false,
+        "leftMatches": 2,
+        "matchIdsSeeded": false,
+        "matched": 68,
+        "matchesTruncated": false,
+        "name": "Tired landlord",
+        "newMatches": 0,
+        "newMatchesWithoutDetail": 0,
+        "savedSearchId": "0mt42a7xmm88ipal3",
+        "seeded": false,
+        "trackedMatches": 68,
+        "truncated": false,
+        "unstableReads": 0,
+        "updatedMatches": 1
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-22T07:40:03.762Z",
+  "id": "0mt42iv2exgtpw9zd",
+  "notificationsSent": 2,
+  "pipelineRunId": "sim-20260822073952-d3232bae",
+  "pipelineRunIsNew": true,
+  "pipelineRunStartedAt": "2026-08-22T06:52:28.105Z",
+  "propertiesEvaluated": 68,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-22T07:40:01.493Z",
+  "trigger": "simulation"
+}
