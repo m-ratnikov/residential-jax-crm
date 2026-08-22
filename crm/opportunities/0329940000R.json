@@ -3,7 +3,7 @@
   "addressLine": "7906 N PEARL ST, JACKSONVILLE, 32208",
   "addressZip": "32208",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 108000,
   "assessedValue": 80045,
   "assigneeId": "0mt3ple75x41kc88b",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.6571213,
   "matchRationale": "assessed at $80,045 (+50); roof about 75 years old, estimated from year built (+45.2).",
   "matchScore": 95.17,
-  "nextStep": null,
+  "nextStep": "Send the roof quote and re-offer",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 84000,
   "outreach": [],
   "ownerId": "0mt3pnpp6ldxxjap1",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "PIEPER SARAH B",
   "parcelIdentifier": "0329940000R",
   "propertyId": "0329940000R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T01:39:56.070Z"
+  "updatedAt": "2026-08-22T01:39:56.882Z"
 }
