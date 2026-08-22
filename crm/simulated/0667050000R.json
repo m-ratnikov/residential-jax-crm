@@ -3,11 +3,11 @@
   "id": "0667050000R",
   "label": "roof permit",
   "propertyId": "0667050000R",
-  "runId": "sim-20260822103614-3f9f1303",
+  "runId": "sim-20260822103648-653e208f",
   "values": {
     "roof_age_basis": "PERMIT",
     "roof_age_years": "0",
-    "roof_permit_count": "1",
+    "roof_permit_count": "2",
     "roof_year_est": "2026"
   }
 }
