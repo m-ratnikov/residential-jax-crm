@@ -1,0 +1,50 @@
+{
+  "alertsCreated": 0,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-wasm-browser",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "sim-20260822100341-78f34a3d",
+      "isSample": false,
+      "kind": "duckdb-wasm-browser",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 0,
+        "alertsSuppressed": 0,
+        "evaluated": 1717,
+        "knownMatches": 1717,
+        "knownMatchesTruncated": false,
+        "leftMatches": 0,
+        "matchIdsSeeded": true,
+        "matched": 1717,
+        "matchesTruncated": false,
+        "name": "Tired landlord, water view - TEST",
+        "newMatches": 0,
+        "newMatchesWithoutDetail": 0,
+        "savedSearchId": "0mt47mb9qc49dx3o4",
+        "seeded": true,
+        "trackedMatches": 1717,
+        "truncated": false,
+        "unstableReads": 0,
+        "updatedMatches": 0
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-22T10:03:55.956Z",
+  "id": "0mt47nvthj7gauqm0",
+  "notificationsSent": 0,
+  "pipelineRunId": "sim-20260822100341-78f34a3d",
+  "pipelineRunIsNew": true,
+  "pipelineRunStartedAt": "2026-08-22T06:52:28.105Z",
+  "propertiesEvaluated": 1717,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-22T10:03:53.557Z",
+  "trigger": "simulation"
+}
