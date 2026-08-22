@@ -17,7 +17,43 @@
   "nextStepDueAt": null,
   "notes": [],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello COLLINS VIRGINIA C,\n\nCounty records suggest the roof at 2002 S MERCER CIR, JACKSONVILLE, 32217 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $240,749.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt49ftrrih2uz5ru",
+      "campaignName": "Aging roof angle - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:53:38.150Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-cc50f84403@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T10:53:38.150Z",
+          "providerEventId": "sim_email_ce4bf3a62ba9b6033afb:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T10:54:05.150Z",
+          "providerEventId": "sim_email_ce4bf3a62ba9b6033afb:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-22T10:54:46.150Z",
+          "providerEventId": "sim_email_ce4bf3a62ba9b6033afb:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt49fu929bsewlq2",
+      "providerMessageId": "sim_email_ce4bf3a62ba9b6033afb",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:53:38.150Z",
+      "subject": "About the roof at 2002 S MERCER CIR, JACKSONVILLE, 32217",
+      "templateId": "roof-condition",
+      "toAddress": "owner-cc50f84403@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt48r789rd6echdx",
   "ownerInterest": null,
   "ownerNameSnapshot": "COLLINS VIRGINIA C",
@@ -65,5 +101,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T10:34:29.197Z"
+  "updatedAt": "2026-08-22T10:53:38.151Z"
 }
