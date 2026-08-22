@@ -77,8 +77,8 @@
       ],
       "id": "0mt3sjmkdtgyg14p5",
       "providerMessageId": "sim_sms_fbcb80b72f6466483631",
-      "status": "sent",
-      "statusAt": "2026-08-22T03:00:41.341Z",
+      "status": "failed",
+      "statusAt": "2026-08-22T03:01:11.949Z",
       "subject": null,
       "templateId": "follow-up",
       "toAddress": "(904) 555-0176"
