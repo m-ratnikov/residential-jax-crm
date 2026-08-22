@@ -53,6 +53,35 @@
       "subject": "About the roof at 2920 W 12TH ST, JACKSONVILLE, 32254",
       "templateId": "roof-condition",
       "toAddress": "801 S FEDERAL HWY APT 121"
+    },
+    {
+      "body": "Hello MACLELLAN VENTURES LLC,\n\nJust following up on my note about 2920 W 12TH ST, JACKSONVILLE, 32254. If the timing is wrong, tell me and I will not write again.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3sjm24crwf1gge",
+      "campaignName": "Follow up - 2026-08-22",
+      "channel": "sms",
+      "createdAt": "2026-08-22T03:00:44.194Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for (904) 555-0163",
+          "occurredAt": "2026-08-22T03:00:44.194Z",
+          "providerEventId": "sim_sms_3d6f32eb940463a1cb88:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T03:01:12.194Z",
+          "providerEventId": "sim_sms_3d6f32eb940463a1cb88:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt3sjormif4tzwq0",
+      "providerMessageId": "sim_sms_3d6f32eb940463a1cb88",
+      "status": "queued",
+      "statusAt": "2026-08-22T03:00:44.194Z",
+      "subject": null,
+      "templateId": "follow-up",
+      "toAddress": "(904) 555-0163"
     }
   ],
   "ownerId": "0mt3rx744sx89e6zp",
@@ -102,5 +131,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T02:43:19.376Z"
+  "updatedAt": "2026-08-22T03:00:44.194Z"
 }
