@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello MACLELLAN VENTURES LLC,\n\nCounty records suggest the roof at 2920 W 12TH ST, JACKSONVILLE, 32254 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $80,030.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3vehvo4pjcbh8t",
+      "campaignName": "Seed - identified",
+      "channel": "direct_mail",
+      "createdAt": "2026-08-22T04:20:40.836Z",
+      "createdById": "0mt3v3qdzqpzl4w3h",
+      "events": [
+        {
+          "detail": "Accepted by simulated-print-and-mail for 801 S FEDERAL HWY APT 121",
+          "occurredAt": "2026-08-22T04:20:40.836Z",
+          "providerEventId": "sim_direct_mail_e324e8666d00ec498ed2:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Returned to sender: vacant",
+          "occurredAt": "2026-08-30T01:07:34.836Z",
+          "providerEventId": "sim_direct_mail_e324e8666d00ec498ed2:returned",
+          "status": "returned"
+        }
+      ],
+      "id": "0mt3vehvog3pevhos",
+      "providerMessageId": "sim_direct_mail_e324e8666d00ec498ed2",
+      "status": "queued",
+      "statusAt": "2026-08-22T04:20:40.836Z",
+      "subject": "About the roof at 2920 W 12TH ST, JACKSONVILLE, 32254",
+      "templateId": "roof-condition",
+      "toAddress": "801 S FEDERAL HWY APT 121"
+    }
+  ],
   "ownerId": "0mt3vee188mwzcrl1",
   "ownerInterest": null,
   "ownerNameSnapshot": "MACLELLAN VENTURES LLC",
@@ -72,5 +102,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T04:20:38.731Z"
+  "updatedAt": "2026-08-22T04:20:40.836Z"
 }
