@@ -42,6 +42,25 @@ function loadEnvFile(): void {
   }
 }
 
+/**
+ * The name of this script's own dedicated search, and the only one it will
+ * ever read or write.
+ *
+ * Not `searches[0]`, which is what this used to do: against a shared store -
+ * the deployed runtime's own `crm-state` branch, which is what this checkout's
+ * `.env.local` points at, there being no separate scratch store - "the first
+ * search the store happens to list" is whatever a prior manual test left
+ * lying around, in whatever order the backend's listing returns (git tree
+ * order for the GitHub-documents backend, which is alphabetical by search id
+ * and carries no meaning at all). That picked a stray "TEST"-named search
+ * from an earlier rehearsal on a real run, evaluated it, converted one of its
+ * alerts into a real opportunity with no address on it, and left both behind
+ * on the live board. Matching on this name instead means the script only ever
+ * touches a search it created and can be told apart from the demo's own
+ * seeded theses at a glance.
+ */
+const VERIFY_SEARCH_NAME = "verify-loop scratch search (created by scripts/verify-loop.ts)";
+
 const failures: string[] = [];
 
 function check(label: string, ok: boolean, detail = ""): void {
@@ -76,35 +95,33 @@ async function main(): Promise<void> {
     );
   }
 
-  // Seed what is missing rather than demanding somebody ran another script
-  // first. This matters for more than convenience: with the in-process backend
-  // the store lives and dies with the process, so `pnpm seed && pnpm verify`
-  // can never work there - the seed exits and takes the data with it. A
-  // verification that only runs against two of the three backends is not the
-  // claim this project makes about them.
-  let searches = await listSavedSearches();
-  if (!searches.length) {
-    const preset = CRITERIA_PRESETS.find((entry) => entry.id === "transit-infill");
-    if (preset) {
-      await createSavedSearch({
-        name: preset.name,
-        description: preset.description,
-        criteria: preset.criteria,
-        ownerId: null,
-        notifyInApp: true,
-        notifyEmail: false,
-        notifySms: false,
-      });
-      console.log(`seeded a saved search to watch: "${preset.name}"
-`);
-      searches = await listSavedSearches();
-    }
-  }
+  // Find or create this script's OWN search, by name - never "whichever one
+  // the store lists first". This matters for more than convenience: with the
+  // in-process backend the store lives and dies with the process, so
+  // `pnpm seed && pnpm verify` can never work there - the seed exits and
+  // takes the data with it. A verification that only runs against two of the
+  // three backends is not the claim this project makes about them.
+  const searches = await listSavedSearches();
+  let target = searches.find((search) => search.name === VERIFY_SEARCH_NAME);
 
-  const target = searches[0];
   if (!target) {
-    check("a saved search exists to watch", false, "no criteria presets to seed from");
-    process.exit(1);
+    const preset = CRITERIA_PRESETS.find((entry) => entry.id === "transit-infill");
+    if (!preset) {
+      check("a saved search exists to watch", false, "no criteria presets to seed from");
+      process.exit(1);
+    }
+
+    target = await createSavedSearch({
+      name: VERIFY_SEARCH_NAME,
+      description: `${preset.description} (this search belongs to scripts/verify-loop.ts and is safe to delete)`,
+      criteria: preset.criteria,
+      ownerId: null,
+      notifyInApp: true,
+      notifyEmail: false,
+      notifySms: false,
+    });
+    console.log(`seeded this script's own saved search to watch: "${VERIFY_SEARCH_NAME}"
+`);
   }
 
   // Start from a known state, so this script says the same thing every time it
