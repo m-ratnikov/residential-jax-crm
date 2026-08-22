@@ -25,7 +25,6 @@
   "lastEvaluatedAt": null,
   "lastMatchCount": null,
   "lastPipelineRunId": null,
-  "matchIds": null,
   "matches": {},
   "matchesTruncated": false,
   "name": "verify-loop scratch search (created by scripts/verify-loop.ts)",
