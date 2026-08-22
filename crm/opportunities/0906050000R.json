@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": 919500,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello ST VINCENTS HOSPITAL INC,\nI am reaching out about 2573 RIVERSIDE AVE, JACKSONVILLE, 32204. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 55 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt431die70adls65",
+      "campaignName": "test campaign 01",
+      "channel": "email",
+      "createdAt": "2026-08-22T07:54:26.245Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-62ecdf056a@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T07:54:26.245Z",
+          "providerEventId": "sim_email_ec6672f8108fd2543d40:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T07:55:18.245Z",
+          "providerEventId": "sim_email_ec6672f8108fd2543d40:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt431e11qr681php",
+      "providerMessageId": "sim_email_ec6672f8108fd2543d40",
+      "status": "queued",
+      "statusAt": "2026-08-22T07:54:26.245Z",
+      "subject": "Interested in buying 2573 RIVERSIDE AVE, JACKSONVILLE, 32204",
+      "templateId": "cash-offer-intro",
+      "toAddress": "owner-62ecdf056a@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt3vf84bhsj4qy4l",
   "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "ST VINCENTS HOSPITAL INC",
@@ -104,5 +134,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T07:44:42.516Z"
+  "updatedAt": "2026-08-22T07:54:26.245Z"
 }
