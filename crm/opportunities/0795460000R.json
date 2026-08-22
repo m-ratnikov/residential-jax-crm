@@ -24,7 +24,49 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello ELPHICK GRACE P,\n\nJust following up on my note about 3510 PARK ST, JACKSONVILLE, 32205. If the timing is wrong, tell me and I will not write again.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3sjm24crwf1gge",
+      "campaignName": "Follow up - 2026-08-22",
+      "channel": "sms",
+      "createdAt": "2026-08-22T03:00:42.787Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for (904) 555-0147",
+          "occurredAt": "2026-08-22T03:00:42.787Z",
+          "providerEventId": "sim_sms_c63ddab139ba6875d343:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T03:01:18.787Z",
+          "providerEventId": "sim_sms_c63ddab139ba6875d343:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Opened",
+          "occurredAt": "2026-08-22T03:01:44.787Z",
+          "providerEventId": "sim_sms_c63ddab139ba6875d343:opened",
+          "status": "opened"
+        },
+        {
+          "detail": "Recipient replied",
+          "occurredAt": "2026-08-22T03:02:11.787Z",
+          "providerEventId": "sim_sms_c63ddab139ba6875d343:replied",
+          "status": "replied"
+        }
+      ],
+      "id": "0mt3sjnojuz5ekezn",
+      "providerMessageId": "sim_sms_c63ddab139ba6875d343",
+      "status": "queued",
+      "statusAt": "2026-08-22T03:00:42.787Z",
+      "subject": null,
+      "templateId": "follow-up",
+      "toAddress": "(904) 555-0147"
+    }
+  ],
   "ownerId": "0mt3ryiz5z0bnznop",
   "ownerInterest": "Went to market",
   "ownerNameSnapshot": "ELPHICK GRACE P",
@@ -88,5 +130,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T02:44:22.289Z"
+  "updatedAt": "2026-08-22T03:00:42.787Z"
 }
