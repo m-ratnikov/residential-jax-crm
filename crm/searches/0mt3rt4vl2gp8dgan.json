@@ -1,0 +1,40 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T02:40:05.361Z",
+  "criteria": {
+    "filters": {
+      "distress": {
+        "absenteeOwner": true,
+        "noHomestead": true
+      },
+      "dwellingsOnly": true,
+      "minRoofAge": 15,
+      "minYearsSinceSale": 10,
+      "residentialOnly": true
+    },
+    "name": "Tired landlord",
+    "weights": {
+      "amenity": 0,
+      "distress": 3,
+      "geography": 0,
+      "roofAge": 3,
+      "tenure": 3,
+      "value": 1
+    }
+  },
+  "description": "Absentee owner, held ten years or more, roof past fifteen years, no homestead exemption. The classic wholesale target.",
+  "id": "0mt3rt4vl2gp8dgan",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Tired landlord",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": "0mt3rt1ahlex93axa",
+  "updatedAt": "2026-08-22T02:40:05.361Z"
+}
