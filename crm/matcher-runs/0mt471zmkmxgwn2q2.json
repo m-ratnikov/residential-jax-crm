@@ -1,0 +1,50 @@
+{
+  "alertsCreated": 0,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-parquet",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "sim-20260822094601-074428b5",
+      "isSample": false,
+      "kind": "duckdb-parquet",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 0,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "knownMatches": 67399,
+        "knownMatchesTruncated": false,
+        "leftMatches": 0,
+        "matchIdsSeeded": false,
+        "matched": 67399,
+        "matchesTruncated": true,
+        "name": "verify-loop scratch search (created by scripts/verify-loop.ts)",
+        "newMatches": 0,
+        "newMatchesWithoutDetail": 0,
+        "savedSearchId": "0mt46rsdoy15fa20e",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": false,
+        "unstableReads": 0,
+        "updatedMatches": 0
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-22T09:46:56.363Z",
+  "id": "0mt471zmkmxgwn2q2",
+  "notificationsSent": 0,
+  "pipelineRunId": "sim-20260822094601-074428b5",
+  "pipelineRunIsNew": false,
+  "pipelineRunStartedAt": "2026-08-22T06:52:28.105Z",
+  "propertiesEvaluated": 2000,
+  "searchesEvaluated": 1,
+  "startedAt": "2026-08-22T09:46:52.065Z",
+  "trigger": "simulation"
+}
