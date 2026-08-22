@@ -1,0 +1,65 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-22T02:26:16.693Z",
+  "dismissedAt": null,
+  "id": "sim-20260822013847-731873da__0mt3plhruuxyr1mr1__0066180100R",
+  "kind": "new_match",
+  "matcherRunId": "0mt3rbdl27h4d2tnj",
+  "notifications": [
+    {
+      "body": "220 TRACER AVE, JACKSONVILLE, 32220 now matches your saved search \"Tired landlord\".\n\nMatch score: 100 / 100\nWhy: held 57 years (+33); roof about 30 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).\n\nOwner of record: STEWART WAYNE A\nAssessed value: $98,353\nParcel: 0066180100R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T02:27:00.895Z",
+      "id": "0mt3rcbkvbiusfwga",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T02:27:00.895Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 220 TRACER AVE, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "220 TRACER AVE, JACKSONVILLE, 32220 now matches your saved search \"Tired landlord\".\n\nMatch score: 100 / 100\nWhy: held 57 years (+33); roof about 30 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).\n\nOwner of record: STEWART WAYNE A\nAssessed value: $98,353\nParcel: 0066180100R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T02:27:00.895Z",
+      "id": "0mt3rcbkv3q1z7r2r",
+      "providerMessageId": "sim_email_26c47a7922eb5d2aa6d9",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T02:27:00.895Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 220 TRACER AVE, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822013847-731873da",
+  "propertyId": "0066180100R",
+  "propertySnapshot": {
+    "address": "220 TRACER AVE, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 98353,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3186399,
+    "longitude": -81.8468045,
+    "ownerName": "STEWART WAYNE A",
+    "ownerOccupied": false,
+    "propertyId": "0066180100R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0KBA53DPMHRGXV66NQ0GRY5",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 30,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 57
+  },
+  "rationale": "held 57 years (+33); roof about 30 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
+  "readAt": null,
+  "savedSearchId": "0mt3plhruuxyr1mr1",
+  "score": 100
+}
