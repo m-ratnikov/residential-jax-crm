@@ -1,0 +1,42 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T02:54:23.458Z",
+  "criteria": {
+    "filters": {
+      "dwellingsOnly": true,
+      "maxAssessedValue": 250000,
+      "minAssessedValue": 80000,
+      "minRoofAge": 20,
+      "residentialOnly": true,
+      "zips": [
+        "32211",
+        "32277",
+        "32225"
+      ]
+    },
+    "name": "EVAL 2026-08-22 aging roof Arlington",
+    "weights": {
+      "amenity": 0,
+      "distress": 1,
+      "geography": 0,
+      "roofAge": 3,
+      "tenure": 1,
+      "value": 3
+    }
+  },
+  "description": "Created by the Pillar 2 evaluator to prove the save-search and alert loop. Safe to delete.",
+  "id": "0mt3sbizmx1kn1quk",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "EVAL 2026-08-22 aging roof Arlington",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T02:54:23.458Z"
+}
