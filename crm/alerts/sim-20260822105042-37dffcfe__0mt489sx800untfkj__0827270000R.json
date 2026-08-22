@@ -1,0 +1,73 @@
+{
+  "changedFields": [
+    "roofYearEst",
+    "roofAgeYears",
+    "roofAgeBasis",
+    "roofPermitCount"
+  ],
+  "createdAt": "2026-08-22T11:07:00.858Z",
+  "dismissedAt": null,
+  "id": "sim-20260822105042-37dffcfe__0mt489sx800untfkj__0827270000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt49x276vsz2bxhv",
+  "notifications": [
+    {
+      "body": "803 N POINT LA VISTA RD, JACKSONVILLE, 32207 already matched \"Waterfront long hold - TEST\" and has changed.\n\nMatch score: 83 / 100\nWhy: held 50 years (+44.6); water view of Jacksonville rivers (COJ Jax_River) 34 m from the water, 1402 m to 3930 San Jose Blvd (+38.7).\n\nChanged since the last pass: estimated roof year, roof age, roof age evidence, roof permit count.\n\nOwner of record: BROWN THOMAS R\nAssessed value: $1,455,649\nParcel: 0827270000R\n\nTriggered by pipeline run sim-20260822105042-37dffcfe.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T11:07:12.064Z",
+      "id": "0mt49xa9stm28trs5",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T11:07:12.064Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Waterfront long hold - TEST\": 803 N POINT LA VISTA RD, JACKSONVILLE, 32207"
+    },
+    {
+      "body": "803 N POINT LA VISTA RD, JACKSONVILLE, 32207 already matched \"Waterfront long hold - TEST\" and has changed.\n\nMatch score: 83 / 100\nWhy: held 50 years (+44.6); water view of Jacksonville rivers (COJ Jax_River) 34 m from the water, 1402 m to 3930 San Jose Blvd (+38.7).\n\nChanged since the last pass: estimated roof year, roof age, roof age evidence, roof permit count.\n\nOwner of record: BROWN THOMAS R\nAssessed value: $1,455,649\nParcel: 0827270000R\n\nTriggered by pipeline run sim-20260822105042-37dffcfe.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T11:07:12.064Z",
+      "id": "0mt49xa9szl3mgp70",
+      "providerMessageId": "sim_email_91f7032bdfa17c501292",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T11:07:12.064Z",
+      "status": "sent",
+      "subject": "Updated match for \"Waterfront long hold - TEST\": 803 N POINT LA VISTA RD, JACKSONVILLE, 32207"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822105042-37dffcfe",
+  "propertyId": "0827270000R",
+  "propertySnapshot": {
+    "address": "803 N POINT LA VISTA RD, JACKSONVILLE, 32207",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32207",
+    "assessedValue": 1455649,
+    "builtYear": 1977,
+    "courtDistressScore": 0,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2791267,
+    "longitude": -81.6637961,
+    "ownerName": "BROWN THOMAS R",
+    "ownerOccupied": false,
+    "propertyId": "0827270000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0M3W127H00WF7SGSCX6D41A",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "PERMIT",
+    "roofAgeYears": 0,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 50
+  },
+  "rationale": "held 50 years (+44.6); water view of Jacksonville rivers (COJ Jax_River) 34 m from the water, 1402 m to 3930 San Jose Blvd (+38.7).",
+  "readAt": null,
+  "savedSearchId": "0mt489sx800untfkj",
+  "score": 83.3
+}
