@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3pohjtzjymlcm2",
-  "ownerInterest": null,
+  "ownerInterest": "Went to market",
   "ownerNameSnapshot": "ELPHICK GRACE P",
   "parcelIdentifier": "0795460000R",
   "propertyId": "0795460000R",
@@ -78,5 +78,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T01:40:32.084Z"
+  "updatedAt": "2026-08-22T01:40:32.915Z"
 }
