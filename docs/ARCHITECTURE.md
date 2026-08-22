@@ -200,9 +200,9 @@ flowchart LR
     crit --> search
     matcherpass -->|diff against| search
     matcherpass -->|writes| alert
-    alert -->|"Convert to opportunity"<br/>(a human action)| opp
-    opp -->|"Launch campaign"<br/>(a human action)| outreach
-    opp -->|"Advance stage"<br/>(a separate human action)| stage
+    alert -->|"Convert to opportunity<br/>(a human action)"| opp
+    opp -->|"Launch campaign<br/>(a human action)"| outreach
+    opp -->|"Advance stage<br/>(a separate human action)"| stage
 ```
 
 Two edges into `opp` and one into `stage` are deliberately **not automatic**. Converting an alert to
@@ -295,7 +295,7 @@ sequenceDiagram
     Actions->>Actions: checkout, install, verify CRM_STORE_* / PROPERTY_DATA_URL present
     Actions->>DuckDB: PROPERTY_ENGINE=native, PROPERTY_FETCH_WHOLE=1
     DuckDB->>GW: fetch the whole ~50 MB artifact once
-    Note over DuckDB,GW: range reading per query rate-limits the gateway<br/>under hundreds of small requests; one download does not
+    Note over DuckDB,GW: range reading per query rate-limits the gateway<br/>under hundreds of small requests - one download does not
     Actions->>Store: evaluate every active search, diff, alert
     Store-->>Actions: matcher-runs record, written whether or not anything fired
 ```
@@ -313,7 +313,7 @@ lives in GitHub Actions instead, where minutes are free on a public repository.
 sequenceDiagram
     autonumber
     participant B as Browser (DuckDB-WASM already attached)
-    participant R as /api/llm/&lt;provider&gt;
+    participant R as /api/llm/[provider]
     participant M as Model provider
 
     B->>B: tool loop runs here - 8 read-only tools<br/>(get_schema, search_properties, run_sql,<br/>get_property, list_saved_searches,<br/>list_opportunities, list_alerts, get_pipeline_status)
