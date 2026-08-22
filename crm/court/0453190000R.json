@@ -2,17 +2,5 @@
   "id": "0453190000R",
   "parcelIdentifier": "0453190000R",
   "propertyId": "0453190000R",
-  "records": [
-    {
-      "amount": 148500,
-      "caseNumber": "2026-SIM-90000R-0",
-      "caseType": "foreclosure",
-      "fetchedAt": "2026-08-22T04:21:42.025Z",
-      "filedDate": "2026-08-22",
-      "partyName": "FOSTER JOHN S",
-      "sourceSystem": "simulated_court_feed",
-      "sourceUrl": null,
-      "status": "open"
-    }
-  ]
+  "records": []
 }
