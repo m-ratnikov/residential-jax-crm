@@ -50,7 +50,7 @@
     "yearsSinceLastSale": 68
   },
   "savedSearchId": "0mt3plhruuxyr1mr1",
-  "stage": "identified",
+  "stage": "contacted",
   "stageEvents": [
     {
       "actorId": "0mt3ple75x41kc88b",
@@ -59,8 +59,16 @@
       "id": "0mt3pniqj9adgpb7x",
       "note": "Created from an alert",
       "toStage": "identified"
+    },
+    {
+      "actorId": "0mt3plgs01tie4kc4",
+      "createdAt": "2026-08-22T01:39:45.840Z",
+      "fromStage": "identified",
+      "id": "0mt3pnk1cxw5w8rok",
+      "note": "Owner answered the SMS asking who we are. Warm enough to keep going.",
+      "toStage": "contacted"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T01:39:44.155Z"
+  "updatedAt": "2026-08-22T01:39:45.840Z"
 }
