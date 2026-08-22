@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-08-22T19:40:12.400Z",
+  "dismissedAt": null,
+  "id": "01M0ND07NV9TANF7K4G66AD6P9__0mt4avamhp8iakx36__0011660010R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt4s910nm9iu8v4n",
+  "notifications": [
+    {
+      "body": "20119 MAXVILLE MACCLENNY HWY, JACKSONVILLE, 32234 already matched \"Tired landlord\" and has changed.\n\nMatch score: 60 / 100\nWhy: roof about 89 years old, estimated from year built (+31); absentee owner mailing from elsewhere in Florida (+20); held 18 years (last sale 2008-08-11) (+9.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: HORNE STACEY RENEE\nAssessed value: $74,377\nParcel: 0011660010R\n\nTriggered by pipeline run 01M0ND07NV9TANF7K4G66AD6P9.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T19:40:15.086Z",
+      "id": "0mt4s92lqhanjbp55",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T19:40:15.086Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 20119 MAXVILLE MACCLENNY HWY, JACKSONVILLE, 32234"
+    },
+    {
+      "body": "20119 MAXVILLE MACCLENNY HWY, JACKSONVILLE, 32234 already matched \"Tired landlord\" and has changed.\n\nMatch score: 60 / 100\nWhy: roof about 89 years old, estimated from year built (+31); absentee owner mailing from elsewhere in Florida (+20); held 18 years (last sale 2008-08-11) (+9.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: HORNE STACEY RENEE\nAssessed value: $74,377\nParcel: 0011660010R\n\nTriggered by pipeline run 01M0ND07NV9TANF7K4G66AD6P9.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T19:40:15.086Z",
+      "id": "0mt4s92lqoe7acn1k",
+      "providerMessageId": "sim_email_4cba0f79e09263d834ae",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T19:40:15.086Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 20119 MAXVILLE MACCLENNY HWY, JACKSONVILLE, 32234"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0ND07NV9TANF7K4G66AD6P9",
+  "propertyId": "0011660010R",
+  "propertySnapshot": {
+    "address": "20119 MAXVILLE MACCLENNY HWY, JACKSONVILLE, 32234",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32234",
+    "assessedValue": 74377,
+    "builtYear": 1937,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2008-08-11",
+    "latitude": 30.2016283,
+    "longitude": -82.0433466,
+    "ownerName": "HORNE STACEY RENEE",
+    "ownerOccupied": false,
+    "propertyId": "0011660010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0ND07NV9TANF7K4G66AD6P9",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 89,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 18
+  },
+  "rationale": "roof about 89 years old, estimated from year built (+31); absentee owner mailing from elsewhere in Florida (+20); held 18 years (last sale 2008-08-11) (+9.2).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 60.2
+}
