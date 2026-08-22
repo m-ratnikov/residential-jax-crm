@@ -15,7 +15,14 @@
   "matchScore": 95.17,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt3v3qdzqpzl4w3h",
+      "body": "Different submarket to the rest of the list, and the numbers still work. Worth a letter.",
+      "createdAt": "2026-08-22T04:20:38.731Z",
+      "id": "0mt3veg97tfalq2ly"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3vee188mwzcrl1",
@@ -65,5 +72,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T04:20:37.875Z"
+  "updatedAt": "2026-08-22T04:20:38.731Z"
 }
