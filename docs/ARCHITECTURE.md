@@ -55,7 +55,7 @@ parquet's owner never writes to this application's store.
 
 ```mermaid
 flowchart LR
-    pq[("Published query table<br/>parquet on IPFS<br/><i>404,023 parcels, read only</i>")]
+    pq[["Published query table<br/>Filebase / IPFS<br/><i>404,023 parcels, read only</i>"]]
 
     subgraph browser ["Visitor's tab - on demand, no credential"]
         direction TB
