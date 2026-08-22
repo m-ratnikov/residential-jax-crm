@@ -59,6 +59,35 @@
       "subject": "Interested in buying 1530 PALM AVE 1530, JACKSONVILLE, 32207",
       "templateId": "cash-offer-intro",
       "toAddress": "owner-365e0f672c@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello BROWN PAMELA C,\n\nCounty records suggest the roof at 1530 PALM AVE 1530, JACKSONVILLE, 32207 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $221,491.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt49ftrrih2uz5ru",
+      "campaignName": "Aging roof angle - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:53:38.752Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-365e0f672c@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T10:53:38.752Z",
+          "providerEventId": "sim_email_7f259f49643d21535ea0:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T10:54:23.752Z",
+          "providerEventId": "sim_email_7f259f49643d21535ea0:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt49fups4g2z5cmx",
+      "providerMessageId": "sim_email_7f259f49643d21535ea0",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:53:38.752Z",
+      "subject": "About the roof at 1530 PALM AVE 1530, JACKSONVILLE, 32207",
+      "templateId": "roof-condition",
+      "toAddress": "owner-365e0f672c@mocked-skip-trace.invalid"
     }
   ],
   "ownerId": "0mt42pg3wmjbbjaxa",
@@ -108,5 +137,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T10:28:08.238Z"
+  "updatedAt": "2026-08-22T10:53:38.752Z"
 }
