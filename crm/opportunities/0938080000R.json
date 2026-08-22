@@ -15,7 +15,14 @@
   "matchScore": 95.16,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt3rt3v3c03mxj29",
+      "body": "Closed at $69,000. Roof replaced before the tenant moved in.",
+      "createdAt": "2026-08-22T02:44:15.262Z",
+      "id": "0mt3ryhpakvmjr6e6"
+    }
+  ],
   "offerPrice": 69000,
   "outreach": [],
   "ownerId": "0mt3rycul6q1fg951",
@@ -97,5 +104,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T02:44:14.376Z"
+  "updatedAt": "2026-08-22T02:44:15.262Z"
 }
