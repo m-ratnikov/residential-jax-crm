@@ -1,0 +1,18 @@
+{
+  "id": "0377160000R",
+  "parcelIdentifier": "0377160000R",
+  "propertyId": "0377160000R",
+  "records": [
+    {
+      "amount": 12400,
+      "caseNumber": "2026-SIM-60000R-4",
+      "caseType": "lien",
+      "fetchedAt": "2026-08-22T04:21:45.614Z",
+      "filedDate": "2026-08-22",
+      "partyName": "BIGGINS WILLIE M ESTATE",
+      "sourceSystem": "simulated_court_feed",
+      "sourceUrl": null,
+      "status": "open"
+    }
+  ]
+}
