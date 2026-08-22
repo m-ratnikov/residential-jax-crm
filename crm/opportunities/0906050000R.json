@@ -3,7 +3,7 @@
   "addressLine": "2573 RIVERSIDE AVE, JACKSONVILLE, 32204",
   "addressZip": "32204",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 1021500,
   "assessedValue": 972946,
   "assigneeId": "0mt3v3qdzqpzl4w3h",
   "closedAt": null,
@@ -13,13 +13,13 @@
   "longitude": -81.6901328,
   "matchRationale": "152 m from the water, 10 m to Riverside Ave + Shircliff St (+59.2); held 55 years (+36.4).",
   "matchScore": 95.63,
-  "nextStep": null,
+  "nextStep": "Confirm both heirs will sign",
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 919500,
   "outreach": [],
   "ownerId": "0mt3vf84bhsj4qy4l",
-  "ownerInterest": null,
+  "ownerInterest": "Motivated by an estate",
   "ownerNameSnapshot": "ST VINCENTS HOSPITAL INC",
   "parcelIdentifier": "0906050000R",
   "propertyId": "0906050000R",
@@ -81,5 +81,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T04:21:17.695Z"
+  "updatedAt": "2026-08-22T04:21:18.458Z"
 }
