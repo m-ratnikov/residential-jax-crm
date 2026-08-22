@@ -21,6 +21,8 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { propertySource } from "./client-source";
+import { publicDataConfig } from "./public-config";
+import { parseRunHistory } from "./runs-parse";
 import type { DataSourceInfo } from "./types";
 
 /** The CRM store as the UI cares about it: can it write, and does it forget. */
@@ -100,6 +102,86 @@ export function useDataset(): DataSourceInfo | null {
   }, []);
 
   return info;
+}
+
+/**
+ * The published run-history document, as the artifact itself describes it.
+ *
+ * `url` and `isSample` are known before anything is fetched, because they come
+ * from the build-time configuration; `publishedCount` and `generatedAt` arrive
+ * once the document has been read. `reachable` is false while it is loading and
+ * stays false if no gateway answers, so a caller can tell "not yet" and "not
+ * ever" apart from a count that happens to be zero.
+ */
+export interface RunHistorySource {
+  url: string;
+  /** True when the bundled 8-run sample is what is being read. */
+  isSample: boolean;
+  /** How many runs the published document holds, before any display cap. */
+  publishedCount: number | null;
+  generatedAt: string | null;
+  reachable: boolean;
+}
+
+/**
+ * Read the published run history in the tab, for its totals.
+ *
+ * `/api/runs` answers with a capped page of runs and nothing about the document
+ * they came from, so a page built only on it can report its own page size and
+ * believe it is reporting the pipeline's history - which is exactly what
+ * "PIPELINE RUNS SEEN 25" was, against a document holding 40. The artifact is a
+ * small public JSON on the same gateway the tab already range reads the parquet
+ * from, so the honest number is one fetch away and needs no server round trip.
+ *
+ * Failure is a missing total, not an error: the page falls back to describing
+ * what it listed.
+ */
+export function useRunHistorySource(): RunHistorySource {
+  const [source, setSource] = useState<RunHistorySource>({
+    url: publicDataConfig.runHistoryUrl,
+    isSample: publicDataConfig.runHistoryIsSample,
+    publishedCount: null,
+    generatedAt: null,
+    reachable: false,
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const read = async (): Promise<void> => {
+      for (const candidate of publicDataConfig.runHistoryUrls) {
+        try {
+          const response = await fetch(candidate, {
+            cache: "no-store",
+            signal: AbortSignal.timeout(publicDataConfig.probeTimeoutMs),
+          });
+          if (!response.ok) continue;
+          // One run is enough: the totals come off the envelope, and parsing
+          // forty runs to display a number would be work for nothing.
+          const document = parseRunHistory(await response.json(), 1);
+          if (cancelled) return;
+          setSource((current) => ({
+            ...current,
+            url: candidate,
+            publishedCount: document.publishedCount,
+            generatedAt: document.generatedAt,
+            reachable: true,
+          }));
+          return;
+        } catch {
+          // Try the next gateway. A history this tab cannot read is a page
+          // without a total, not a broken page.
+        }
+      }
+    };
+
+    void read();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return source;
 }
 
 /** One sentence about the store, for a banner. Null when there is nothing to say. */

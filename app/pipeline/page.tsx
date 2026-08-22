@@ -14,9 +14,20 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Badge, Button, Empty, Panel, Spinner, Stat, ago, count, when } from "@/components/ui";
+import {
+  Badge,
+  Button,
+  Empty,
+  Panel,
+  Spinner,
+  Stat,
+  ago,
+  count,
+  plural,
+  when,
+} from "@/components/ui";
 import { api, del, type MatcherRunRow } from "@/lib/client";
-import { useDataset, useServerStatus } from "@/lib/data/status";
+import { useDataset, useRunHistorySource, useServerStatus } from "@/lib/data/status";
 import { runMatcherPass } from "@/lib/notify/client-matcher";
 
 interface PipelineRunRow {
@@ -42,9 +53,76 @@ interface PipelineRunRow {
   }[];
 }
 
+/**
+ * How many runs the list asks the server for.
+ *
+ * The cap the route enforces, rather than the 25 that was here: the published
+ * history holds 40 today and asking for 25 listed 25 of them. The total shown
+ * above the list is read from the artifact itself, so it stays right whatever
+ * this number is - but there is no reason to page a document this small.
+ */
+const RUN_PAGE_SIZE = 100;
+
+/**
+ * The run-history stat: its number, and what that number is a count of.
+ *
+ * A pure function rather than three ternaries in the JSX, because the two bugs
+ * this replaces were both decisions and not markup. The page printed
+ * `runs.length` under "Pipeline runs seen" - so a display cap of 25 was shown
+ * against a published document holding 40, and nothing on the page said which
+ * of the two a reader was looking at. And an unset RUN_HISTORY_URL served the
+ * bundled 8-run sample with no badge at all, which is the pre-fix symptom one
+ * missing variable away.
+ *
+ * Both are now decided here, where a test can drive them.
+ */
+export function runHistoryStat(input: {
+  /** True when the bundled sample is what is being read. */
+  isSample: boolean;
+  /** The published document's own count, or null if it could not be read. */
+  publishedCount: number | null;
+  /** How many runs the list below is showing. */
+  listed: number;
+  /** False while the list is still loading. */
+  loaded: boolean;
+  /** "3 hours ago" for the newest run, when there is one. */
+  latestAgo: string | null;
+}): { label: string; value: string; hint: string; tone: "default" | "warn" } {
+  const label = "Pipeline runs published";
+
+  if (input.isSample) {
+    return {
+      label,
+      value: input.publishedCount !== null ? count(input.publishedCount) : count(input.listed),
+      hint: "bundled sample history - set RUN_HISTORY_URL for the published one",
+      tone: "warn",
+    };
+  }
+
+  if (input.publishedCount === null) {
+    return {
+      label,
+      value: input.loaded ? count(input.listed) : "-",
+      hint: `${plural(input.listed, "run")} listed, published total not reachable`,
+      tone: "default",
+    };
+  }
+
+  return {
+    label,
+    value: count(input.publishedCount),
+    hint:
+      input.publishedCount > input.listed
+        ? `latest ${count(input.listed)} listed below`
+        : `all listed below${input.latestAgo ? `, latest ${input.latestAgo}` : ""}`,
+    tone: "default",
+  };
+}
+
 export default function PipelinePage() {
   const [status, reloadStatus] = useServerStatus();
   const dataset = useDataset();
+  const runHistory = useRunHistorySource();
   const [runs, setRuns] = useState<PipelineRunRow[] | null>(null);
   const [passes, setPasses] = useState<MatcherRunRow[]>([]);
   const [busy, setBusy] = useState(false);
@@ -54,7 +132,7 @@ export default function PipelinePage() {
   const load = useCallback(() => {
     reloadStatus();
     return api<{ pipelineRuns: PipelineRunRow[]; matcherRuns: MatcherRunRow[] }>(
-      "/api/runs?limit=25",
+      `/api/runs?limit=${RUN_PAGE_SIZE}`,
     )
       .then((body) => {
         setRuns(body.pipelineRuns);
@@ -73,7 +151,7 @@ export default function PipelinePage() {
     try {
       const result = await runMatcherPass({ trigger: "manual" });
       setMessage(
-        `Evaluated ${count(result.searchesEvaluated)} saved searches and raised ${count(result.alertsCreated)} alerts${
+        `Evaluated ${plural(result.searchesEvaluated, "saved search", "saved searches")} and raised ${plural(result.alertsCreated, "alert")}${
           result.alertsSuppressed
             ? `, suppressing ${count(result.alertsSuppressed)} beyond the per-search cap`
             : ""
@@ -92,7 +170,7 @@ export default function PipelinePage() {
     try {
       const result = await del<{ changes: number; courtRecords: number }>("/api/simulate");
       setMessage(
-        `Removed ${count(result.changes)} simulated field changes and ${count(result.courtRecords)} simulated court filings. Published values are restored.`,
+        `Removed ${plural(result.changes, "simulated field change")} and ${plural(result.courtRecords, "simulated court filing")}. Published values are restored.`,
       );
       await load();
     } catch (cause: unknown) {
@@ -104,6 +182,26 @@ export default function PipelinePage() {
 
   const latest = runs?.[0] ?? null;
   const lastPass = passes[0] ?? null;
+
+  /**
+   * The number above the run list, and what it is a number of.
+   *
+   * The stat used to be `runs.length` under the label "Pipeline runs seen",
+   * which made a display cap look like the pipeline's history: the page asked
+   * for 25, the published document held 40, and the two never reconciled for
+   * anyone who opened the artifact. The value is now the document's own count,
+   * and the hint says how many of them are listed below - so the page states
+   * both numbers rather than conflating them.
+   */
+  const listed = runs?.length ?? 0;
+  const published = runHistory.publishedCount;
+  const runsStat = runHistoryStat({
+    isSample: runHistory.isSample,
+    publishedCount: published,
+    listed,
+    loaded: runs !== null,
+    latestAgo: latest ? ago(latest.startedAt) : null,
+  });
 
   return (
     <div className="space-y-4">
@@ -145,9 +243,10 @@ export default function PipelinePage() {
           hint="all readable on a parcel"
         />
         <Stat
-          label="Pipeline runs seen"
-          value={runs ? count(runs.length) : "-"}
-          hint={latest ? `latest ${ago(latest.startedAt)}` : "no run history"}
+          label={runsStat.label}
+          value={runsStat.value}
+          hint={runsStat.hint}
+          tone={runsStat.tone}
         />
         <Stat
           label="Matcher passes"
@@ -177,6 +276,19 @@ export default function PipelinePage() {
             />
             <Row label="Produced by run" value={dataset?.runId ?? "unknown"} mono />
             <Row label="As of" value={dataset?.generatedAt ?? "unknown"} />
+            <Row label="Run history" value={runHistory.url} mono />
+            <Row
+              label="History kind"
+              value={
+                runHistory.isSample
+                  ? "bundled sample extract - set RUN_HISTORY_URL to read the published run history"
+                  : `published run history${
+                      runHistory.publishedCount !== null
+                        ? `, ${plural(runHistory.publishedCount, "run")}`
+                        : " (not reachable from this tab)"
+                    }${runHistory.generatedAt ? `, as of ${runHistory.generatedAt}` : ""}`
+              }
+            />
             <Row
               label="CRM store"
               value={`${status.crmStore.kind} - ${status.crmStore.location}${
@@ -266,8 +378,25 @@ export default function PipelinePage() {
       </Panel>
 
       <Panel
-        title="Upstream pipeline runs"
-        subtitle="Published by the Duval Oracle pipeline. Per-source counts are its own, not this app's."
+        title={
+          <span className="flex flex-wrap items-center gap-2">
+            Upstream pipeline runs
+            {runHistory.isSample && (
+              <Badge tone="warn" testId="run-history-sample">
+                sample
+              </Badge>
+            )}
+          </span>
+        }
+        subtitle={
+          runHistory.isSample
+            ? "RUN_HISTORY_URL is not set, so this is the bundled 8-run sample shipped with the app and NOT the pipeline's published history."
+            : `Published by the Duval Oracle pipeline. Per-source counts are its own, not this app's.${
+                published !== null && published > listed
+                  ? ` Showing the latest ${count(listed)} of ${count(published)}.`
+                  : ""
+              }`
+        }
       >
         {runs === null ? (
           <Spinner />

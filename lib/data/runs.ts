@@ -16,7 +16,13 @@ import { readFile } from "node:fs/promises";
 import type { PipelineRun } from "./types";
 import { loadRunHistoryFrom } from "./runs-parse";
 
-export { runDelta, runMovedData, loadRunHistoryFrom } from "./runs-parse";
+export {
+  runDelta,
+  runMovedData,
+  loadRunHistoryFrom,
+  parseRunHistory,
+  type RunHistoryDocument,
+} from "./runs-parse";
 
 async function readSource(location: string): Promise<unknown> {
   if (/^https?:\/\//i.test(location)) {

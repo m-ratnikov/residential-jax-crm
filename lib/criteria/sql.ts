@@ -241,6 +241,170 @@ export function geometrySql(geometry: Geometry): string {
 }
 
 /* ------------------------------------------------------------------ */
+/* Ownership tenure: what the roll actually knows                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Tenure is the strongest signal in this application and the least trustworthy
+ * column in the roll, so it gets its own guard.
+ *
+ * Measured on the published artifact (404,023 parcels, 401,832 of them
+ * carrying a `years_since_last_sale`): the two most common values in the whole
+ * `last_sale_date_any` column are not sales. 842 parcels are stamped
+ * `1899-12-30` - the Delphi/Excel zero date - and 609 are stamped
+ * `1899-01-01`, with one each at `1900-09-13` and `1800-01-01`. Every one of
+ * them carries `tenure_basis = 'COJ_SALESL'`, a NULL `sale_count` and a NULL
+ * `last_sale_date`, and the pipeline turns them into a tenure of 125 to 226
+ * years. They are literal placeholder dates, not nulls that became an epoch:
+ * a parcel the roll genuinely says nothing about has a NULL tenure (2,191 of
+ * them) and is already handled.
+ *
+ * 1,453 parcels out of 404,023 is a rounding error until they are ranked. The
+ * tenure ramp rewards longer holds by design, so those rows floated to the top
+ * of every distress list: on the "tired landlord" thesis they are 31 of the
+ * 10,209 matches - 0.3% - and 23 of the top 100. `201 N BROOKVIEW DR`, built
+ * in 1986, opened the list at "held 127 years".
+ *
+ * Two rules, both derived from columns every query already selects, so the
+ * guard needs no new column and behaves identically in the browser and in the
+ * scheduled matcher:
+ *
+ * 1. A tenure that implies a sale in 1901 or earlier is the roll's placeholder,
+ *    not a transaction. This catches all 1,453 placeholder rows and 6 genuine
+ *    recordings dated 1901 or earlier, none of them residential.
+ * 2. A sale recorded more than a year before the structure existed contradicts
+ *    the roll's own `built_year`. Sometimes that is a lot bought before it was
+ *    built on, sometimes it is a bad date; either way the number is not
+ *    evidence for a thesis about the building, so it is capped at the age of
+ *    the building rather than believed. 4,225 parcels on the published
+ *    artifact, about 1%, and the one-year grace absorbs the 3,483 parcels
+ *    bought the year before completion.
+ *
+ * Rule 2 is deliberately independent of rule 1: if the pipeline ever publishes
+ * a placeholder this module has not seen, a parcel with a `built_year` still
+ * gets capped to something plausible instead of leading the list.
+ *
+ * NOTE FOR THE MATCHER: none of this changes `years_since_last_sale`. That
+ * column is one of the sixteen material fields the change-detection matcher
+ * fingerprints, and rewriting it would invalidate every stored snapshot. The
+ * guard produces a separate ranking value and a separate confidence label.
+ */
+
+/** A sale the roll dates to this year or earlier is a placeholder. */
+export const EARLIEST_CREDIBLE_SALE_YEAR = 1901;
+
+/**
+ * How far before the recorded `built_year` a sale may fall before the two
+ * fields are treated as contradicting each other. One year: buying the lot the
+ * calendar year before the house is finished is ordinary, and the roll records
+ * a year rather than a date for construction.
+ */
+export const BUILT_YEAR_GRACE_YEARS = 1;
+
+/** What the roll can support about a parcel's ownership tenure. */
+export type TenureConfidence =
+  /** A dated transfer the roll can stand behind. */
+  | "RECORDED"
+  /** The roll's placeholder date: nobody has recorded a sale for this parcel. */
+  | "NO_RECORDED_SALE"
+  /** The sale predates the structure, so tenure is capped at the building's age. */
+  | "PREDATES_STRUCTURE"
+  /** No tenure published at all. */
+  | "UNKNOWN";
+
+export const TENURE_CONFIDENCE_ALIAS = "tenure_confidence";
+export const TENURE_RANKED_ALIAS = "tenure_years_ranked";
+
+/**
+ * The year tenure is measured against.
+ *
+ * Read once per call rather than baked in, because `years_since_last_sale` is
+ * itself measured from the pipeline run and both drift together. Exported so a
+ * test can assert against the same value the builder used instead of pinning a
+ * literal that expires on 1 January.
+ */
+export function referenceYear(date: Date = new Date()): number {
+  return date.getUTCFullYear();
+}
+
+/** The two published fields the tenure guard reads. Nothing else is needed. */
+export interface TenureFacts {
+  yearsSinceLastSale: number | null;
+  builtYear: number | null;
+}
+
+/**
+ * The same decision as `tenureConfidenceSql`, in TypeScript, for the rationale
+ * and the result row. The two are pinned together by a test that runs the SQL
+ * over the bundled extract and compares it row for row.
+ */
+export function tenureConfidenceOf(
+  facts: TenureFacts,
+  asOfYear: number = referenceYear(),
+): TenureConfidence {
+  const tenure = facts.yearsSinceLastSale;
+  if (tenure === null || !Number.isFinite(tenure)) return "UNKNOWN";
+  const impliedSaleYear = asOfYear - tenure;
+  if (impliedSaleYear <= EARLIEST_CREDIBLE_SALE_YEAR) return "NO_RECORDED_SALE";
+  const builtYear = facts.builtYear;
+  if (builtYear !== null && impliedSaleYear < builtYear - BUILT_YEAR_GRACE_YEARS) {
+    return "PREDATES_STRUCTURE";
+  }
+  return "RECORDED";
+}
+
+/**
+ * The tenure the ranking is allowed to use: the published value when the roll
+ * supports it, the age of the building when the sale predates the building, and
+ * nothing at all when there is no sale on record.
+ *
+ * `null` means "unknown", and every ramp in this module already scores an
+ * unknown as zero. An unknown parcel is still in the result set and still says
+ * why on screen: "no recorded sale" is a signal an acquisitions team wants, it
+ * just must not outrank a verified forty-five year hold.
+ */
+export function rankedTenureYears(
+  facts: TenureFacts,
+  asOfYear: number = referenceYear(),
+): number | null {
+  const confidence = tenureConfidenceOf(facts, asOfYear);
+  if (confidence === "UNKNOWN" || confidence === "NO_RECORDED_SALE") return null;
+  const builtYear = facts.builtYear;
+  if (confidence === "PREDATES_STRUCTURE" && builtYear !== null) {
+    return Math.max(asOfYear - (builtYear - BUILT_YEAR_GRACE_YEARS), 0);
+  }
+  return facts.yearsSinceLastSale;
+}
+
+function impliedSaleYearSql(asOfYear: number): string {
+  return `(${num(asOfYear)} - years_since_last_sale)`;
+}
+
+/** The label carried out with every row, so the guard is visible in the SQL. */
+export function tenureConfidenceSql(asOfYear: number = referenceYear()): string {
+  const implied = impliedSaleYearSql(asOfYear);
+  return (
+    `CASE WHEN years_since_last_sale IS NULL THEN 'UNKNOWN' ` +
+    `WHEN ${implied} <= ${num(EARLIEST_CREDIBLE_SALE_YEAR)} THEN 'NO_RECORDED_SALE' ` +
+    `WHEN built_year IS NOT NULL AND ${implied} < built_year - ${num(BUILT_YEAR_GRACE_YEARS)} ` +
+    `THEN 'PREDATES_STRUCTURE' ` +
+    `ELSE 'RECORDED' END`
+  );
+}
+
+/** The SQL twin of `rankedTenureYears`. Used by the ramp and by the sort. */
+export function rankedTenureSql(asOfYear: number = referenceYear()): string {
+  const implied = impliedSaleYearSql(asOfYear);
+  return (
+    `(CASE WHEN years_since_last_sale IS NULL THEN NULL ` +
+    `WHEN ${implied} <= ${num(EARLIEST_CREDIBLE_SALE_YEAR)} THEN NULL ` +
+    `WHEN built_year IS NOT NULL AND ${implied} < built_year - ${num(BUILT_YEAR_GRACE_YEARS)} ` +
+    `THEN greatest(${num(asOfYear)} - (built_year - ${num(BUILT_YEAR_GRACE_YEARS)}), 0) ` +
+    `ELSE years_since_last_sale END)`
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Filters                                                              */
 /* ------------------------------------------------------------------ */
 
@@ -268,9 +432,35 @@ export function needsCourtData(filters: Filters): boolean {
   return filters.distress ? courtRequested(filters.distress) : false;
 }
 
+/**
+ * A fact the emitted WHERE clause makes true on every row it returns.
+ *
+ * This exists because the scoring side used to carry a hand-maintained
+ * `guaranteed: true/false` beside each signal, meaning "the filter already
+ * pinned this, so it cannot rank". Two places encoding one truth, free to
+ * disagree - the same shape as the bug that put 1899 at the top of the list.
+ *
+ * A guarantee is now recorded at the single site that pushes the clause it
+ * comes from, so the clause and the flag are one statement. `buildScore` asks
+ * `buildWhere` what it emitted rather than restating the filter.
+ */
+export type WhereGuarantee =
+  /** `NOT coalesce(homestead_flag, false)` is on every row. */
+  | "no-homestead"
+  /** Every row is a non-occupant owner with a mailing address elsewhere. */
+  | "absentee"
+  /** `owner_region_class` is pinned to a single value, so any grade of it is constant. */
+  | "owner-region-pinned"
+  /** Exactly one kind of court filing was required, so it is on every row. */
+  | "court-single-kind"
+  /** `water_view_flag` is on every row. */
+  | "water-view";
+
 export interface WhereResult {
   sql: string;
   clauses: string[];
+  /** What the emitted clause pins. Read by `buildScore`; see `WhereGuarantee`. */
+  guarantees: ReadonlySet<WhereGuarantee>;
 }
 
 /**
@@ -279,6 +469,7 @@ export interface WhereResult {
  */
 export function buildWhere(filters: Filters, courtJoinAvailable: boolean): WhereResult {
   const clauses: string[] = [];
+  const guarantees = new Set<WhereGuarantee>();
 
   if (filters.residentialOnly) clauses.push(`property_type = 'RESIDENTIAL'`);
   // See the note on `dwellingsOnly`. 400 sq ft is the floor area below which
@@ -323,12 +514,19 @@ export function buildWhere(filters: Filters, courtJoinAvailable: boolean): Where
   if (filters.subdivisions?.length) clauses.push(inList("subdivision", filters.subdivisions));
   if (filters.geometry) clauses.push(geometrySql(filters.geometry));
 
-  if (filters.ownerRegionClasses?.length)
+  if (filters.ownerRegionClasses?.length) {
     clauses.push(inList("owner_region_class", filters.ownerRegionClasses));
+    // One class in the list means the column is a constant across the result,
+    // so anything that grades it grades a constant.
+    if (filters.ownerRegionClasses.length === 1) guarantees.add("owner-region-pinned");
+  }
   if (filters.ownerOccupied !== undefined)
     clauses.push(filters.ownerOccupied ? `owner_occupied` : `NOT coalesce(owner_occupied, false)`);
 
-  if (filters.waterView) clauses.push(`water_view_flag`);
+  if (filters.waterView) {
+    clauses.push(`water_view_flag`);
+    guarantees.add("water-view");
+  }
   if (filters.maxWaterDistanceM !== undefined)
     clauses.push(`water_dist_m <= ${num(filters.maxWaterDistanceM)}`);
   if (filters.maxTransitDistanceM !== undefined)
@@ -342,12 +540,17 @@ export function buildWhere(filters: Filters, courtJoinAvailable: boolean): Where
   const d = filters.distress;
   if (d) {
     // Answerable from the appraisal roll alone.
-    if (d.absenteeOwner)
+    if (d.absenteeOwner) {
       clauses.push(
         `(NOT coalesce(owner_occupied, false) AND owner_mailing_address IS NOT NULL ` +
           `AND (owner_mailing_city IS DISTINCT FROM address_city OR owner_mailing_state IS DISTINCT FROM 'FL'))`,
       );
-    if (d.noHomestead) clauses.push(`NOT coalesce(homestead_flag, false)`);
+      guarantees.add("absentee");
+    }
+    if (d.noHomestead) {
+      clauses.push(`NOT coalesce(homestead_flag, false)`);
+      guarantees.add("no-homestead");
+    }
 
     // Answerable only when a court source has been loaded.
     if (courtJoinAvailable) {
@@ -358,7 +561,11 @@ export function buildWhere(filters: Filters, courtJoinAvailable: boolean): Where
       if (d.hasProbate) any.push(`coalesce(court_probate_count, 0) > 0`);
       // Distress signals are alternatives, not a conjunction: a parcel in
       // foreclosure is a candidate whether or not it also carries a lien.
-      if (any.length) clauses.push(`(${any.join(" OR ")})`);
+      if (any.length) {
+        clauses.push(`(${any.join(" OR ")})`);
+        // One alternative is not an alternative: every row has that filing.
+        if (any.length === 1) guarantees.add("court-single-kind");
+      }
       if (d.minCourtScore !== undefined)
         clauses.push(`coalesce(court_distress_score, 0) >= ${num(d.minCourtScore)}`);
     } else if (courtRequested(d)) {
@@ -371,7 +578,7 @@ export function buildWhere(filters: Filters, courtJoinAvailable: boolean): Where
     }
   }
 
-  return { sql: clauses.length ? clauses.join("\n  AND ") : "true", clauses };
+  return { sql: clauses.length ? clauses.join("\n  AND ") : "true", clauses, guarantees };
 }
 
 /* ------------------------------------------------------------------ */
@@ -516,18 +723,43 @@ export function closenessSql(expression: string, best: number, worst: number): s
  * away from the signals that can, compresses the score into the top of the
  * range and manufactures ties there once the number is rounded. So it is
  * measured where the data supports a finer reading, and otherwise left out.
+ *
+ * `guaranteed` is never written by hand any more: it is read off the
+ * `WhereGuarantee` set the clause builder returned. See `WhereGuarantee`.
  */
 interface Signal {
   expression: string;
-  /** True when every row that passes the filter scores 1 on this signal. */
+  /** True when every row that passes the filter scores the same on this signal. */
   guaranteed: boolean;
+  /** How the rationale names this signal when it does rank. */
+  rule: string;
 }
 
-function meanOf(signals: readonly Signal[]): string | null {
+/**
+ * The phrases a distress component uses to name the signals that actually rank
+ * inside it.
+ *
+ * They are exported because the rationale reads them back off the component's
+ * rule to decide which evidence it is allowed to quote. Narrating a signal that
+ * scored nothing inside a scoring contribution - "no homestead exemption
+ * (+28.3)", when the entire 28.3 was the absentee grade - is the provenance
+ * failure this closes.
+ */
+export const DISTRESS_SIGNAL_RULES = {
+  absentee: "how far away the owner mails from",
+  filings: "how many of the requested filings are recorded",
+  courtScore: "how high the published distress score is",
+} as const;
+
+function meanOf(signals: readonly Signal[]): { expression: string; rules: string[] } | null {
   const ranking = signals.filter((signal) => !signal.guaranteed);
   if (!ranking.length) return null;
-  if (ranking.length === 1) return `(${ranking[0]?.expression})`;
-  return `((${ranking.map((signal) => signal.expression).join(" + ")}) / CAST(${num(ranking.length)} AS DOUBLE))`;
+  const rules = ranking.map((signal) => signal.rule);
+  if (ranking.length === 1) return { expression: `(${ranking[0]?.expression})`, rules };
+  return {
+    expression: `((${ranking.map((signal) => signal.expression).join(" + ")}) / CAST(${num(ranking.length)} AS DOUBLE))`,
+    rules,
+  };
 }
 
 /**
@@ -561,6 +793,10 @@ export function buildScoreComponents(
 ): ScoreComponentSql[] {
   const { filters, weights } = criteria;
   const components: ScoreComponentSql[] = [];
+  // Ask the clause builder what it emitted rather than restating the filter.
+  // A signal is "guaranteed" because of what is in the WHERE clause, so that is
+  // where the answer comes from. See `WhereGuarantee`.
+  const { guarantees } = buildWhere(filters, courtJoinAvailable);
 
   if (filters.minYearsSinceSale !== undefined && weights.tenure > 0) {
     const from = filters.minYearsSinceSale;
@@ -568,8 +804,12 @@ export function buildScoreComponents(
     components.push({
       key: "tenure",
       alias: "comp_tenure",
+      // The guarded tenure, not the published column: a parcel stamped with the
+      // roll's 1899 placeholder ranks as unknown rather than as the longest
+      // hold in the county. `years_since_last_sale` itself is untouched, because
+      // the matcher fingerprints it.
       expression: risingRampSql({
-        column: "years_since_last_sale",
+        column: rankedTenureSql(),
         from,
         to: ceiling ?? TENURE_FULL_YEARS,
         tail: ceiling === undefined ? TENURE_TAIL_YEARS : null,
@@ -577,8 +817,8 @@ export function buildScoreComponents(
       weight: weights.tenure,
       rule:
         ceiling === undefined
-          ? `held at least ${from} years, and every further year scores higher`
-          : `held between ${from} and ${ceiling} years, longer scores higher`,
+          ? `held at least ${from} years on a recorded sale, and every further year scores higher`
+          : `held between ${from} and ${ceiling} years on a recorded sale, longer scores higher`,
     });
   }
 
@@ -606,13 +846,22 @@ export function buildScoreComponents(
   if (d && weights.distress > 0) {
     const signals: Signal[] = [];
     // Graded, so it still ranks inside a result set the filter has already made
-    // entirely absentee.
-    if (d.absenteeOwner) signals.push({ expression: ABSENTEE_DISTANCE_SQL, guaranteed: false });
+    // entirely absentee - unless the filter also pinned the owner class, which
+    // turns the four step grade into one constant. That is the same defect as
+    // the homestead flag below, and it is now caught the same way rather than
+    // by remembering to think about it.
+    if (d.absenteeOwner)
+      signals.push({
+        expression: ABSENTEE_DISTANCE_SQL,
+        guaranteed: guarantees.has("absentee") && guarantees.has("owner-region-pinned"),
+        rule: DISTRESS_SIGNAL_RULES.absentee,
+      });
     // Genuinely boolean, and identical to the predicate that selected the row.
     if (d.noHomestead)
       signals.push({
         expression: boolSignal(`NOT coalesce(homestead_flag, false)`),
-        guaranteed: true,
+        guaranteed: guarantees.has("no-homestead"),
+        rule: "whether a homestead exemption is on file",
       });
 
     if (courtJoinAvailable) {
@@ -629,7 +878,8 @@ export function buildScoreComponents(
           // the requested kinds, so a lone requested kind is guaranteed on every
           // row; two or more are alternatives and each still ranks.
           expression: boolSignal(`coalesce(${signal.column}, 0) > 0`),
-          guaranteed: requested.length === 1,
+          guaranteed: guarantees.has("court-single-kind"),
+          rule: DISTRESS_SIGNAL_RULES.filings,
         });
       }
       if (d.minCourtScore !== undefined) {
@@ -643,18 +893,22 @@ export function buildScoreComponents(
             tail: null,
           }),
           guaranteed: false,
+          rule: DISTRESS_SIGNAL_RULES.courtScore,
         });
       }
     }
 
-    const expression = meanOf(signals);
-    if (expression) {
+    const distress = meanOf(signals);
+    if (distress) {
       components.push({
         key: "distress",
         alias: "comp_distress",
         weight: weights.distress,
-        expression,
-        rule: `how strongly the requested distress signals read on this parcel`,
+        expression: distress.expression,
+        // The rule names the signals that rank, and only those. The rationale
+        // reads it back, so a signal that scored nothing can never appear
+        // inside a scoring contribution.
+        rule: `ranked on ${[...new Set(distress.rules)].join(", and ")}`,
       });
     }
   }
@@ -708,7 +962,10 @@ export function buildScoreComponents(
         expression:
           `CASE WHEN water_dist_m IS NULL THEN ${num(QUALIFY_CREDIT)} ELSE ` +
           `${closenessSql("water_dist_m", 0, WATER_VIEW_FULL_M)} END`,
+        // `water_view_flag` itself is guaranteed by the clause; the distance
+        // this scores instead is not, which is the whole point of the signal.
         guaranteed: false,
+        rule: "how close the water is",
       });
     }
     if (filters.maxWaterDistanceM !== undefined) {
@@ -717,6 +974,7 @@ export function buildScoreComponents(
           `CASE WHEN water_dist_m IS NULL THEN 0.0 ELSE ` +
           `${closenessSql("water_dist_m", 0, filters.maxWaterDistanceM)} END`,
         guaranteed: false,
+        rule: "how close the water is",
       });
     }
     if (filters.maxTransitDistanceM !== undefined) {
@@ -725,16 +983,17 @@ export function buildScoreComponents(
           `CASE WHEN nearest_transit_stop_m IS NULL THEN 0.0 ELSE ` +
           `${closenessSql("nearest_transit_stop_m", 0, filters.maxTransitDistanceM)} END`,
         guaranteed: false,
+        rule: "how close the nearest transit stop is",
       });
     }
-    const expression = meanOf(amenity);
-    if (expression) {
+    const amenityScore = meanOf(amenity);
+    if (amenityScore) {
       components.push({
         key: "amenity",
         alias: "comp_amenity",
-        expression,
+        expression: amenityScore.expression,
         weight: weights.amenity,
-        rule: `how close the water and transit signals published by the pipeline actually are`,
+        rule: `ranked on ${[...new Set(amenityScore.rules)].join(", and ")}`,
       });
     }
   }
@@ -923,12 +1182,21 @@ export const TIEBREAK_SQL =
  * bug was never that the ordering exists; it was that it ran when nobody chose
  * it.
  */
-const ORDER_SQL: Record<BuildSearchOptions["orderBy"], string> = {
-  score: `${SCORE_ALIAS} DESC, ${TIEBREAK_SQL}`,
-  assessed_value: `assessed_value ASC NULLS LAST, ${TIEBREAK_SQL}`,
-  roof_age: `roof_age_years DESC NULLS LAST, ${TIEBREAK_SQL}`,
-  tenure: `years_since_last_sale DESC NULLS LAST, ${TIEBREAK_SQL}`,
-};
+function orderSql(orderBy: BuildSearchOptions["orderBy"]): string {
+  switch (orderBy) {
+    case "score":
+      return `${SCORE_ALIAS} DESC, ${TIEBREAK_SQL}`;
+    case "assessed_value":
+      return `assessed_value ASC NULLS LAST, ${TIEBREAK_SQL}`;
+    case "roof_age":
+      return `roof_age_years DESC NULLS LAST, ${TIEBREAK_SQL}`;
+    case "tenure":
+      // "Longest held" sorts on the guarded tenure, so pressing it does not
+      // open the list on 610 parcels the roll stamped 1899. Parcels with no
+      // recorded sale sort last and say so on the row rather than disappearing.
+      return `${rankedTenureSql()} DESC NULLS LAST, ${TIEBREAK_SQL}`;
+  }
+}
 
 export interface BuiltSearch {
   sql: string;
@@ -960,12 +1228,20 @@ export function buildSearch(options: BuildSearchOptions): BuiltSearch {
 
   const columns = LIST_COLUMNS.join(",\n    ");
 
+  // Carried on every row so the guard is auditable: the reader of "Show the SQL
+  // behind this result" can see why a parcel the roll says was held 127 years
+  // is not ranked as one, and the row itself can say so honestly.
+  const tenureColumns =
+    `${tenureConfidenceSql()} AS ${TENURE_CONFIDENCE_ALIAS},\n    ` +
+    `${rankedTenureSql()} AS ${TENURE_RANKED_ALIAS}`;
+
   const sql = `${prefix}SELECT
     ${columns}${courtColumns},
+    ${tenureColumns},
     ${score.selectFragment}
   FROM ${from}
   WHERE ${whereSql}
-  ORDER BY ${ORDER_SQL[options.orderBy]}
+  ORDER BY ${orderSql(options.orderBy)}
   LIMIT ${num(options.limit)} OFFSET ${num(options.offset)}`;
 
   const countSql = `${prefix}SELECT count(*) AS ${TOTAL_ALIAS} FROM ${from} WHERE ${whereSql}`;

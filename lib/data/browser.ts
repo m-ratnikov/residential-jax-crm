@@ -338,7 +338,8 @@ export function browserAttachDeps(): AttachDeps {
 export interface BrowserSourceOptions {
   /**
    * The parquet URLs DuckDB-WASM range reads, best first. The same content on
-   * each gateway; the first one that answers is the one that is used.
+   * each gateway; the first one that both answers a probe and attaches is
+   * the one that is used.
    */
   urls: readonly string[];
   isSample: boolean;

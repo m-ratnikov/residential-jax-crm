@@ -27,6 +27,7 @@ import {
   ago,
   count,
   money,
+  plural,
 } from "@/components/ui";
 import { ApiError, api, patch, post, type OpportunityRow } from "@/lib/client";
 import { NEIGHBOURHOODS } from "@/lib/criteria/areas";
@@ -483,6 +484,19 @@ function FuturePlaceholders() {
   );
 }
 
+/**
+ * The two pieces of copy on the campaign dialog that carry a count.
+ *
+ * The send button read "Send to 1 owners" - a count glued to a fixed plural -
+ * which is the last line a person reads before a batch of messages goes out. It
+ * is a function so the agreement can be asserted rather than eyeballed, and so
+ * the two places that say it cannot drift apart.
+ */
+export function campaignCopy(ownerCount: number): { subtitle: string; sendLabel: string } {
+  const owners = plural(ownerCount, "owner");
+  return { subtitle: owners, sendLabel: `Send to ${owners}` };
+}
+
 function CampaignDialog({
   opportunityIds,
   onClose,
@@ -533,7 +547,7 @@ function CampaignDialog({
       <div className="w-full max-w-md">
         <Panel
           title="Mocked outreach campaign"
-          subtitle={`${count(opportunityIds.length)} owners`}
+          subtitle={campaignCopy(opportunityIds.length).subtitle}
           actions={
             <Button size="sm" variant="ghost" onClick={onClose}>
               Cancel
@@ -589,7 +603,7 @@ function CampaignDialog({
             )}
 
             <Button variant="primary" className="w-full" onClick={send} disabled={sending}>
-              {sending ? "Sending" : `Send to ${count(opportunityIds.length)} owners`}
+              {sending ? "Sending" : campaignCopy(opportunityIds.length).sendLabel}
             </Button>
           </div>
         </Panel>

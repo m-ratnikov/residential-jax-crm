@@ -32,9 +32,10 @@ node scripts/sync-shared.mjs --origin <path> --pull     # overwrite the vendored
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `columns.ts`                    | The published query table contract: the 37 canonical Elephant columns, the derived columns the pipeline adds, how they group on a detail view, and which of them are provenance. |
 | `sql.ts`                        | Read-only SQL guard (`guardSql`), the shared thresholds (`ROOF_AGE_YEARS`, `OWNERSHIP_HOLD_YEARS`, `WALK_DISTANCE_M`), and the question presets the pipeline UI answers.         |
-| `geo.ts`                        | Haversine distance, bounding boxes, point-in-polygon.                                                                                                                            |
+| `duckdb.ts`                     | The DuckDB-WASM engine: attach the published parquet over HTTP range reads, register the view, run a query, report load progress, tear the engine down.                          |
+| `opfs.ts`                       | Best-effort Origin Private File System cache for that parquet, with an in-memory fallback.                                                                                       |
 | `format.ts`                     | Currency, distance, date and number formatting shared by both UIs.                                                                                                               |
-| `agent/providers.ts`            | The bring-your-own-key provider registry: seven model providers, their free-tier terms with the URL and date each was read, and the models each one exposes.                     |
+| `agent/providers.ts`            | The model provider registry: nine providers, their free-tier terms with the URL and date each was read, and the models each one exposes.                                        |
 | `agent/redact.ts`               | Strips key material from anything that could reach a log.                                                                                                                        |
 | `agent/ratelimit.ts`            | Per-client-address request budget, counted in process.                                                                                                                           |
 | `agent/errors.ts`               | Typed agent errors and their HTTP mapping.                                                                                                                                       |
@@ -47,3 +48,14 @@ node scripts/sync-shared.mjs --origin <path> --pull     # overwrite the vendored
 `agent/run.ts`, `agent/tools.ts`, `agent/prompt.ts` and `agent/db.ts` are domain specific: the
 pipeline UI answers questions about a county roll, this application answers questions about an
 acquisition pipeline. Their equivalents live in `lib/agent/` and are written for this repository.
+
+`geo.ts` was vendored and has been removed. It is slippy-tile arithmetic and a haversine for the
+pipeline UI's library-free 3x3 tile thumbnail; this application draws its map with MapLibre and
+computes distance in SQL (`haversineSql` in `lib/criteria/sql.ts`), so nothing here imported a line
+of it. `scripts/sync-shared.mjs` enumerates what is present in this directory rather than a fixed
+list, so a removed file narrows what the drift check compares instead of failing it.
+
+Files are vendored whole rather than trimmed to the exports this application calls. `format.ts` is
+here for `toPlain`, which `duckdb.ts` uses to flatten an Arrow value; its other formatters have no
+caller in this repository. Deleting them would make every future drift report a false positive,
+which is worse than carrying them.

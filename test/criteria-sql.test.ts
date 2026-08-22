@@ -10,12 +10,19 @@ import {
   buildScore,
   buildSearch,
   buildWhere,
+  DISTRESS_SIGNAL_RULES,
   geometrySql,
   needsCourtData,
   num,
   polygonSql,
+  rankedTenureSql,
+  rankedTenureYears,
   str,
+  tenureConfidenceOf,
+  TENURE_CONFIDENCE_ALIAS,
+  TENURE_RANKED_ALIAS,
   TIEBREAK_SQL,
+  type WhereGuarantee,
 } from "@/lib/criteria/sql";
 import { criteriaSetSchema, DEFAULT_WEIGHTS, type CriteriaSet } from "@/lib/criteria/types";
 
@@ -371,7 +378,9 @@ describe("how ties are broken", () => {
 
   it("leads on the requested column for the other explicit sorts", () => {
     expect(order("roof_age")).toContain("ORDER BY roof_age_years DESC NULLS LAST");
-    expect(order("tenure")).toContain("ORDER BY years_since_last_sale DESC NULLS LAST");
+    // Tenure leads on the guarded value, not the published column: "Longest
+    // held" used to open on the 610 parcels the roll stamped 1899-01-01.
+    expect(order("tenure")).toContain(`ORDER BY ${rankedTenureSql()} DESC NULLS LAST`);
   });
 
   it("still ranks by score first when the criteria can rank", () => {
@@ -438,5 +447,206 @@ describe("a court criterion with no court source", () => {
     );
     expect(without.sql).not.toContain("false /*");
     expect(without.sql).toContain("homestead_flag");
+  });
+});
+
+describe("ownership tenure the roll cannot support", () => {
+  // Fixed so the assertions read against a stated year rather than the clock.
+  const asOf = 2026;
+
+  it("reads the county placeholder sale date as unknown, not as the longest hold in Duval", () => {
+    // 201 N BROOKVIEW DR, on the published artifact: built 1986,
+    // last_sale_date_any 1899-01-01, years_since_last_sale 127, and it opened
+    // the distress list at "held 127 years".
+    const brookview = { yearsSinceLastSale: 127, builtYear: 1986 };
+    expect(tenureConfidenceOf(brookview, asOf)).toBe("NO_RECORDED_SALE");
+    expect(rankedTenureYears(brookview, asOf)).toBeNull();
+
+    // 1899-12-30 is the other placeholder: the Delphi/Excel zero date, on 842
+    // parcels. It arrives as 126 years, and a parcel with no built_year has
+    // nothing to cross check against, so the year floor has to catch it alone.
+    expect(tenureConfidenceOf({ yearsSinceLastSale: 126, builtYear: null }, asOf)).toBe(
+      "NO_RECORDED_SALE",
+    );
+  });
+
+  it("keeps a verified long hold exactly as published", () => {
+    // The whole point: an unknown tenure must not outrank this parcel, and this
+    // parcel must not be changed to make that true.
+    const verified = { yearsSinceLastSale: 45, builtYear: 1958 };
+    expect(tenureConfidenceOf(verified, asOf)).toBe("RECORDED");
+    expect(rankedTenureYears(verified, asOf)).toBe(45);
+  });
+
+  it("caps tenure at the age of the building rather than believing a sale that predates it", () => {
+    // The independent sanity check: tenure cannot exceed the age of the
+    // structure. A lot bought in 1966 and built on in 2005 is a real thing, so
+    // the parcel is kept and ranked on the building's age instead of dropped.
+    const landThenBuilt = { yearsSinceLastSale: 60, builtYear: 2005 };
+    expect(tenureConfidenceOf(landThenBuilt, asOf)).toBe("PREDATES_STRUCTURE");
+    expect(rankedTenureYears(landThenBuilt, asOf)).toBe(22);
+  });
+
+  it("allows the lot bought the calendar year before the house was finished", () => {
+    // 3,483 parcels on the published artifact sit exactly one year over, which
+    // is ordinary construction timing rather than a contradiction.
+    expect(tenureConfidenceOf({ yearsSinceLastSale: 41, builtYear: 1986 }, asOf)).toBe("RECORDED");
+    expect(tenureConfidenceOf({ yearsSinceLastSale: 42, builtYear: 1986 }, asOf)).toBe(
+      "PREDATES_STRUCTURE",
+    );
+  });
+
+  it("reports a parcel with no published tenure as unknown rather than as zero", () => {
+    const none = { yearsSinceLastSale: null, builtYear: 1986 };
+    expect(tenureConfidenceOf(none, asOf)).toBe("UNKNOWN");
+    expect(rankedTenureYears(none, asOf)).toBeNull();
+  });
+
+  it("ramps tenure on the guarded value, never on the published column", () => {
+    const tenure = buildScore(criteria({ minYearsSinceSale: 10 }), false).components[0];
+    expect(tenure?.expression).toContain(rankedTenureSql());
+    // The bare column is what let a 127 year placeholder through the ramp.
+    expect(tenure?.expression).not.toContain("CAST(years_since_last_sale AS DOUBLE)");
+  });
+
+  it("carries the confidence out on every row so the guard is auditable", () => {
+    const { sql } = buildSearch({
+      criteria: criteria({ minYearsSinceSale: 10 }),
+      limit: 10,
+      offset: 0,
+      orderBy: "score",
+      courtJoinAvailable: false,
+    });
+    expect(sql).toContain(`AS ${TENURE_CONFIDENCE_ALIAS}`);
+    expect(sql).toContain(`AS ${TENURE_RANKED_ALIAS}`);
+  });
+
+  it("leaves years_since_last_sale itself alone, because the matcher fingerprints it", () => {
+    // `yearsSinceLastSale` is one of the sixteen material fields the change
+    // detection matcher hashes per parcel. Rewriting the published column would
+    // invalidate every stored snapshot and alert on every watched parcel on the
+    // next pass, so the guard is a separate value beside it, never a rewrite of
+    // it.
+    const { clauses } = buildWhere({ minYearsSinceSale: 10, maxYearsSinceSale: 40 }, false);
+    expect(clauses).toContain("years_since_last_sale >= 10");
+    expect(clauses).toContain("years_since_last_sale <= 40");
+
+    const { sql } = buildSearch({
+      criteria: criteria({ minYearsSinceSale: 10 }),
+      limit: 10,
+      offset: 0,
+      orderBy: "score",
+      courtJoinAvailable: false,
+    });
+    // Still selected as published, under its own name.
+    expect(sql).toContain("years_since_last_sale,\n");
+  });
+});
+
+describe("guaranteed signals are derived from the clause that guarantees them", () => {
+  it("records the guarantee at the same site that pushes the clause", () => {
+    const { guarantees } = buildWhere(
+      { distress: { noHomestead: true, absenteeOwner: true } },
+      false,
+    );
+    expect([...guarantees].sort()).toEqual(["absentee", "no-homestead"]);
+  });
+
+  it("pins the owner class only when the filter admits exactly one", () => {
+    expect([...buildWhere({ ownerRegionClasses: ["NATIONAL"] }, false).guarantees]).toContain(
+      "owner-region-pinned",
+    );
+    expect([
+      ...buildWhere({ ownerRegionClasses: ["NATIONAL", "FOREIGN"] }, false).guarantees,
+    ]).not.toContain("owner-region-pinned");
+  });
+
+  it("stops grading owner distance once the filter has pinned the owner class", () => {
+    // The four level absentee step is a ramp only while the classes vary. Pin
+    // the class and it is a constant that takes weight from the signals that
+    // can still order the list, which is the same defect as scoring the
+    // homestead flag.
+    const free = buildScore(criteria({ distress: { absenteeOwner: true } }), false);
+    expect(free.components[0]?.expression).toContain("owner_region_class");
+
+    const pinned = buildScore(
+      criteria({ distress: { absenteeOwner: true }, ownerRegionClasses: ["NATIONAL"] }),
+      false,
+    );
+    expect(pinned.components).toHaveLength(0);
+    expect(pinned.unranked).toBe(true);
+  });
+
+  it("keeps grading owner distance when more than one class survives the filter", () => {
+    const two = buildScore(
+      criteria({
+        distress: { absenteeOwner: true },
+        ownerRegionClasses: ["NATIONAL", "FOREIGN"],
+      }),
+      false,
+    );
+    expect(two.components[0]?.expression).toContain("owner_region_class");
+  });
+
+  it("never scores a signal the emitted WHERE clause already guarantees", () => {
+    // The drift guard, in addition to the derivation: if anyone reintroduces a
+    // hand written flag, this fails on the combination it disagrees about.
+    const guarded: { guarantee: WhereGuarantee; column: string }[] = [
+      { guarantee: "no-homestead", column: "homestead_flag" },
+      { guarantee: "owner-region-pinned", column: "owner_region_class" },
+    ];
+    const courtColumns = [
+      "court_lien_count",
+      "court_foreclosure_count",
+      "court_code_enforcement_count",
+      "court_probate_count",
+    ];
+
+    for (const noHomestead of [false, true]) {
+      for (const absenteeOwner of [false, true]) {
+        for (const hasLien of [false, true]) {
+          for (const hasForeclosure of [false, true]) {
+            for (const pinnedClass of [false, true]) {
+              for (const courtJoinAvailable of [false, true]) {
+                const filters = {
+                  ...(pinnedClass ? { ownerRegionClasses: ["NATIONAL"] } : {}),
+                  distress: { noHomestead, absenteeOwner, hasLien, hasForeclosure },
+                };
+                const { guarantees } = buildWhere(filters, courtJoinAvailable);
+                const score = buildScore(criteria(filters), courtJoinAvailable);
+                const distress = score.components.find((component) => component.key === "distress");
+                if (!distress) continue;
+
+                for (const { guarantee, column } of guarded) {
+                  // owner_region_class only goes constant when the rows are
+                  // also all absentee; otherwise the 0.0 branch still varies.
+                  const constant =
+                    guarantee === "owner-region-pinned"
+                      ? guarantees.has(guarantee) && guarantees.has("absentee")
+                      : guarantees.has(guarantee);
+                  if (constant) expect(distress.expression).not.toContain(column);
+                }
+                if (guarantees.has("court-single-kind")) {
+                  for (const column of courtColumns) {
+                    expect(distress.expression).not.toContain(column);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  it("names in the rule exactly the signals that rank inside the component", () => {
+    // The rationale reads this back, so a signal that scored nothing can never
+    // be narrated inside a scoring contribution.
+    const absenteeOnly = buildScore(
+      criteria({ distress: { absenteeOwner: true, noHomestead: true } }),
+      false,
+    ).components[0];
+    expect(absenteeOnly?.rule).toContain(DISTRESS_SIGNAL_RULES.absentee);
+    expect(absenteeOnly?.rule).not.toContain("homestead");
   });
 });

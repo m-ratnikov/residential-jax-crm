@@ -53,7 +53,6 @@ function rewriteImports(source) {
   return normalizeEol(source)
     .replaceAll('from "@/lib/sql"', 'from "@/lib/oracle/sql"')
     .replaceAll('from "@/lib/columns"', 'from "@/lib/oracle/columns"')
-    .replaceAll('from "@/lib/geo"', 'from "@/lib/oracle/geo"')
     .replaceAll('from "@/lib/format"', 'from "@/lib/oracle/format"');
 }
 

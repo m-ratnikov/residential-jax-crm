@@ -91,25 +91,72 @@ function toRun(raw: RawRun): PipelineRun | null {
   };
 }
 
+/** A published run history, with the runs a caller asked for and the total it holds. */
+export interface RunHistoryDocument {
+  /** Newest first, capped at the requested limit. */
+  runs: readonly PipelineRun[];
+  /**
+   * How many runs the published document holds, BEFORE the display cap.
+   *
+   * The pipeline stamps `runCount` on the envelope, and that is preferred
+   * because it is the number a reviewer sees when they open the artifact. It
+   * falls back to counting the array for a bare-array history that has no
+   * envelope to carry it.
+   */
+  publishedCount: number;
+  /** When the pipeline published this document, if it said. */
+  generatedAt: string | null;
+  county: string | null;
+}
+
 /**
- * Normalise a parsed run-history document into runs, newest first.
+ * Normalise a parsed run-history document into runs, newest first, and report
+ * how many runs it actually holds.
+ *
+ * The count is separate from `runs.length` on purpose. `/pipeline` asked this
+ * for 25 runs and then printed "PIPELINE RUNS SEEN 25" from the length of what
+ * came back, while the published artifact held 40 - so the page reported its
+ * own page size as if it were the pipeline's history, and a reviewer who opened
+ * the IPNS document saw a number that did not match. A display cap is a
+ * property of the request; the total is a property of the document; they are
+ * now two fields and cannot be confused for one another again.
  *
  * Accepts either the `{ county, runs: [...] }` envelope the pipeline publishes
  * or a bare array, because both have been seen.
  */
-export function loadRunHistoryFrom(payload: unknown, limit = 25): readonly PipelineRun[] {
-  const container = payload as { runs?: unknown } | unknown[];
-  const rawRuns = Array.isArray(container)
+export function parseRunHistory(payload: unknown, limit = 25): RunHistoryDocument {
+  const container = payload as { runs?: unknown; runCount?: unknown } | unknown[];
+  const bare = Array.isArray(container);
+  const rawRuns = bare
     ? container
     : Array.isArray((container as { runs?: unknown }).runs)
       ? (container as { runs: unknown[] }).runs
       : [];
 
-  return rawRuns
+  const runs = rawRuns
     .map((raw) => toRun(raw as RawRun))
     .filter((run): run is PipelineRun => run !== null)
-    .sort((a, b) => (a.startedAt < b.startedAt ? 1 : a.startedAt > b.startedAt ? -1 : 0))
-    .slice(0, Math.max(limit, 1));
+    .sort((a, b) => (a.startedAt < b.startedAt ? 1 : a.startedAt > b.startedAt ? -1 : 0));
+
+  const envelope = bare ? null : (container as { runCount?: unknown; generatedAt?: unknown });
+  const declared = envelope ? Number(envelope.runCount) : Number.NaN;
+  // A declared count is trusted only when it is a sane whole number that is not
+  // smaller than what the document actually carries. A stale or truncated
+  // `runCount` must never make the page claim fewer runs than it is listing.
+  const publishedCount =
+    Number.isInteger(declared) && declared >= runs.length ? declared : runs.length;
+
+  return {
+    runs: runs.slice(0, Math.max(limit, 1)),
+    publishedCount,
+    generatedAt: envelope ? text(envelope.generatedAt) : null,
+    county: bare ? null : text((container as { county?: unknown }).county),
+  };
+}
+
+/** The runs alone, for callers that only render the list. */
+export function loadRunHistoryFrom(payload: unknown, limit = 25): readonly PipelineRun[] {
+  return parseRunHistory(payload, limit).runs;
 }
 
 /** Total rows inserted and updated across every track in a run. */

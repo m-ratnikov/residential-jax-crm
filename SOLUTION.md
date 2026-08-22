@@ -100,12 +100,24 @@ The gateway named in `NEXT_PUBLIC_PROPERTY_DATA_URL` still leads. Behind it,
 `NEXT_PUBLIC_IPFS_GATEWAYS` (`https://ipfs.io,https://dweb.link` by default) is
 a list of alternates, each tried as a rewrite of that URL's own `/ipns/...` or
 `/ipfs/...` path - so every candidate addresses the identical artifact, and
-failing over cannot quietly change which data is loaded. A HEAD probe
-(`NEXT_PUBLIC_GATEWAY_PROBE_TIMEOUT_MS`, 8s) decides the order; each candidate
-then gets `NEXT_PUBLIC_ATTACH_TIMEOUT_MS` (45s) to attach before the next is
-tried. The attach state is on screen throughout, saying which gateway of how
-many is being tried, and offering a retry rather than an empty list if every one
-of them refuses.
+failing over cannot quietly change which data is loaded.
+
+The order is fixed and not measured: the gateway in the data URL, then the
+alternates in the order they are listed. A HEAD probe
+(`NEXT_PUBLIC_GATEWAY_PROBE_TIMEOUT_MS`, 8s) is the cheap gate in front of each
+candidate in turn, not a race that reorders them. A gateway that will not answer
+a HEAD in eight seconds is not going to range read 49.5 MB, so failing the
+probe skips it for the price of one request instead of the whole
+`NEXT_PUBLIC_ATTACH_TIMEOUT_MS` (45s) the candidate would otherwise get to
+attach. The probe asks a deliberately narrow question - 405 and 501 mean the
+gateway is there and does not do HEAD, which counts as an answer, while 404 and
+anything 5xx do not - because the engine already copes with a gateway that
+refuses range reads, and failing one over for that would be failing it over
+something it can handle. Between candidates the engine is torn down, so a
+half-attached one cannot answer the next gateway's queries from the previous
+one's file handle. The attach state is on screen throughout, saying which
+gateway of how many is being tried, and offering a retry rather than an empty
+list if every one of them refuses.
 
 ### The bundled sample is real county data
 
@@ -127,8 +139,9 @@ thing that suspends, expires, or starts costing money when the row count or the
 company changes. So the default backend is not a database at all.
 
 Everything the CRM writes goes through one interface, `CrmStore`
-([`lib/crm/store.ts`](lib/crm/store.ts)) - `list`, `get`, `put`, `remove`,
-`clear` over JSON documents in named collections. Three implementations:
+([`lib/crm/store.ts`](lib/crm/store.ts)) - `list`, `get`, `put`, `update`,
+`remove`, `clear` over JSON documents in named collections. Three
+implementations:
 
 | Backend                                                          | Used when                             | What it costs                       |
 | ---------------------------------------------------------------- | ------------------------------------- | ----------------------------------- |
@@ -156,6 +169,15 @@ It is deliberately a narrow bet, and the constraints that make it safe are:
   note during seeding, where a read-modify-write read the pre-note document.
 - **A write updates the read cache in place** rather than invalidating it, so the
   process that wrote a document always reads back what it wrote.
+- **Nothing reads a document and writes it back with `put`.** A git backend
+  cannot merge, so a `put` built from a read taken a moment earlier is an
+  overwrite of whoever wrote in between, and the loser leaves no trace in the
+  history. Every such caller goes through `update(collection, id, mutate)`
+  instead: the mutation is handed the current document and is re-run against the
+  winner if the write raced, which is why it has to be pure. Two people adding a
+  note to the same opportunity in the same minute both keep their note, and a
+  simulation appending a court filing cannot erase a real one recorded while it
+  was running.
 
 Where it stops: writes are serialised per branch and cost a round trip, so this
 suits a small acquisitions team, not a call centre. That is why the interface
@@ -250,6 +272,21 @@ written, more after the next six-hourly pass. Pointing that variable at a CID
 instead would pin the page to one immutable snapshot and freeze the number,
 which is the one thing a page about continuous refresh must not do.
 
+**Pipeline runs published** on that page is the published document's own
+`runCount`, read off the envelope, not the length of the list underneath it.
+The two are not the same number and the page used to confuse them: it asked for
+25 runs, printed 25 from what came back, and the artifact held 40 - so the page
+was reporting its own page size as the pipeline's history, and a reviewer who
+opened the IPNS document saw a different number. A display cap is a property of
+the request and the total is a property of the document
+([`lib/data/runs-parse.ts`](lib/data/runs-parse.ts)); they are now two fields.
+A declared `runCount` is trusted only when it is a whole number no smaller than
+what the document actually carries, so a stale envelope can never make the page
+claim fewer runs than it is listing, and an unreachable history falls back to
+describing what it listed rather than to an error. The Data source panel names
+the run-history URL that answered and whether it is the published history or the
+bundled sample, and the tile is badged when it is the sample.
+
 An alert cites the run id **stamped inside the artifact it read**, not the newest
 entry in that history. The two can disagree: the parquet and `run-history.json`
 are separate objects behind separate IPNS names, republished at different
@@ -336,6 +373,17 @@ Rules:
   order. Absentee is now graded on `owner_region_class`, which genuinely varies:
   out of state outranks elsewhere in Florida outranks a landlord who mails to the
   next ZIP, because that is a materially better call to make.
+- **The guarantee is derived, not remembered.** Writing that rule down as a flag
+  beside each signal put the same truth in two places and left them free to
+  disagree, which is the shape of the original bug. `buildWhere` now returns a
+  set of `WhereGuarantee`s, each one added at the same line that pushes the
+  clause it comes from, and `buildScoreComponents` reads that set instead of
+  restating the filter. So the grade drops out on its own where it stops
+  varying: `absenteeOwner` keeps ranking while owner classes differ, and stops
+  scoring the moment `ownerRegionClasses` pins the search to a single class,
+  because then the four-step grade is one constant. An exhaustive test walks 64
+  filter combinations and fails if any signal is scored while the emitted clause
+  guarantees it.
 - **Continuous signals ramp, and the ramp never plateaus.** Clearing the
   threshold earns a small qualifying credit; a linear core then runs across the
   criterion's real range as read off the roll - tenure to 45 years, roof age to
@@ -344,37 +392,128 @@ Rules:
   60-year hold still outranks a 45-year hold, by less than the first ten years
   were worth. When the user sets an upper bound the tail is dropped: everything
   above it was filtered out, so there is nothing left up there to order.
-- **Falling ramps** do the same job in the other direction, for distance from the
-  middle of a requested value band, from the centre of a drawn area, from the
-  water and from a transit stop. Polygons and boxes rank as well as circles now;
-  before, only a circle had a centre to measure from, so every hand-drawn area
-  tied.
+- **Falling ramps** do the same job in the other direction, for every distance
+  the criteria can ask about: from the centre of a drawn area, from the water,
+  from a transit stop. Each is linear - full marks at nought metres, nothing at
+  the limit the user set, clamped outside. Polygons and boxes rank as well as
+  circles now; before, only a circle had a centre to measure from, so every
+  hand-drawn area tied.
 - Genuinely boolean signals stay boolean. Grading a homestead exemption or a
   recorded filing would be inventing precision the roll does not have.
-- Cheaper scores higher inside a requested value band - a budget is a ceiling.
-- With no ranking signals at all, everything scores 100 and the rationale says
-  so, rather than inventing an order.
+- **Assessed value is measured from the floor of the band, not from its
+  middle.** An acquisition budget is a ceiling, so the best parcel is the
+  cheapest one that clears the floor, not the one nearest the centre. With a
+  floor and a ceiling both set it is the same falling ramp as the distances:
+  1.0 at the floor, 0 at the ceiling. With a floor and no ceiling there is
+  nothing to run a ramp to, so the component is `floor / assessed_value` -
+  hyperbolic decay rather than a ramp, half credit at twice the floor, a third
+  at three times, approaching nought without ever reaching it. That keeps the
+  order strict all the way up the distribution instead of inventing a ceiling
+  the user did not ask for and flattening everything above it.
+- With no ranking signals at all, nothing is ranked: every row scores the same
+  and the list says so once, above the results, rather than pretending to an
+  order. The badge on those rows reads `unranked` rather than a green `100`,
+  because a hundred looks like a verdict and there is no verdict to give.
 
-The rationale quotes the values behind the number:
+### Tenure the roll cannot support
 
-> roof about 67 years old, estimated from year built (+29.2); absentee owner
-> mailing from out of state, no homestead exemption (+28.3); held 43 years
-> (+27.4).
+Tenure is the strongest signal here and the least trustworthy column in the
+roll, so it has its own guard ([`lib/criteria/sql.ts`](lib/criteria/sql.ts)).
 
-**Expect scores in the eighties, not hundreds.** On the bundled 75,988-row
-extract the same thesis produced 31 distinct scores with a floor of 73.3 and
-11.2% of rows tied at exactly 100 - an eleven percent tie for first place, in
-which "held 47 years with a 79 year old roof" and "held 25 years with a 30 year
-old roof" were the same parcel. It now produces **820 distinct scores, topping
-out at 84.88 with exactly one parcel there, and a floor of 19.35**. A top score
-of 100 on a ranked search would now be the symptom, not the goal.
+The two **most common non-null values in the entire sale-date column are not
+sales**. 842 parcels are stamped `1899-12-30` (the spreadsheet zero date), 609
+are stamped `1899-01-01`, one each sits at `1900-09-13` and `1800-01-01`. All
+1,453 carry `tenure_basis = 'COJ_SALESL'` with a null `sale_count` and a null
+`last_sale_date`, and the pipeline turns them into holds of 125 to 226 years.
+Two dates being more common than any genuine sale date is itself the evidence
+that they are placeholders and not very old transactions. They are also not
+nulls: a parcel the roll genuinely says nothing about already carries a null
+tenure, and a null already scores nothing.
+
+1,453 rows out of 404,023 is a rounding error until they are ranked. The tenure
+ramp pays for longer holds by design, so they floated to the top of every
+distress list: 23 of the top 100 of the tired-landlord thesis, led by
+`201 N BROOKVIEW DR` - built in 1986, opening the list at "held 127 years".
+
+Two rules, both read off columns every query already selects, so the guard needs
+no new column and behaves identically in the tab and in the scheduled matcher:
+
+- an implied sale year of **1901 or earlier** is the placeholder, not a
+  transaction (`NO_RECORDED_SALE`). It catches all 1,453, plus six genuine
+  pre-1901 recordings, none of them residential;
+- a sale recorded **more than a year before `built_year`** contradicts the
+  roll's own record of the building (`PREDATES_STRUCTURE`, 4,225 parcels). That
+  one is capped at the age of the structure rather than discarded, so a genuine
+  1966 lot with a 2005 house on it still ranks on twenty years rather than
+  sixty. The one-year grace absorbs the ordinary case of buying the lot the
+  calendar year before completion.
+
+Rule two is deliberately independent of rule one, so a placeholder nobody has
+seen yet still gets capped to something plausible instead of leading the list.
+
+Three properties worth checking rather than taking on trust:
+
+- **Nothing is filtered out.** The `WHERE` clause still reads the published
+  `years_since_last_sale`, so the match count is identical before and after -
+  10,209 on the tired-landlord thesis either way. An unranked parcel is still in
+  the result and still says why on screen: "no recorded sale" is a signal an
+  acquisitions team wants, it just must not outrank a verified forty-five year
+  hold.
+- **No stored snapshot was invalidated.** `years_since_last_sale` is one of the
+  sixteen fingerprinted material fields, so rewriting it would have made every
+  saved search re-baseline and alert on a change that never happened in the
+  county. The guard produces two _separate_ values instead, and the old column
+  list was re-run through the unchanged hash over 3,000 published parcels with
+  zero drift.
+- **The guard is visible, not hidden.** `tenure_confidence` and
+  `tenure_years_ranked` are selected on every row, so they appear in _Show the
+  SQL behind this result_, in the parcel drawer, in the alert and in the
+  properties CSV. A reviewer can see why a parcel the roll calls a 127 year hold
+  is not ranked as one.
+
+Effect on the flagship thesis: the top 100 went from 23 placeholder rows and 24
+rows claiming holds over a century to **zero of each**, and
+`201 N BROOKVIEW DR` fell from rank 1 to rank 818.
+
+### What the rationale says
+
+It quotes the values behind the number, and only the signals that actually
+ranked. This is the current top match of the _Tired landlord_ thesis on the
+published artifact:
+
+> held 66 years (+31.1); roof about 71 years old, estimated from year built
+> (+29.7); absentee owner mailing from out of state (+28.3).
+
+It used to end that middle clause "absentee owner mailing from out of state, no
+homestead exemption (+28.3)", which was a false provenance claim: the homestead
+flag is guaranteed by the `WHERE` clause and therefore scores nothing, so the
+whole 28.3 was the absentee grade and the sentence credited half of it to a
+signal worth zero. The generator now names the signals it ranked and the
+sentence renders evidence only for those, so the two cannot drift apart.
+
+A parcel whose tenure the roll cannot support says so in the same sentence:
+"no recorded sale: the roll carries a placeholder date, so ownership tenure is
+unknown and is not ranked", or the capped form naming the build year. It is said
+whether or not tenure is one of the criteria, because the parcel is on screen
+either way and the number beside it would otherwise read as a fact.
+
+**Expect scores in the eighties, not hundreds.** Every measurement here is on
+the published county artifact, not on the bundled sample. Under the old model
+the tired-landlord thesis spread its 10,209 matches over 31 distinct scores,
+none below 73.3, with 1,140 of them - eleven percent - at exactly 100: a tie for
+first place in which "held 47 years with a 79 year old roof" and "held 25 years
+with a 30 year old roof" were the same parcel. The same thesis on the same
+artifact, re-measured after the tenure guard, now produces **1,951 distinct
+scores over those same 10,209 matches, topping out at 89.18 with exactly one
+parcel there, and a floor of 18.33**. A top score of 100 on a ranked search
+would now be the symptom, not the goal.
 
 ### What breaks a tie, and why it mattered more than it looks
 
-With no ranking signals set, every row scores 100 - so the tiebreak decides the
-entire default list. It used to be `assessed_value ASC`, and the app opened on
-fifteen consecutive $1 condo shells at 514 LOMAX ST: the exact failure the
-dwelling filter exists to prevent, in the first screenshot anyone takes.
+With no ranking signals set every row carries the same score, so the tiebreak
+decides the entire default list. It used to be `assessed_value ASC`, and the app
+opened on fifteen consecutive $1 condo shells at 514 LOMAX ST: the exact failure
+the dwelling filter exists to prevent, in the first screenshot anyone takes.
 
 It now breaks on **priced-dwelling class, then distance from downtown
 Jacksonville, then `property_id`** (`TIEBREAK_SQL` in
@@ -483,12 +622,17 @@ Stated here rather than discovered by a reviewer.
   re-roofed houses. The filter panel has a "only roofs with real evidence"
   toggle; the list marks proxied roofs with an asterisk; the agent is required
   to say so.
-- **Ownership tenure needs the published artifact.** A locally built roll carries
-  only the current roll period's sales, so `years_since_last_sale` is null on
-  most parcels and "no ownership change in 10+ years" returns nothing. The
-  published table is built where the county's own sales history is reachable:
-  tenure is filled on **401,832 of 404,023** parcels, and 153,240 have been held
-  ten years or more.
+- **Ownership tenure needs the published artifact, and not every published
+  value is a sale.** A locally built roll carries only the current roll period's
+  sales, so `years_since_last_sale` is null on most parcels and "no ownership
+  change in 10+ years" returns nothing. The published table is built where the
+  county's own sales history is reachable: tenure is published on **401,832 of
+  404,023** parcels and 153,240 of those read ten years or more. Of the
+  published values, **1,459 are the roll's placeholder date rather than a sale**
+  and 4,225 record a sale predating the structure, so on a recorded sale the
+  ten-year-plus population is **148,722**. Those rows are still returned and
+  still filtered on the published column; they are excluded from the ranking and
+  labelled wherever they appear. See _Tenure the roll cannot support_ above.
 - **Court signals need a store.** Without a CRM store there are no court records,
   and the court filters are disabled with that reason shown. Their absence is
   not evidence that no filings exist.
@@ -531,12 +675,38 @@ cat >> .env.local <<'EOF'
 CRM_STORE_REPO=owner/residential-jax-crm
 CRM_STORE_TOKEN=github_pat_...        # fine-grained, one repo, contents: write
 EOF
-pnpm seed           # a team, three theses, nine worked opportunities
+pnpm seed --reset   # a team, three theses, nine worked deals
 ```
 
 The branch (`crm-state`) and directory (`crm`) are created on the first write.
 Set `DATABASE_URL` instead for the Postgres backend; the table is created on
 first use and there is no migration step.
+
+**`--reset` destroys CRM state.** It clears every collection before it writes:
+saved searches, alerts, opportunities, outreach, court records, the lot. On the
+git backend that is a commit on `crm-state` and is recoverable from the branch
+history; on Postgres it is not recoverable. Read the flag before running it
+against a store somebody is using.
+
+Without it the seed **refuses to run on top of a populated store** and exits 3.
+That is not caution for its own sake: seeding over an existing board leaves two
+generations of CRM state side by side, the older rows keeping the scores and
+rationales of the model that produced them, both looking equally current. That
+is how a stale fixture survives a scoring fix. `--keep-existing` says otherwise
+deliberately, in one word, and `--memory` runs the whole thing against an
+in-process store and writes nowhere, which is the way to see the shape without
+a token.
+
+The fixture is generated, not written down: scores and rationales come from the
+real scoring engine over the configured artifact rather than from literals, and
+three of the nine opportunities carry genuine `alert_id` and `matcher_run_id`
+values because the seed applies a real simulated pipeline update and runs an
+ordinary matcher pass over it.
+
+**Order matters between the two scripts.** `pnpm verify` clears the simulation
+at both ends of its run, so that it says the same thing every time rather than
+only the first time. That means it must run **before** a seed and not after: run
+it second and it strips the overlay rows the seeded board's alerts rest on.
 
 ### The scheduler
 
@@ -610,18 +780,37 @@ Each step states what to look for. All of it runs against the deployed URL.
 1. **Open `/`.** The header states the dataset and its size. If it says a parcel
    count without SAMPLE, the full published county table is loaded.
 2. **Open `/search`.** Pick the _Tired landlord_ thesis. Watch the count settle
-   as the criteria apply - it is debounced, not a button. It settles a little
-   over ten thousand: 10,209 on the artifact published as this was written, and
-   the exact figure moves with the county's six-hourly republish, which is the
-   whole premise of the app. Expand _Show the SQL behind this result_: the
-   statement that produced the count is on screen. Now turn off _Has a
-   dwelling_. Two things happen, and both are the point. The count rises by a
-   few hundred - 468 parcels the appraisal roll declines to price as somewhere
-   to live: 430 of them assessed at a dollar or less, 196 with no floor area at
-   all, and a median livable area of 55 sq ft among those that have any. And the
-   top of the list does not move. The guard is what keeps those out of the
-   result; the tiebreak is what keeps them off the first screen anyway, for the
-   land buyer who turns the guard off on purpose.
+   as the criteria apply - it is debounced, not a button. **Every number in this
+   step is county scale**, measured on the full published artifact the deployed
+   URL reads. The step behaves identically on the bundled five-ZIP sample and
+   counts much smaller there, so do not expect these figures from `pnpm dev`.
+   It settles a little over ten thousand: 10,209 on the artifact published as
+   this was written, and the exact figure moves with the county's six-hourly
+   republish, which is the whole premise of the app. Expand _Show the SQL behind
+   this result_: the statement that produced the count is on screen. Now turn
+   off _Has a dwelling_. Two things happen, and both are the point. The count
+   rises by a few hundred - on the county artifact, 468 parcels the appraisal
+   roll declines to price as somewhere to live: 430 of them assessed at a dollar
+   or less, 196 with no floor area at all, and a median livable area of 55 sq ft
+   among those that have any. And the top of the list does not move. The guard
+   is what keeps those out of the result; the tiebreak is what keeps them off
+   the first screen anyway, for the land buyer who turns the guard off on
+   purpose.
+
+   Two things to read on this screen before moving on. **The scores are not
+   hundreds**: the top match is in the high eighties, one parcel is there, and
+   the rationale under it quotes the values that earned it - a hold, a roof age
+   and how far away the owner mails - and names no signal that scored nothing.
+   **No row claims a hold of a century.** The published roll stamps 1,453
+   parcels with a placeholder sale date that reads as 125 to 226 years; they are
+   still in the result, ranked as unknown tenure and labelled "no recorded
+   sale". _Show the SQL behind this result_ carries `tenure_confidence` and
+   `tenure_years_ranked` so the guard is auditable rather than asserted.
+
+   Now clear the thesis back to no criteria. Every badge reads **`unranked`**,
+   not a green 100, and one line above the list says why. Nothing here can tell
+   these parcels apart, and a hundred would have claimed the opposite.
+
 3. **Draw an area.** `Radius`, click a centre, click again for the radius. The
    count drops to what is inside it. `Polygon` works the same way; double click
    closes it.
@@ -632,7 +821,9 @@ Each step states what to look for. All of it runs against the deployed URL.
    alert forever on that rectangle.
 5. **Open a parcel.** Confirm the grouped published columns, and the Provenance
    block with a clickable source URL, the collection timestamp and the pipeline
-   run id.
+   run id. Where the roll's tenure is a placeholder or predates the structure,
+   the drawer says so in words beside the number rather than presenting it as a
+   fact. The owner block shows the mocked skip-traced contact when one exists.
 6. **Save the search.** The dialog states that the first pass records a baseline
    without alerting. Enable in-app and mocked email.
 7. **Go to `/searches`.** The saved search shows when it was last evaluated,
@@ -644,7 +835,10 @@ Each step states what to look for. All of it runs against the deployed URL.
    run id that triggered it, the fields that changed, the score rationale, and -
    under `Detail` - the mocked email body that would have gone out.
 10. **Convert one to an opportunity.** It lands at Identified with the owner
-    attached and the match rationale preserved.
+    attached and the match rationale preserved. The owner panel on the deal
+    renders the mocked skip-traced contact - it used to read "not on file" on
+    the one screen a converted alert actually lands on, while the API had the
+    contact all along.
 11. **Open `/opportunities`.** Board and table views, and five named filters:
     stage, match strength, area, city or ZIP, and ownership signal. Set **Area**
     to Arlington - that is the one control a city column cannot answer, because
@@ -662,13 +856,21 @@ Each step states what to look for. All of it runs against the deployed URL.
     and `pipeline_run_id`. A row whose provenance is genuinely unknown has empty
     cells rather than an invented value. Provenance travelling with the data is
     the argument this whole application makes, and a CSV that leaves the
-    building without it is where that argument would break.
+    building without it is where that argument would break. The property CSV on
+    `/search` makes the same argument about data quality: it exports
+    `years_since_last_sale` unaltered and carries `tenure_confidence` and
+    `tenure_caveat` beside it, so a placeholder tenure cannot travel downstream
+    with nothing attached to say so.
 14. **Open `/pipeline`.** Upstream pipeline runs with their real per-source
     counts and declared limitations, next to every matcher pass including the
-    ones that raised nothing. Press `Run matcher now`; a new pass appears.
-    `Clear simulation` removes the simulated rows. The passes marked `cron` were
-    run by GitHub Actions on a runner nobody was watching, which is the point of
-    the whole exercise.
+    ones that raised nothing. **Pipeline runs published** is the published
+    document's own `runCount`, not the number of rows listed below it; open the
+    run-history URL in the Data source panel and the two agree. That panel also
+    names which artifact and which run history answered, and badges either one
+    when it is the bundled sample rather than the published document. Press
+    `Run matcher now`; a new pass appears. `Clear simulation` removes the
+    simulated rows. The passes marked `cron` were run by GitHub Actions on a
+    runner nobody was watching, which is the point of the whole exercise.
 15. **Open `/agent`.** Pick a model from the dropdown. This deployment answers
     on its own key, so there is nothing to configure and no key to supply. Use
     the first suggested question, which is the assignment's own: _"Which
@@ -720,16 +922,25 @@ which is what was done:
 
 `lib/oracle/` is **vendored** from the Duval pipeline repository at commit
 `28088d0`, not written here: the published column contract, the read-only SQL
-guard, the per-column meanings, and the provider registry with its dated
-free-tier terms. See [`lib/oracle/VENDORED.md`](lib/oracle/VENDORED.md) for why it is a
-copy rather than a package - each assignment is graded as an independently
-clonable repository - and `scripts/sync-shared.mjs` to check the two copies for
-drift.
+guard, the per-column meanings, the DuckDB-WASM engine with its OPFS cache, and
+the provider registry with its dated free-tier terms. See
+[`lib/oracle/VENDORED.md`](lib/oracle/VENDORED.md) for why it is a copy rather
+than a package - each assignment is graded as an independently clonable
+repository - and `scripts/sync-shared.mjs` to check the two copies for drift.
 
 It is the subset this application actually imports, not a mirror of the origin
-directory. The pipeline's server-side model resolver, its credential-header
-reader and its Bedrock prompt-cache wrapper went with the bring-your-own-key
-page: this deployment answers on its own key through one proxy route, so those
-modules had no caller left and are not carried. The drift check enumerates what
-is vendored here and compares each file against the origin, so a smaller
-vendored set narrows what it checks rather than breaking it.
+directory, and it is kept that way rather than left to accumulate. Three things
+are not carried. The pipeline's server-side model resolver, its
+credential-header reader and its Bedrock prompt-cache wrapper went with the
+bring-your-own-key page: this deployment answers on its own key through one
+proxy route, so those modules had no caller left. `geo.ts` went the same way -
+it is slippy-tile arithmetic and a haversine for the pipeline UI's library-free
+tile thumbnail, where this application draws with MapLibre and computes distance
+in SQL, so nothing here imported a line of it. The drift check enumerates what
+is present in this directory rather than a fixed list, so a smaller vendored set
+narrows what it compares rather than breaking it.
+
+Within a file that is carried, nothing is trimmed. `format.ts` is here because
+`duckdb.ts` needs `toPlain` to flatten an Arrow value; its other formatters have
+no caller in this repository and are kept anyway, because deleting them would
+turn every future drift report into a false positive.

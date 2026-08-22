@@ -14,6 +14,8 @@
  */
 
 import type { CriteriaSet } from "@/lib/criteria/types";
+import { tenureCaveat } from "@/lib/criteria/score";
+import { tenureConfidenceOf } from "@/lib/criteria/sql";
 import { displayAddress } from "./map";
 import { fetchOverlay, propertySource } from "./client-source";
 
@@ -44,6 +46,12 @@ const HEADERS = [
   "years_since_last_sale",
   "last_sale_date",
   "tenure_basis",
+  // The roll's placeholder sale dates produce tenures like 127 years on a house
+  // built in 1986. The published number is exported unaltered, and these two say
+  // whether it can be relied on - an export that drops the caveat sends the
+  // number downstream with nothing attached to it.
+  "tenure_confidence",
+  "tenure_caveat",
   "water_view",
   "nearest_transit_stop_m",
   "court_distress_score",
@@ -103,6 +111,8 @@ export async function buildPropertyCsv(criteria: CriteriaSet): Promise<string> {
         property.yearsSinceLastSale,
         property.lastSaleDate,
         property.tenureBasis,
+        tenureConfidenceOf(property),
+        tenureCaveat(property),
         property.waterViewFlag,
         property.nearestTransitStopM,
         property.raw["court_distress_score"] ?? null,

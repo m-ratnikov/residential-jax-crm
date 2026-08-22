@@ -11,6 +11,7 @@
 import type { CriteriaSet } from "@/lib/criteria/types";
 import type { Provenance, ScoreComponent } from "@/lib/data/types";
 import type { AcquisitionStage, OutreachChannel, OutreachStatus } from "@/lib/notify/types";
+import type { MockedOwnerContact } from "@/lib/crm/documents";
 
 export interface SearchRow {
   propertyId: string;
@@ -128,6 +129,16 @@ export interface OpportunityRow {
     createdAt: string;
     updatedAt: string;
   };
+  /**
+   * The whole owner document, which is what the detail endpoint answers with.
+   *
+   * `email` and `phone` are the hand-entered fields and are usually null; the
+   * attached contact is on `skipTrace`. This type once described only what the
+   * board needed, so the deal page could render `email ?? "not on file"` and
+   * the compiler had nothing to object to - the contact was in the response and
+   * absent from the page, and no test that asserted the API could see it.
+   * Declaring the fields is what makes that omission a type error.
+   */
   owner: {
     id: string;
     name: string;
@@ -137,6 +148,9 @@ export interface OpportunityRow {
     mailingCity: string | null;
     mailingState: string | null;
     mailingZip: string | null;
+    sourceSystem: string | null;
+    sourceUrl: string | null;
+    skipTrace?: MockedOwnerContact | null;
   } | null;
   assignee: { id: string; name: string; email: string } | null;
   searchName: string | null;

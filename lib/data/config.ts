@@ -35,7 +35,17 @@ export interface DataConfig {
   /** Parquet path or URL DuckDB reads. */
   queryTableSource: string;
   runHistoryUrl: string | null;
+  /** True for the parcel dataset: no published artifact configured. */
   isSample: boolean;
+  /**
+   * True when the run history above is the bundled 8-run sample rather than the
+   * pipeline's published document.
+   *
+   * Tracked separately from `isSample` because the two fall back independently:
+   * a deployment with PROPERTY_DATA_URL set but RUN_HISTORY_URL missing reads
+   * real parcels and a sample history, and used to say so nowhere at all.
+   */
+  runHistoryIsSample: boolean;
   label: string;
   countyName: string;
   stateCode: string;
@@ -131,6 +141,7 @@ export function dataConfig(env: NodeJS.ProcessEnv = process.env): DataConfig {
     queryTableSource,
     runHistoryUrl,
     isSample,
+    runHistoryIsSample: !runHistoryConfigured,
     label: isSample
       ? `${countyName} County sample extract`
       : `${countyName} County query table (published)`,

@@ -378,17 +378,65 @@ async function main(): Promise<void> {
   // not a deal is in it - an assertion the wrong state also satisfies.
   const opportunities = await page.request
     .get(`${target}/api/opportunities`)
-    .then((r) => r.json() as Promise<{ opportunities?: { opportunity?: { stage?: string } }[] }>)
+    .then(
+      (r) =>
+        r.json() as Promise<{
+          opportunities?: {
+            opportunity?: {
+              stage?: string;
+              matchScore?: number | null;
+              addressZip?: string | null;
+              alertId?: string | null;
+            };
+          }[];
+        }>,
+    )
     .catch(() => ({ opportunities: [] }));
+  const rows = (opportunities.opportunities ?? [])
+    .map((row) => row.opportunity)
+    .filter((row): row is NonNullable<typeof row> => Boolean(row));
   const stages = new Set(
-    (opportunities.opportunities ?? [])
-      .map((row) => row.opportunity?.stage)
-      .filter((stage): stage is string => Boolean(stage)),
+    rows.map((row) => row.stage).filter((stage): stage is string => Boolean(stage)),
   );
   check(
     "deals are spread across the funnel",
     stages.size >= 3,
     `${stages.size} stages occupied: ${[...stages].join(", ") || "none"}`,
+  );
+
+  // 7b. The three things a stale fixture gets wrong, checked on the live board.
+  //
+  // These are not hypothetical. A previous seed was written under the older
+  // scoring model and under the older `property_id` tiebreak, and it survived
+  // both fixes: ten of eleven deals still read exactly 100 - which under the
+  // current model is the score for "these criteria cannot rank" - and the board
+  // was dominated by one far-western ZIP that plat order used to put first. The
+  // code was right and the first three screens said otherwise, which is the only
+  // thing a reviewer can see. So the demo state is asserted here, on the
+  // deployed runtime, rather than trusted because a script once printed it.
+  const saturated = rows.filter((row) => row.matchScore !== null && row.matchScore === 100);
+  check(
+    "no deal carries the unrankable score of exactly 100",
+    saturated.length === 0,
+    `${saturated.length} of ${rows.length} at 100`,
+  );
+
+  const zips = new Set(rows.map((row) => row.addressZip ?? "").filter(Boolean));
+  const topZip = Math.max(
+    0,
+    ...[...zips].map((zip) => rows.filter((row) => row.addressZip === zip).length),
+  );
+  check(
+    "the board spans several ZIPs rather than one",
+    zips.size >= 3 && topZip <= Math.ceil(rows.length / 2),
+    `${zips.size} ZIPs, largest holds ${topZip} of ${rows.length}`,
+  );
+
+  const withLineage = rows.filter((row) => Boolean(row.alertId));
+  check(
+    "deals carry the alert they were converted from",
+    withLineage.length > 0,
+    `${withLineage.length} of ${rows.length} carry an alert id`,
   );
 
   // 7a. And one of them opens.

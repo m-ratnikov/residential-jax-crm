@@ -22,6 +22,7 @@ import {
   Panel,
   ScoreBadge,
   Select,
+  SimulatedContact,
   Spinner,
   StageBadge,
   StatusBadge,
@@ -39,6 +40,7 @@ import {
   type OpportunityRow,
   type OutreachMessageRow,
 } from "@/lib/client";
+import type { MockedOwnerContact } from "@/lib/crm/documents";
 import {
   ACQUISITION_STAGES,
   CHANNEL_LABELS,
@@ -46,7 +48,22 @@ import {
   type AcquisitionStage,
 } from "@/lib/notify/types";
 
+/**
+ * The owner as this screen needs it.
+ *
+ * `OpportunityRow` describes the columns a board row needs and stops there; the
+ * detail endpoint answers with the whole owner document, provenance and mocked
+ * skip trace included. Narrowing the property here rather than widening the
+ * shared row type keeps the board's contract as small as the board's needs.
+ */
+export type DetailOwner = NonNullable<OpportunityRow["owner"]> & {
+  sourceSystem?: string | null;
+  sourceUrl?: string | null;
+  skipTrace?: MockedOwnerContact | null;
+};
+
 interface Detail extends OpportunityRow {
+  owner: DetailOwner | null;
   stageEvents: {
     event: {
       id: string;
@@ -358,32 +375,7 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
             />
           </Panel>
 
-          <Panel title="Owner">
-            {detail.owner ? (
-              <dl className="space-y-1 text-[11px]">
-                <Row label="Name" value={detail.owner.name} />
-                <Row label="Email" value={detail.owner.email ?? "not on file"} />
-                <Row label="Phone" value={detail.owner.phone ?? "not on file"} />
-                <Row
-                  label="Mailing"
-                  value={
-                    [
-                      detail.owner.mailingAddress,
-                      detail.owner.mailingCity,
-                      detail.owner.mailingState,
-                      detail.owner.mailingZip,
-                    ]
-                      .filter(Boolean)
-                      .join(", ") || "not published"
-                  }
-                />
-              </dl>
-            ) : (
-              <p className="text-[11px] text-ink-500">
-                No owner record. The county publishes an owner of record only for some parcels.
-              </p>
-            )}
-          </Panel>
+          <OwnerContactPanel owner={detail.owner} />
 
           <Panel title="Deal">
             <div className="space-y-2.5">
@@ -492,5 +484,65 @@ function Row({ label, value }: { label: string; value: string }) {
       <dt className="w-24 shrink-0 text-ink-500">{label}</dt>
       <dd className="min-w-0 flex-1 break-words text-ink-200">{value}</dd>
     </div>
+  );
+}
+
+/**
+ * Who owns this parcel, and how an acquisitions team would reach them.
+ *
+ * The same two blocks the parcel drawer renders, deliberately not one. The
+ * first is the county roll - the owner of record and the mailing address, which
+ * are real and which carry the source system they were read from. The second is
+ * the MOCKED skip trace, because the roll publishes no telephone and no email.
+ *
+ * This panel used to render `owner.email ?? "not on file"` and never look at
+ * `skipTrace`, so the one screen a converted alert actually lands on was the
+ * one screen that still said the owner had no contact details, while the drawer
+ * and the CSV both showed them. Exported so a test can render it directly: an
+ * assertion that the API returns the contact is what let that survive.
+ */
+export function OwnerContactPanel({ owner }: { owner: DetailOwner | null }) {
+  if (!owner) {
+    return (
+      <Panel title="Owner contact">
+        <p className="text-[11px] text-ink-500">
+          No owner record. The county publishes an owner of record only for some parcels.
+        </p>
+      </Panel>
+    );
+  }
+
+  const mailing =
+    [owner.mailingAddress, owner.mailingCity, owner.mailingState, owner.mailingZip]
+      .filter(Boolean)
+      .join(", ") || "not published";
+
+  return (
+    <Panel
+      title="Owner contact"
+      subtitle="The roll publishes an owner and a mailing address. It publishes no telephone and no email."
+    >
+      <dl className="space-y-1 text-[11px]">
+        <Row label="Owner of record" value={owner.name} />
+        <Row label="Mailing" value={mailing} />
+        <Row label="Address source" value={owner.sourceSystem ?? "not published"} />
+      </dl>
+
+      {owner.skipTrace ? (
+        <SimulatedContact contact={owner.skipTrace} className="mt-3" />
+      ) : (
+        <p className="mt-3 rounded-md border border-[var(--line)] px-2.5 py-2 text-[11px] leading-relaxed text-ink-400">
+          No simulated contact is attached to this owner, so there is no telephone or email to show.
+          Nothing here calls a skip-trace vendor.
+        </p>
+      )}
+
+      {(owner.email || owner.phone) && (
+        <dl className="mt-3 space-y-1 border-t border-[var(--line)] pt-2.5 text-[11px]">
+          {owner.phone && <Row label="Phone (entered)" value={owner.phone} />}
+          {owner.email && <Row label="Email (entered)" value={owner.email} />}
+        </dl>
+      )}
+    </Panel>
   );
 }

@@ -202,6 +202,18 @@ export interface PublicDataConfig {
   /** The same artifact on every gateway worth trying, best first. */
   queryTableUrls: readonly string[];
   runHistoryUrl: string;
+  /** The same run history on every gateway worth trying, best first. */
+  runHistoryUrls: readonly string[];
+  /**
+   * True when NEXT_PUBLIC_RUN_HISTORY_URL is unset and the bundled 8-run sample
+   * is what `/pipeline` is reading.
+   *
+   * Separate from `isSample`, which is about the parcel dataset only. The two
+   * fall back independently, and a deployment reading real parcels against a
+   * sample history used to look exactly like a deployment reading both for
+   * real. See resolveRunHistorySource.
+   */
+  runHistoryIsSample: boolean;
   /** True when no published artifact is configured and the bundled sample answers. */
   isSample: boolean;
   label: string;
@@ -214,18 +226,38 @@ export interface PublicDataConfig {
   probeTimeoutMs: number;
 }
 
+/**
+ * Where the run history is read from, and whether that is the bundled sample.
+ *
+ * Pulled out of the config object and exported so the fallback is a testable
+ * decision rather than a ternary nobody looks at. An unset variable silently
+ * served the 8-run sample on `/pipeline` with no SAMPLE badge - which is the
+ * exact symptom this app already badges for the parcel dataset - so the
+ * fallback now returns the fact along with the URL and the page has no way to
+ * render one without the other.
+ */
+export function resolveRunHistorySource(configured: string | undefined): {
+  url: string;
+  isSample: boolean;
+} {
+  const trimmed = configured?.trim();
+  if (!trimmed) return { url: SAMPLE_RUN_HISTORY_URL, isSample: true };
+  return { url: resolvePublicArtifactUrl(trimmed, "run-history.json"), isSample: false };
+}
+
 const isSample = !queryTableEnv?.trim();
 const countyName = pick(countyEnv, "Duval");
 const queryTableUrl = isSample
   ? SAMPLE_QUERY_TABLE_URL
   : resolvePublicArtifactUrl(queryTableEnv as string, "query-table.parquet");
+const runHistory = resolveRunHistorySource(runHistoryEnv);
 
 export const publicDataConfig: PublicDataConfig = {
   queryTableUrl,
   queryTableUrls: ipfsGatewayCandidates(queryTableUrl, parseGatewayList(gatewaysEnv)),
-  runHistoryUrl: runHistoryEnv?.trim()
-    ? resolvePublicArtifactUrl(runHistoryEnv, "run-history.json")
-    : SAMPLE_RUN_HISTORY_URL,
+  runHistoryUrl: runHistory.url,
+  runHistoryUrls: ipfsGatewayCandidates(runHistory.url, parseGatewayList(gatewaysEnv)),
+  runHistoryIsSample: runHistory.isSample,
   isSample,
   label: isSample
     ? `${countyName} County sample extract`

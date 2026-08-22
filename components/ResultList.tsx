@@ -14,6 +14,8 @@
 import { useState } from "react";
 
 import type { SearchRow } from "@/lib/client";
+import { tenureCaveat, UNRANKED_EXPLANATION } from "@/lib/criteria/score";
+import { rankedTenureYears, tenureConfidenceOf } from "@/lib/criteria/sql";
 import { WEIGHT_LABELS, type CriteriaSet, type Weights } from "@/lib/criteria/types";
 import type { ScoreComponent } from "@/lib/data/types";
 import { downloadPropertyCsv } from "@/lib/data/export-csv";
@@ -78,6 +80,50 @@ export function resultSummary({
 }
 
 /**
+ * Whether this result set was ranked at all.
+ *
+ * Read off the rows rather than recomputed from the criteria, because the rows
+ * are what the server actually scored: `buildScore` emits no components when
+ * nothing in the criteria set can rank, and a flat 100 for every row. Asking
+ * the answer of the data avoids a second copy of that decision on the client
+ * that could disagree with the first.
+ */
+export function isUnrankedResult(rows: readonly { components: readonly unknown[] }[]): boolean {
+  return rows.length > 0 && rows.every((row) => row.components.length === 0);
+}
+
+/**
+ * What the row is allowed to claim about ownership tenure.
+ *
+ * `held 127y` beside `built 1986` was the single most visible data-quality
+ * defect in this list: 1,453 parcels on the published artifact carry the
+ * county's placeholder sale date and the ramp read them as the longest holds in
+ * Duval. The row now says what the roll actually supports.
+ */
+function TenureCell({ row }: { row: SearchRow }) {
+  if (row.yearsSinceLastSale === null) return null;
+  const facts = { yearsSinceLastSale: row.yearsSinceLastSale, builtYear: row.builtYear };
+  const confidence = tenureConfidenceOf(facts);
+  const caveat = tenureCaveat(facts);
+
+  if (confidence === "RECORDED" || caveat === null) {
+    return <span>held {row.yearsSinceLastSale}y</span>;
+  }
+  if (confidence === "PREDATES_STRUCTURE") {
+    return (
+      <span title={caveat} className="text-warn-500">
+        held &le;{rankedTenureYears(facts) ?? 0}y*
+      </span>
+    );
+  }
+  return (
+    <span title={caveat} className="text-warn-500">
+      tenure unknown*
+    </span>
+  );
+}
+
+/**
  * What each criterion contributed, beside the total it adds up to.
  *
  * A single number cannot be argued with, and two parcels a point apart look
@@ -136,6 +182,7 @@ export function ResultList({
   limitedToView = false,
 }: ResultListProps) {
   const [exporting, setExporting] = useState(false);
+  const unranked = !loading && isUnrankedResult(rows);
 
   return (
     <div className="flex h-full min-h-0 flex-col rounded-xl border border-[var(--line)] bg-[var(--panel)]">
@@ -202,6 +249,24 @@ export function ResultList({
         </div>
       </header>
 
+      {/*
+        Said once, above the list, instead of on every row.
+
+        It used to be the per-row rationale, line-clamped to two lines and
+        repeated identically down the whole page, so the default search read as
+        a wall of green 100 badges with an explanation nobody could finish. It
+        is one fact about the criteria set, not a fact about a parcel, so it
+        belongs where the criteria set is described.
+      */}
+      {unranked && (
+        <p
+          className="border-b border-[var(--line)] bg-warn-500/10 px-3 py-2 text-[11px] leading-snug text-ink-300"
+          data-testid="unranked-notice"
+        >
+          <span className="font-medium text-warn-500">Not ranked.</span> {UNRANKED_EXPLANATION}
+        </p>
+      )}
+
       <div className="panel-scroll min-h-0 flex-1">
         {rows.length === 0 && !loading && (
           <div className="px-4 py-10 text-center text-xs text-ink-500">
@@ -230,7 +295,19 @@ export function ResultList({
                       {row.ownerName ?? "owner not published"}
                     </p>
                   </div>
-                  <ScoreBadge score={row.score} title={row.rationale} />
+                  {unranked ? (
+                    // A flat 100 painted good-green on every row reads as
+                    // "every one of these is a perfect match". It means the
+                    // opposite: nothing here could tell them apart.
+                    <Badge
+                      tone="outline"
+                      title="Nothing in this criteria set can rank these matches. The note above the list says why."
+                    >
+                      unranked
+                    </Badge>
+                  ) : (
+                    <ScoreBadge score={row.score} title={row.rationale} />
+                  )}
                 </div>
 
                 <div className="tabular mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink-400">
@@ -247,7 +324,7 @@ export function ResultList({
                       roof {row.roofAgeYears}y{row.roofAgeBasis?.includes("PROXY") ? "*" : ""}
                     </span>
                   )}
-                  {row.yearsSinceLastSale !== null && <span>held {row.yearsSinceLastSale}y</span>}
+                  <TenureCell row={row} />
                 </div>
 
                 <div className="mt-1.5 flex flex-wrap gap-1">
@@ -273,9 +350,16 @@ export function ResultList({
 
                 <ScoreBreakdown components={row.components} />
 
-                <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-ink-500">
-                  {row.rationale}
-                </p>
+                {/*
+                  Only when there is something parcel-specific to say. In an
+                  unranked set every row carries the same sentence, and it is
+                  already stated once above the list.
+                */}
+                {!unranked && (
+                  <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-ink-500">
+                    {row.rationale}
+                  </p>
+                )}
               </button>
             </li>
           ))}

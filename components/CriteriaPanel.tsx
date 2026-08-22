@@ -216,7 +216,17 @@ export function CriteriaPanel({
           </div>
         </Section>
 
-        <Section title="Ownership tenure" hint="From years_since_last_sale on the published roll.">
+        {/*
+          The hint says what the filter reads AND what the ranking will not
+          trust, because the two are deliberately different: 1,453 parcels on
+          the published roll carry a placeholder sale date that turns into a
+          125 to 226 year hold. They still match the filter and still appear;
+          they are just not ranked as the longest holds in the county.
+        */}
+        <Section
+          title="Ownership tenure"
+          hint="Filters on years_since_last_sale as published. A parcel whose sale date is the county's placeholder, or predates the building, is shown but not ranked on tenure."
+        >
           <div className="grid grid-cols-2 gap-2">
             <Field label="Held at least (years)">
               <TextInput

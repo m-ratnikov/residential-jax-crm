@@ -28,7 +28,7 @@ import { randomUUID } from "node:crypto";
 import { OVERRIDABLE_COLUMNS, type OverridableColumn } from "@/lib/data/overlay";
 import { logEvent } from "@/lib/notify/log";
 import { crmStore } from "./db";
-import { nowIso, type CourtDoc, type SimulatedDoc } from "./documents";
+import { nowIso, type CourtDoc, type CourtRecordDoc, type SimulatedDoc } from "./documents";
 
 const OVERRIDABLE = new Set<string>(OVERRIDABLE_COLUMNS);
 
@@ -87,32 +87,40 @@ async function applyCourtFilings(
     if (!caseType) continue;
     const caseNumber = `${filedDate.slice(0, 4)}-SIM-${target.propertyId.slice(-6)}-${index}`;
 
+    const record: CourtRecordDoc = {
+      caseNumber,
+      caseType: caseType.type,
+      filedDate,
+      partyName: target.ownerName ?? null,
+      amount: caseType.amount,
+      status: "open",
+      sourceSystem: SIMULATED_COURT_SOURCE,
+      sourceUrl: null,
+      // Stamped once, outside the mutation, so a re-run against a document
+      // somebody else wrote first produces the identical record.
+      fetchedAt: nowIso(),
+    };
+
     // One court document per parcel, holding its filings. Appending rather than
     // replacing, so a simulation never erases a real filing that is already
-    // recorded against the same parcel.
-    const existing = await store.get<CourtDoc>("court", target.propertyId);
-    const records = existing?.records ?? [];
-    if (records.some((record) => record.caseNumber === caseNumber)) continue;
-
-    await store.put<CourtDoc>("court", {
-      id: target.propertyId,
-      propertyId: target.propertyId,
-      parcelIdentifier: target.parcelIdentifier ?? existing?.parcelIdentifier ?? null,
-      records: [
-        ...records,
-        {
-          caseNumber,
-          caseType: caseType.type,
-          filedDate,
-          partyName: target.ownerName ?? null,
-          amount: caseType.amount,
-          status: "open",
-          sourceSystem: SIMULATED_COURT_SOURCE,
-          sourceUrl: null,
-          fetchedAt: nowIso(),
-        },
-      ],
+    // recorded against the same parcel - and appending through `update` rather
+    // than `get` then `put`, because a `put` built from a read taken a moment
+    // earlier discards any filing another writer recorded in between. The
+    // mutation derives everything from its argument and from `record`, so it is
+    // safe for `update` to run it again on a write conflict.
+    const written = await store.update<CourtDoc>("court", target.propertyId, (current) => {
+      const records = current?.records ?? [];
+      // Re-checked inside the mutation rather than trusted from a listing: the
+      // same filing may have been recorded while this pass was running.
+      if (records.some((existing) => existing.caseNumber === caseNumber)) return null;
+      return {
+        id: target.propertyId,
+        propertyId: target.propertyId,
+        parcelIdentifier: target.parcelIdentifier ?? current?.parcelIdentifier ?? null,
+        records: [...records, record],
+      };
     });
+    if (!written) continue;
 
     changes.push({
       propertyId: target.propertyId,
@@ -133,6 +141,9 @@ async function applyRollMovements(
   const store = crmStore();
   const changes: SimulationChange[] = [];
   const thisYear = new Date().getFullYear();
+  // Stamped once for the whole pass, so a mutation re-run after a write
+  // conflict produces the identical document rather than a later timestamp.
+  const at = nowIso();
 
   for (const [index, target] of targets.entries()) {
     const writes: {
@@ -213,15 +224,21 @@ async function applyRollMovements(
     }
 
     if (Object.keys(values).length) {
-      const existing = await store.get<SimulatedDoc>("simulated", target.propertyId);
-      await store.put<SimulatedDoc>("simulated", {
+      const label = writes[0]?.label ?? null;
+      // Merged through `update`. The document accumulates every column a
+      // simulation overrides on this parcel, so reading it, merging, and
+      // writing it back with `put` would drop an override written by a
+      // simulation running at the same time. The mutation reads only its
+      // argument, `values`, `label`, `runId` and `at`, so re-running it against
+      // the winning document is safe.
+      await store.update<SimulatedDoc>("simulated", target.propertyId, (current) => ({
         id: target.propertyId,
         propertyId: target.propertyId,
         runId,
-        label: writes[0]?.label ?? null,
-        values: { ...(existing?.values ?? {}), ...values },
-        createdAt: existing?.createdAt ?? nowIso(),
-      });
+        label,
+        values: { ...(current?.values ?? {}), ...values },
+        createdAt: current?.createdAt ?? at,
+      }));
     }
 
     const headline = writes.find((write) => write.detail);
@@ -262,11 +279,26 @@ export async function clearSimulation(): Promise<{ changes: number; courtRecords
   let removedRecords = 0;
 
   for (const doc of court) {
-    const kept = doc.records.filter((record) => record.sourceSystem !== SIMULATED_COURT_SOURCE);
-    if (kept.length === doc.records.length) continue;
-    removedRecords += doc.records.length - kept.length;
-    if (kept.length) await store.put<CourtDoc>("court", { ...doc, records: kept });
-    else await store.remove("court", doc.id);
+    if (!doc.records.some((record) => record.sourceSystem === SIMULATED_COURT_SOURCE)) continue;
+
+    // Stripped through `update`, not `put`. The listing above can be a minute
+    // old, and writing a filtered copy of it back would erase any real filing
+    // recorded in between. The filter is re-applied inside the mutation, which
+    // reads only its argument, so `update` can re-run it against whatever is
+    // actually stored.
+    const stripped = await store.update<CourtDoc>("court", doc.id, (current) => {
+      if (!current) return null;
+      const kept = current.records.filter(
+        (record) => record.sourceSystem !== SIMULATED_COURT_SOURCE,
+      );
+      return kept.length === current.records.length ? null : { ...current, records: kept };
+    });
+    if (!stripped) continue;
+
+    // Counted against this pass's own snapshot: a filing recorded after the
+    // listing is still stripped, it is just not claimed in the total.
+    removedRecords += Math.max(0, doc.records.length - stripped.records.length);
+    if (!stripped.records.length) await store.remove("court", doc.id);
   }
 
   logEvent("simulate.cleared", { changes: simulated.length, courtRecords: removedRecords });

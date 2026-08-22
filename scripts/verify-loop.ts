@@ -115,7 +115,13 @@ async function main(): Promise<void> {
   for (const alert of await listAlerts({ savedSearchId: target.id, limit: 500 })) {
     await store.remove("alerts", alert.id);
   }
-  await store.put<SavedSearchDoc>("searches", { ...target, matches: {}, matchesTruncated: false });
+  // `update`, not `put`: this spreads a document read a moment ago, which is
+  // the shape the store's contract warns about even when the intent is a reset.
+  // It is the last instance of it in the repository, and leaving one behind is
+  // how the pattern comes back.
+  await store.update<SavedSearchDoc>("searches", target.id, (current) =>
+    current ? { ...current, matches: {}, matchesTruncated: false } : null,
+  );
 
   const criteria = criteriaSetSchema.parse(target.criteria);
 
