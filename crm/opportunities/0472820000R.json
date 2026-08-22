@@ -59,6 +59,41 @@
       "subject": "About the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
       "templateId": "roof-condition",
       "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello SAPP ILENE M ESTATE,\nI am reaching out about 2280 SHERRINGTON ST, JACKSONVILLE, 32209. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 54 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt431die70adls65",
+      "campaignName": "test campaign 01",
+      "channel": "email",
+      "createdAt": "2026-08-22T07:54:25.575Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-8968d4a456@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T07:54:25.575Z",
+          "providerEventId": "sim_email_0895878bf4a00a7a047c:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T07:55:24.575Z",
+          "providerEventId": "sim_email_0895878bf4a00a7a047c:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-22T07:56:52.575Z",
+          "providerEventId": "sim_email_0895878bf4a00a7a047c:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt431dieb8u594ej",
+      "providerMessageId": "sim_email_0895878bf4a00a7a047c",
+      "status": "queued",
+      "statusAt": "2026-08-22T07:54:25.575Z",
+      "subject": "Interested in buying 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
+      "templateId": "cash-offer-intro",
+      "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
     }
   ],
   "ownerId": "0mt3vekkip7pmsxzt",
@@ -150,5 +185,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-22T07:44:50.213Z"
+  "updatedAt": "2026-08-22T07:54:25.575Z"
 }
