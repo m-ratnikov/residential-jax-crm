@@ -6,7 +6,7 @@
   "askingPrice": 108000,
   "assessedValue": 80045,
   "assigneeId": "0mt3v3p9v4cw2aqxd",
-  "closedAt": null,
+  "closedAt": "2026-08-22T07:44:50.308Z",
   "createdAt": "2026-08-22T04:21:05.349Z",
   "id": "0329940000R",
   "latitude": 30.3899743,
@@ -96,7 +96,7 @@
     "yearsSinceLastSale": 23
   },
   "savedSearchId": "0mt3v3t85fmff026j",
-  "stage": "under_contract",
+  "stage": "closed",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -129,6 +129,14 @@
       "id": "0mt42osywv80q989c",
       "note": null,
       "toStage": "under_contract"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-22T07:44:50.308Z",
+      "fromStage": "under_contract",
+      "id": "0mt42p1msjii3r14f",
+      "note": null,
+      "toStage": "closed"
     }
   ],
   "tasks": [
@@ -142,5 +150,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-22T07:44:39.080Z"
+  "updatedAt": "2026-08-22T07:44:50.308Z"
 }
