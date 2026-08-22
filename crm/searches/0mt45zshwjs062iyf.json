@@ -1,0 +1,38 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T09:17:10.532Z",
+  "criteria": {
+    "filters": {
+      "dwellingsOnly": true,
+      "maxAssessedValue": 250000,
+      "minAssessedValue": 80000,
+      "minRoofAge": 20,
+      "residentialOnly": true,
+      "waterView": true
+    },
+    "name": "Aging roof, entry price band  WITH WATER VIEW  TEST",
+    "weights": {
+      "amenity": 0,
+      "distress": 1,
+      "geography": 0,
+      "roofAge": 3,
+      "tenure": 1,
+      "value": 3
+    }
+  },
+  "description": null,
+  "id": "0mt45zshwjs062iyf",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Aging roof, entry price band  WITH WATER VIEW  TEST",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T09:17:10.532Z"
+}
