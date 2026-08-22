@@ -53,6 +53,35 @@
       "subject": "Interested in buying 2573 RIVERSIDE AVE, JACKSONVILLE, 32204",
       "templateId": "cash-offer-intro",
       "toAddress": "owner-62ecdf056a@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello ST VINCENTS HOSPITAL INC,\n\nCounty records suggest the roof at 2573 RIVERSIDE AVE, JACKSONVILLE, 32204 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $972,946.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt48ezxt3q4no38g",
+      "campaignName": "Aging roof angle - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:24:59.876Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-62ecdf056a@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T10:24:59.876Z",
+          "providerEventId": "sim_email_a3626f31935add5eb913:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T10:26:07.876Z",
+          "providerEventId": "sim_email_a3626f31935add5eb913:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt48f0f89i5jarmy",
+      "providerMessageId": "sim_email_a3626f31935add5eb913",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:24:59.876Z",
+      "subject": "About the roof at 2573 RIVERSIDE AVE, JACKSONVILLE, 32204",
+      "templateId": "roof-condition",
+      "toAddress": "owner-62ecdf056a@mocked-skip-trace.invalid"
     }
   ],
   "ownerId": "0mt3vf84bhsj4qy4l",
@@ -134,5 +163,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T07:54:26.245Z"
+  "updatedAt": "2026-08-22T10:24:59.876Z"
 }
