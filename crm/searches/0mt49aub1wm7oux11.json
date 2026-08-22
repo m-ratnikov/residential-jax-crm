@@ -1,0 +1,65 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T10:49:44.941Z",
+  "criteria": {
+    "filters": {
+      "dwellingsOnly": true,
+      "geometry": {
+        "ring": [
+          [
+            -81.68668162605601,
+            30.29398836875727
+          ],
+          [
+            -81.668284409477,
+            30.261813372443456
+          ],
+          [
+            -81.66816870371242,
+            30.261313677535597
+          ],
+          [
+            -81.64873013525163,
+            30.286595048568927
+          ],
+          [
+            -81.68621880299764,
+            30.294188180487367
+          ],
+          [
+            -81.68621880299764,
+            30.294188180487367
+          ]
+        ],
+        "type": "polygon"
+      },
+      "minYearsSinceSale": 15,
+      "residentialOnly": true,
+      "waterView": true
+    },
+    "name": "Waterfront long hold - TEST",
+    "weights": {
+      "amenity": 3,
+      "distress": 1,
+      "geography": 0,
+      "roofAge": 1,
+      "tenure": 3,
+      "value": 1
+    }
+  },
+  "description": null,
+  "id": "0mt49aub1wm7oux11",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Waterfront long hold - TEST",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T10:49:44.941Z"
+}
