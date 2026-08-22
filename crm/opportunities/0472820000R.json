@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello SAPP ILENE M ESTATE,\n\nCounty records suggest the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $145,475.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3pnfjb1eahs7f1",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-22T01:39:40.007Z",
+      "createdById": "0mt3plg31guo8moh6",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-8968d4a456@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T01:39:40.007Z",
+          "providerEventId": "sim_email_23afdd35b3beae057049:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T01:41:16.007Z",
+          "providerEventId": "sim_email_23afdd35b3beae057049:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-22T01:43:39.007Z",
+          "providerEventId": "sim_email_23afdd35b3beae057049:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt3pnfjb82dzzyxm",
+      "providerMessageId": "sim_email_23afdd35b3beae057049",
+      "status": "queued",
+      "statusAt": "2026-08-22T01:39:40.007Z",
+      "subject": "About the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
+      "templateId": "roof-condition",
+      "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt3pn9dgx0c86i7p",
   "ownerInterest": null,
   "ownerNameSnapshot": "SAPP ILENE M ESTATE",
@@ -87,5 +123,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-22T01:39:37.662Z"
+  "updatedAt": "2026-08-22T01:39:40.007Z"
 }
