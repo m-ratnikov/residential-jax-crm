@@ -15,6 +15,7 @@ import { z } from "zod";
 
 import { handleError, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
+import { generatedIdSchema, propertyIdSchema } from "@/lib/crm/ids";
 import {
   advanceOutreach,
   fastForwardOutreach,
@@ -29,11 +30,12 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 120;
 
 const sendSchema = z.object({
-  opportunityIds: z.array(z.string().min(1)).min(1).max(500),
+  // An opportunity id IS the parcel id, by construction.
+  opportunityIds: z.array(propertyIdSchema).min(1).max(500),
   channel: z.enum(OUTREACH_CHANNELS),
   templateId: z.string().min(1),
   campaignName: z.string().max(200).optional(),
-  createdById: z.string().nullish(),
+  createdById: generatedIdSchema.nullish(),
 });
 
 const advanceSchema = z.object({ fastForward: z.boolean().default(false) });

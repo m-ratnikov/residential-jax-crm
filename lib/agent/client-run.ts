@@ -19,9 +19,14 @@
  * executes moved.
  */
 
-import { ToolLoopAgent, stepCountIs, type ModelMessage } from "ai";
+import {
+  ToolLoopAgent,
+  stepCountIs,
+  type LanguageModel,
+  type ModelMessage,
+  type SystemModelMessage,
+} from "ai";
 
-import type { ResolvedModel } from "@/lib/oracle/agent/model";
 import { classifyProviderError } from "@/lib/oracle/agent/errors";
 import { safeMessage } from "@/lib/oracle/agent/redact";
 import type { AgentChatMessage, AgentResponse, AgentUsage } from "@/lib/oracle/agent/types";
@@ -33,6 +38,30 @@ import { createAgentTools, newTrace, TOOL_ORDER } from "./tools";
 
 export const MAX_STEPS = 12;
 export const MAX_HISTORY_MESSAGES = 12;
+
+/**
+ * The model this turn runs on, once it has been built.
+ *
+ * Declared here rather than imported from the vendored agent because this
+ * deployment resolves exactly one way: a provider and model it publishes, built
+ * against the proxy that holds the key. The vendored resolver existed to weigh
+ * that against a credential the visitor supplied, and the bring-your-own-key
+ * page it served was removed; keeping its resolver around would have kept ~550
+ * lines of provider-construction and header-reading code that nothing calls.
+ *
+ * `source` survives the narrowing because the error classifier words a 401
+ * differently depending on whose credential failed, and the answer here is
+ * always "this deployment's".
+ */
+interface ResolvedModel {
+  provider: AgentProvider;
+  modelId: string;
+  model: LanguageModel;
+  /** Whose credential built this client. Drives error wording, not behaviour. */
+  source: "user" | "server";
+  /** Wrap the system prompt with the provider's cache marker, if it has one. */
+  instructions: (system: string) => SystemModelMessage;
+}
 
 export function toModelMessages(messages: AgentChatMessage[]): ModelMessage[] {
   const trimmed = messages

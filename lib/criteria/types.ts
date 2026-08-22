@@ -105,8 +105,9 @@ export const filtersSchema = z.object({
    * HOA common areas and retention ponds (usage 009, assessed at zero), and
    * condominium garage and storage units (assessed at a dollar or two). All of
    * them are residential, absentee owned, without a homestead exemption and
-   * held for decades, so on a distress thesis they score a perfect 100 and bury
-   * every real house. Filtering on assessed value alone does not remove them:
+   * held for decades, so on a distress thesis they score at the very top of the
+   * ranking and bury every real house. Filtering on value alone does not remove
+   * them:
    * a garage unit assessed at $1 passes `assessed_value > 0`.
    *
    * On by default, and shown in the panel so it can be turned off - a land
@@ -153,6 +154,21 @@ export const weightsSchema = z.object({
 });
 
 export type Weights = z.infer<typeof weightsSchema>;
+
+/**
+ * One name per weighted signal, so the panel that sets a weight and the result
+ * row that shows what it contributed call the same thing the same thing. They
+ * used to carry two separate literals, which is how "Distance from centre" and
+ * "geo" ended up on screen at once.
+ */
+export const WEIGHT_LABELS: Record<keyof Weights, string> = {
+  tenure: "Ownership tenure",
+  roofAge: "Roof age",
+  distress: "Distress signals",
+  value: "Assessed value",
+  geography: "Distance from centre",
+  amenity: "Amenity signals",
+};
 
 export const DEFAULT_WEIGHTS: Weights = {
   tenure: 3,

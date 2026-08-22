@@ -39,6 +39,7 @@ import { PROVIDERS } from "@/lib/agent/providers";
 import { isServerModel, serverKeyFor, upstreamFor } from "@/lib/agent/server-models";
 import { AGENT_RATE_LIMIT, clientAddress } from "@/lib/agent/ratelimit";
 import { isSafeProxyPath, sameOriginRequest } from "@/lib/api-auth";
+import { DYNAMIC_CACHE_CONTROL, noStoreHeaders } from "@/lib/api";
 import { logAgent } from "@/lib/agent/log";
 import { safeMessage } from "@/lib/agent/redact";
 
@@ -80,7 +81,7 @@ function requestedModel(path: string[], body: string): string | null {
 }
 
 function fail(status: number, message: string): NextResponse {
-  return NextResponse.json({ error: { message } }, { status });
+  return NextResponse.json({ error: { message } }, { status, headers: noStoreHeaders() });
 }
 
 export async function POST(
@@ -121,7 +122,10 @@ export async function POST(
           message: `Rate limit reached: ${limit.limit} requests per window for this deployment's key, shared by everyone using it. Try again in ${limit.retryAfterSeconds}s.`,
         },
       },
-      { status: 429, headers: { "retry-after": String(limit.retryAfterSeconds) } },
+      {
+        status: 429,
+        headers: noStoreHeaders({ "retry-after": String(limit.retryAfterSeconds) }),
+      },
     );
   }
 
@@ -159,7 +163,7 @@ export async function POST(
       status: response.status,
       headers: {
         "content-type": response.headers.get("content-type") ?? "application/json",
-        "cache-control": "no-store",
+        "cache-control": DYNAMIC_CACHE_CONTROL,
       },
     });
   } catch (error: unknown) {

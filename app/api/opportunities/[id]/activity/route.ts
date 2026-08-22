@@ -10,6 +10,7 @@ import { z } from "zod";
 
 import { fail, handleError, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
+import { generatedIdSchema, parseDocumentKey } from "@/lib/crm/ids";
 import { addNote, addTask, setTaskStatus } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
@@ -19,17 +20,19 @@ const bodySchema = z.discriminatedUnion("kind", [
   z.object({
     kind: z.literal("note"),
     body: z.string().min(1).max(5000),
-    authorId: z.string().nullish(),
+    authorId: generatedIdSchema.nullish(),
   }),
   z.object({
     kind: z.literal("task"),
     title: z.string().min(1).max(300),
-    assigneeId: z.string().nullish(),
+    assigneeId: generatedIdSchema.nullish(),
     dueAt: z.string().datetime().nullish(),
   }),
   z.object({
     kind: z.literal("task_status"),
-    taskId: z.string().min(1),
+    // Minted by newId() when the task was added, so it has the same shape as
+    // every other generated id rather than being any non-empty string.
+    taskId: generatedIdSchema,
     status: z.enum(["open", "done", "cancelled"]),
   }),
 ]);
@@ -44,7 +47,15 @@ export async function POST(
     const denied = guardMutation(request);
     if (denied) return denied;
 
-    const { id } = await context.params;
+    const id = parseDocumentKey((await context.params).id);
+    if (!id) {
+      return fail(
+        "invalid_request",
+        "That is not a parcel id this application could have issued.",
+        400,
+      );
+    }
+
     const input = bodySchema.parse(await readJson(request));
 
     const updated =

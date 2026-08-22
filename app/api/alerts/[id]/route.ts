@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { fail, handleError, ok, readJson } from "@/lib/api";
+import { parseDocumentKey } from "@/lib/crm/ids";
 import { dismissAlert, markAlertRead } from "@/lib/crm/repo";
 import { guardMutation } from "@/lib/api-auth";
 
@@ -20,7 +21,16 @@ export async function PATCH(
     const denied = guardMutation(request);
     if (denied) return denied;
 
-    const { id } = await context.params;
+    // `<pass>__<search>__<parcel>`, not a UUID. See lib/crm/ids.ts.
+    const id = parseDocumentKey((await context.params).id);
+    if (!id) {
+      return fail(
+        "invalid_request",
+        "That is not an alert id this application could have issued.",
+        400,
+      );
+    }
+
     const patch = patchSchema.parse(await readJson(request));
 
     const updated = patch.dismissed

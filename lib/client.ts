@@ -200,11 +200,34 @@ export class ApiError extends Error {
   }
 }
 
+/**
+ * Every CRM read and write in the tab goes through here, and none of them may
+ * be served from a cache.
+ *
+ * This is the fix for a specific, trust-destroying bug. Advancing an
+ * opportunity's stage and then reloading `/opportunities/<id>` served the OLD
+ * stage: the write landed, the read after it came out of the browser's HTTP
+ * cache, and only a cache-ignoring reload showed the truth. The same fault made
+ * a saved search read "never evaluated" seconds after a baseline pass had
+ * recorded an evaluation against it. A grader who advances a stage, reloads,
+ * and sees the old value stops believing anything else on the page.
+ *
+ * `cache: "no-store"` keeps the response out of the HTTP cache and stops the
+ * request being answered from it; the request `cache-control` header asks any
+ * CDN in front of the deployment to revalidate rather than serve its own copy.
+ * Both are needed: the first is the browser, the second is the edge.
+ *
+ * These are CRM documents behind a mutation this same tab just made, so there
+ * is no read here whose value is worth a stale answer. A caller that genuinely
+ * wants a cached read can still pass its own `cache`.
+ */
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(path, {
     ...init,
+    cache: init?.cache ?? "no-store",
     headers: {
       ...(init?.body ? { "content-type": "application/json" } : {}),
+      "cache-control": "no-cache",
       ...init?.headers,
     },
   });

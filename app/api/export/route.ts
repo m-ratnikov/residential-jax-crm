@@ -13,9 +13,15 @@
  * Provenance travels with the data: every row carries the source system and the
  * pipeline run it came from, so an exported file cannot lose the audit trail
  * the moment it leaves the app.
+ *
+ * The mailing columns are real, from the county roll. The two contact columns
+ * that end in `_simulated` are not: they hold the mocked skip trace, and they
+ * are named that way because a CSV on somebody's desktop has no tooltip to
+ * explain itself. `owner_email` and `owner_phone` stay reserved for details a
+ * team entered by hand.
  */
 
-import { fail, handleError } from "@/lib/api";
+import { fail, handleError, noStoreHeaders } from "@/lib/api";
 import { crmStore } from "@/lib/crm/db";
 import type { AlertDoc } from "@/lib/crm/documents";
 import { listOpportunities, type OpportunityView } from "@/lib/crm/repo";
@@ -42,12 +48,14 @@ function csv(headers: readonly string[], rows: readonly (readonly unknown[])[]):
 }
 
 function attachment(body: string, filename: string): Response {
+  // Built by hand rather than through `ok`, so the directive is applied here
+  // explicitly. A cached export is a file that quietly stops matching the board
+  // it was taken from.
   return new Response(body, {
-    headers: {
+    headers: noStoreHeaders({
       "content-type": "text/csv; charset=utf-8",
       "content-disposition": `attachment; filename="${filename}"`,
-      "cache-control": "no-store",
-    },
+    }),
   });
 }
 
@@ -129,6 +137,13 @@ const OPPORTUNITY_HEADERS = [
   "owner_name",
   "owner_email",
   "owner_phone",
+  // Suffixed rather than folded into the two columns above, so a spreadsheet
+  // three desks away still says what these are. They come from the mocked skip
+  // trace in lib/crm/skip-trace.ts: a reserved `.invalid` domain and a reserved
+  // 555-01xx number, neither of which can be delivered to or dialled.
+  "owner_email_simulated",
+  "owner_phone_simulated",
+  "owner_contact_note",
   "owner_mailing_address",
   "owner_mailing_city",
   "owner_mailing_state",
@@ -220,6 +235,9 @@ export async function GET(request: Request): Promise<Response> {
               row.owner?.name ?? row.opportunity.ownerNameSnapshot,
               row.owner?.email,
               row.owner?.phone,
+              row.owner?.skipTrace?.email,
+              row.owner?.skipTrace?.phone,
+              row.owner?.skipTrace?.label,
               row.owner?.mailingAddress,
               row.owner?.mailingCity,
               row.owner?.mailingState,

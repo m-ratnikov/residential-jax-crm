@@ -78,19 +78,23 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
   const [taskTitle, setTaskTitle] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const load = useCallback(() => {
-    api<Detail>(`/api/opportunities/${id}`)
-      .then(setDetail)
-      .catch((cause: ApiError) => setError(cause.message));
-  }, [id]);
+  const load = useCallback(
+    () =>
+      api<Detail>(`/api/opportunities/${id}`)
+        .then(setDetail)
+        .catch((cause: ApiError) => setError(cause.message)),
+    [id],
+  );
 
-  useEffect(load, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   useEffect(() => {
     api<{ opportunities: OpportunityRow[] }>("/api/opportunities?limit=1")
       .then(() => undefined)
       .catch(() => undefined);
-    fetch("/api/team")
+    fetch("/api/team", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((body: { members?: { id: string; name: string }[] } | null) => {
         if (body?.members) setTeam(body.members);
@@ -98,11 +102,31 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
       .catch(() => undefined);
   }, []);
 
+  /**
+   * Write, then show what was written.
+   *
+   * The PATCH answers with the stored opportunity, so that is applied straight
+   * away rather than waiting a round trip to find out what this tab just asked
+   * for. The reload after it is what brings back the parts a stage change also
+   * moves - the stage event appended to the history below - and it is awaited,
+   * so `saving` is not cleared while the screen still shows the old value.
+   */
   const update = async (body: Record<string, unknown>) => {
     setSaving(true);
-    await patch(`/api/opportunities/${id}`, body).catch(() => undefined);
-    setSaving(false);
-    load();
+    try {
+      const written = await patch<{ opportunity: Detail["opportunity"] }>(
+        `/api/opportunities/${id}`,
+        body,
+      ).catch(() => null);
+      if (written?.opportunity) {
+        setDetail((current) =>
+          current ? { ...current, opportunity: written.opportunity } : current,
+        );
+      }
+      await load();
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (error) {
@@ -196,7 +220,7 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
                 size="sm"
                 onClick={async () => {
                   await patch("/api/outreach", { fastForward: true }).catch(() => undefined);
-                  load();
+                  await load();
                 }}
                 title="Pull every pending provider event forward to now, so a direct mail piece does not take days to be scanned."
               >
@@ -274,7 +298,7 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
                     body: noteBody.trim(),
                   }).catch(() => undefined);
                   setNoteBody("");
-                  load();
+                  await load();
                 }}
               >
                 Add
@@ -420,7 +444,7 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
                     assigneeId: detail.assignee?.id ?? null,
                   }).catch(() => undefined);
                   setTaskTitle("");
-                  load();
+                  await load();
                 }}
               >
                 Add
@@ -439,7 +463,7 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
                           taskId: task.id,
                           status: task.status === "done" ? "open" : "done",
                         }).catch(() => undefined);
-                        load();
+                        await load();
                       }}
                       className="size-3.5 accent-[var(--color-accent-500)]"
                     />

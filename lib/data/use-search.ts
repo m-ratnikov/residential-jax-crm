@@ -17,7 +17,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CriteriaSet } from "@/lib/criteria/types";
 import { needsCourtData, type MapViewport } from "@/lib/criteria/sql";
 import { displayAddress } from "./map";
-import type { ScoredProperty } from "./types";
+import type {
+  AttachAttaching,
+  AttachFailed,
+  AttachReady,
+  AttachState,
+  ScoredProperty,
+} from "./types";
 import {
   fetchOverlay,
   propertySource,
@@ -71,23 +77,86 @@ export function toSearchRow(
 
 export type OrderBy = "score" | "assessed_value" | "roof_age" | "tenure";
 
-export interface SearchState {
-  rows: SearchRow[];
-  scored: ScoredProperty[];
-  total: number;
-  sql: string;
-  tookMs: number;
-  loading: boolean;
-  error: string | null;
-  mapPoints: { id: string; lat: number; lng: number; score: number }[];
-  mapTruncated: boolean;
+export interface MapPoint {
+  id: string;
+  lat: number;
+  lng: number;
+  score: number;
+}
+
+/** What every variant can do, whether or not there is anything to show yet. */
+interface SearchControls {
   overlay: OverlayStatus;
-  /** Engine load progress, for the banner while the artifact attaches. */
-  engineStage: string;
-  engineMessage: string;
-  hasMore: boolean;
   loadMore: () => void;
   refresh: () => void;
+  /** Try every gateway again after they all refused. */
+  retryAttach: () => void;
+}
+
+/**
+ * The artifact has not attached. There are no rows, no total, and no way to ask
+ * this variant for either - which is the point.
+ */
+export interface SearchAttaching extends SearchControls {
+  readonly status: "attaching";
+  readonly attach: AttachAttaching;
+}
+
+/** Every gateway refused. The surface offers a retry, not an empty list. */
+export interface SearchUnavailable extends SearchControls {
+  readonly status: "unavailable";
+  readonly attach: AttachFailed;
+}
+
+/** The artifact is attached, so a row count is now a fact about the data. */
+export interface SearchReady extends SearchControls {
+  readonly status: "ready";
+  readonly attach: AttachReady;
+  readonly rows: SearchRow[];
+  readonly scored: ScoredProperty[];
+  readonly total: number;
+  readonly sql: string;
+  readonly tookMs: number;
+  readonly loading: boolean;
+  readonly error: string | null;
+  readonly mapPoints: MapPoint[];
+  readonly mapTruncated: boolean;
+  readonly hasMore: boolean;
+}
+
+/**
+ * `rows` and `total` exist on `SearchReady` and nowhere else, so "no parcels
+ * match these criteria" cannot be typed while the source is still attaching:
+ * reaching for the row count without narrowing past `attaching` first is a
+ * compile error rather than a lie on screen.
+ */
+export type SearchState = SearchAttaching | SearchUnavailable | SearchReady;
+
+/** What the result surface should render. There is exactly one right answer. */
+export type ResultView = "attaching" | "unavailable" | "searching" | "empty" | "results";
+
+/**
+ * The whole defect, in one function.
+ *
+ * "Nothing matched" is only sayable once the data is attached and a query has
+ * actually come back. Any other combination has its own honest answer, and
+ * `empty` is unreachable from all of them.
+ */
+export function resultView(attach: AttachState, loading: boolean, rowCount: number): ResultView {
+  if (attach.phase === "attaching") return "attaching";
+  if (attach.phase === "failed") return "unavailable";
+  if (loading) return "searching";
+  return rowCount > 0 ? "results" : "empty";
+}
+
+/** One sentence for the attach banner, including how long it has been going. */
+export function attachHeadline(attach: AttachAttaching): string {
+  const seconds = Math.floor(attach.elapsedMs / 1000);
+  const elapsed = seconds >= 60 ? `${Math.floor(seconds / 60)}m ${seconds % 60}s` : `${seconds}s`;
+  const where = attach.failedOver
+    ? ` (gateway ${attach.gatewayIndex + 1} of ${attach.gatewayCount})`
+    : "";
+  return `${attach.message}${where} - ${elapsed} elapsed`;
 }
 
 export function useParcelSearch(
@@ -110,34 +179,53 @@ export function useParcelSearch(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
-  const [mapPoints, setMapPoints] = useState<SearchState["mapPoints"]>([]);
+  const [mapPoints, setMapPoints] = useState<MapPoint[]>([]);
   const [mapTruncated, setMapTruncated] = useState(false);
   const [overlay, setOverlay] = useState<OverlayStatus>(EMPTY_OVERLAY_STATUS);
   const [tracked, setTracked] = useState<Map<string, string>>(new Map());
-  const [engine, setEngine] = useState({ stage: "booting", message: "Starting the query engine" });
 
   const source = propertySource();
+  const [attach, setAttach] = useState<AttachState>(() => source.attachState());
+  // Bumped by a retry, to restart the poll below against a fresh attempt.
+  const [attachEpoch, setAttachEpoch] = useState(0);
   const requestId = useRef(0);
 
   useEffect(() => {
     void fetchOverlay().then(setOverlay);
   }, []);
 
-  // Poll the engine's own state while it attaches, so a slow first load shows
-  // progress instead of an empty screen.
+  // Poll while it attaches, so a slow first load shows what it is doing and for
+  // how long. The poll stops the moment the attach settles either way; a ready
+  // source has nothing left to report.
   useEffect(() => {
     let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
     const tick = () => {
       if (cancelled) return;
-      const state = source.engineState();
-      setEngine({ stage: state.stage, message: state.message });
-      if (state.stage !== "ready" && state.stage !== "error") setTimeout(tick, 300);
+      const next = source.attachState();
+      setAttach(next);
+      if (next.phase === "attaching") timer = setTimeout(tick, 400);
     };
-    void source.prefetch().catch(() => undefined);
+
+    void source
+      .prefetch()
+      .catch(() => undefined)
+      .then(() => {
+        if (!cancelled) setAttach(source.attachState());
+      });
     tick();
+
     return () => {
       cancelled = true;
+      if (timer !== undefined) clearTimeout(timer);
     };
+  }, [source, attachEpoch]);
+
+  const retryAttach = useCallback(() => {
+    void source.retryAttach().catch(() => undefined);
+    setAttach(source.attachState());
+    setAttachEpoch((epoch) => epoch + 1);
   }, [source]);
 
   // The viewport is rounded into the key at about a metre of precision. Panning
@@ -225,19 +313,22 @@ export function useParcelSearch(
   );
 
   useEffect(() => {
+    // Nothing to query until something has attached. Running anyway is how the
+    // surface used to reach "0 matches" before the data existed.
+    if (attach.phase !== "ready") return;
     const timer = setTimeout(() => void run(0, false), 250);
     return () => clearTimeout(timer);
     // run closes over criteria, orderBy and overlay; queryKey covers the first
     // two and the overlay is included explicitly.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryKey, overlay]);
+  }, [queryKey, overlay, attach.phase]);
 
   // Which of these are already being worked, so the list can say so and a
   // second analyst does not start over on the same house.
   useEffect(() => {
     if (!scored.length) return;
     let cancelled = false;
-    fetch("/api/opportunities?limit=1000")
+    fetch("/api/opportunities?limit=1000", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then(
         (
@@ -262,7 +353,19 @@ export function useParcelSearch(
     [scored, tracked],
   );
 
+  const controls: SearchControls = {
+    overlay,
+    retryAttach,
+    loadMore: () => void run(offset + PAGE_SIZE, true),
+    refresh: () => void run(0, false),
+  };
+
+  if (attach.phase === "attaching") return { status: "attaching", attach, ...controls };
+  if (attach.phase === "failed") return { status: "unavailable", attach, ...controls };
+
   return {
+    status: "ready",
+    attach,
     rows,
     scored,
     total,
@@ -272,11 +375,7 @@ export function useParcelSearch(
     error,
     mapPoints,
     mapTruncated,
-    overlay,
-    engineStage: engine.stage,
-    engineMessage: engine.message,
     hasMore: rows.length < total,
-    loadMore: () => void run(offset + PAGE_SIZE, true),
-    refresh: () => void run(0, false),
+    ...controls,
   };
 }

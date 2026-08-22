@@ -16,6 +16,7 @@ import { useState } from "react";
 
 import {
   CRITERIA_PRESETS,
+  WEIGHT_LABELS,
   type CriteriaSet,
   type Filters,
   type Weights,
@@ -464,16 +465,19 @@ export function CriteriaPanel({
                 Only criteria you have set take part in the score. Weights are relative and are
                 normalised across the ones in play.
               </p>
-              {(
-                [
-                  ["tenure", "Ownership tenure"],
-                  ["roofAge", "Roof age"],
-                  ["distress", "Distress signals"],
-                  ["value", "Assessed value"],
-                  ["geography", "Distance from centre"],
-                  ["amenity", "Amenity signals"],
-                ] as [keyof Weights, string][]
-              ).map(([key, label]) => (
+              <p className="text-[11px] text-ink-500">
+                Anything measurable is scored on a ramp rather than as a pass mark: held 33 years
+                outranks held 11, an older roof outranks a newer one, and a parcel at the bottom of
+                your value band outranks one at the top. A signal every match already satisfies -
+                asking for no homestead exemption, then scoring it - cannot order anything, so it is
+                left out of the score rather than added to every row.
+              </p>
+              <p className="text-[11px] text-ink-500">
+                The top of each ramp is approached rather than reached, so a full 100 is not handed
+                out and the best match in a set usually sits in the eighties. A parcel scoring 100
+                means the criteria could not rank at all.
+              </p>
+              {(Object.entries(WEIGHT_LABELS) as [keyof Weights, string][]).map(([key, label]) => (
                 <label key={key} className="flex items-center gap-2 text-[12px]">
                   <span className="w-40 text-ink-400">{label}</span>
                   <input

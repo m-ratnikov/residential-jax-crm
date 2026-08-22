@@ -40,6 +40,61 @@ export interface DataSourceInfo {
   readonly runId: string | null;
 }
 
+/* ------------------------------------------------------------------ attach */
+
+/**
+ * Whether the published artifact is readable yet.
+ *
+ * This is a union rather than a pair of booleans because of a specific lie the
+ * product used to tell. On a cold load the parquet attach takes as long as the
+ * gateway takes - forty seconds is normal, two minutes has been observed - and
+ * during that window the surface rendered "Searching" and then "No parcels
+ * match these criteria". A reviewer's first impression of a CRM over 404,023
+ * parcels was that it had found nothing.
+ *
+ * "The query ran and returned zero rows" and "there is nothing to query yet"
+ * are different facts, and only one of them is ever true. Making them different
+ * *types* is what stops the second from being rendered as the first: the row
+ * count and the total live on the ready variant only, so a component cannot
+ * reach for `rows.length` without having narrowed past `attaching` first. It is
+ * a compile error rather than a code review note.
+ */
+export type AttachState = AttachAttaching | AttachReady | AttachFailed;
+
+export interface AttachAttaching {
+  readonly phase: "attaching";
+  /** What it is doing right now, in words a non-engineer can read. */
+  readonly message: string;
+  /** 0..1 while bytes are being counted, null when the size is not known. */
+  readonly progress: number | null;
+  /** Since the first gateway was tried, so a long wait reads as a slow network. */
+  readonly elapsedMs: number;
+  /** The gateway being tried, and where it sits in the list. */
+  readonly gateway: string;
+  readonly gatewayIndex: number;
+  readonly gatewayCount: number;
+  /** True once the configured gateway has been given up on. Said out loud. */
+  readonly failedOver: boolean;
+}
+
+export interface AttachReady {
+  readonly phase: "ready";
+  /** The gateway that answered. Not always the configured one. */
+  readonly gateway: string;
+  readonly failedOver: boolean;
+  readonly elapsedMs: number;
+  /** How the bytes got here: range read, whole download, or browser cache. */
+  readonly accessMode: string | null;
+}
+
+export interface AttachFailed {
+  readonly phase: "failed";
+  readonly error: string;
+  /** Every gateway that was tried, so the retry message can name them. */
+  readonly tried: readonly string[];
+  readonly elapsedMs: number;
+}
+
 export interface ColumnDescriptor {
   readonly name: string;
   readonly type: string;

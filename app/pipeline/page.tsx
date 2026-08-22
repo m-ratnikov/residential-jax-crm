@@ -53,7 +53,9 @@ export default function PipelinePage() {
 
   const load = useCallback(() => {
     reloadStatus();
-    api<{ pipelineRuns: PipelineRunRow[]; matcherRuns: MatcherRunRow[] }>("/api/runs?limit=25")
+    return api<{ pipelineRuns: PipelineRunRow[]; matcherRuns: MatcherRunRow[] }>(
+      "/api/runs?limit=25",
+    )
       .then((body) => {
         setRuns(body.pipelineRuns);
         setPasses(body.matcherRuns);
@@ -61,7 +63,9 @@ export default function PipelinePage() {
       .catch(() => setRuns([]));
   }, [reloadStatus]);
 
-  useEffect(load, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   const runMatcher = async () => {
     setBusy(true);
@@ -75,7 +79,7 @@ export default function PipelinePage() {
             : ""
         }.`,
       );
-      load();
+      await load();
     } catch (cause: unknown) {
       setMessage(cause instanceof Error ? cause.message : "The pass failed.");
     } finally {
@@ -90,7 +94,7 @@ export default function PipelinePage() {
       setMessage(
         `Removed ${count(result.changes)} simulated field changes and ${count(result.courtRecords)} simulated court filings. Published values are restored.`,
       );
-      load();
+      await load();
     } catch (cause: unknown) {
       setMessage(cause instanceof Error ? cause.message : "Nothing to clear.");
     } finally {

@@ -12,6 +12,7 @@ import { z } from "zod";
 
 import { fail, handleError, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
+import { generatedIdSchema, parseDocumentKey } from "@/lib/crm/ids";
 import { getOpportunityView, updateOpportunity } from "@/lib/crm/repo";
 import { advanceOutreach } from "@/lib/notify/outreach";
 import { ACQUISITION_STAGES } from "@/lib/notify/types";
@@ -19,24 +20,33 @@ import { ACQUISITION_STAGES } from "@/lib/notify/types";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+/**
+ * The two id fields here name a team member. Those are minted by `newId()`, so
+ * they are checked against that shape rather than left as any string at all -
+ * an assignee id that is not an id assigns the deal to nobody, silently.
+ */
 const patchSchema = z.object({
   stage: z.enum(ACQUISITION_STAGES).optional(),
-  assigneeId: z.string().nullish(),
+  assigneeId: generatedIdSchema.nullish(),
   ownerInterest: z.string().max(2000).nullish(),
   askingPrice: z.number().min(0).nullish(),
   offerPrice: z.number().min(0).nullish(),
   nextStep: z.string().max(1000).nullish(),
   nextStepDueAt: z.string().datetime().nullish(),
-  actorId: z.string().nullish(),
+  actorId: generatedIdSchema.nullish(),
   stageNote: z.string().max(1000).nullish(),
 });
+
+/** The parcel id in the path, refused outright when it cannot be one. */
+const BAD_ID = "That is not a parcel id this application could have issued.";
 
 export async function GET(
   _request: Request,
   context: { params: Promise<{ id: string }> },
 ): Promise<Response> {
   try {
-    const { id } = await context.params;
+    const id = parseDocumentKey((await context.params).id);
+    if (!id) return fail("invalid_request", BAD_ID, 400);
 
     // Opening the record is a natural moment to apply any provider events that
     // have come due, so the thread is current without a background worker.
@@ -60,7 +70,9 @@ export async function PATCH(
     const denied = guardMutation(request);
     if (denied) return denied;
 
-    const { id } = await context.params;
+    const id = parseDocumentKey((await context.params).id);
+    if (!id) return fail("invalid_request", BAD_ID, 400);
+
     const patch = patchSchema.parse(await readJson(request));
 
     const updated = await updateOpportunity(id, {

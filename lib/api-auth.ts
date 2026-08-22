@@ -47,6 +47,7 @@
 import { NextResponse } from "next/server";
 
 import { RateLimiter, clientAddress } from "@/lib/agent/ratelimit";
+import { noStoreHeaders } from "@/lib/api";
 
 /**
  * Standard is a note, a stage change, a saved search. Heavy is a pass over the
@@ -256,13 +257,15 @@ export function guardMutation(
 ): NextResponse | null {
   const denial = checkMutation(request, options);
   if (!denial) return null;
+  // A 429 that a cache is allowed to replay would keep refusing a caller whose
+  // window has already reset, so the denials carry the directive too.
   return NextResponse.json(
     { error: denial.message, code: denial.code },
     {
       status: denial.status,
-      headers: denial.retryAfterSeconds
-        ? { "retry-after": String(denial.retryAfterSeconds) }
-        : undefined,
+      headers: noStoreHeaders(
+        denial.retryAfterSeconds ? { "retry-after": String(denial.retryAfterSeconds) } : undefined,
+      ),
     },
   );
 }

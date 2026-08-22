@@ -3,6 +3,7 @@ import { z } from "zod";
 import { fail, handleError, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
 import { criteriaSetSchema } from "@/lib/criteria/types";
+import { parseDocumentKey } from "@/lib/crm/ids";
 import { deleteSavedSearch, getSavedSearch, updateSavedSearch } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
@@ -19,12 +20,16 @@ const patchSchema = z.object({
   active: z.boolean().optional(),
 });
 
+const BAD_ID = "That is not a saved search id this application could have issued.";
+
 export async function GET(
   _request: Request,
   context: { params: Promise<{ id: string }> },
 ): Promise<Response> {
   try {
-    const { id } = await context.params;
+    const id = parseDocumentKey((await context.params).id);
+    if (!id) return fail("invalid_request", BAD_ID, 400);
+
     const search = await getSavedSearch(id);
     if (!search) return fail("not_found", "No such saved search.", 404);
     return ok({ search });
@@ -43,7 +48,9 @@ export async function PATCH(
     const denied = guardMutation(request);
     if (denied) return denied;
 
-    const { id } = await context.params;
+    const id = parseDocumentKey((await context.params).id);
+    if (!id) return fail("invalid_request", BAD_ID, 400);
+
     const patch = patchSchema.parse(await readJson(request));
     const updated = await updateSavedSearch(id, {
       ...patch,
@@ -64,7 +71,9 @@ export async function DELETE(
     const denied = guardMutation(request);
     if (denied) return denied;
 
-    const { id } = await context.params;
+    const id = parseDocumentKey((await context.params).id);
+    if (!id) return fail("invalid_request", BAD_ID, 400);
+
     await deleteSavedSearch(id);
     return ok({ deleted: true });
   } catch (error: unknown) {

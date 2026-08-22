@@ -14,7 +14,8 @@
 import { useState } from "react";
 
 import type { SearchRow } from "@/lib/client";
-import type { CriteriaSet } from "@/lib/criteria/types";
+import { WEIGHT_LABELS, type CriteriaSet, type Weights } from "@/lib/criteria/types";
+import type { ScoreComponent } from "@/lib/data/types";
 import { downloadPropertyCsv } from "@/lib/data/export-csv";
 import { TRACKED_MATCH_CAP } from "@/lib/notify/limits";
 import { Badge, Button, ScoreBadge, cx, count, money } from "./ui";
@@ -48,6 +49,77 @@ const ORDER_OPTIONS = [
   { value: "tenure", label: "Longest held" },
 ] as const;
 
+/**
+ * The line under the heading, and the one rule it has to obey.
+ *
+ * A search that is still running has no result to describe, so it must not
+ * describe one. The heading already switches to "Searching" while `loading` is
+ * true and the empty state below the list is already gated on `!loading`; this
+ * line was not, so every ordinary re-query - tightening a filter, drawing a
+ * radius, pressing "Search this view" - flashed "No parcels match these
+ * criteria" until the rows came back. Read quickly, that is a broken search.
+ *
+ * The three cases are mutually exclusive by construction: searching, results,
+ * or nothing matched. `tookMs` is the previous query's timing while a new one
+ * is in flight, so it is only quoted once the query it belongs to has finished.
+ */
+export function resultSummary({
+  loading,
+  rowCount,
+  tookMs,
+}: {
+  loading: boolean;
+  rowCount: number;
+  tookMs: number;
+}): string {
+  if (loading) return "Querying the published parcels";
+  if (rowCount === 0) return "No parcels match these criteria";
+  return `Showing ${count(rowCount)}${tookMs ? ` - ${tookMs} ms` : ""}`;
+}
+
+/**
+ * What each criterion contributed, beside the total it adds up to.
+ *
+ * A single number cannot be argued with, and two parcels a point apart look
+ * identical until you can see that one of them earned it on tenure and the
+ * other on the roof. The bar is how much of that criterion the parcel earned,
+ * the number is what it put into the score - both of them, because a bar alone
+ * conveys meaning by length only, and the rest of this app says everything it
+ * colours or sizes in words as well.
+ */
+function ScoreBreakdown({ components }: { components: readonly ScoreComponent[] }) {
+  if (!components.length) return null;
+
+  return (
+    <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px]">
+      {components.map((component) => {
+        const earned = Math.max(0, Math.min(1, component.value));
+        const label = WEIGHT_LABELS[component.key as keyof Weights] ?? component.key;
+        const contribution = Math.round(component.points * 10) / 10;
+        return (
+          <span
+            key={component.key}
+            className="flex items-center gap-1 text-ink-500"
+            title={`${label}: ${component.label}. Earned ${Math.round(earned * 100)}% of this criterion, worth ${contribution} points of the score.`}
+          >
+            <span>{label}</span>
+            <span
+              aria-hidden
+              className="block h-1 w-8 overflow-hidden rounded-full bg-[var(--panel-raised)]"
+            >
+              <span
+                className="block h-full rounded-full bg-accent-500"
+                style={{ width: `${earned * 100}%` }}
+              />
+            </span>
+            <span className="tabular text-ink-400">+{contribution}</span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 export function ResultList({
   rows,
   total,
@@ -76,8 +148,7 @@ export function ResultList({
             )}
           </h2>
           <p className="text-[11px] text-ink-500">
-            {rows.length ? `Showing ${count(rows.length)}` : "No parcels match these criteria"}
-            {tookMs ? ` - ${tookMs} ms` : ""}
+            {resultSummary({ loading, rowCount: rows.length, tookMs })}
           </p>
           {/*
             The count above is what the criteria select. It is not what saving
@@ -199,6 +270,8 @@ export function ResultList({
                     <Badge tone="outline">{row.ownerRegionClass.toLowerCase()} owner</Badge>
                   )}
                 </div>
+
+                <ScoreBreakdown components={row.components} />
 
                 <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-ink-500">
                   {row.rationale}

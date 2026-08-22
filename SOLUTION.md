@@ -81,10 +81,31 @@ NEXT_PUBLIC_PROPERTY_DATA_URL=https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0
   environments where the native addon will not load.
 
 The interface earned its keep: when the native engine turned out to be
-undeployable, twelve integration tests passed unmodified against the replacement.
+undeployable, the integration suite in
+[`test/data-source.test.ts`](test/data-source.test.ts) - thirteen tests driving
+the real parquet rather than a mock - passed unmodified against the replacement.
 
 The header says which of the two is answering, always. There is no state where
 the app runs on a subset without saying so.
+
+### One gateway is a single point of failure, so there is more than one
+
+Every read in the tab goes to one IPFS gateway, and a public gateway is allowed
+to be slow or to be down. Depending on a single one with no fallback is a real
+availability risk and it had a real symptom: a bad minute at the gateway was
+indistinguishable from a broken deployment, because the page sat on "attaching"
+with nothing on screen to explain itself.
+
+The gateway named in `NEXT_PUBLIC_PROPERTY_DATA_URL` still leads. Behind it,
+`NEXT_PUBLIC_IPFS_GATEWAYS` (`https://ipfs.io,https://dweb.link` by default) is
+a list of alternates, each tried as a rewrite of that URL's own `/ipns/...` or
+`/ipfs/...` path - so every candidate addresses the identical artifact, and
+failing over cannot quietly change which data is loaded. A HEAD probe
+(`NEXT_PUBLIC_GATEWAY_PROBE_TIMEOUT_MS`, 8s) decides the order; each candidate
+then gets `NEXT_PUBLIC_ATTACH_TIMEOUT_MS` (45s) to attach before the next is
+tried. The attach state is on screen throughout, saying which gateway of how
+many is being tried, and offering a retry rather than an empty list if every one
+of them refuses.
 
 ### The bundled sample is real county data
 
@@ -145,6 +166,15 @@ environment variable, with no code change and no data model change.
 configured, and seeds what it needs first, so it is a single command against any
 of the three rather than a script that assumes somebody already ran the seed in
 the same process.
+
+Its last step is the one that is not like the others: it converts the alert it
+just raised into an opportunity **through the route handler**, invoked in process
+with the real mutation guard and the real zod schema. Everything before it calls
+the repository directly, and so does `pnpm seed` - which is exactly how the worst
+bug here survived. The POST the application itself uses asserted
+`z.string().uuid()` on four id fields and nothing in this system has ever minted
+a UUID, so the first step of the demo script returned 400 on the deployed
+runtime while every script stayed green, because no script was driving a route.
 
 ### Who can write, on whose credential
 
@@ -207,11 +237,18 @@ the last touch on a parcel. So there is no per-row change stamp to read, and
 anything claiming to detect "changed parcels" from the parquet alone would be
 inventing it.
 
-What the pipeline _does_ publish is `run-history.json`: every run it has made
-(38 at the time of writing, and growing every six hours), each with per-track
-`inserted` / `updated` / `unchanged` / `table_total_after` and the limitations
-that run declared for itself. That is real evidence, and `/pipeline` shows it
-beside the CRM's own passes.
+What the pipeline _does_ publish is `run-history.json`: every run it has made,
+each with per-track `inserted` / `updated` / `unchanged` / `table_total_after`
+and the limitations that run declared for itself. That is real evidence, and
+`/pipeline` shows it beside the CRM's own passes.
+
+The count on that page is deliberately not quoted here, because it moves.
+`RUN_HISTORY_URL` is the pipeline's `oracle-run-history-duval` **IPNS name**,
+which re-points on every publish, so `/pipeline` shows whatever the pipeline has
+published by the time the page is opened - 40 runs when this paragraph was
+written, more after the next six-hourly pass. Pointing that variable at a CID
+instead would pin the page to one immutable snapshot and freeze the number,
+which is the one thing a page about continuous refresh must not do.
 
 An alert cites the run id **stamped inside the artifact it read**, not the newest
 entry in that history. The two can disagree: the parquet and `run-history.json`
@@ -291,16 +328,46 @@ Rules:
   alone is scored on roof age alone, not diluted by five components nobody asked
   for.
 - Weights are relative and normalised across the participating components.
-- Meeting a threshold earns 60% of a component; the remaining 40% ramps over the
-  next 15 years past it.
+- **A signal the `WHERE` clause already guarantees does not score.** A constant
+  cannot order anything, and this was the bug that mattered most: `absenteeOwner`
+  and `noHomestead` were both filter predicates _and_ scoring signals, so the
+  distress component was exactly 1.0 on every row in the result by construction -
+  three ninths of the weight of the flagship thesis contributing nothing to the
+  order. Absentee is now graded on `owner_region_class`, which genuinely varies:
+  out of state outranks elsewhere in Florida outranks a landlord who mails to the
+  next ZIP, because that is a materially better call to make.
+- **Continuous signals ramp, and the ramp never plateaus.** Clearing the
+  threshold earns a small qualifying credit; a linear core then runs across the
+  criterion's real range as read off the roll - tenure to 45 years, roof age to
+  65, both about the p99 and p90 of the matched population - and past that a
+  compressive hyperbolic tail approaches 1.0 without ever reaching it. So a
+  60-year hold still outranks a 45-year hold, by less than the first ten years
+  were worth. When the user sets an upper bound the tail is dropped: everything
+  above it was filtered out, so there is nothing left up there to order.
+- **Falling ramps** do the same job in the other direction, for distance from the
+  middle of a requested value band, from the centre of a drawn area, from the
+  water and from a transit stop. Polygons and boxes rank as well as circles now;
+  before, only a circle had a centre to measure from, so every hand-drawn area
+  tied.
+- Genuinely boolean signals stay boolean. Grading a homestead exemption or a
+  recorded filing would be inventing precision the roll does not have.
 - Cheaper scores higher inside a requested value band - a budget is a ceiling.
 - With no ranking signals at all, everything scores 100 and the rationale says
   so, rather than inventing an order.
 
 The rationale quotes the values behind the number:
 
-> held 35 years (+33); roof about 53 years old, estimated from year built (+33);
-> absentee owner, no homestead exemption (+33).
+> roof about 67 years old, estimated from year built (+29.2); absentee owner
+> mailing from out of state, no homestead exemption (+28.3); held 43 years
+> (+27.4).
+
+**Expect scores in the eighties, not hundreds.** On the bundled 75,988-row
+extract the same thesis produced 31 distinct scores with a floor of 73.3 and
+11.2% of rows tied at exactly 100 - an eleven percent tie for first place, in
+which "held 47 years with a 79 year old roof" and "held 25 years with a 30 year
+old roof" were the same parcel. It now produces **820 distinct scores, topping
+out at 84.88 with exactly one parcel there, and a floor of 19.35**. A top score
+of 100 on a ranked search would now be the symptom, not the goal.
 
 ### What breaks a tie, and why it mattered more than it looks
 
@@ -309,15 +376,30 @@ entire default list. It used to be `assessed_value ASC`, and the app opened on
 fifteen consecutive $1 condo shells at 514 LOMAX ST: the exact failure the
 dwelling filter exists to prevent, in the first screenshot anyone takes.
 
-It now breaks on **priced-dwelling class, then `property_id`**. Priced is
-measured per square foot rather than as an invented floor, and the threshold
-came from the data: of the 68,403 sample dwellings that clear the existing
-guard, **zero** are assessed below $1/sqft and the cheapest genuine house is
-$1.70/sqft, so a dollar-assessed shell misses by three orders of magnitude. It
-orders, it never filters. `property_id` after that, because a tie means the
-criteria did not distinguish the rows and choosing cheapest _or_ dearest is the
-same class of mistake - and because a stable order makes paging and the tracked
-set deterministic.
+It now breaks on **priced-dwelling class, then distance from downtown
+Jacksonville, then `property_id`** (`TIEBREAK_SQL` in
+[`lib/criteria/sql.ts`](lib/criteria/sql.ts)).
+
+Priced is measured per square foot rather than as an invented floor, and the
+threshold came from the data: of the 68,403 sample dwellings that clear the
+existing guard, **zero** are assessed below $1/sqft and the cheapest genuine
+house is $1.70/sqft, so a dollar-assessed shell misses by three orders of
+magnitude. It orders, it never filters.
+
+Distance from a fixed downtown point comes next because `property_id` alone
+turned out to carry an opinion nobody chose. An RE number is assigned in the
+order the county platted the land, so ascending order marches west-to-east
+through one rural subdivision at a time: the first twenty rows of the default
+search were all on N US 301 HWY, the Baldwin corridor, 28-30 km out, past the
+95th percentile of the county's own distance distribution. The tiebreak now
+states the opinion an acquisitions team would actually hold - when nothing else
+separates two parcels, the one in the market they work comes first - and the
+same default search opens on N Ocean St, E Ashley St, E Church St and Phelps St.
+It is a constant point and not the map viewport, because where you scrolled must
+not change what a saved search watches.
+
+`property_id` remains last so an exact distance tie resolves the same way on
+every pass: paging and the tracked set both need a total order.
 
 Sorting descending was tried and rejected: it leads with $75M apartment
 complexes, which for an acquisitions team is worse than the shells. `Cheapest`
@@ -434,7 +516,7 @@ header says SAMPLE and the CRM pages say no store is attached.
 
 ```bash
 PROPERTY_DATA_URL=https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r \
-RUN_HISTORY_URL=https://ipfs.filebase.io/ipfs/bafybeif2bwakcxmc3p2rkczkqvuecin6657oihsdm5mba5lktajoazemdm \
+RUN_HISTORY_URL=https://ipfs.filebase.io/ipns/k51qzi5uqu5dl3zmapadjh90auy4k6gtr6w52zg6ozeu64kzbiwwgw8k9ef6ny \
 pnpm dev
 ```
 
@@ -486,10 +568,33 @@ pnpm matcher
 npx tsx scripts/smoke.mts https://residential-jax-crm.vercel.app
 ```
 
-Opens a real browser against the live URL and asserts that the artifact attaches
-over the gateway, the parcel count is county scale, a criteria search returns
-scored matches, the rationale cites real values, the SQL is disclosed and the
-parcel drawer shows provenance. It writes `smoke-search.png`.
+Opens a real browser against the live URL and drives it the way a reviewer
+would: the artifact attaches over the gateway, a criteria search returns scored
+matches, the rationale cites real values, the SQL is disclosed, the parcel drawer
+carries a clickable source URL and a pipeline run id, the board has worked deals
+across several stages, and an alert converts into an opportunity **through the
+real HTTP route**. It writes `smoke-search.png`.
+
+Every assertion in it is held to one rule: it has to fail in the state it exists
+to rule out. Three of them were rewritten because they did not:
+
+- the parcel count asserted `>= 50_000`, which the bundled 75,988 parcel sample
+  passes - so the line whose entire purpose was proving this deployment is on the
+  404,023 parcel county artifact could not tell the two apart. It now asserts
+  county scale, that the badge is not the SAMPLE badge, and that the parquet
+  bytes were fetched from an IPFS gateway and not from this deployment's own
+  `/sample/` path;
+- the funnel check counted page text matching each stage name, which the stage
+  filter's own dropdown supplies on a completely empty board;
+- the store check only looked for the absence of a warning badge, which a header
+  that failed to render also satisfies.
+
+And the conversion step is there because of a specific failure. `pnpm seed`
+writes to the store directly and never calls an HTTP route, so it stayed green
+while the POST the app itself uses rejected every request: four id fields
+asserted `z.string().uuid()` and nothing in this system has ever minted a UUID.
+The first step of the demo script returned 400 on the deployed runtime and no
+script noticed, because no script was driving a route.
 
 ### Everything else
 
@@ -505,10 +610,18 @@ Each step states what to look for. All of it runs against the deployed URL.
 1. **Open `/`.** The header states the dataset and its size. If it says a parcel
    count without SAMPLE, the full published county table is loaded.
 2. **Open `/search`.** Pick the _Tired landlord_ thesis. Watch the count settle
-   as the criteria apply - it is debounced, not a button. Expand _Show the SQL
-   behind this result_: the statement that produced the count is on screen.
-   Turn off _Has a dwelling_ and watch 55 sq ft condo garage units assessed at a
-   dollar take over the top of the list. That is why it is on by default.
+   as the criteria apply - it is debounced, not a button. It settles a little
+   over ten thousand: 10,209 on the artifact published as this was written, and
+   the exact figure moves with the county's six-hourly republish, which is the
+   whole premise of the app. Expand _Show the SQL behind this result_: the
+   statement that produced the count is on screen. Now turn off _Has a
+   dwelling_. Two things happen, and both are the point. The count rises by a
+   few hundred - 468 parcels the appraisal roll declines to price as somewhere
+   to live: 430 of them assessed at a dollar or less, 196 with no floor area at
+   all, and a median livable area of 55 sq ft among those that have any. And the
+   top of the list does not move. The guard is what keeps those out of the
+   result; the tiebreak is what keeps them off the first screen anyway, for the
+   land buyer who turns the guard off on purpose.
 3. **Draw an area.** `Radius`, click a centre, click again for the radius. The
    count drops to what is inside it. `Polygon` works the same way; double click
    closes it.
@@ -557,11 +670,14 @@ Each step states what to look for. All of it runs against the deployed URL.
     run by GitHub Actions on a runner nobody was watching, which is the point of
     the whole exercise.
 15. **Open `/agent`.** Pick a model from the dropdown. This deployment answers
-    on its own key, so there is nothing to configure and no key to supply. Ask
-    _"Which
-    residential properties in the Arlington area match my distressed criteria and
+    on its own key, so there is nothing to configure and no key to supply. Use
+    the first suggested question, which is the assignment's own: _"Which
+    residential properties in the Arlington area match a distressed profile -
+    roofs older than 15 years, no ownership change in 10 or more years - and
     have not been contacted yet?"_ Check the `Tools` and `Rows` tabs under the
-    answer, and the caveats block.
+    answer, and the caveats block. Arlington resolves to ZIPs 32211, 32277 and
+    32225, because every one of them says JACKSONVILLE on the roll and the agent
+    is handed that mapping in `get_schema` rather than left to guess it.
 16. **Scroll to the bottom of `/opportunities`.** Disposition, portfolio tracking
     and live messaging are visible and disabled, with the reason each is out of
     scope for this milestone.
@@ -609,3 +725,11 @@ free-tier terms. See [`lib/oracle/VENDORED.md`](lib/oracle/VENDORED.md) for why 
 copy rather than a package - each assignment is graded as an independently
 clonable repository - and `scripts/sync-shared.mjs` to check the two copies for
 drift.
+
+It is the subset this application actually imports, not a mirror of the origin
+directory. The pipeline's server-side model resolver, its credential-header
+reader and its Bedrock prompt-cache wrapper went with the bring-your-own-key
+page: this deployment answers on its own key through one proxy route, so those
+modules had no caller left and are not carried. The drift check enumerates what
+is vendored here and compares each file against the origin, so a smaller
+vendored set narrows what it checks rather than breaking it.

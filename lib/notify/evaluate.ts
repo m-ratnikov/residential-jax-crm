@@ -341,15 +341,22 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         outcome.trackedMatches = tracked.length;
         outcome.matchesTruncated = evaluation.matched > tracked.length;
 
-        await store.put<SavedSearchDoc>("searches", {
-          ...search,
-          matches,
-          matchesTruncated: outcome.matchesTruncated,
-          lastEvaluatedAt: startedAt,
-          lastPipelineRunId: runId,
-          lastMatchCount: evaluation.matched,
-          updatedAt: startedAt,
-        });
+        // Read-modify-write: an analyst renaming this search, or changing its
+        // notification preference, while a matcher pass is mid-flight must not
+        // have that edit thrown away by the pass writing back what it read.
+        await store.update<SavedSearchDoc>("searches", search.id, (current) =>
+          current
+            ? {
+                ...current,
+                matches,
+                matchesTruncated: outcome.matchesTruncated,
+                lastEvaluatedAt: startedAt,
+                lastPipelineRunId: runId,
+                lastMatchCount: evaluation.matched,
+                updatedAt: startedAt,
+              }
+            : null,
+        );
       } catch (error: unknown) {
         outcome.error = error instanceof Error ? error.message : String(error);
         logEvent("matcher.search_failed", { savedSearchId: search.id, error: outcome.error });

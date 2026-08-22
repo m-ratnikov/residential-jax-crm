@@ -33,15 +33,6 @@ export const DWELLING_MIN_SQFT = 400;
 export const SCORE_ALIAS = "match_score";
 export const TOTAL_ALIAS = "match_total";
 
-/**
- * How far past a threshold counts as "as good as it gets". A parcel that clears
- * the roof-age threshold by this many years scores the full component.
- */
-const RAMP_YEARS = 15;
-
-/** Meeting a threshold at all is worth this much of a component before the ramp. */
-const BASE_CREDIT = 0.6;
-
 /** Columns every screen needs. Anything else is fetched on the detail view. */
 export const LIST_COLUMNS = [
   "property_id",
@@ -169,6 +160,68 @@ export function polygonSql(ring: readonly (readonly [number, number])[]): string
   return `((${crossings.join(" + ")}) % 2 = 1)`;
 }
 
+/** The same great circle distance as `haversineSql`, evaluated here. */
+export function haversineMeters(
+  lat: number,
+  lng: number,
+  otherLat: number,
+  otherLng: number,
+): number {
+  const toRad = Math.PI / 180;
+  const dLat = (otherLat - lat) * toRad;
+  const dLng = (otherLng - lng) * toRad;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat * toRad) * Math.cos(otherLat * toRad) * Math.sin(dLng / 2) ** 2;
+  return EARTH_RADIUS_M * 2 * Math.asin(Math.sqrt(a));
+}
+
+export interface GeometryCentre {
+  lat: number;
+  lng: number;
+  /** Distance from the centre to the furthest point the geometry admits. */
+  radiusM: number;
+}
+
+/**
+ * The centre of a drawn area and how far it reaches, so a polygon or a box can
+ * be scored on distance from its middle exactly as a circle already was.
+ *
+ * Without this, drawing a neighbourhood by hand - which is what the map invites
+ * you to do - produced a geography weight that scored nothing at all, and every
+ * parcel inside the shape tied.
+ */
+export function geometryCentre(geometry: Geometry | undefined): GeometryCentre | null {
+  if (!geometry) return null;
+  if (geometry.type === "circle") {
+    return { lat: geometry.lat, lng: geometry.lng, radiusM: geometry.radiusM };
+  }
+  if (geometry.type === "bbox") {
+    const lat = (geometry.north + geometry.south) / 2;
+    const lng = (geometry.east + geometry.west) / 2;
+    const radiusM = haversineMeters(lat, lng, geometry.north, geometry.east);
+    return radiusM > 0 ? { lat, lng, radiusM } : null;
+  }
+  // Ring vertices are [lng, lat]. The centroid of the vertices is close enough
+  // to the middle of a hand drawn shape, and the furthest vertex is how far the
+  // shape reaches; both only have to be stable, not exact.
+  const ring = geometry.ring;
+  if (!ring.length) return null;
+  let sumLat = 0;
+  let sumLng = 0;
+  for (const [lng, lat] of ring) {
+    sumLat += lat;
+    sumLng += lng;
+  }
+  const lat = sumLat / ring.length;
+  const lng = sumLng / ring.length;
+  let radiusM = 0;
+  for (const [vertexLng, vertexLat] of ring) {
+    radiusM = Math.max(radiusM, haversineMeters(lat, lng, vertexLat, vertexLng));
+  }
+  return radiusM > 0 ? { lat, lng, radiusM } : null;
+}
+
 /** The map's visible rectangle. A bbox geometry, but never a saved filter. */
 export type MapViewport = Extract<Geometry, { type: "bbox" }>;
 
@@ -203,12 +256,16 @@ function courtRequested(d: NonNullable<Filters["distress"]>): boolean {
   );
 }
 
+/**
+ * The same question as `courtRequested`, asked of the whole filter set.
+ *
+ * It delegates rather than restating the predicate: these two drifting apart
+ * would mean the WHERE clause and the "this needs a court source" banner
+ * disagreed about whether court data had been asked for, which is the kind of
+ * contradiction a reviewer finds and cannot unsee.
+ */
 export function needsCourtData(filters: Filters): boolean {
-  const d = filters.distress;
-  if (!d) return false;
-  return Boolean(
-    d.hasLien || d.hasForeclosure || d.hasCodeEnforcement || d.hasProbate || d.minCourtScore,
-  );
+  return filters.distress ? courtRequested(filters.distress) : false;
 }
 
 export interface WhereResult {
@@ -331,14 +388,167 @@ export interface ScoreComponentSql {
   rule: string;
 }
 
-/** A ramp from `BASE_CREDIT` at the threshold to 1.0 `RAMP_YEARS` beyond it. */
-function rampSql(column: string, threshold: number): string {
+/* ------------------------------------------------------------------ */
+/* Ramps: how a continuous signal becomes a 0..1 component              */
+/* ------------------------------------------------------------------ */
+
+/**
+ * The scoring used to be a threshold with a small ramp on top: clearing the
+ * threshold was worth 0.6 of the component outright, and the remaining 0.4 was
+ * earned over the next fifteen years, after which the component was pinned at
+ * 1.0. Both halves of that destroy the ranking.
+ *
+ * Measured on the published Duval roll, the "tired landlord" thesis (held 10+
+ * years, roof 15+, absentee, no homestead) matches 10,209 dwellings. Under the
+ * old model those 10,209 parcels carried 31 distinct scores, none below 73.3,
+ * and 1,140 of them sat at exactly 100 - an eleven percent tie for first place,
+ * in which "held 47 years with a 79 year old roof" and "held 25 years with a 30
+ * year old roof" are the same parcel. The distress component made it worse: its
+ * signals were the same predicates the WHERE clause had already applied, so it
+ * was 1.0 for every row in the result by construction.
+ *
+ * What replaces it, for every signal that is genuinely continuous:
+ *
+ * - a small credit for clearing the threshold at all, so a parcel that only
+ *   just qualifies still reads as a match rather than as a zero;
+ * - a linear core across the criterion's real range, taken from the roll rather
+ *   than from the threshold, so the spread of actual parcels is the spread of
+ *   actual scores;
+ * - a compressive tail past the top of that range, so the ninetieth percentile
+ *   is not a ceiling: a 60 year hold still outranks a 45 year hold, by less
+ *   than the first ten years were worth.
+ *
+ * Genuinely boolean signals - a homestead exemption, a recorded filing - stay
+ * boolean. Grading them would be inventing precision the roll does not have.
+ */
+
+/** Clearing the threshold at all, before anything is earned on the ramp. */
+const QUALIFY_CREDIT = 0.1;
+/** The part of a component earned on the ramp. `QUALIFY_CREDIT` + this is 1. */
+const EARNED_SHARE = 0.9;
+/** How the earned part splits between the linear core and the tail. */
+const CORE_SHARE = 0.85;
+const TAIL_SHARE = 0.15;
+
+/**
+ * Where the linear core tops out, per criterion.
+ *
+ * Both are read off the population a thesis of this kind actually matches. In
+ * the tired-landlord match set tenure runs p50 15, p90 28, p99 47 years, so the
+ * core runs to 45: tenure has a long thin tail and the core should cover nearly
+ * all of it. Roof age runs p50 36, p90 66, p99 79, so the core runs to 65 - past
+ * about sixty years the number is the year-built proxy telling you the house is
+ * old rather than a roof telling you it is worse, and paying linearly for that
+ * would rank a 1900 cottage above a genuinely failing roof.
+ *
+ * Above the core the tail keeps the order strict without pretending the extra
+ * years are worth as much as the first ones.
+ */
+const TENURE_FULL_YEARS = 45;
+const TENURE_TAIL_YEARS = 20;
+const ROOF_FULL_YEARS = 65;
+const ROOF_TAIL_YEARS = 25;
+
+/**
+ * How close the water has to be for a water view to score full marks. Of the
+ * 12,873 water-view parcels in the sample the median sits 80 m from the water
+ * and the 99th percentile at 149 m, so 150 m is the far edge of the signal.
+ */
+const WATER_VIEW_FULL_M = 150;
+
+/** Guards a degenerate band (min equal to max) from dividing by zero. */
+const MIN_RAMP_SPAN = 1;
+
+export interface RisingRamp {
+  /** The column, or any SQL expression, being scored. */
+  column: string;
+  /** Below this, nothing. Normally the threshold the user filtered on. */
+  from: number;
+  /** Top of the linear core. */
+  to: number;
+  /**
+   * Scale of the compressive tail past `to`, or null for a hard stop there.
+   * A hard stop is right when the user set an upper bound: everything above it
+   * was filtered out, so there is nothing left up there to order.
+   */
+  tail: number | null;
+}
+
+/** More is better: tenure, roof age. Returns a bounded 0..1 DOUBLE. */
+export function risingRampSql({ column, from, to, tail }: RisingRamp): string {
+  const span = Math.max(to - from, MIN_RAMP_SPAN);
+  const top = from + span;
+  const value = `CAST(${column} AS DOUBLE)`;
+  const core = `least(1.0, (${value} - ${num(from)}) / ${num(span)})`;
+  const earned =
+    tail === null
+      ? core
+      : // greatest(...) is the overshoot past the core; over / (over + tail)
+        // rises from 0 towards 1 and never reaches it, so no two parcels with
+        // different values ever tie here.
+        `${num(CORE_SHARE)} * ${core} + ${num(TAIL_SHARE)} * ` +
+        `(greatest(${value} - ${num(top)}, 0.0) / (greatest(${value} - ${num(top)}, 0.0) + ${num(tail)}))`;
+
   return (
-    `CASE WHEN ${column} IS NULL THEN 0 ` +
-    `WHEN ${column} < ${num(threshold)} THEN 0 ` +
-    `ELSE least(1.0, ${BASE_CREDIT} + ${1 - BASE_CREDIT} * ` +
-    `least(1.0, (${column} - ${num(threshold)}) / ${num(RAMP_YEARS)}.0)) END`
+    `CASE WHEN ${column} IS NULL THEN 0.0 ` +
+    `WHEN ${value} < ${num(from)} THEN 0.0 ` +
+    `ELSE ${num(QUALIFY_CREDIT)} + ${num(EARNED_SHARE)} * (${earned}) END`
   );
+}
+
+/**
+ * Less is better: distance from a point, distance above the floor of a value
+ * band. 1.0 at `best`, 0.0 at `worst`, linear between, clamped outside.
+ */
+export function closenessSql(expression: string, best: number, worst: number): string {
+  const span = Math.max(worst - best, MIN_RAMP_SPAN);
+  return (
+    `greatest(0.0, least(1.0, 1.0 - ` +
+    `(CAST(${expression} AS DOUBLE) - ${num(best)}) / ${num(span)}))`
+  );
+}
+
+/**
+ * A signal inside a multi-signal component, and whether it can rank.
+ *
+ * A signal the WHERE clause has already guaranteed is a constant across the
+ * whole result set. A constant cannot reorder anything - it only takes weight
+ * away from the signals that can, compresses the score into the top of the
+ * range and manufactures ties there once the number is rounded. So it is
+ * measured where the data supports a finer reading, and otherwise left out.
+ */
+interface Signal {
+  expression: string;
+  /** True when every row that passes the filter scores 1 on this signal. */
+  guaranteed: boolean;
+}
+
+function meanOf(signals: readonly Signal[]): string | null {
+  const ranking = signals.filter((signal) => !signal.guaranteed);
+  if (!ranking.length) return null;
+  if (ranking.length === 1) return `(${ranking[0]?.expression})`;
+  return `((${ranking.map((signal) => signal.expression).join(" + ")}) / CAST(${num(ranking.length)} AS DOUBLE))`;
+}
+
+/**
+ * How far away the owner is, on the class the pipeline publishes.
+ *
+ * The absentee filter asks one question - does the owner mail somewhere else -
+ * and every row in the result answers it the same way. The roll can answer a
+ * sharper one: in the tired-landlord match set 1,021 owners mail from another
+ * state, 1,005 from elsewhere in Florida and 189 from Jacksonville itself. An
+ * out-of-state landlord is a materially better call than one who mails to the
+ * next ZIP, so the score says so instead of scoring all three the same.
+ */
+const ABSENTEE_DISTANCE_SQL =
+  `CASE WHEN coalesce(owner_occupied, false) OR owner_mailing_address IS NULL THEN 0.0 ` +
+  `WHEN owner_region_class = 'FOREIGN' THEN 1.0 ` +
+  `WHEN owner_region_class = 'NATIONAL' THEN 0.85 ` +
+  `WHEN owner_region_class = 'REGIONAL' THEN 0.6 ` +
+  `ELSE 0.35 END`;
+
+function boolSignal(condition: string): string {
+  return `CASE WHEN ${condition} THEN 1.0 ELSE 0.0 END`;
 }
 
 /**
@@ -353,50 +563,98 @@ export function buildScoreComponents(
   const components: ScoreComponentSql[] = [];
 
   if (filters.minYearsSinceSale !== undefined && weights.tenure > 0) {
+    const from = filters.minYearsSinceSale;
+    const ceiling = filters.maxYearsSinceSale;
     components.push({
       key: "tenure",
       alias: "comp_tenure",
-      expression: rampSql("years_since_last_sale", filters.minYearsSinceSale),
+      expression: risingRampSql({
+        column: "years_since_last_sale",
+        from,
+        to: ceiling ?? TENURE_FULL_YEARS,
+        tail: ceiling === undefined ? TENURE_TAIL_YEARS : null,
+      }),
       weight: weights.tenure,
-      rule: `held at least ${filters.minYearsSinceSale} years, longer scores higher`,
+      rule:
+        ceiling === undefined
+          ? `held at least ${from} years, and every further year scores higher`
+          : `held between ${from} and ${ceiling} years, longer scores higher`,
     });
   }
 
   if (filters.minRoofAge !== undefined && weights.roofAge > 0) {
+    const from = filters.minRoofAge;
+    const ceiling = filters.maxRoofAge;
     components.push({
       key: "roofAge",
       alias: "comp_roof",
-      expression: rampSql("roof_age_years", filters.minRoofAge),
+      expression: risingRampSql({
+        column: "roof_age_years",
+        from,
+        to: ceiling ?? ROOF_FULL_YEARS,
+        tail: ceiling === undefined ? ROOF_TAIL_YEARS : null,
+      }),
       weight: weights.roofAge,
-      rule: `roof at least ${filters.minRoofAge} years old, older scores higher`,
+      rule:
+        ceiling === undefined
+          ? `roof at least ${from} years old, and every further year scores higher`
+          : `roof between ${from} and ${ceiling} years old, older scores higher`,
     });
   }
 
   const d = filters.distress;
   if (d && weights.distress > 0) {
-    const signals: string[] = [];
-    if (d.absenteeOwner)
-      signals.push(
-        `CASE WHEN NOT coalesce(owner_occupied, false) AND owner_mailing_address IS NOT NULL THEN 1 ELSE 0 END`,
-      );
+    const signals: Signal[] = [];
+    // Graded, so it still ranks inside a result set the filter has already made
+    // entirely absentee.
+    if (d.absenteeOwner) signals.push({ expression: ABSENTEE_DISTANCE_SQL, guaranteed: false });
+    // Genuinely boolean, and identical to the predicate that selected the row.
     if (d.noHomestead)
-      signals.push(`CASE WHEN NOT coalesce(homestead_flag, false) THEN 1 ELSE 0 END`);
+      signals.push({
+        expression: boolSignal(`NOT coalesce(homestead_flag, false)`),
+        guaranteed: true,
+      });
+
     if (courtJoinAvailable) {
-      if (d.hasLien) signals.push(`CASE WHEN coalesce(court_lien_count, 0) > 0 THEN 1 ELSE 0 END`);
-      if (d.hasForeclosure)
-        signals.push(`CASE WHEN coalesce(court_foreclosure_count, 0) > 0 THEN 1 ELSE 0 END`);
-      if (d.hasCodeEnforcement)
-        signals.push(`CASE WHEN coalesce(court_code_enforcement_count, 0) > 0 THEN 1 ELSE 0 END`);
-      if (d.hasProbate)
-        signals.push(`CASE WHEN coalesce(court_probate_count, 0) > 0 THEN 1 ELSE 0 END`);
+      const court: { requested: boolean; column: string }[] = [
+        { requested: Boolean(d.hasLien), column: "court_lien_count" },
+        { requested: Boolean(d.hasForeclosure), column: "court_foreclosure_count" },
+        { requested: Boolean(d.hasCodeEnforcement), column: "court_code_enforcement_count" },
+        { requested: Boolean(d.hasProbate), column: "court_probate_count" },
+      ];
+      const requested = court.filter((signal) => signal.requested);
+      for (const signal of requested) {
+        signals.push({
+          // A filing either exists or it does not. `buildWhere` requires one of
+          // the requested kinds, so a lone requested kind is guaranteed on every
+          // row; two or more are alternatives and each still ranks.
+          expression: boolSignal(`coalesce(${signal.column}, 0) > 0`),
+          guaranteed: requested.length === 1,
+        });
+      }
+      if (d.minCourtScore !== undefined) {
+        // Published 0..100 and continuous, so it is scored as a ramp from the
+        // floor the user asked for up to the top of the scale.
+        signals.push({
+          expression: risingRampSql({
+            column: "coalesce(court_distress_score, 0)",
+            from: d.minCourtScore,
+            to: 100,
+            tail: null,
+          }),
+          guaranteed: false,
+        });
+      }
     }
-    if (signals.length) {
+
+    const expression = meanOf(signals);
+    if (expression) {
       components.push({
         key: "distress",
         alias: "comp_distress",
-        expression: `((${signals.join(" + ")}) / ${num(signals.length)}.0)`,
         weight: weights.distress,
-        rule: `share of the ${signals.length} requested distress signals present`,
+        expression,
+        rule: `how strongly the requested distress signals read on this parcel`,
       });
     }
   }
@@ -405,51 +663,78 @@ export function buildScoreComponents(
   // ceiling, so a parcel at the bottom of the band scores highest.
   const lo = filters.minAssessedValue;
   const hi = filters.maxAssessedValue;
-  if (hi !== undefined && weights.value > 0) {
+  if (weights.value > 0 && (hi !== undefined || (lo !== undefined && lo > 0))) {
     const floor = lo ?? 0;
-    const span = Math.max(hi - floor, 1);
+    const expression =
+      hi === undefined
+        ? // A floor with no ceiling. Halving credit for each multiple of the
+          // floor keeps the ordering strict all the way up the distribution
+          // rather than inventing a ceiling the user did not ask for.
+          `CASE WHEN assessed_value IS NULL OR assessed_value <= 0 THEN 0.0 ` +
+          `ELSE least(1.0, ${num(floor)} / CAST(assessed_value AS DOUBLE)) END`
+        : `CASE WHEN assessed_value IS NULL THEN 0.0 ELSE ${closenessSql("assessed_value", floor, hi)} END`;
     components.push({
       key: "value",
       alias: "comp_value",
-      expression:
-        `CASE WHEN assessed_value IS NULL THEN 0 ELSE ` +
-        `greatest(0.0, least(1.0, 1.0 - (assessed_value - ${num(floor)}) / ${num(span)}.0)) END`,
+      expression,
       weight: weights.value,
-      rule: `lower assessed value inside the ${floor} to ${hi} band scores higher`,
+      rule:
+        hi === undefined
+          ? `assessed value nearer the ${floor} floor scores higher`
+          : `lower assessed value inside the ${floor} to ${hi} band scores higher`,
     });
   }
 
-  // Closer to the centre of a drawn circle is a better fit for a farming area.
-  if (filters.geometry?.type === "circle" && weights.geography > 0) {
-    const g = filters.geometry;
+  // Closer to the centre of a drawn area is a better fit for a farming area.
+  const centre = geometryCentre(filters.geometry);
+  if (centre && weights.geography > 0) {
     components.push({
       key: "geography",
       alias: "comp_geo",
       expression:
-        `CASE WHEN latitude IS NULL THEN 0 ELSE ` +
-        `greatest(0.0, least(1.0, 1.0 - ${haversineSql(g.lat, g.lng)} / ${num(g.radiusM)}.0)) END`,
+        `CASE WHEN latitude IS NULL THEN 0.0 ELSE ` +
+        `${closenessSql(haversineSql(centre.lat, centre.lng), 0, centre.radiusM)} END`,
       weight: weights.geography,
-      rule: `nearer the centre of the drawn radius scores higher`,
+      rule: `nearer the centre of the drawn area scores higher`,
     });
   }
 
   if (weights.amenity > 0) {
-    const amenity: string[] = [];
-    if (filters.waterView) amenity.push(`CASE WHEN water_view_flag THEN 1 ELSE 0 END`);
-    if (filters.maxTransitDistanceM !== undefined) {
-      const limit = num(filters.maxTransitDistanceM);
-      amenity.push(
-        `CASE WHEN nearest_transit_stop_m IS NULL THEN 0 ELSE ` +
-          `greatest(0.0, least(1.0, 1.0 - nearest_transit_stop_m / ${limit}.0)) END`,
-      );
+    const amenity: Signal[] = [];
+    if (filters.waterView) {
+      // The flag itself is the filter, so it is 1 on every row. How close the
+      // water is, which the pipeline also publishes, is not.
+      amenity.push({
+        expression:
+          `CASE WHEN water_dist_m IS NULL THEN ${num(QUALIFY_CREDIT)} ELSE ` +
+          `${closenessSql("water_dist_m", 0, WATER_VIEW_FULL_M)} END`,
+        guaranteed: false,
+      });
     }
-    if (amenity.length) {
+    if (filters.maxWaterDistanceM !== undefined) {
+      amenity.push({
+        expression:
+          `CASE WHEN water_dist_m IS NULL THEN 0.0 ELSE ` +
+          `${closenessSql("water_dist_m", 0, filters.maxWaterDistanceM)} END`,
+        guaranteed: false,
+      });
+    }
+    if (filters.maxTransitDistanceM !== undefined) {
+      amenity.push({
+        expression:
+          `CASE WHEN nearest_transit_stop_m IS NULL THEN 0.0 ELSE ` +
+          `${closenessSql("nearest_transit_stop_m", 0, filters.maxTransitDistanceM)} END`,
+        guaranteed: false,
+      });
+    }
+    const expression = meanOf(amenity);
+    if (expression) {
       components.push({
         key: "amenity",
         alias: "comp_amenity",
-        expression: `((${amenity.join(" + ")}) / ${num(amenity.length)}.0)`,
+        expression,
         weight: weights.amenity,
-        rule: `water view and transit proximity signals published by the pipeline`,
+        rule: `how close the water and transit signals published by the pipeline actually are`,
       });
     }
   }
@@ -493,11 +778,19 @@ export function buildScore(criteria: CriteriaSet, courtJoinAvailable: boolean): 
   const totalWeight = components.reduce((sum, c) => sum + c.weight, 0);
   const weighted = components.map((c) => `${num(c.weight)} * ${c.alias}`).join(" + ");
 
-  const aliases = components.map((c) => `${c.expression} AS ${c.alias}`).join(",\n    ");
+  const aliases = components
+    .map((c) => `CAST(${c.expression} AS DOUBLE) AS ${c.alias}`)
+    .join(",\n    ");
 
+  // Two decimals, not one. The score is displayed rounded to a whole number, so
+  // the decimals exist only to order the list - and at one decimal the whole
+  // county has 1,001 possible scores to sit on, which puts thousands of parcels
+  // on each of them and hands the ordering back to the tiebreak.
   return {
     components,
-    selectFragment: `${aliases},\n    round(100.0 * (${weighted}) / ${num(totalWeight)}, 1) AS ${SCORE_ALIAS}`,
+    selectFragment:
+      `${aliases},\n    ` +
+      `CAST(round(100.0 * (${weighted}) / ${num(totalWeight)}, 2) AS DOUBLE) AS ${SCORE_ALIAS}`,
     unranked: false,
   };
 }
@@ -581,14 +874,47 @@ const PRICED_DWELLING_SQL = `livable_floor_area >= ${DWELLING_MIN_SQFT} AND asse
  *    than as a filter, so it still holds when a land buyer turns that guard off
  *    to look for infill lots: the lots are in the result, they are simply not
  *    the first thing on the screen.
- * 2. `property_id` - stable, arbitrary, and carrying no opinion about price.
- *    Ties are broken deterministically, which is what pagination and the
- *    matcher's tracked set both need, without inventing a ranking from columns
- *    the user never mentioned. Ranking is what criteria are for; the fix for a
- *    featureless default list is to set one, not to smuggle a price preference
- *    into ORDER BY.
+ * 2. Nearer the middle of Jacksonville first.
+ *
+ *    `property_id` used to be the whole of this step, on the argument that it is
+ *    stable and carries no opinion. It is stable. It is not without an opinion:
+ *    an RE number is assigned by plat, in the order the county platted the land,
+ *    so ascending order is west-to-east rural-first and marches through one
+ *    subdivision at a time. On the published roll the first twenty rows of the
+ *    default search are all on N US 301 HWY - the Baldwin corridor, 28 to 30 km
+ *    from downtown, past the 95th percentile of the county's own distance
+ *    distribution (p25 9 km, p50 14.5 km, p75 19 km). Baldwin is a town of
+ *    1,400 people at the far western county edge, and it opened every list in a
+ *    Jacksonville CRM. Sorting by plat number is not neutral, it is just an
+ *    opinion nobody chose.
+ *
+ *    So the tiebreak states the opinion an acquisitions team would actually
+ *    hold: when nothing else separates two parcels, the one in the market they
+ *    work comes first. Distance from downtown (the same point the map opens on)
+ *    is the plainest reading of that - it is where the comps, the crews and the
+ *    buyers are, and half the county's housing stock sits within 14.5 km of it.
+ *    With this in place the same default search opens on N Ocean St, E Ashley
+ *    St, E Church St and Phelps St: downtown, LaVilla and Springfield.
+ *
+ *    It is a constant point, not the map viewport. Where you have scrolled must
+ *    not change what a saved search watches.
+ *
+ * 3. `property_id` last, so an exact distance tie still resolves the same way on
+ *    every pass. Pagination and the matcher's tracked set both need a total
+ *    order; without one, LIMIT/OFFSET can repeat or skip a row.
  */
-export const TIEBREAK_SQL = `CASE WHEN ${PRICED_DWELLING_SQL} THEN 0 ELSE 1 END, property_id`;
+/**
+ * Downtown Jacksonville. The same coordinate the map centres on by default
+ * (NEXT_PUBLIC_MAP_LAT / _LNG), repeated rather than imported because this
+ * module is bundled into the browser query path and must not reach into the
+ * server-side data configuration to sort a list.
+ */
+export const CORE_LAT = 30.3322;
+export const CORE_LNG = -81.6557;
+
+export const TIEBREAK_SQL =
+  `CASE WHEN ${PRICED_DWELLING_SQL} THEN 0 ELSE 1 END, ` +
+  `${haversineSql(CORE_LAT, CORE_LNG)} ASC NULLS LAST, property_id`;
 
 /**
  * `assessed_value` is the "Cheapest" button. That is a sort the user asked for

@@ -66,9 +66,12 @@ async function main(): Promise<void> {
       `NOTE  running against the bundled sample - ${info.rowCount.toLocaleString("en-US")} parcels, not the full county. Set PROPERTY_DATA_URL to verify the deliverable.`,
     );
   } else {
+    // Duval publishes 404,023 parcels and the bundled sample is 75,988, so this
+    // floor sits clear of both - the same number scripts/smoke.mts uses, for the
+    // same reason: "county scale" has to be a claim the sample cannot satisfy.
     check(
       "dataset is county scale",
-      info.rowCount > 100_000,
+      info.rowCount >= 300_000,
       `${info.rowCount.toLocaleString("en-US")} parcels`,
     );
   }
@@ -264,7 +267,83 @@ watching "${target.name}", simulating a ${kind.replace("_", " ")}
     `${repeat.alertsCreated} alerts on the second pass`,
   );
 
-  // 6. Clean up, so the demo starts from a known state next time.
+  // 6. The alert converts into an opportunity THROUGH THE ROUTE.
+  //
+  // Everything above this line calls the repository directly, and that is
+  // exactly how the worst bug in this project survived. `pnpm seed` and this
+  // script both write to the store without ever touching an HTTP handler, so
+  // both stayed green while the POST the application itself uses rejected every
+  // request it was given: four id fields asserted `z.string().uuid()` and
+  // nothing in this system has ever minted a UUID. The first step of the demo
+  // script returned 400 on the deployed runtime, and no script noticed, because
+  // no script was driving a route.
+  //
+  // The handler is invoked in process rather than over a socket. It needs no
+  // server, so this runs anywhere `pnpm verify` runs, and it still exercises the
+  // real contract: the same zod schema, the same mutation guard, the same
+  // repository write, against ids minted by the same functions the app mints
+  // them with.
+  const { POST: createOpportunity } = await import("@/app/api/opportunities/route");
+
+  const origin = "http://localhost:3000";
+  const conversion = sample
+    ? await createOpportunity(
+        new Request(`${origin}/api/opportunities`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            origin,
+            // A browser sets both of these itself; the guard reads them to tell
+            // a page on this deployment from a drive-by request.
+            "sec-fetch-site": "same-origin",
+          },
+          body: JSON.stringify({
+            propertyId: sample.propertyId,
+            addressLine: String(
+              sample.propertySnapshot?.["address"] ?? `Parcel ${sample.propertyId}`,
+            ),
+            propertySnapshot: sample.propertySnapshot ?? {},
+            matchScore: sample.score,
+            matchRationale: sample.rationale,
+            savedSearchId: sample.savedSearchId,
+            alertId: sample.id,
+          }),
+        }),
+      )
+    : null;
+
+  const conversionBody = (await conversion?.json().catch(() => null)) as {
+    opportunity?: { id?: string; alertId?: string | null };
+    detail?: { issues?: { path?: string; message?: string }[] };
+  } | null;
+
+  // 201 on a new deal, 200 when this parcel already has one: the document key is
+  // `opportunities/<propertyId>`, so a repeat conversion writes the same
+  // document rather than opening a second deal, and both are a working route.
+  const converted = conversion?.status === 200 || conversion?.status === 201;
+
+  check(
+    "an alert converts to an opportunity through the real route",
+    converted && Boolean(conversionBody?.opportunity?.id),
+    converted
+      ? `HTTP ${conversion?.status}, opportunity ${conversionBody?.opportunity?.id}`
+      : `HTTP ${conversion?.status ?? "not attempted"}${
+          conversionBody?.detail?.issues
+            ? `: ${conversionBody.detail.issues.map((issue) => `${issue.path} ${issue.message}`).join(", ")}`
+            : ""
+        }`,
+  );
+
+  // The alert id has to survive the round trip. It was silently dropped for as
+  // long as the schema refused it, so every opportunity ever created recorded
+  // `alert_id` null and could not say which alert opened it.
+  check(
+    "and the opportunity records which alert opened it",
+    conversionBody?.opportunity?.alertId === sample?.id,
+    `alertId=${conversionBody?.opportunity?.alertId ?? "null"}`,
+  );
+
+  // 7. Clean up, so the demo starts from a known state next time.
   const cleared = await clearSimulation();
   console.log(
     `\ncleared ${cleared.changes} simulated changes and ${cleared.courtRecords} simulated filings`,

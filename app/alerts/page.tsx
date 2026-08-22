@@ -55,12 +55,14 @@ function AlertsFeed() {
     const query = new URLSearchParams({ limit: "200" });
     if (savedSearchId) query.set("savedSearchId", savedSearchId);
     if (unreadOnly) query.set("unread", "true");
-    api<{ alerts: AlertRow[] }>(`/api/alerts?${query.toString()}`)
+    return api<{ alerts: AlertRow[] }>(`/api/alerts?${query.toString()}`)
       .then((body) => setAlerts(body.alerts))
       .catch(() => setAlerts([]));
   }, [savedSearchId, unreadOnly]);
 
-  useEffect(load, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   const convert = async (alert: AlertRow) => {
     setConverting(alert.id);
@@ -91,7 +93,7 @@ function AlertsFeed() {
         alertId: alert.id,
       });
       await patch(`/api/alerts/${alert.id}`, { read: true }).catch(() => undefined);
-      load();
+      await load();
     } finally {
       setConverting(null);
     }
@@ -120,7 +122,7 @@ function AlertsFeed() {
             disabled={!unread}
             onClick={async () => {
               await patch("/api/alerts", { markAllRead: true }).catch(() => undefined);
-              load();
+              await load();
             }}
           >
             Mark all read
@@ -277,7 +279,7 @@ function AlertsFeed() {
                         await patch(`/api/alerts/${alert.id}`, {
                           read: alert.readAt === null,
                         }).catch(() => undefined);
-                        load();
+                        await load();
                       }}
                     >
                       {alert.readAt === null ? "Mark read" : "Mark unread"}

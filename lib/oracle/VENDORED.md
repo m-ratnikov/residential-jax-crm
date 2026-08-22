@@ -35,15 +35,11 @@ node scripts/sync-shared.mjs --origin <path> --pull     # overwrite the vendored
 | `geo.ts`                        | Haversine distance, bounding boxes, point-in-polygon.                                                                                                                            |
 | `format.ts`                     | Currency, distance, date and number formatting shared by both UIs.                                                                                                               |
 | `agent/providers.ts`            | The bring-your-own-key provider registry: seven model providers, their free-tier terms with the URL and date each was read, and the models each one exposes.                     |
-| `agent/model.ts`                | Resolves a provider and model into a Vercel AI SDK `LanguageModel`, from either server environment or per-request credentials.                                                   |
-| `agent/credentials.ts`          | Reads the per-request `x-llm-*` headers and validates them.                                                                                                                      |
 | `agent/redact.ts`               | Strips key material from anything that could reach a log.                                                                                                                        |
 | `agent/ratelimit.ts`            | Per-client-address request budget, counted in process.                                                                                                                           |
 | `agent/errors.ts`               | Typed agent errors and their HTTP mapping.                                                                                                                                       |
 | `agent/log.ts`                  | One JSON line per agent event.                                                                                                                                                   |
 | `agent/schema.ts`               | Per-column meanings, in English, that the agent is given as context.                                                                                                             |
-| `agent/settings-client.ts`      | Browser-side storage of the visitor's provider choice and key.                                                                                                                   |
-| `agent/bedrock-prompt-cache.ts` | Bedrock prompt cache point insertion.                                                                                                                                            |
 | `agent/types.ts`                | Shared agent request and response types.                                                                                                                                         |
 
 ## What is deliberately NOT vendored

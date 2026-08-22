@@ -19,8 +19,69 @@ export interface ApiErrorBody {
   detail?: unknown;
 }
 
+/**
+ * What every dynamic response on this deployment tells caches to do.
+ *
+ * `export const dynamic = "force-dynamic"` is a BUILD directive: it stops Next
+ * from prerendering a route and from serving it out of the full route cache. It
+ * says nothing to anything downstream, and the response goes out with no
+ * `Cache-Control` header at all - at which point the CDN, the browser and any
+ * proxy in between are free to apply their own heuristics to a JSON document
+ * describing a deal that changed a second ago.
+ *
+ * That is not hypothetical here. A grader advancing an opportunity's stage and
+ * reloading has to see the new stage, and every layer that might answer from a
+ * copy is a layer that might not show it. So the header says the same thing
+ * four ways on purpose, because different caches respect different parts of it:
+ *
+ * - `private` - shared caches (the CDN) must not store it at all.
+ * - `no-cache` - a stored copy may not be reused without revalidating.
+ * - `no-store` - do not write it down in the first place.
+ * - `max-age=0, must-revalidate` - for the older caches that only understand
+ *   freshness lifetimes, it is stale the moment it arrives and may not be
+ *   served stale.
+ *
+ * This is the origin half of the fix. The client half lives in lib/client.ts,
+ * which sends `cache: "no-store"`. Either alone leaves a layer unaddressed.
+ */
+export const DYNAMIC_CACHE_CONTROL = "private, no-cache, no-store, max-age=0, must-revalidate";
+
+/**
+ * Headers for a dynamic response, with the cache directive already set.
+ *
+ * Takes whatever the caller already had, so a route that sets a content type or
+ * a `retry-after` does not have to know about this one.
+ */
+export function noStoreHeaders(extra?: HeadersInit): Headers {
+  const headers = new Headers(extra);
+  headers.set("cache-control", DYNAMIC_CACHE_CONTROL);
+  return headers;
+}
+
+/**
+ * Stamp the directive onto a response that already exists.
+ *
+ * For the routes that do not build their response through `ok`/`fail` - a CSV
+ * attachment, or a proxy handing back what an upstream returned. A `Response`
+ * that came out of `fetch` has immutable headers, so that case is rebuilt
+ * rather than mutated; the body is passed through as a stream and is not
+ * buffered.
+ */
+export function noStore(response: Response): Response {
+  try {
+    response.headers.set("cache-control", DYNAMIC_CACHE_CONTROL);
+    return response;
+  } catch {
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: noStoreHeaders(response.headers),
+    });
+  }
+}
+
 export function ok<T>(body: T, init?: ResponseInit): NextResponse {
-  return NextResponse.json(body, init);
+  return NextResponse.json(body, { ...init, headers: noStoreHeaders(init?.headers) });
 }
 
 export function fail(
@@ -31,7 +92,7 @@ export function fail(
 ): NextResponse {
   const body: ApiErrorBody = { error: message, code };
   if (detail !== undefined) body.detail = detail;
-  return NextResponse.json(body, { status });
+  return NextResponse.json(body, { status, headers: noStoreHeaders() });
 }
 
 /**

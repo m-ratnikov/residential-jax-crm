@@ -11,6 +11,7 @@ import { z } from "zod";
 import { handleError, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
 import { criteriaSetSchema } from "@/lib/criteria/types";
+import { generatedIdSchema } from "@/lib/crm/ids";
 import { createSavedSearch, listSavedSearchesForDisplay } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
@@ -20,7 +21,10 @@ const createSchema = z.object({
   name: z.string().min(1).max(120),
   description: z.string().max(1000).nullish(),
   criteria: criteriaSetSchema,
-  ownerId: z.string().uuid().nullish(),
+  // A team member id, minted by newId(). It asserted `uuid()`, which nothing in
+  // this system produces, so any request that actually named an owner was
+  // rejected; see lib/crm/ids.ts.
+  ownerId: generatedIdSchema.nullish(),
   notifyInApp: z.boolean().optional(),
   notifyEmail: z.boolean().optional(),
   notifySms: z.boolean().optional(),

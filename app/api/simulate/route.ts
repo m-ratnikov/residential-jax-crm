@@ -16,6 +16,7 @@ import { z } from "zod";
 import { handleError, ok } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
 import { readJson } from "@/lib/api";
+import { propertyIdSchema } from "@/lib/crm/ids";
 import { applySimulation, clearSimulation } from "@/lib/crm/simulate";
 import { listSimulatedChanges } from "@/lib/crm/repo";
 
@@ -27,7 +28,9 @@ const bodySchema = z.object({
   targets: z
     .array(
       z.object({
-        propertyId: z.string().min(1),
+        // Becomes `court/<propertyId>` and `simulated/<propertyId>`, so it is
+        // a document key and is checked as one.
+        propertyId: propertyIdSchema,
         parcelIdentifier: z.string().nullish(),
         addressLine: z.string().min(1).max(400),
         ownerName: z.string().max(400).nullish(),

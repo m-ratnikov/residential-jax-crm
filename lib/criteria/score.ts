@@ -96,6 +96,23 @@ export function humanField(field: string): string {
 }
 
 /**
+ * How absent the absentee owner is. The score grades this rather than treating
+ * every non-occupant the same, so the sentence has to say which one it saw.
+ */
+function absenteePhrase(property: PropertyRecord): string {
+  switch (property.ownerRegionClass) {
+    case "FOREIGN":
+      return "absentee owner mailing from abroad";
+    case "NATIONAL":
+      return "absentee owner mailing from out of state";
+    case "REGIONAL":
+      return "absentee owner mailing from elsewhere in Florida";
+    default:
+      return "absentee owner";
+  }
+}
+
+/**
  * The evidence behind a component, read off the row. This is what makes the
  * rationale worth reading: "roof 34 years old" rather than "roof criterion met".
  */
@@ -117,7 +134,7 @@ function evidenceFor(key: string, property: PropertyRecord): string | null {
     }
     case "distress": {
       const signals: string[] = [];
-      if (property.ownerOccupied === false) signals.push("absentee owner");
+      if (property.ownerOccupied === false) signals.push(absenteePhrase(property));
       if (property.homesteadFlag === false) signals.push("no homestead exemption");
       const court = property.raw as Record<string, unknown>;
       const liens = Number(court["court_lien_count"] ?? 0);
@@ -137,9 +154,14 @@ function evidenceFor(key: string, property: PropertyRecord): string | null {
       return property.addressCity ? `in ${property.addressCity}` : null;
     case "amenity": {
       const signals: string[] = [];
+      // The distance is the part that ranks, so it is the part that is quoted.
+      const water =
+        property.waterDistM === null ? "" : ` ${Math.round(property.waterDistM)} m from the water`;
       if (property.waterViewFlag && property.waterBodyName)
-        signals.push(`water view of ${property.waterBodyName}`);
-      else if (property.waterViewFlag) signals.push("water view");
+        signals.push(`water view of ${property.waterBodyName}${water}`);
+      else if (property.waterViewFlag) signals.push(`water view${water}`);
+      else if (property.waterDistM !== null)
+        signals.push(`${Math.round(property.waterDistM)} m from the water`);
       if (property.nearestTransitStopM !== null)
         signals.push(
           `${Math.round(property.nearestTransitStopM)} m to ${property.nearestTransitStopName ?? "a transit stop"}`,
@@ -151,13 +173,26 @@ function evidenceFor(key: string, property: PropertyRecord): string | null {
   }
 }
 
+/**
+ * Points, at the precision they were actually computed to.
+ *
+ * The contributions are rounded to a tenth upstream, and a reader checking the
+ * rationale against the badge should be able to add them up and land on the
+ * number. Printing 4.7 as "+5" three times over is how a 14 point score comes
+ * to read as 15.
+ */
+function points(value: number): string {
+  const rounded = Math.round(value * 10) / 10;
+  return Number.isInteger(rounded) ? rounded.toFixed(0) : rounded.toFixed(1);
+}
+
 export function rationaleFor(
   property: PropertyRecord,
   components: readonly ScoreComponent[],
   unranked: boolean,
 ): string {
   if (unranked) {
-    return "This criteria set has no ranking signals, so every match is scored equally. Add a tenure, roof age, distress or value criterion to rank them.";
+    return "This criteria set has no ranking signals, so every match is scored equally: every criterion here is either unset, or is a filter every match already satisfies. Add a tenure, roof age, value or distress criterion that can vary to rank them.";
   }
 
   const contributing = [...components]
@@ -171,8 +206,8 @@ export function rationaleFor(
   const parts = contributing.map((component) => {
     const evidence = evidenceFor(component.key, property);
     return evidence
-      ? `${evidence} (+${component.points.toFixed(0)})`
-      : `${component.label} (+${component.points.toFixed(0)})`;
+      ? `${evidence} (+${points(component.points)})`
+      : `${component.label} (+${points(component.points)})`;
   });
 
   const missing = components.filter((component) => component.points === 0);
@@ -180,5 +215,9 @@ export function rationaleFor(
     ? ` No contribution from ${missing.map((component) => component.key).join(", ")}.`
     : "";
 
+  // Deliberately not restated as a total. The badge beside this sentence is the
+  // score, computed in SQL; adding up ten separately rounded contributions here
+  // would sometimes print a number a point away from it, and a rationale that
+  // disagrees with the badge is worse than one that does not mention it.
   return `${parts.join("; ")}.${tail}`;
 }

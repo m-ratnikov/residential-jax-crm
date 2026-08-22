@@ -20,6 +20,7 @@ import { z } from "zod";
 
 import { fail, handleError, matcherTokenValid, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
+import { generatedIdSchema, propertyIdSchema, runIdSchema } from "@/lib/crm/ids";
 import { listMatcherRuns } from "@/lib/crm/repo";
 import { evaluateAndAlert } from "@/lib/notify/evaluate";
 import { advanceOutreach } from "@/lib/notify/outreach";
@@ -29,7 +30,8 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
 const matchSchema = z.object({
-  propertyId: z.string().min(1),
+  // Reaches `alertId()` and becomes part of a document key.
+  propertyId: propertyIdSchema,
   matchHash: z.string().min(1).max(128),
   snapshot: z.record(z.string(), z.unknown()),
   score: z.number(),
@@ -39,18 +41,31 @@ const matchSchema = z.object({
 
 const bodySchema = z.object({
   trigger: z.enum(["cron", "manual", "simulation", "browser"]).default("browser"),
-  pipelineRunId: z.string().max(200).nullish(),
+  pipelineRunId: runIdSchema.nullish(),
   pipelineRunStartedAt: z.string().nullish(),
   dataSource: z.object({
     kind: z.string().max(80),
     location: z.string().max(2000),
     rowCount: z.number().int().min(0),
     isSample: z.boolean(),
+    /**
+     * The generation of the data this pass read.
+     *
+     * `lib/notify/client-matcher.ts` has always posted this, and
+     * `evaluateAndAlert` uses it for two things: keying the alert id on the
+     * logical pass so a retry is a no-op, and suppressing a "changed" alert
+     * when the fingerprint moved but the artifact did not. Zod strips unknown
+     * keys, so leaving it out of this schema did not fail - it silently turned
+     * both guarantees off on the browser path, which is the path a live demo
+     * drives. The cron path calls `evaluateAndAlert` directly and never lost
+     * it, so the two matchers disagreed and nothing said so.
+     */
+    artifactRunId: runIdSchema.nullish(),
   }),
   evaluations: z
     .array(
       z.object({
-        savedSearchId: z.string().min(1),
+        savedSearchId: generatedIdSchema,
         matched: z.number().int().min(0),
         rows: z.array(matchSchema).max(5_000),
         truncated: z.boolean().default(false),
@@ -92,7 +107,13 @@ export async function POST(request: Request): Promise<Response> {
       trigger: input.trigger,
       pipelineRunId: input.pipelineRunId ?? null,
       pipelineRunStartedAt: input.pipelineRunStartedAt ?? null,
-      dataSource: input.dataSource,
+      dataSource: {
+        kind: input.dataSource.kind,
+        location: input.dataSource.location,
+        rowCount: input.dataSource.rowCount,
+        isSample: input.dataSource.isSample,
+        artifactRunId: input.dataSource.artifactRunId ?? null,
+      },
       evaluations: input.evaluations.map((evaluation) => ({
         savedSearchId: evaluation.savedSearchId,
         matched: evaluation.matched,

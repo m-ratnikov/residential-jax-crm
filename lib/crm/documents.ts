@@ -21,6 +21,38 @@
 import type { CriteriaSet } from "@/lib/criteria/types";
 import type { AcquisitionStage, OutreachChannel, OutreachStatus } from "@/lib/notify/types";
 
+/** Always this. No skip-trace vendor is called anywhere in this build. */
+export const SKIP_TRACE_PROVIDER = "mocked-skip-trace";
+
+/**
+ * A SIMULATED owner contact, produced by lib/crm/skip-trace.ts.
+ *
+ * The shape lives here rather than beside the function that builds it because
+ * the parcel drawer renders it, and this module has no runtime imports at all -
+ * so a client component can name the type without pulling `node:crypto` into
+ * the browser bundle.
+ *
+ * Every field is part of the labelling, not decoration: `simulated` and
+ * `provider` are what a reader of the raw JSON sees first, and `label` is what
+ * the UI and the CSV print beside the values.
+ */
+export interface MockedOwnerContact {
+  /** Always true. Present in the stored document so a reader cannot miss it. */
+  readonly simulated: true;
+  /** Always `mocked-skip-trace`. No vendor was called. */
+  readonly provider: typeof SKIP_TRACE_PROVIDER;
+  /** Rendered verbatim next to the values, in the UI and in the API response. */
+  readonly label: string;
+  /** `owner-<hash>@mocked-skip-trace.invalid`. Reserved TLD, never deliverable. */
+  readonly email: string;
+  /** `(904) 555-01xx`. Reserved fiction range, never routable. */
+  readonly phone: string;
+  /** The inputs the values were derived from, so they are reproducible. */
+  readonly derivedFrom: string;
+  /** Why there is no real number to show instead. */
+  readonly basis: string;
+}
+
 export interface TeamMemberDoc {
   id: string;
   name: string;
@@ -137,6 +169,12 @@ export interface MatcherRunDoc {
 export interface OwnerDoc {
   id: string;
   name: string;
+  /**
+   * REAL. Read from the county roll, and the address a print run would post to.
+   * `sourceSystem` and `sourceUrl` below are its provenance, and it is kept in
+   * different fields from `skipTrace` on purpose: mixing a real address into a
+   * block of simulated contact details would make the real one untrustworthy.
+   */
   mailingAddress: string | null;
   mailingCity: string | null;
   mailingState: string | null;
@@ -147,6 +185,15 @@ export interface OwnerDoc {
   sourceSystem: string | null;
   sourceUrl: string | null;
   notes: string | null;
+  /**
+   * SIMULATED. A mocked skip trace, attached when the opportunity is created.
+   *
+   * The roll carries no telephone or email, so this is a reserved `.invalid`
+   * address and a reserved 555-01xx number, deterministic from the parcel and
+   * the owner. See lib/crm/skip-trace.ts for what that does and does not claim.
+   * Optional because owner documents written before it existed do not carry it.
+   */
+  skipTrace?: MockedOwnerContact | null;
   createdAt: string;
 }
 

@@ -88,13 +88,17 @@ export default function OpportunitiesPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [campaignOpen, setCampaignOpen] = useState(false);
 
-  const load = useCallback(() => {
-    api<{ opportunities: OpportunityRow[] }>("/api/opportunities?limit=1000")
-      .then((body) => setRows(body.opportunities))
-      .catch(() => setRows([]));
-  }, []);
+  const load = useCallback(
+    () =>
+      api<{ opportunities: OpportunityRow[] }>("/api/opportunities?limit=1000")
+        .then((body) => setRows(body.opportunities))
+        .catch(() => setRows([])),
+    [],
+  );
 
-  useEffect(load, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   /**
    * A spoken area name is a ZIP list, not a city: every ZIP in Arlington is
@@ -140,7 +144,7 @@ export default function OpportunitiesPage() {
 
   const advance = async (row: OpportunityRow, stage: AcquisitionStage) => {
     await patch(`/api/opportunities/${row.opportunity.id}`, { stage }).catch(() => undefined);
-    load();
+    await load();
   };
 
   const toggleSelected = (id: string) => {
@@ -369,7 +373,7 @@ export default function OpportunitiesPage() {
           onSent={() => {
             setCampaignOpen(false);
             setSelected(new Set());
-            load();
+            void load();
           }}
         />
       )}

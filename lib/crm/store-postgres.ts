@@ -18,7 +18,13 @@
 
 import { neon } from "@neondatabase/serverless";
 
-import { serialise, type Collection, type CrmStore, type StoredDocument } from "./store";
+import {
+  MAX_UPDATE_ATTEMPTS,
+  serialise,
+  type Collection,
+  type CrmStore,
+  type StoredDocument,
+} from "./store";
 
 type Sql = ReturnType<typeof neon>;
 
@@ -77,6 +83,53 @@ export class PostgresCrmStore implements CrmStore {
       DO UPDATE SET document = EXCLUDED.document, updated_at = now()
     `;
     return document;
+  }
+
+  /**
+   * Read, change, write, as a compare and set on the document itself.
+   *
+   * The driver is Neon's HTTP one, which has no session and therefore no
+   * transaction to hold a row lock in. So the guard is the value that was read:
+   * the UPDATE only matches while the stored document is still the one `mutate`
+   * was handed, and a row count of zero means somebody else wrote in between and
+   * the mutation has to be re-run against what they left. `jsonb` equality is
+   * semantic rather than textual, so key order cannot make this spin.
+   */
+  async update<T extends StoredDocument>(
+    collection: Collection,
+    id: string,
+    mutate: (current: T | null) => T | null,
+  ): Promise<T | null> {
+    await this.#ensure();
+
+    for (let attempt = 0; attempt < MAX_UPDATE_ATTEMPTS; attempt += 1) {
+      const current = await this.get<T>(collection, id);
+      const next = mutate(current);
+      if (!next) return null;
+      const body = serialise(next);
+
+      const rows = current
+        ? ((await this.sql`
+            UPDATE crm_documents
+               SET document = ${body}::jsonb, updated_at = now()
+             WHERE collection = ${collection}
+               AND id = ${id}
+               AND document = ${serialise(current)}::jsonb
+            RETURNING id
+          `) as { id: string }[])
+        : ((await this.sql`
+            INSERT INTO crm_documents (collection, id, document, updated_at)
+            VALUES (${collection}, ${id}, ${body}::jsonb, now())
+            ON CONFLICT (collection, id) DO NOTHING
+            RETURNING id
+          `) as { id: string }[]);
+
+      if (rows.length > 0) return next;
+    }
+
+    throw new Error(
+      `could not update ${collection}/${id}: the document was changed by another writer on every one of ${MAX_UPDATE_ATTEMPTS} attempts`,
+    );
   }
 
   async remove(collection: Collection, id: string): Promise<void> {

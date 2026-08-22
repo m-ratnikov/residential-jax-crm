@@ -37,6 +37,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import type { MapViewport } from "@/lib/criteria/sql";
 import type { Geometry } from "@/lib/criteria/types";
+import type { MapBounds } from "@/lib/data/public-config";
 import { Badge, Button, cx, count } from "./ui";
 
 /**
@@ -66,7 +67,18 @@ export type DrawMode = "none" | "circle" | "polygon";
 
 export interface PropertyMapProps {
   points: MapPoint[];
+  /** Fallback camera, used only when no opening rectangle is configured. */
   center: { lat: number; lng: number; zoom: number };
+  /**
+   * The rectangle the map opens on, and returns to.
+   *
+   * Bounds rather than a zoom number, because what matters is which places are
+   * on screen and a zoom frames a different amount of county on every monitor.
+   * This is a Jacksonville CRM and it opens over Jacksonville; see
+   * JACKSONVILLE_BOUNDS in lib/data/public-config.ts for why that is stated
+   * explicitly rather than left to whatever the first result happens to be.
+   */
+  initialBounds?: MapBounds | null;
   /** The geometry currently applied to the search, drawn as an overlay. */
   geometry: Geometry | null;
   onGeometryChange: (geometry: Geometry | null) => void;
@@ -165,6 +177,7 @@ const BASE_STYLE: StyleSpecification = {
 export function PropertyMap({
   points,
   center,
+  initialBounds,
   geometry,
   onGeometryChange,
   onViewportChange,
@@ -226,11 +239,24 @@ export function PropertyMap({
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
+    // The opening rectangle is applied through the constructor rather than a
+    // fitBounds after load. fitBounds animates, and "Search this view" reads
+    // map.getBounds() the moment it is pressed - from a camera mid flight it
+    // would search a rectangle nobody was looking at. Constructed bounds are
+    // resolved synchronously, so getBounds() is truthful from the first frame.
+    const opening = initialBounds ?? null;
     const map = new MapLibreMap({
       container: containerRef.current,
       style: BASE_STYLE,
-      center: [center.lng, center.lat] as LngLatLike,
-      zoom: center.zoom,
+      ...(opening
+        ? {
+            bounds: [
+              [opening.west, opening.south],
+              [opening.east, opening.north],
+            ] as [[number, number], [number, number]],
+            fitBoundsOptions: { padding: 16 },
+          }
+        : { center: [center.lng, center.lat] as LngLatLike, zoom: center.zoom }),
       attributionControl: { compact: true },
     });
     mapRef.current = map;
@@ -438,6 +464,26 @@ export function PropertyMap({
     setMode((current) => (current === next ? "none" : next));
   }, []);
 
+  /**
+   * Back to the opening rectangle.
+   *
+   * "Fit" frames the current matches, which after a pan across the county can
+   * be anywhere. This is the way back to the city the CRM is about, and when
+   * results are following the map it re-reports the viewport so the list and
+   * the map agree about what is on screen.
+   */
+  const resetView = useCallback(() => {
+    const map = mapRef.current;
+    if (!map || !initialBounds) return;
+    map.fitBounds(
+      [
+        [initialBounds.west, initialBounds.south],
+        [initialBounds.east, initialBounds.north],
+      ],
+      { padding: 16, duration: 500 },
+    );
+  }, [initialBounds]);
+
   const fitToPoints = useCallback(() => {
     const map = mapRef.current;
     if (!map || !points.length) return;
@@ -528,6 +574,16 @@ export function PropertyMap({
           >
             Fit
           </Button>
+          {initialBounds && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={resetView}
+              title="Back to Jacksonville, the view this map opens on."
+            >
+              Reset view
+            </Button>
+          )}
         </div>
 
         {mode !== "none" && (

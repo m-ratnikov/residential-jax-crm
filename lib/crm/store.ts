@@ -66,14 +66,40 @@ export interface CrmStore {
   list<T extends StoredDocument>(collection: Collection): Promise<T[]>;
   get<T extends StoredDocument>(collection: Collection, id: string): Promise<T | null>;
   /**
-   * Write a document. Idempotent by key.
+   * Write a document whole. Idempotent by key, LAST WRITER WINS.
    *
    * A backend MUST skip the write when the document is byte-identical to what is
    * already stored. The matcher runs every thirty minutes and most passes change
    * nothing; committing an unchanged document each time would fill the history
    * with noise and cost a round trip for nothing.
+   *
+   * Use this only for a BLIND write - a document built from scratch, where the
+   * caller genuinely means "this is the state now". For anything that reads a
+   * document, changes part of it and writes it back, use `update`: a `put` in
+   * that position silently discards whatever another writer did in between.
    */
   put<T extends StoredDocument>(collection: Collection, document: T): Promise<T>;
+  /**
+   * Read, change, write, with the read repeated if the write raced.
+   *
+   * `mutate` is handed the CURRENT document and must return the whole next one,
+   * or null to leave the store untouched (which is how a caller says "no such
+   * document"). It may be called more than once, so it must be pure: derive
+   * everything from its argument, and do not capture the result of an earlier
+   * read from outside.
+   *
+   * This exists because the git backend cannot merge. Its conflict path used to
+   * re-send the same stale body against the newly fetched blob sha, which is
+   * not a retry - it is an overwrite. Two people adding a note to the same
+   * opportunity in the same minute lost one of the notes, with nothing in the
+   * history to say a note had ever existed. Re-running the mutation against
+   * what is actually stored is what makes both survive.
+   */
+  update<T extends StoredDocument>(
+    collection: Collection,
+    id: string,
+    mutate: (current: T | null) => T | null,
+  ): Promise<T | null>;
   remove(collection: Collection, id: string): Promise<void>;
   /** Drop a whole collection. Used by the seed's --reset and by clearing a simulation. */
   clear(collection: Collection): Promise<void>;
@@ -103,6 +129,15 @@ function sortedReplacer(_key: string, value: unknown): unknown {
   );
   return Object.fromEntries(entries);
 }
+
+/**
+ * How many times a conflicting read-modify-write is re-run before it gives up.
+ *
+ * Bounded rather than open-ended: a document under genuine contention from two
+ * writers settles on the second attempt, and a loop that never stops would turn
+ * a broken backend into a hung request instead of an error.
+ */
+export const MAX_UPDATE_ATTEMPTS = 4;
 
 /** A document id safe to use as a file name in any backend. */
 export function documentId(...parts: string[]): string {

@@ -40,13 +40,25 @@ export default function SavedSearchesPage() {
     null,
   );
 
-  const load = useCallback(() => {
-    api<{ searches: SavedSearch[] }>("/api/searches")
-      .then((body) => setSearches(body.searches))
-      .catch(() => setSearches([]));
-  }, []);
+  /**
+   * Re-read the saved criteria.
+   *
+   * Awaited by everything that changes them, because this page's whole job is
+   * to say when each search was last evaluated: a card that still read "never
+   * evaluated" straight after a baseline pass had recorded one made the
+   * matcher look broken when it had in fact just run.
+   */
+  const load = useCallback(
+    () =>
+      api<{ searches: SavedSearch[] }>("/api/searches")
+        .then((body) => setSearches(body.searches))
+        .catch(() => setSearches([])),
+    [],
+  );
 
-  useEffect(load, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   const runNow = async (search: SavedSearch) => {
     setBusy(search.id);
@@ -65,7 +77,7 @@ export default function SavedSearchesPage() {
                 : ""
             }.`,
       });
-      load();
+      await load();
     } catch (cause: unknown) {
       setOutcome({
         id: search.id,
@@ -146,7 +158,7 @@ export default function SavedSearchesPage() {
         tone: "good",
         text: `Pipeline run ${applied.simulation.runId} changed ${count(applied.simulation.changes.length)} parcels (${applied.simulation.changes.map((change) => change.label).join(", ")}). The matcher raised ${count(matcher.alertsCreated)} alerts.`,
       });
-      load();
+      await load();
     } catch (cause: unknown) {
       setOutcome({
         id: search.id,
@@ -160,12 +172,12 @@ export default function SavedSearchesPage() {
 
   const toggle = async (search: SavedSearch, patchBody: Partial<SavedSearch>) => {
     await patch(`/api/searches/${search.id}`, patchBody).catch(() => undefined);
-    load();
+    await load();
   };
 
   const remove = async (search: SavedSearch) => {
     await del(`/api/searches/${search.id}`).catch(() => undefined);
-    load();
+    await load();
   };
 
   return (

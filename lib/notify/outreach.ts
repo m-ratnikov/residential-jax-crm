@@ -225,6 +225,16 @@ export async function sendOutreach(input: SendOutreachInput): Promise<SendOutrea
   const ownerDocs = await store.list<OwnerDoc>("owners");
   const ownerById = new Map(ownerDocs.map((owner) => [owner.id, owner]));
 
+  // Read every opportunity once, the way owners are read once above. Reads
+  // revalidate against the branch now, and this loop's own writes move the
+  // branch, so a per-iteration `get` would pay a real round trip on every
+  // iteration after the first: a 500-message campaign costing about a thousand
+  // requests instead of five hundred. The append itself still goes through
+  // `store.update`, which re-reads the document it is changing, so nothing here
+  // is written from this snapshot.
+  const opportunityDocs = await store.list<OpportunityDoc>("opportunities");
+  const opportunityById = new Map(opportunityDocs.map((doc) => [doc.id, doc]));
+
   const campaignId = newId();
   const campaignName = input.campaignName ?? `${template.name} - ${nowIso().slice(0, 10)}`;
   const provider = providerFor(input.channel);
@@ -233,7 +243,7 @@ export async function sendOutreach(input: SendOutreachInput): Promise<SendOutrea
   const messageIds: string[] = [];
 
   for (const opportunityId of input.opportunityIds) {
-    const opportunity = await store.get<OpportunityDoc>("opportunities", opportunityId);
+    const opportunity = opportunityById.get(opportunityId);
     if (!opportunity) {
       skipped.push({ opportunityId, reason: "no such opportunity" });
       continue;
@@ -253,11 +263,15 @@ export async function sendOutreach(input: SendOutreachInput): Promise<SendOutrea
           : null,
     });
 
+    // Hand-entered detail first, then the mocked skip trace, then the generic
+    // fallback. The drawer shows the skip-traced address for this owner, so
+    // addressing the message anywhere else would make the two disagree on
+    // screen; a real contact an analyst typed still outranks a simulated one.
     const to =
       input.channel === "email"
-        ? (owner?.email ?? fallbackAddress("email", opportunity.id))
+        ? (owner?.email ?? owner?.skipTrace?.email ?? fallbackAddress("email", opportunity.id))
         : input.channel === "sms"
-          ? (owner?.phone ?? fallbackAddress("sms", opportunity.id))
+          ? (owner?.phone ?? owner?.skipTrace?.phone ?? fallbackAddress("sms", opportunity.id))
           : (owner?.mailingAddress ?? fallbackAddress("direct_mail", opportunity.id));
 
     const subject = input.channel === "sms" ? null : template.subject(context);
@@ -309,11 +323,16 @@ export async function sendOutreach(input: SendOutreachInput): Promise<SendOutrea
         })),
       };
 
-      await store.put<OpportunityDoc>("opportunities", {
-        ...opportunity,
-        outreach: [...opportunity.outreach, message],
-        updatedAt: nowIso(),
-      });
+      const appendedAt = nowIso();
+      await store.update<OpportunityDoc>("opportunities", opportunity.id, (current) =>
+        current
+          ? {
+              ...current,
+              outreach: [...current.outreach, message],
+              updatedAt: appendedAt,
+            }
+          : null,
+      );
 
       messageIds.push(messageId);
     } catch (error: unknown) {
@@ -364,32 +383,44 @@ export async function advanceOutreach(now: Date = new Date()): Promise<AdvanceRe
   let messagesAdvanced = 0;
   let eventsApplied = 0;
 
-  for (const opportunity of opportunities) {
-    if (!opportunity.outreach.length) continue;
-    let changed = false;
+  for (const stale of opportunities) {
+    if (!stale.outreach.length) continue;
 
-    const outreach = opportunity.outreach.map((message) => {
-      const due = message.events.filter((event) => event.occurredAt <= cutoff);
-      eventsApplied += due.length;
+    // `mutate` runs again when a write races, so these record the last attempt
+    // instead of accumulating across attempts and double-counting a retry.
+    let advancedHere = 0;
+    let appliedHere = 0;
 
-      let status = message.status;
-      let statusAt = message.statusAt;
+    await store.update<OpportunityDoc>("opportunities", stale.id, (current) => {
+      advancedHere = 0;
+      appliedHere = 0;
+      if (!current) return null;
 
-      for (const event of due) {
-        if (!supersedes(event.status, status)) continue;
-        status = event.status;
-        statusAt = event.occurredAt;
-      }
+      let changed = false;
+      const outreach = current.outreach.map((message) => {
+        const due = message.events.filter((event) => event.occurredAt <= cutoff);
+        appliedHere += due.length;
 
-      if (status === message.status) return message;
-      changed = true;
-      messagesAdvanced += 1;
-      return { ...message, status, statusAt };
+        let status = message.status;
+        let statusAt = message.statusAt;
+
+        for (const event of due) {
+          if (!supersedes(event.status, status)) continue;
+          status = event.status;
+          statusAt = event.occurredAt;
+        }
+
+        if (status === message.status) return message;
+        changed = true;
+        advancedHere += 1;
+        return { ...message, status, statusAt };
+      });
+
+      return changed ? { ...current, outreach } : null;
     });
 
-    if (changed) {
-      await store.put<OpportunityDoc>("opportunities", { ...opportunity, outreach });
-    }
+    messagesAdvanced += advancedHere;
+    eventsApplied += appliedHere;
   }
 
   return { messagesAdvanced, eventsApplied };
@@ -405,15 +436,20 @@ export async function fastForwardOutreach(): Promise<AdvanceResult> {
   const opportunities = await store.list<OpportunityDoc>("opportunities");
   const at = nowIso();
 
-  for (const opportunity of opportunities) {
-    if (!opportunity.outreach.length) continue;
-    const outreach = opportunity.outreach.map((message) => ({
-      ...message,
-      events: message.events.map((event) =>
-        event.occurredAt > at ? { ...event, occurredAt: at } : event,
-      ),
-    }));
-    await store.put<OpportunityDoc>("opportunities", { ...opportunity, outreach });
+  for (const stale of opportunities) {
+    if (!stale.outreach.length) continue;
+    await store.update<OpportunityDoc>("opportunities", stale.id, (current) => {
+      if (!current) return null;
+      return {
+        ...current,
+        outreach: current.outreach.map((message) => ({
+          ...message,
+          events: message.events.map((event) =>
+            event.occurredAt > at ? { ...event, occurredAt: at } : event,
+          ),
+        })),
+      };
+    });
   }
 
   logEvent("outreach.fast_forward", {});

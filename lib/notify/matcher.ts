@@ -24,6 +24,11 @@ import {
   type SearchEvaluation,
 } from "./evaluate";
 import { logEvent } from "./log";
+// Defined in an isomorphic module so the browser matcher builds the identical
+// record; re-exported here because this is where callers expect to find it.
+import { alertSnapshot, toEvaluatedMatch } from "./snapshot";
+
+export { alertSnapshot, toEvaluatedMatch };
 
 export type { MatcherResult, SearchOutcome } from "./evaluate";
 
@@ -41,42 +46,6 @@ export interface MatcherOptions {
   /** Limit the pass to these saved searches. Used after a simulated update. */
   savedSearchIds?: readonly string[];
   now?: Date;
-}
-
-/** A compact record of the parcel as it looked when the alert fired. */
-export function alertSnapshot(scored: ScoredProperty): Record<string, unknown> {
-  const property = scored.property;
-  return {
-    propertyId: property.propertyId,
-    address: displayAddress(property),
-    addressCity: property.addressCity,
-    addressZip: property.addressZip,
-    latitude: property.latitude,
-    longitude: property.longitude,
-    ownerName: property.ownerName,
-    assessedValue: property.assessedValue,
-    roofAgeYears: property.roofAgeYears,
-    roofAgeBasis: property.roofAgeBasis,
-    yearsSinceLastSale: property.yearsSinceLastSale,
-    lastSaleDate: property.lastSaleDate,
-    ownerOccupied: property.ownerOccupied,
-    homesteadFlag: property.homesteadFlag,
-    waterViewFlag: property.waterViewFlag,
-    courtDistressScore: property.raw["court_distress_score"] ?? null,
-    provenance: property.provenance,
-  };
-}
-
-/** Turn a scored row into the shape the shared evaluator consumes. */
-export function toEvaluatedMatch(scored: ScoredProperty) {
-  return {
-    propertyId: scored.property.propertyId,
-    matchHash: scored.matchHash,
-    snapshot: materialSnapshot(scored.property),
-    score: scored.score,
-    rationale: scored.rationale,
-    propertySnapshot: alertSnapshot(scored),
-  };
 }
 
 function parseCriteria(raw: unknown, name: string): CriteriaSet | null {

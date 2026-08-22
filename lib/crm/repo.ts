@@ -32,6 +32,7 @@ import {
   type TaskDoc,
   type TeamMemberDoc,
 } from "./documents";
+import { mockedOwnerContact } from "./skip-trace";
 import { documentId } from "./store";
 
 /** Newest first, on an ISO timestamp field. */
@@ -139,23 +140,30 @@ export async function updateSavedSearch(
   id: string,
   patch: Partial<SaveSearchInput> & { active?: boolean },
 ): Promise<SavedSearchDoc | null> {
-  const existing = await getSavedSearch(id);
-  if (!existing) return null;
+  // Parsed once, outside the mutation, because the mutation can run more than
+  // once and validating the same criteria set repeatedly is wasted work.
+  const criteria = patch.criteria ? criteriaSetSchema.parse(patch.criteria) : null;
+  const at = nowIso();
 
-  const next: SavedSearchDoc = {
-    ...existing,
-    name: patch.name ?? existing.name,
-    description:
-      patch.description === undefined ? existing.description : (patch.description ?? null),
-    criteria: patch.criteria ? criteriaSetSchema.parse(patch.criteria) : existing.criteria,
-    notifyInApp: patch.notifyInApp ?? existing.notifyInApp,
-    notifyEmail: patch.notifyEmail ?? existing.notifyEmail,
-    notifySms: patch.notifySms ?? existing.notifySms,
-    alertLimitPerRun: patch.alertLimitPerRun ?? existing.alertLimitPerRun,
-    active: patch.active ?? existing.active,
-    updatedAt: nowIso(),
-  };
-  return crmStore().put("searches", next);
+  return crmStore().update<SavedSearchDoc>("searches", id, (existing) =>
+    existing
+      ? {
+          // Spread from what is CURRENTLY stored, so a matcher pass that wrote
+          // `matches` while this edit was open is not rolled back by it.
+          ...existing,
+          name: patch.name ?? existing.name,
+          description:
+            patch.description === undefined ? existing.description : (patch.description ?? null),
+          criteria: criteria ?? existing.criteria,
+          notifyInApp: patch.notifyInApp ?? existing.notifyInApp,
+          notifyEmail: patch.notifyEmail ?? existing.notifyEmail,
+          notifySms: patch.notifySms ?? existing.notifySms,
+          alertLimitPerRun: patch.alertLimitPerRun ?? existing.alertLimitPerRun,
+          active: patch.active ?? existing.active,
+          updatedAt: at,
+        }
+      : null,
+  );
 }
 
 export async function deleteSavedSearch(id: string): Promise<void> {
@@ -195,23 +203,34 @@ export async function getAlert(id: string): Promise<AlertDoc | null> {
 }
 
 export async function markAlertRead(id: string, read = true): Promise<AlertDoc | null> {
-  const alert = await getAlert(id);
-  if (!alert) return null;
-  return crmStore().put("alerts", { ...alert, readAt: read ? nowIso() : null });
+  const at = read ? nowIso() : null;
+  return crmStore().update<AlertDoc>("alerts", id, (alert) =>
+    alert ? { ...alert, readAt: at } : null,
+  );
 }
 
 export async function markAllAlertsRead(): Promise<number> {
   const alerts = await crmStore().list<AlertDoc>("alerts");
-  const unread = alerts.filter((alert) => alert.readAt === null);
   const at = nowIso();
-  for (const alert of unread) await crmStore().put("alerts", { ...alert, readAt: at });
-  return unread.length;
+  let marked = 0;
+  for (const candidate of alerts) {
+    if (candidate.readAt !== null) continue;
+    // Re-checked inside the mutation rather than trusted from the listing: the
+    // read above can be a minute old, and marking an alert read is not a reason
+    // to overwrite a dismissal somebody made in between.
+    const updated = await crmStore().update<AlertDoc>("alerts", candidate.id, (alert) =>
+      alert && alert.readAt === null ? { ...alert, readAt: at } : null,
+    );
+    if (updated) marked += 1;
+  }
+  return marked;
 }
 
 export async function dismissAlert(id: string): Promise<AlertDoc | null> {
-  const alert = await getAlert(id);
-  if (!alert) return null;
-  return crmStore().put("alerts", { ...alert, dismissedAt: nowIso() });
+  const at = nowIso();
+  return crmStore().update<AlertDoc>("alerts", id, (alert) =>
+    alert ? { ...alert, dismissedAt: at } : null,
+  );
 }
 
 export async function unreadAlertCount(): Promise<number> {
@@ -245,14 +264,16 @@ export async function updateOwner(
   id: string,
   patch: { email?: string | null; phone?: string | null; notes?: string | null },
 ): Promise<OwnerDoc | null> {
-  const owner = await getOwner(id);
-  if (!owner) return null;
-  return crmStore().put("owners", {
-    ...owner,
-    email: patch.email === undefined ? owner.email : patch.email,
-    phone: patch.phone === undefined ? owner.phone : patch.phone,
-    notes: patch.notes === undefined ? owner.notes : patch.notes,
-  });
+  return crmStore().update<OwnerDoc>("owners", id, (owner) =>
+    owner
+      ? {
+          ...owner,
+          email: patch.email === undefined ? owner.email : patch.email,
+          phone: patch.phone === undefined ? owner.phone : patch.phone,
+          notes: patch.notes === undefined ? owner.notes : patch.notes,
+        }
+      : null,
+  );
 }
 
 /**
@@ -264,13 +285,32 @@ export async function updateOwner(
 async function upsertOwner(input: CreateOpportunityInput): Promise<string | null> {
   if (!input.ownerName) return null;
 
+  // SIMULATED, and labelled as such in the document it is written into. The
+  // roll carries no telephone or email, so the alternative to this is every
+  // opportunity reading "not on file" for the one detail an acquisitions team
+  // opens the record for. See lib/crm/skip-trace.ts.
+  const skipTrace = mockedOwnerContact({
+    propertyId: input.propertyId,
+    ownerName: input.ownerName,
+  });
+
   const owners = await crmStore().list<OwnerDoc>("owners");
   const existing = owners.find(
     (owner) =>
       owner.name === input.ownerName &&
       (owner.mailingAddress ?? null) === (input.ownerMailingAddress ?? null),
   );
-  if (existing) return existing.id;
+
+  if (existing) {
+    // An owner document written before the skip trace existed gets one now,
+    // rather than being the only record in the CRM without a contact.
+    if (!existing.skipTrace) {
+      await crmStore().update<OwnerDoc>("owners", existing.id, (owner) =>
+        owner && !owner.skipTrace ? { ...owner, skipTrace } : null,
+      );
+    }
+    return existing.id;
+  }
 
   const owner: OwnerDoc = {
     id: newId(),
@@ -284,6 +324,7 @@ async function upsertOwner(input: CreateOpportunityInput): Promise<string | null
     sourceSystem: input.sourceSystem ?? null,
     sourceUrl: input.sourceUrl ?? null,
     notes: null,
+    skipTrace,
     createdAt: nowIso(),
   };
   await crmStore().put("owners", owner);
@@ -351,7 +392,7 @@ export async function createOpportunityFromSnapshot(
   const ownerId = await upsertOwner(input);
   const now = nowIso();
 
-  const opportunity: OpportunityDoc = {
+  const fresh: OpportunityDoc = {
     id: input.propertyId,
     propertyId: input.propertyId,
     parcelIdentifier: input.parcelIdentifier ?? null,
@@ -393,16 +434,36 @@ export async function createOpportunityFromSnapshot(
     closedAt: null,
   };
 
-  await crmStore().put("opportunities", opportunity);
+  // Not a `put`: the read above can be a minute old on the git backend, so two
+  // analysts converting the same alert at once would otherwise have the second
+  // one's blind write erase the first one's record - including any note or
+  // stage change already made against it. Written through the mutation, the
+  // loser of that race finds the document and keeps it.
+  let created = false;
+  const opportunity = await crmStore().update<OpportunityDoc>(
+    "opportunities",
+    input.propertyId,
+    (current) => {
+      created = !current;
+      return current ?? fresh;
+    },
+  );
+
+  if (!opportunity) {
+    // Unreachable: the mutation never returns null. Narrowing rather than
+    // asserting, so a future change to it cannot silently produce undefined.
+    throw new Error(`could not create the opportunity for parcel ${input.propertyId}`);
+  }
+
   if (input.alertId) await linkAlertToOpportunity(input.alertId, opportunity.id);
 
-  return { opportunity, created: true };
+  return { opportunity, created };
 }
 
 async function linkAlertToOpportunity(id: string, opportunityId: string): Promise<void> {
-  const alert = await getAlert(id);
-  if (!alert || alert.opportunityId === opportunityId) return;
-  await crmStore().put("alerts", { ...alert, opportunityId });
+  await crmStore().update<AlertDoc>("alerts", id, (alert) =>
+    alert && alert.opportunityId !== opportunityId ? { ...alert, opportunityId } : null,
+  );
 }
 
 export interface OpportunityFilter {
@@ -538,61 +599,71 @@ export async function updateOpportunity(
   propertyId: string,
   patch: UpdateOpportunityInput,
 ): Promise<OpportunityDoc | null> {
-  const current = await getOpportunity(propertyId);
-  if (!current) return null;
-
-  const stageChanged = patch.stage !== undefined && patch.stage !== current.stage;
   const now = nowIso();
 
-  const next: OpportunityDoc = {
-    ...current,
-    stage: patch.stage ?? current.stage,
-    assigneeId: patch.assigneeId === undefined ? current.assigneeId : patch.assigneeId,
-    ownerInterest: patch.ownerInterest === undefined ? current.ownerInterest : patch.ownerInterest,
-    askingPrice: patch.askingPrice === undefined ? current.askingPrice : patch.askingPrice,
-    offerPrice: patch.offerPrice === undefined ? current.offerPrice : patch.offerPrice,
-    nextStep: patch.nextStep === undefined ? current.nextStep : patch.nextStep,
-    nextStepDueAt: patch.nextStepDueAt === undefined ? current.nextStepDueAt : patch.nextStepDueAt,
-    updatedAt: now,
-    closedAt: stageChanged
-      ? patch.stage === "closed" || patch.stage === "dead"
-        ? now
-        : null
-      : current.closedAt,
-    stageEvents: stageChanged
-      ? [
-          ...current.stageEvents,
-          {
-            id: newId(),
-            fromStage: current.stage,
-            toStage: patch.stage as AcquisitionStage,
-            actorId: patch.actorId ?? null,
-            note: patch.stageNote ?? null,
-            createdAt: now,
-          },
-        ]
-      : current.stageEvents,
-  };
+  // Everything below is derived from `current`, which is what makes this safe
+  // to re-run after a conflict: the stage event that gets appended names the
+  // stage the record is actually in when the write lands, not the one it was in
+  // when the request arrived.
+  return crmStore().update<OpportunityDoc>("opportunities", propertyId, (current) => {
+    if (!current) return null;
+    const stageChanged = patch.stage !== undefined && patch.stage !== current.stage;
 
-  return crmStore().put("opportunities", next);
+    return {
+      ...current,
+      stage: patch.stage ?? current.stage,
+      assigneeId: patch.assigneeId === undefined ? current.assigneeId : patch.assigneeId,
+      ownerInterest:
+        patch.ownerInterest === undefined ? current.ownerInterest : patch.ownerInterest,
+      askingPrice: patch.askingPrice === undefined ? current.askingPrice : patch.askingPrice,
+      offerPrice: patch.offerPrice === undefined ? current.offerPrice : patch.offerPrice,
+      nextStep: patch.nextStep === undefined ? current.nextStep : patch.nextStep,
+      nextStepDueAt:
+        patch.nextStepDueAt === undefined ? current.nextStepDueAt : patch.nextStepDueAt,
+      updatedAt: now,
+      closedAt: stageChanged
+        ? patch.stage === "closed" || patch.stage === "dead"
+          ? now
+          : null
+        : current.closedAt,
+      stageEvents: stageChanged
+        ? [
+            ...current.stageEvents,
+            {
+              id: newId(),
+              fromStage: current.stage,
+              toStage: patch.stage as AcquisitionStage,
+              actorId: patch.actorId ?? null,
+              note: patch.stageNote ?? null,
+              createdAt: now,
+            },
+          ]
+        : current.stageEvents,
+    };
+  });
 }
 
 /* ------------------------------------------------------------------ */
 /* Notes and tasks                                                      */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Append a note.
+ *
+ * The append happens INSIDE the mutation, so a note written while another
+ * writer was saving one lands on top of theirs instead of replacing it. That
+ * is the whole of the lost-update fix as the user experiences it: two people
+ * taking notes on the same deal both keep their note.
+ */
 export async function addNote(
   propertyId: string,
   body: string,
   authorId: string | null,
 ): Promise<OpportunityDoc | null> {
-  const current = await getOpportunity(propertyId);
-  if (!current) return null;
-  return crmStore().put("opportunities", {
-    ...current,
-    notes: [...current.notes, { id: newId(), authorId, body, createdAt: nowIso() }],
-    updatedAt: nowIso(),
-  });
+  const note: NoteDoc = { id: newId(), authorId, body, createdAt: nowIso() };
+  return crmStore().update<OpportunityDoc>("opportunities", propertyId, (current) =>
+    current ? { ...current, notes: [...current.notes, note], updatedAt: note.createdAt } : null,
+  );
 }
 
 export async function addTask(input: {
@@ -601,24 +672,18 @@ export async function addTask(input: {
   assigneeId?: string | null;
   dueAt?: string | null;
 }): Promise<OpportunityDoc | null> {
-  const current = await getOpportunity(input.propertyId);
-  if (!current) return null;
-  return crmStore().put("opportunities", {
-    ...current,
-    tasks: [
-      ...current.tasks,
-      {
-        id: newId(),
-        title: input.title,
-        assigneeId: input.assigneeId ?? null,
-        status: "open" as const,
-        dueAt: input.dueAt ?? null,
-        completedAt: null,
-        createdAt: nowIso(),
-      },
-    ],
-    updatedAt: nowIso(),
-  });
+  const task: TaskDoc = {
+    id: newId(),
+    title: input.title,
+    assigneeId: input.assigneeId ?? null,
+    status: "open",
+    dueAt: input.dueAt ?? null,
+    completedAt: null,
+    createdAt: nowIso(),
+  };
+  return crmStore().update<OpportunityDoc>("opportunities", input.propertyId, (current) =>
+    current ? { ...current, tasks: [...current.tasks, task], updatedAt: task.createdAt } : null,
+  );
 }
 
 export async function setTaskStatus(
@@ -626,17 +691,20 @@ export async function setTaskStatus(
   taskId: string,
   status: "open" | "done" | "cancelled",
 ): Promise<OpportunityDoc | null> {
-  const current = await getOpportunity(propertyId);
-  if (!current) return null;
-  return crmStore().put("opportunities", {
-    ...current,
-    tasks: current.tasks.map((task) =>
-      task.id === taskId
-        ? { ...task, status, completedAt: status === "done" ? nowIso() : null }
-        : task,
-    ),
-    updatedAt: nowIso(),
-  });
+  const at = nowIso();
+  return crmStore().update<OpportunityDoc>("opportunities", propertyId, (current) =>
+    current
+      ? {
+          ...current,
+          tasks: current.tasks.map((task) =>
+            task.id === taskId
+              ? { ...task, status, completedAt: status === "done" ? at : null }
+              : task,
+          ),
+          updatedAt: at,
+        }
+      : null,
+  );
 }
 
 /* ------------------------------------------------------------------ */

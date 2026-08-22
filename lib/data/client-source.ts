@@ -20,12 +20,16 @@ let source: BrowserPropertyDataSource | null = null;
 
 export function propertySource(): BrowserPropertyDataSource {
   source ??= new BrowserPropertyDataSource({
-    url: publicDataConfig.queryTableUrl,
+    // Every gateway the same artifact can be read from, configured first. The
+    // tab tries them in order rather than waiting on one that is not answering.
+    urls: publicDataConfig.queryTableUrls,
     isSample: publicDataConfig.isSample,
     label: publicDataConfig.label,
     countyName: publicDataConfig.countyName,
     stateCode: publicDataConfig.stateCode,
     runHistoryUrl: publicDataConfig.runHistoryUrl,
+    attachTimeoutMs: publicDataConfig.attachTimeoutMs,
+    probeTimeoutMs: publicDataConfig.probeTimeoutMs,
   });
   return source;
 }
@@ -53,7 +57,7 @@ export const EMPTY_OVERLAY_STATUS: OverlayStatus = {
  */
 export async function fetchOverlay(): Promise<OverlayStatus> {
   try {
-    const response = await fetch("/api/overlay");
+    const response = await fetch("/api/overlay", { cache: "no-store" });
     if (!response.ok) return EMPTY_OVERLAY_STATUS;
     return (await response.json()) as OverlayStatus;
   } catch {

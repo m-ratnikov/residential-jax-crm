@@ -16,14 +16,25 @@ import { z } from "zod";
 
 import { handleError, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
+import { alertIdSchema, generatedIdSchema, propertyIdSchema } from "@/lib/crm/ids";
 import { createOpportunityFromSnapshot, listOpportunities } from "@/lib/crm/repo";
 import { ACQUISITION_STAGES } from "@/lib/notify/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+/**
+ * These four id fields asserted `z.string().uuid()` and nothing in this system
+ * has ever minted a UUID, so converting an alert into an opportunity - the
+ * first step of the demo script - returned 400 on every alert and `alert_id`
+ * was null on every opportunity ever created. The schemas below are derived
+ * from the functions that actually mint these ids; see lib/crm/ids.ts.
+ *
+ * `propertyId` is validated too, and for a second reason: it becomes the
+ * document key verbatim, and the git backend turns that into a file path.
+ */
 const createSchema = z.object({
-  propertyId: z.string().min(1),
+  propertyId: propertyIdSchema,
   parcelIdentifier: z.string().nullish(),
   addressLine: z.string().min(1).max(400),
   addressCity: z.string().max(200).nullish(),
@@ -42,10 +53,10 @@ const createSchema = z.object({
 
   matchScore: z.number().nullish(),
   matchRationale: z.string().max(4000).nullish(),
-  savedSearchId: z.string().uuid().nullish(),
-  alertId: z.string().uuid().nullish(),
-  assigneeId: z.string().uuid().nullish(),
-  actorId: z.string().uuid().nullish(),
+  savedSearchId: generatedIdSchema.nullish(),
+  alertId: alertIdSchema.nullish(),
+  assigneeId: generatedIdSchema.nullish(),
+  actorId: generatedIdSchema.nullish(),
 });
 
 export async function GET(request: Request): Promise<Response> {

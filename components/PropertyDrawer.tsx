@@ -19,6 +19,7 @@ import { post } from "@/lib/client";
 import { COLUMN_GROUPS, ungroupedColumns } from "@/lib/oracle/columns";
 import { displayAddress } from "@/lib/data/map";
 import { fetchOverlay, propertySource } from "@/lib/data/client-source";
+import type { OwnerDoc } from "@/lib/crm/documents";
 import type { PropertyRecord } from "@/lib/data/types";
 import {
   Badge,
@@ -53,7 +54,20 @@ interface PropertyDetail {
   otherColumns: string[];
   court: CourtRecordRow[];
   opportunity: { id: string; stage: string } | null;
+  /**
+   * The owner document, once the parcel is tracked. Its mailing address is real
+   * and comes from the roll; its `skipTrace` block is a simulation and is
+   * rendered as one. See lib/crm/skip-trace.ts.
+   */
+  owner: OwnerDoc | null;
   simulated: boolean;
+}
+
+/** What GET /api/property/[id] answers with. */
+interface PropertyCrmResponse {
+  opportunity?: { id: string; stage: string } | null;
+  owner?: OwnerDoc | null;
+  court?: CourtRecordRow[];
 }
 
 const CURRENCY = new Set([
@@ -152,8 +166,14 @@ export function PropertyDrawer({
         const [property, crm] = await Promise.all([
           propertySource().getProperty(propertyId, overlay.overlay),
           fetch(`/api/property/${encodeURIComponent(propertyId)}`)
-            .then((response) => (response.ok ? response.json() : { opportunity: null, court: [] }))
-            .catch(() => ({ opportunity: null, court: [] })),
+            .then((response) =>
+              response.ok
+                ? (response.json() as Promise<PropertyCrmResponse>)
+                : ({ opportunity: null, owner: null, court: [] } satisfies PropertyCrmResponse),
+            )
+            .catch(
+              () => ({ opportunity: null, owner: null, court: [] }) satisfies PropertyCrmResponse,
+            ),
         ]);
 
         if (cancelled) return;
@@ -173,9 +193,9 @@ export function PropertyDrawer({
             columns: group.columns.filter((column) => available.includes(column)),
           })).filter((group) => group.columns.length),
           otherColumns: ungroupedColumns(available),
-          court: (crm as { court?: CourtRecordRow[] }).court ?? [],
-          opportunity:
-            (crm as { opportunity?: { id: string; stage: string } | null }).opportunity ?? null,
+          court: crm.court ?? [],
+          opportunity: crm.opportunity ?? null,
+          owner: crm.owner ?? null,
           simulated: Boolean(property.raw["overlay_run_id"]),
         });
       } catch (cause: unknown) {
@@ -242,9 +262,23 @@ export function PropertyDrawer({
         },
       );
       onTracked?.(result.opportunity.id);
+
+      // Re-read the CRM's half of the record rather than guessing at it: the
+      // owner document, and with it the simulated contact, is created by the
+      // POST above and is what the contact panel below renders.
+      const crm = await fetch(`/api/property/${encodeURIComponent(propertyId)}`)
+        .then((response) =>
+          response.ok ? (response.json() as Promise<PropertyCrmResponse>) : null,
+        )
+        .catch(() => null);
+
       setDetail((current) =>
         current
-          ? { ...current, opportunity: { id: result.opportunity.id, stage: "identified" } }
+          ? {
+              ...current,
+              opportunity: crm?.opportunity ?? { id: result.opportunity.id, stage: "identified" },
+              owner: crm?.owner ?? current.owner,
+            }
           : current,
       );
     } catch (cause: unknown) {
@@ -340,6 +374,8 @@ export function PropertyDrawer({
               </Panel>
             )}
 
+            <OwnerContact detail={detail} />
+
             {provenance && (
               <Panel title="Provenance" subtitle="Where this record came from.">
                 <dl className="space-y-1.5 text-[11px]">
@@ -422,6 +458,88 @@ export function PropertyDrawer({
         {!loading && !detail && !error && <Empty title="Nothing to show" />}
       </div>
     </aside>
+  );
+}
+
+/**
+ * Who owns this parcel, and how an acquisitions team would reach them.
+ *
+ * Two blocks, deliberately not one. The first is the county roll: the owner of
+ * record and the mailing address, which are real, and which carry the source
+ * system they were read from. The second is a MOCKED skip trace, because the
+ * roll publishes no telephone and no email and the alternative was every record
+ * reading "not on file" for the one detail this panel exists to show.
+ *
+ * The simulated block is fenced, tinted, badged, and repeats the provider name
+ * and the reason underneath the values. That is more shouting than a design
+ * would normally want, and it is the point: a phone number on a CRM screen is
+ * something somebody dials, so the one thing that must never happen is a
+ * reviewer taking this for a real number.
+ */
+function OwnerContact({ detail }: { detail: PropertyDetail }) {
+  const property = detail.property;
+  const owner = detail.owner;
+  const skipTrace = owner?.skipTrace ?? null;
+
+  const name = owner?.name ?? property.ownerName;
+  const mailing = [
+    owner?.mailingAddress ?? property.ownerMailingAddress,
+    owner?.mailingCity ?? property.ownerMailingCity,
+    [
+      owner?.mailingState ?? property.ownerMailingState,
+      owner?.mailingZip ?? property.ownerMailingZip,
+    ]
+      .filter(Boolean)
+      .join(" "),
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  return (
+    <Panel
+      title="Owner contact"
+      subtitle="The roll publishes an owner and a mailing address. It publishes no telephone and no email."
+    >
+      <dl className="space-y-1.5 text-[11px]">
+        <Row label="Owner of record" value={name ?? "not published"} />
+        <Row label="Mailing address" value={mailing || "not published"} />
+        <Row
+          label="Address source"
+          value={owner?.sourceSystem ?? property.provenance.sourceSystem ?? "not published"}
+        />
+      </dl>
+
+      {skipTrace ? (
+        <div className="mt-3 rounded-md border border-warn-500/50 bg-warn-500/10 p-2.5">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Badge tone="warn" testId="owner-contact-simulated">
+              simulated contact
+            </Badge>
+            <span className="text-[11px] font-medium text-warn-500">
+              not a real phone number or email address
+            </span>
+          </div>
+          <dl className="mt-2 space-y-1.5 text-[11px]">
+            <Row label="Phone (mock)" value={skipTrace.phone} mono />
+            <Row label="Email (mock)" value={skipTrace.email} mono />
+            <Row label="Generated by" value={skipTrace.provider} />
+          </dl>
+          <p className="mt-2 text-[11px] leading-relaxed text-ink-400">{skipTrace.basis}</p>
+        </div>
+      ) : (
+        <p className="mt-3 rounded-md border border-[var(--line)] px-2.5 py-2 text-[11px] leading-relaxed text-ink-400">
+          Tracking this parcel attaches a clearly labelled simulated telephone and email, so the
+          outreach thread has something to address. Nothing here calls a skip-trace vendor.
+        </p>
+      )}
+
+      {(owner?.email || owner?.phone) && (
+        <dl className="mt-3 space-y-1.5 border-t border-[var(--line)] pt-2.5 text-[11px]">
+          {owner.phone && <Row label="Phone (entered)" value={owner.phone} mono />}
+          {owner.email && <Row label="Email (entered)" value={owner.email} mono />}
+        </dl>
+      )}
+    </Panel>
   );
 }
 

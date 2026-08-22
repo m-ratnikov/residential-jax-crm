@@ -13,8 +13,11 @@
  * 2. **Unchanged documents are not written.** The matcher runs every thirty
  *    minutes and most passes change nothing; a `put` matching what is stored
  *    returns without a commit, so steady state produces no history at all.
- * 3. **A conflicting write is retried once against the current blob sha**, which
- *    is the only failure the contents API actually produces here.
+ * 3. **A conflicting write re-runs the mutation against the current document.**
+ *    A conflict is the only failure the contents API actually produces here,
+ *    and git cannot merge two JSON documents for us, so `update` re-reads and
+ *    re-applies rather than re-sending a body that is already stale. See the
+ *    note on `update` for the lost note this cost before it did.
  * 4. **Reads are content addressed, and a write updates the cache in place.**
  *    Both matter for read-after-write. `download_url` points at a CDN that
  *    serves a stale copy for minutes after a commit, and invalidating the cache
@@ -23,13 +26,20 @@
  *    immediately followed by a task read the pre-note document and dropped the
  *    note silently. Fetching blobs by sha cannot be stale by construction.
  *
- * The read cache is per process and short. A serverless instance handling a
- * burst of requests should not re-list a directory for each one, and thirty
- * seconds is short enough that a write from another instance shows up promptly.
+ * The read cache is per process, and a per-process cache cannot be trusted to
+ * expire on a clock. Several instances serve one deployment, so a PATCH lands
+ * on one and the reload after it is routed to another: a time-based window
+ * means that second instance can show state from before a change that has
+ * already been acknowledged. Reads therefore REVALIDATE - one conditional
+ * request against the branch, which GitHub answers 304 for free when nothing
+ * has moved - and the cache is what makes that answer cost nothing to act on.
+ * The clock survives only on the write path, where a stale read costs a
+ * conflict and a retry rather than a wrong answer.
  */
 
 import {
   CrmStoreNotWritableError,
+  MAX_UPDATE_ATTEMPTS,
   serialise,
   type Collection,
   type CrmStore,
@@ -39,15 +49,23 @@ import { logEvent, logError } from "@/lib/notify/log";
 
 const API = "https://api.github.com";
 /**
- * How long a read is served from this process before the tree is re-read.
+ * How old a tree the WRITE path will compute against.
  *
- * Sixty seconds rather than thirty, and the trade is explicit: GitHub allows
- * 5,000 requests an hour and this deployment exhausted them once, answering 500
- * to every CRM read for the rest of the window. A write updates this process's
- * cache in place, so the person who made a change never waits for it; what the
- * window bounds is how long ANOTHER instance can show state one minute old.
- * For an acquisitions board that is not a meaningful staleness. For a rate
- * limit, the difference between thirty and sixty seconds is half the traffic.
+ * This used to gate reads as well, and that was the bug. A serverless
+ * deployment runs many instances and each held its own cache: a PATCH landed on
+ * one, the reload after it was routed to another, and that one served a tree up
+ * to a minute old. The stage change had been committed and acknowledged and the
+ * board still showed the old stage. No amount of `cache: "no-store"` in the
+ * browser fixes that, because the origin itself is behind.
+ *
+ * So reads no longer consult this window at all - see `#tree` - and the window
+ * now covers only the write path, where staleness is not a correctness problem:
+ * a `put` is last-writer-wins by contract, and an `update` computing against a
+ * stale sha is refused by GitHub, re-reads, and re-runs the mutation. Keeping
+ * writes on the cached tree is what stops a bulk loop - a campaign across
+ * hundreds of opportunities - from spending one tree read per document on top
+ * of the write itself. That amplification is what once exhausted GitHub's
+ * 5,000 requests an hour and took every CRM read down with it.
  */
 const CACHE_MS = 60_000;
 
@@ -72,6 +90,16 @@ interface Entry {
 interface CacheEntry {
   at: number;
   entries: Map<string, Entry>;
+  /**
+   * The tree these entries were built from, held by reference.
+   *
+   * A revalidation that answers 304 hands back the very same map, so an
+   * identity check is enough to know every sha is unchanged and the documents
+   * with them. That is what makes revalidating on every read cheap in work as
+   * well as in budget: the common case is one conditional request and nothing
+   * else at all.
+   */
+  tree: Map<string, string>;
 }
 
 export class GitHubCrmStore implements CrmStore {
@@ -104,6 +132,15 @@ export class GitHubCrmStore implements CrmStore {
    */
   #treeEtag: string | null = null;
   #rateLimitedUntil = 0;
+  /**
+   * The revalidation currently in flight, so concurrent callers share one.
+   *
+   * This is what makes "revalidate on every read" affordable in latency. One
+   * page load lists opportunities, owners, team and searches inside a single
+   * `Promise.all`; without this each would open its own conditional request to
+   * GitHub for the identical answer.
+   */
+  #treeInflight: Promise<Map<string, string>> | null = null;
 
   /** True when the last read was served from a stale copy after a refusal. */
   get degraded(): boolean {
@@ -153,10 +190,46 @@ export class GitHubCrmStore implements CrmStore {
    * needs. Content addressing is what makes that safe: a sha that has not
    * changed cannot be stale.
    */
-  async #tree(): Promise<Map<string, string>> {
-    const now = Date.now();
-    if (this.#treeCache && now - this.#treeCache.at < CACHE_MS) return this.#treeCache.paths;
+  async #tree(revalidate: boolean): Promise<Map<string, string>> {
+    // Whoever is already asking is asking the same question. Join them.
+    const inflight = this.#treeInflight;
+    if (inflight) return inflight;
 
+    const now = Date.now();
+
+    // While the budget is exhausted every request is refused until the reset,
+    // so there is nothing to gain by making one. Serve the last good copy; the
+    // `degraded` flag is what tells the UI it is showing state a few minutes
+    // old rather than implying it is current.
+    if (now < this.#rateLimitedUntil && this.#lastGoodTree) return this.#lastGoodTree;
+
+    // The read path never takes this branch. See the note on CACHE_MS.
+    if (!revalidate && this.#treeCache && now - this.#treeCache.at < CACHE_MS) {
+      return this.#treeCache.paths;
+    }
+
+    const started = this.#fetchTree(now);
+    this.#treeInflight = started;
+    try {
+      return await started;
+    } finally {
+      // Only if it is still ours: an `#invalidate` in between may already have
+      // dropped it and a newer revalidation may have taken its place.
+      if (this.#treeInflight === started) this.#treeInflight = null;
+    }
+  }
+
+  /**
+   * One conditional request for the whole branch.
+   *
+   * Conditional is the whole economics of this. Measured against the live API:
+   * two unconditional reads took the remaining count 4996 -> 4995, then three
+   * consecutive conditional reads all reported 4994. A 304 is free, so a read
+   * that revalidates on every call costs budget only when something has
+   * actually changed - which means the cost is bounded by the number of WRITES,
+   * not by the number of reads.
+   */
+  async #fetchTree(now: number): Promise<Map<string, string>> {
     const response = await fetch(
       `${API}/repos/${this.options.repository}/git/trees/${encodeURIComponent(this.options.branch)}?recursive=1`,
       {
@@ -249,18 +322,31 @@ export class GitHubCrmStore implements CrmStore {
   }
 
   /**
-   * List a collection.
+   * Load a collection.
    *
-   * Documents already held at the same sha are reused, so the common case -
-   * nothing changed since the last window - costs one tree request and no blob
-   * reads at all.
+   * `revalidate` is the read-your-write guarantee. With it, the tree is checked
+   * against GitHub before anything is served, so this instance cannot answer
+   * with state older than a write another instance has already acknowledged.
+   * Without it, the cached tree is used - which is what the write path wants,
+   * because a stale sha there costs a conflict and a retry rather than a wrong
+   * answer, and because re-reading the tree once per document would put back
+   * the request amplification that once took the deployment down.
+   *
+   * Documents already held at the same sha are reused, so the ordinary case -
+   * revalidate, get a 304 - costs one conditional request, no budget, and no
+   * blob reads at all.
    */
-  async #load(collection: Collection): Promise<Map<string, Entry>> {
+  async #load(collection: Collection, revalidate: boolean): Promise<Map<string, Entry>> {
     const cached = this.#cache.get(collection);
-    if (cached && Date.now() - cached.at < CACHE_MS) return cached.entries;
+    if (!revalidate && cached && Date.now() - cached.at < CACHE_MS) return cached.entries;
 
     const prefix = `${this.#path(collection)}/`;
-    const tree = await this.#tree();
+    const tree = await this.#tree(revalidate);
+
+    // The identical tree came back, so every sha under this prefix is the one
+    // these entries were built from and there is nothing to rebuild.
+    if (cached && cached.tree === tree) return cached.entries;
+
     const known = cached?.entries ?? this.#cache.get(collection)?.entries;
 
     const wanted: { id: string; sha: string }[] = [];
@@ -287,8 +373,27 @@ export class GitHubCrmStore implements CrmStore {
       if (item?.entry.document?.id) entries.set(item.entry.document.id, item.entry);
     }
 
-    this.#cache.set(collection, { at: Date.now(), entries });
+    this.#cache.set(collection, { at: Date.now(), entries, tree });
     return entries;
+  }
+
+  /**
+   * Record a document this process has just written, at its new sha.
+   *
+   * Kept in the cache rather than invalidated. Invalidating would force a
+   * re-read, and a read straight after a write is exactly the moment the remote
+   * is most likely to be behind. The tree reference is carried over unchanged:
+   * it is now one commit out of date, which is what makes the next read-path
+   * revalidation see a changed tree and rebuild - reusing this entry by sha, so
+   * the rebuild costs no blob read.
+   */
+  #remember(collection: Collection, entries: Map<string, Entry>, entry: Entry): void {
+    entries.set(entry.document.id, entry);
+    this.#cache.set(collection, {
+      at: Date.now(),
+      entries,
+      tree: this.#cache.get(collection)?.tree ?? new Map<string, string>(),
+    });
   }
 
   #invalidate(collection: Collection): void {
@@ -296,15 +401,18 @@ export class GitHubCrmStore implements CrmStore {
     // The tree goes too: a write changed a sha, and a stale tree would hand the
     // old one back and undo the read-after-write guarantee below.
     this.#treeCache = null;
+    // And any revalidation already in flight was started before that write, so
+    // joining it would answer from before the change.
+    this.#treeInflight = null;
   }
 
   async list<T extends StoredDocument>(collection: Collection): Promise<T[]> {
-    const entries = await this.#load(collection);
+    const entries = await this.#load(collection, true);
     return [...entries.values()].map((entry) => entry.document as T);
   }
 
   async get<T extends StoredDocument>(collection: Collection, id: string): Promise<T | null> {
-    const entries = await this.#load(collection);
+    const entries = await this.#load(collection, true);
     return (entries.get(id)?.document as T | undefined) ?? null;
   }
 
@@ -313,7 +421,10 @@ export class GitHubCrmStore implements CrmStore {
       throw new CrmStoreNotWritableError("no GitHub token is configured for the document store");
     }
 
-    const entries = await this.#load(collection);
+    // Not revalidated: a `put` is last-writer-wins by contract, so a stale sha
+    // costs one conflict and one retry rather than a wrong answer, and a bulk
+    // campaign does not pay a tree read per document.
+    const entries = await this.#load(collection, false);
     const existing = entries.get(document.id);
     const body = serialise(document);
 
@@ -321,7 +432,7 @@ export class GitHubCrmStore implements CrmStore {
     // per pass would be history noise and a round trip for no reason.
     if (existing && serialise(existing.document) === body) return document;
 
-    const sha = await this.#write(
+    const written = await this.#write(
       collection,
       document.id,
       body,
@@ -329,23 +440,109 @@ export class GitHubCrmStore implements CrmStore {
       `crm: ${collection}/${document.id}`,
     );
 
-    // Kept in the cache with its new sha rather than invalidated. Invalidating
-    // would force a re-read, and a read straight after a write is exactly the
-    // moment the remote is most likely to be behind. This way the process that
-    // wrote a document always reads back what it wrote, and it costs no request.
-    entries.set(document.id, { sha, document });
-    this.#cache.set(collection, { at: Date.now(), entries });
+    if (!written.ok) {
+      if (!written.conflict) throw written.error;
+      // A blind write that raced. There is no mutation to re-run - the caller
+      // said "this is the state now" - so the only honest retry is to re-read
+      // the sha and let the last writer win, which is what `put` promises.
+      // Anything that must not lose a concurrent change goes through `update`.
+      this.#invalidate(collection);
+      const current = await this.#load(collection, false);
+      const retried = await this.#write(
+        collection,
+        document.id,
+        body,
+        current.get(document.id)?.sha,
+        `crm: ${collection}/${document.id}`,
+      );
+      if (!retried.ok) throw retried.error;
+      this.#remember(collection, current, { sha: retried.sha, document });
+      return document;
+    }
+
+    this.#remember(collection, entries, { sha: written.sha, document });
     return document;
   }
 
+  /**
+   * Read, change, write, re-running the change against the current document
+   * whenever the write races.
+   *
+   * The bug this replaces was subtle and silent. The old conflict path re-sent
+   * the SAME body against the newly fetched sha, which is not a retry: the body
+   * was computed from a document that is by definition no longer current, so
+   * the write went through and erased whatever the other writer had just added.
+   * Two analysts adding a note to the same opportunity within the cache window
+   * ended up with one note, and nothing anywhere said the other had been lost.
+   *
+   * `mutate` is therefore re-run from scratch on each attempt, against a tree
+   * that has been invalidated so the read cannot be served from the copy that
+   * just lost. Attempts are bounded: a document under real contention settles
+   * on the second pass, and a backend that refuses forever should raise rather
+   * than hang.
+   */
+  async update<T extends StoredDocument>(
+    collection: Collection,
+    id: string,
+    mutate: (current: T | null) => T | null,
+  ): Promise<T | null> {
+    if (!this.options.token) {
+      throw new CrmStoreNotWritableError("no GitHub token is configured for the document store");
+    }
+
+    for (let attempt = 0; attempt < MAX_UPDATE_ATTEMPTS; attempt += 1) {
+      // The first attempt works from the cached tree; a stale one is refused by
+      // GitHub and the loop re-reads and re-runs the mutation, which is a
+      // cheaper way to be correct than a tree read before every write.
+      const entries = await this.#load(collection, attempt > 0);
+      const existing = entries.get(id);
+
+      const next = mutate((existing?.document as T | undefined) ?? null);
+      if (!next) return null;
+
+      const body = serialise(next);
+      // Unchanged is not written, exactly as in `put`.
+      if (existing && serialise(existing.document) === body) return next;
+
+      const written = await this.#write(
+        collection,
+        next.id,
+        body,
+        existing?.sha,
+        `crm: ${collection}/${next.id}`,
+      );
+
+      if (written.ok) {
+        this.#remember(collection, entries, { sha: written.sha, document: next });
+        return next;
+      }
+      if (!written.conflict) throw written.error;
+
+      // Somebody wrote first. Drop the cached tree so the next read is the
+      // state they left, and run the mutation again on top of it.
+      this.#invalidate(collection);
+      logEvent("store.write_conflict", { collection, id, attempt: attempt + 1 });
+    }
+
+    throw new Error(
+      `could not update ${collection}/${id}: the document was changed by another writer on every one of ${MAX_UPDATE_ATTEMPTS} attempts`,
+    );
+  }
+
+  /**
+   * One PUT against the contents API.
+   *
+   * Returns the outcome rather than throwing on a conflict, because a conflict
+   * is the one failure the callers handle differently from each other: `put`
+   * retries once and lets the last writer win, `update` re-runs the mutation.
+   */
   async #write(
     collection: Collection,
     id: string,
     body: string,
     sha: string | undefined,
     message: string,
-    attempt = 0,
-  ): Promise<string> {
+  ): Promise<{ ok: true; sha: string } | { ok: false; conflict: boolean; error: Error }> {
     const response = await fetch(
       `${API}/repos/${this.options.repository}/contents/${this.#path(collection, id)}`,
       {
@@ -364,22 +561,19 @@ export class GitHubCrmStore implements CrmStore {
     if (response.ok) {
       logEvent("store.written", { collection, id });
       const written = (await response.json()) as { content?: { sha?: string } };
-      return written.content?.sha ?? "";
+      return { ok: true, sha: written.content?.sha ?? "" };
     }
 
     // 409 or 422 means the blob moved under us, which happens when the matcher
-    // and a person write the same document at the same moment. Re-read the
-    // current sha and try once more; a second failure is a real error.
-    if ((response.status === 409 || response.status === 422) && attempt === 0) {
-      this.#invalidate(collection);
-      const current = await this.#load(collection);
-      const currentSha = current.get(id)?.sha;
-      return this.#write(collection, id, body, currentSha, message, attempt + 1);
-    }
-
-    throw new Error(
-      `could not write ${collection}/${id}: ${response.status} ${await response.text()}`,
-    );
+    // and a person write the same document at the same moment.
+    const conflict = response.status === 409 || response.status === 422;
+    return {
+      ok: false,
+      conflict,
+      error: new Error(
+        `could not write ${collection}/${id}: ${response.status} ${await response.text()}`,
+      ),
+    };
   }
 
   async remove(collection: Collection, id: string): Promise<void> {
@@ -387,7 +581,9 @@ export class GitHubCrmStore implements CrmStore {
       throw new CrmStoreNotWritableError("no GitHub token is configured for the document store");
     }
 
-    const entries = await this.#load(collection);
+    // Revalidated: a document this instance has not seen yet is one this would
+    // otherwise silently decline to delete. One request, not one per document.
+    const entries = await this.#load(collection, true);
     const existing = entries.get(id);
     if (!existing) return;
 
@@ -429,7 +625,7 @@ export class GitHubCrmStore implements CrmStore {
     //
     // Still sequential: the contents API serialises commits to a branch anyway,
     // so firing them in parallel only produces conflicts to retry.
-    const entries = await this.#load(collection);
+    const entries = await this.#load(collection, true);
     for (const [id, entry] of entries) await this.#delete(collection, id, entry.sha);
     this.#invalidate(collection);
   }

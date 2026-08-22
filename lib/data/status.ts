@@ -63,7 +63,7 @@ export function useServerStatus(): [ServerStatus | null, () => void] {
   const [status, setStatus] = useState<ServerStatus | null>(null);
 
   const reload = useCallback(() => {
-    fetch("/api/datasource")
+    fetch("/api/datasource", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((body: ServerStatus | null) => {
         if (body) setStatus(body);

@@ -18,7 +18,13 @@ import { PropertyMap } from "@/components/PropertyMap";
 import { ResultList } from "@/components/ResultList";
 import { Button, Field, Panel, TextArea, TextInput, Toggle, count } from "@/components/ui";
 import { ApiError, post, type SavedSearch } from "@/lib/client";
-import { useParcelSearch, type OrderBy } from "@/lib/data/use-search";
+import {
+  attachHeadline,
+  useParcelSearch,
+  type OrderBy,
+  type SearchState,
+} from "@/lib/data/use-search";
+import type { AttachAttaching, AttachFailed } from "@/lib/data/types";
 import { publicDataConfig } from "@/lib/data/public-config";
 import { EMPTY_CRITERIA, type CriteriaSet, type Geometry } from "@/lib/criteria/types";
 import type { MapViewport } from "@/lib/criteria/sql";
@@ -66,7 +72,7 @@ function SearchWorkspace() {
   useEffect(() => {
     if (!savedSearchId) return;
     let cancelled = false;
-    fetch(`/api/searches/${savedSearchId}`)
+    fetch(`/api/searches/${savedSearchId}`, { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((body: { search?: SavedSearch } | null) => {
         if (!cancelled && body?.search) setCriteria(body.search.criteria);
@@ -78,7 +84,6 @@ function SearchWorkspace() {
   }, [savedSearchId]);
 
   const search = useParcelSearch(criteria, orderBy, viewport);
-  const { rows, total, loading, error } = search;
 
   const setGeometry = useCallback((geometry: Geometry | null) => {
     setCriteria((current) => ({
@@ -86,6 +91,16 @@ function SearchWorkspace() {
       filters: { ...current.filters, geometry: geometry ?? undefined },
     }));
   }, []);
+
+  // Everything below narrows on `search.status` first. Until the published
+  // artifact has attached there are no rows to count, so there is nothing here
+  // that could render a match count - the surface can only say what it is
+  // waiting for.
+  const ready = search.status === "ready" ? search : null;
+  const rows = ready?.rows ?? [];
+  const total = ready?.total ?? 0;
+  const loading = ready ? ready.loading : true;
+  const error = ready?.error ?? null;
 
   const selectedRow = rows.find((row) => row.propertyId === selectedId) ?? null;
 
@@ -108,8 +123,9 @@ function SearchWorkspace() {
         )}
         <div className="min-h-0 flex-1">
           <PropertyMap
-            points={search.mapPoints}
+            points={ready?.mapPoints ?? []}
             center={publicDataConfig.center}
+            initialBounds={publicDataConfig.initialBounds}
             geometry={criteria.filters.geometry ?? null}
             onGeometryChange={setGeometry}
             onViewportChange={setViewport}
@@ -117,7 +133,7 @@ function SearchWorkspace() {
             onFollowViewChange={setFollowView}
             onSelect={setSelectedId}
             selectedId={selectedId}
-            truncated={search.mapTruncated}
+            truncated={ready?.mapTruncated ?? false}
             total={total}
             loading={loading}
           />
@@ -125,21 +141,25 @@ function SearchWorkspace() {
       </div>
 
       <div className="flex min-h-0 flex-col overflow-hidden">
-        <ResultList
-          rows={rows}
-          total={total}
-          loading={loading}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-          hasMore={search.hasMore}
-          onLoadMore={search.loadMore}
-          sql={search.sql}
-          tookMs={search.tookMs}
-          orderBy={orderBy}
-          onOrderChange={setOrderBy}
-          criteria={criteria}
-          limitedToView={followView}
-        />
+        {search.status === "ready" ? (
+          <ResultList
+            rows={search.rows}
+            total={search.total}
+            loading={search.loading}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+            hasMore={search.hasMore}
+            onLoadMore={search.loadMore}
+            sql={search.sql}
+            tookMs={search.tookMs}
+            orderBy={orderBy}
+            onOrderChange={setOrderBy}
+            criteria={criteria}
+            limitedToView={followView}
+          />
+        ) : (
+          <AttachPanel search={search} />
+        )}
       </div>
 
       <PropertyDrawer
@@ -165,6 +185,114 @@ function SearchWorkspace() {
       )}
     </div>
   );
+}
+
+/**
+ * What the result column shows before there is anything to rank.
+ *
+ * This exists because the alternative was a lie. The published parquet is
+ * 49.5 MB of Duval County read over a public IPFS gateway, and on a cold load
+ * the attach takes as long as the gateway takes. The surface used to say
+ * "Searching", then "No parcels match these criteria" - so the first thing a
+ * reviewer saw was a CRM that had searched 404,023 parcels and found nothing.
+ *
+ * A wait is fine. A wait that does not say what it is waiting for, how long it
+ * has been waiting, or what it will do about it, is not.
+ */
+function AttachPanel({ search }: { search: Exclude<SearchState, { status: "ready" }> }) {
+  return search.status === "attaching" ? (
+    <Attaching attach={search.attach} />
+  ) : (
+    <Unavailable attach={search.attach} onRetry={search.retryAttach} />
+  );
+}
+
+function Attaching({ attach }: { attach: AttachAttaching }) {
+  const percent = attach.progress === null ? null : Math.round(attach.progress * 100);
+  const slow = attach.elapsedMs > 20_000;
+
+  return (
+    <Panel
+      title="Loading the county"
+      subtitle={`${publicDataConfig.countyName} County, read straight from the gateway by this tab`}
+    >
+      <div className="space-y-3">
+        <p className="text-xs text-ink-300">{attachHeadline(attach)}</p>
+
+        <div
+          className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--panel-raised)]"
+          role="progressbar"
+          aria-valuenow={percent ?? undefined}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Query table load progress"
+        >
+          <div
+            className={
+              percent === null
+                ? "h-full w-1/3 animate-pulse rounded-full bg-accent-500/70"
+                : "h-full rounded-full bg-accent-500 transition-[width] duration-300"
+            }
+            style={percent === null ? undefined : { width: `${percent}%` }}
+          />
+        </div>
+
+        <p className="text-[11px] text-ink-500">
+          Reading from <span className="mono text-ink-400">{hostname(attach.gateway)}</span>
+          {attach.gatewayCount > 1 &&
+            ` - ${attach.gatewayCount - attach.gatewayIndex - 1} more gateway${
+              attach.gatewayCount - attach.gatewayIndex - 1 === 1 ? "" : "s"
+            } to fall back on`}
+          .
+        </p>
+
+        {attach.failedOver && (
+          <p className="rounded-md border border-warn-500/40 bg-warn-500/10 px-3 py-2 text-[11px] text-warn-500">
+            The configured gateway did not answer in time, so this tab moved to a public IPFS
+            gateway. It is the same content-addressed artifact either way.
+          </p>
+        )}
+
+        {slow && !attach.failedOver && (
+          <p className="text-[11px] text-ink-500">
+            Public IPFS gateways are slow on a cold read. Nothing is wrong; the tab is fetching the
+            parquet and will fall back to another gateway if this one stalls.
+          </p>
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+function Unavailable({ attach, onRetry }: { attach: AttachFailed; onRetry: () => void }) {
+  return (
+    <Panel title="The county data could not be read">
+      <div className="space-y-3">
+        <p className="rounded-md border border-bad-500/40 bg-bad-500/10 px-3 py-2 text-xs text-bad-500">
+          {attach.error}
+        </p>
+        <p className="text-[11px] text-ink-500">
+          Tried {attach.tried.length} gateway{attach.tried.length === 1 ? "" : "s"}:{" "}
+          <span className="mono text-ink-400">
+            {attach.tried.map((url) => hostname(url)).join(", ")}
+          </span>
+          . This is the gateway, not the CRM: saved criteria, alerts and opportunities are
+          unaffected.
+        </p>
+        <Button variant="primary" onClick={onRetry} className="w-full">
+          Try the gateways again
+        </Button>
+      </div>
+    </Panel>
+  );
+}
+
+function hostname(url: string): string {
+  try {
+    return new URL(url, "https://localhost").host || url;
+  } catch {
+    return url;
+  }
 }
 
 /**

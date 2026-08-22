@@ -46,6 +46,25 @@ export class MemoryCrmStore implements CrmStore {
     return document;
   }
 
+  /**
+   * There is no concurrency to lose an update to inside one process: nothing
+   * else can run between the read and the write, because there is no await
+   * between them. So this is the read-modify-write it looks like, and it is
+   * here to satisfy the same contract the git backend has to work harder for.
+   */
+  async update<T extends StoredDocument>(
+    collection: Collection,
+    id: string,
+    mutate: (current: T | null) => T | null,
+  ): Promise<T | null> {
+    const bucket = this.#bucket(collection);
+    const raw = bucket.get(id);
+    const next = mutate(raw ? (JSON.parse(raw) as T) : null);
+    if (!next) return null;
+    bucket.set(next.id, serialise(next));
+    return next;
+  }
+
   async remove(collection: Collection, id: string): Promise<void> {
     this.#bucket(collection).delete(id);
   }

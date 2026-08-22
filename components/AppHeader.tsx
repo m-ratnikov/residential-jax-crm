@@ -42,7 +42,7 @@ export function AppHeader() {
   // a badge and avoids a polling timer nobody asked for.
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/alerts?unread=true&limit=200")
+    fetch("/api/alerts?unread=true&limit=200", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((body: { alerts?: unknown[] } | null) => {
         if (!cancelled) setUnread(body?.alerts?.length ?? 0);

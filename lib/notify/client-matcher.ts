@@ -22,7 +22,9 @@ import { displayAddress } from "@/lib/data/map";
 import type { ScoredProperty } from "@/lib/data/types";
 import { fetchOverlay, propertySource } from "@/lib/data/client-source";
 import { postLarge, type SavedSearch } from "@/lib/client";
-import { TRACKED_MATCH_CAP, type MatcherResult } from "./evaluate";
+import { TRACKED_MATCH_CAP } from "./limits";
+import type { MatcherResult } from "./evaluate";
+import { toEvaluatedMatch } from "./snapshot";
 
 /** Matches the server-side cap, so a pass from either side sees the same set. */
 /**
@@ -36,29 +38,6 @@ import { TRACKED_MATCH_CAP, type MatcherResult } from "./evaluate";
  * is two steps of the demo script.
  */
 export const MATCH_EVALUATION_CAP = TRACKED_MATCH_CAP;
-
-function alertSnapshot(scored: ScoredProperty): Record<string, unknown> {
-  const property = scored.property;
-  return {
-    propertyId: property.propertyId,
-    address: displayAddress(property),
-    addressCity: property.addressCity,
-    addressZip: property.addressZip,
-    latitude: property.latitude,
-    longitude: property.longitude,
-    ownerName: property.ownerName,
-    assessedValue: property.assessedValue,
-    roofAgeYears: property.roofAgeYears,
-    roofAgeBasis: property.roofAgeBasis,
-    yearsSinceLastSale: property.yearsSinceLastSale,
-    lastSaleDate: property.lastSaleDate,
-    ownerOccupied: property.ownerOccupied,
-    homesteadFlag: property.homesteadFlag,
-    waterViewFlag: property.waterViewFlag,
-    courtDistressScore: property.raw["court_distress_score"] ?? null,
-    provenance: property.provenance,
-  };
-}
 
 export interface RunPassOptions {
   /** Limit the pass to these saved searches. Used right after a simulation. */
@@ -130,14 +109,7 @@ export async function runMatcherPass(options: RunPassOptions = {}): Promise<Matc
         savedSearchId: search.id,
         matched: result.total,
         truncated: result.total > result.rows.length,
-        rows: result.rows.map((scored) => ({
-          propertyId: scored.property.propertyId,
-          matchHash: scored.matchHash,
-          snapshot: materialSnapshot(scored.property),
-          score: scored.score,
-          rationale: scored.rationale,
-          propertySnapshot: alertSnapshot(scored),
-        })),
+        rows: result.rows.map(toEvaluatedMatch),
       });
     } catch (error: unknown) {
       evaluations.push({

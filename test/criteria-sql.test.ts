@@ -139,20 +139,115 @@ describe("scoring", () => {
       false,
     );
     const value = score.components.find((component) => component.key === "value");
-    expect(value?.expression).toContain("1.0 - (assessed_value - 100000)");
+    // Linear across the band the user asked for: 1.0 at the floor, 0.0 at the
+    // ceiling, and the span is the band rather than an invented constant.
+    expect(value?.expression).toContain("1.0 - (CAST(assessed_value AS DOUBLE) - 100000) / 100000");
+  });
+
+  it("still ranks on value when only a floor was given", () => {
+    const score = buildScore(criteria({ minAssessedValue: 100000 }), false);
+    const value = score.components.find((component) => component.key === "value");
+    expect(value?.expression).toContain("100000 / CAST(assessed_value AS DOUBLE)");
   });
 
   it("excludes court signals from the distress component when unavailable", () => {
-    const withCourt = buildScore(
-      criteria({ distress: { hasLien: true, absenteeOwner: true } }),
-      true,
-    );
-    const withoutCourt = buildScore(
-      criteria({ distress: { hasLien: true, absenteeOwner: true } }),
-      false,
-    );
+    const filters = { distress: { hasLien: true, hasForeclosure: true, absenteeOwner: true } };
+    const withCourt = buildScore(criteria(filters), true);
+    const withoutCourt = buildScore(criteria(filters), false);
     expect(withCourt.components[0]?.expression).toContain("court_lien_count");
     expect(withoutCourt.components[0]?.expression).not.toContain("court_lien_count");
+  });
+});
+
+describe("a score that discriminates", () => {
+  it("does not hand out a fixed credit for clearing a threshold", () => {
+    // The defect: 0.6 of the component the moment the threshold was cleared, so
+    // the whole ranking lived in the remaining 0.4.
+    const score = buildScore(criteria({ minYearsSinceSale: 10 }), false);
+    expect(score.components[0]?.expression).not.toContain("0.6");
+  });
+
+  it("keeps earning past the threshold instead of capping fifteen years later", () => {
+    // Held 33 years and held 25 years used to be the same parcel. The linear
+    // core now runs to the top of the roll's own range, and past that a tail
+    // that approaches but never reaches full marks.
+    const tenure = buildScore(criteria({ minYearsSinceSale: 10 }), false).components[0];
+    expect(tenure?.expression).toContain("greatest");
+    // 10 + 35: the core tops out at the roll's 45 year mark, not at 10 + 15.
+    expect(tenure?.expression).toContain("/ 35");
+  });
+
+  it("stops the ramp at an upper bound the user actually set", () => {
+    // Nothing above the ceiling survived the WHERE clause, so there is nothing
+    // up there to order and the tail would only waste range.
+    const banded = buildScore(criteria({ minRoofAge: 15, maxRoofAge: 25 }), false).components[0];
+    expect(banded?.expression).toContain("/ 10");
+    expect(banded?.expression).not.toContain("greatest");
+  });
+
+  it("grades an absentee owner by how far away they are rather than repeating the filter", () => {
+    const distress = buildScore(criteria({ distress: { absenteeOwner: true } }), false)
+      .components[0];
+    expect(distress?.expression).toContain("owner_region_class");
+  });
+
+  it("leaves out a signal the filter already guarantees on every row", () => {
+    // `noHomestead` is both the predicate and the signal, so it is 1.0 for
+    // every row in the result. Scoring it only takes weight from the signals
+    // that can still tell two matches apart.
+    const both = buildScore(
+      criteria({ distress: { absenteeOwner: true, noHomestead: true } }),
+      false,
+    );
+    expect(both.components[0]?.expression).not.toContain("homestead_flag");
+
+    const alone = buildScore(criteria({ distress: { noHomestead: true } }), false);
+    expect(alone.components).toHaveLength(0);
+    expect(alone.unranked).toBe(true);
+  });
+
+  it("keeps court signals that are alternatives and drops one that is not", () => {
+    // Two requested kinds are ORed, so a parcel may have one and not the other
+    // and the component ranks. A single requested kind is on every row.
+    const two = buildScore(criteria({ distress: { hasLien: true, hasProbate: true } }), true);
+    expect(two.components[0]?.expression).toContain("court_lien_count");
+    expect(two.components[0]?.expression).toContain("court_probate_count");
+
+    const one = buildScore(criteria({ distress: { hasForeclosure: true } }), true);
+    expect(one.components).toHaveLength(0);
+  });
+
+  it("scores a court distress floor as a ramp up the published scale", () => {
+    const score = buildScore(criteria({ distress: { minCourtScore: 40 } }), true);
+    expect(score.components[0]?.expression).toContain("court_distress_score");
+    expect(score.components[0]?.expression).toContain("/ 60");
+  });
+
+  it("ranks on distance from the middle of a drawn polygon, not just a circle", () => {
+    const ring: [number, number][] = [
+      [-81.7, 30.3],
+      [-81.6, 30.3],
+      [-81.6, 30.4],
+      [-81.7, 30.4],
+    ];
+    const score = buildScore(criteria({ geometry: { type: "polygon", ring } }), false);
+    const geography = score.components.find((component) => component.key === "geography");
+    expect(geography?.expression).toContain("asin");
+  });
+
+  it("carries every component out as a DOUBLE", () => {
+    // A decimal typed score reaches the browser as a four element array, which
+    // becomes NaN, which paints an empty map. See the note on buildScore.
+    const score = buildScore(criteria({ minRoofAge: 15, minYearsSinceSale: 10 }), false);
+    for (const component of score.components) {
+      expect(score.selectFragment).toContain(`AS DOUBLE) AS ${component.alias}`);
+    }
+    expect(score.selectFragment).toContain(`AS DOUBLE) AS match_score`);
+  });
+
+  it("keeps more than one decimal so the score itself orders the list", () => {
+    const score = buildScore(criteria({ minRoofAge: 15 }), false);
+    expect(score.selectFragment).toContain(", 2)");
   });
 });
 
@@ -236,6 +331,22 @@ describe("how ties are broken", () => {
     // that would have removed it is switched off.
     expect(TIEBREAK_SQL).toContain("assessed_value >= livable_floor_area");
     expect(order("score")).toContain("assessed_value >= livable_floor_area");
+  });
+
+  it("opens on Jacksonville rather than on the plat numbers", () => {
+    // `property_id` is an RE number, assigned in the order the county platted
+    // the land, so ascending order is the rural western edge first: the first
+    // twenty rows of the default search were all on the Baldwin corridor, 28 km
+    // out. Distance from downtown comes first now, and the plat number only
+    // resolves an exact tie.
+    const ordering = order("score");
+    expect(ordering).toContain("30.3322");
+    expect(ordering).toContain("-81.6557");
+    expect(ordering.indexOf("30.3322")).toBeLessThan(ordering.indexOf("property_id"));
+  });
+
+  it("puts a parcel with no coordinates last rather than first", () => {
+    expect(order("score")).toContain("ASC NULLS LAST, property_id");
   });
 
   it("breaks a remaining tie on a stable key rather than inventing a ranking", () => {
