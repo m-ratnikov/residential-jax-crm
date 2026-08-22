@@ -53,7 +53,7 @@
     "yearsSinceLastSale": 55
   },
   "savedSearchId": "0mt3v3tx5y3x93mqx",
-  "stage": "contacted",
+  "stage": "negotiating",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -70,8 +70,16 @@
       "id": "0mt3vf9pok39q5g5m",
       "note": null,
       "toStage": "contacted"
+    },
+    {
+      "actorId": "0mt3v3qdzqpzl4w3h",
+      "createdAt": "2026-08-22T04:21:17.695Z",
+      "fromStage": "contacted",
+      "id": "0mt3vfabjw61bs278",
+      "note": "Probate is the driver here. Two heirs, one out of state, both want it gone. Asking $1,021,500, we are at $919,500.",
+      "toStage": "negotiating"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T04:21:16.908Z"
+  "updatedAt": "2026-08-22T04:21:17.695Z"
 }
