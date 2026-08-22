@@ -111,7 +111,7 @@
         },
         {
           "detail": "Delivered",
-          "occurredAt": "2026-08-24T17:06:06.056Z",
+          "occurredAt": "2026-08-22T10:25:19.933Z",
           "providerEventId": "sim_direct_mail_390dbdb97ff4858a7300:delivered",
           "status": "delivered"
         }
@@ -140,13 +140,13 @@
         },
         {
           "detail": "Delivered",
-          "occurredAt": "2026-08-22T10:26:04.274Z",
+          "occurredAt": "2026-08-22T10:25:19.933Z",
           "providerEventId": "sim_email_ff97e9372d31ea033b46:delivered",
           "status": "delivered"
         },
         {
           "detail": "Recipient opened the message",
-          "occurredAt": "2026-08-22T10:27:42.274Z",
+          "occurredAt": "2026-08-22T10:25:19.933Z",
           "providerEventId": "sim_email_ff97e9372d31ea033b46:opened",
           "status": "opened"
         }
