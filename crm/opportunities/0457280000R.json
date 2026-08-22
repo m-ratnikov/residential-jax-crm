@@ -19,7 +19,7 @@
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt3pni1bsay9tr01",
-  "ownerInterest": null,
+  "ownerInterest": "Curious, not committed",
   "ownerNameSnapshot": "NEAL SALLIE ESTATE",
   "parcelIdentifier": "0457280000R",
   "propertyId": "0457280000R",
@@ -70,5 +70,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T01:39:45.840Z"
+  "updatedAt": "2026-08-22T01:39:47.000Z"
 }
