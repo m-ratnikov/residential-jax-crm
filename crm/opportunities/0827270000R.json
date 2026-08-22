@@ -15,7 +15,14 @@
   "matchScore": 83.3,
   "nextStep": null,
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": null,
+      "body": "test note",
+      "createdAt": "2026-08-22T10:52:52.321Z",
+      "id": "0mt49euw1zixw28ms"
+    }
+  ],
   "offerPrice": null,
   "outreach": [],
   "ownerId": "0mt49ecrgjflzhvdr",
@@ -65,5 +72,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T10:52:44.205Z"
+  "updatedAt": "2026-08-22T10:52:52.321Z"
 }
