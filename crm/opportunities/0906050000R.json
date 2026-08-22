@@ -48,8 +48,8 @@
       ],
       "id": "0mt431e11qr681php",
       "providerMessageId": "sim_email_ec6672f8108fd2543d40",
-      "status": "sent",
-      "statusAt": "2026-08-22T07:54:26.245Z",
+      "status": "delivered",
+      "statusAt": "2026-08-22T07:55:18.245Z",
       "subject": "Interested in buying 2573 RIVERSIDE AVE, JACKSONVILLE, 32204",
       "templateId": "cash-offer-intro",
       "toAddress": "owner-62ecdf056a@mocked-skip-trace.invalid"
