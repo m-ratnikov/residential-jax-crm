@@ -96,7 +96,7 @@
     "yearsSinceLastSale": 54
   },
   "savedSearchId": "0mt3v3tx5y3x93mqx",
-  "stage": "contacted",
+  "stage": "negotiating",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -113,6 +113,14 @@
       "id": "0mt3vemqvrpo6gl35",
       "note": "Letter went out last week. No reply yet.",
       "toStage": "contacted"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-22T07:44:40.087Z",
+      "fromStage": "contacted",
+      "id": "0mt42otqwz04o3h9j",
+      "note": null,
+      "toStage": "negotiating"
     }
   ],
   "tasks": [
@@ -126,5 +134,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-22T04:20:52.004Z"
+  "updatedAt": "2026-08-22T07:44:40.087Z"
 }
