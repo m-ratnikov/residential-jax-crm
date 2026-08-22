@@ -1,0 +1,37 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T11:33:40.893Z",
+  "criteria": {
+    "filters": {
+      "dwellingsOnly": true,
+      "maxBuiltYear": 1990,
+      "maxTransitDistanceM": 800,
+      "minYearsSinceSale": 10,
+      "residentialOnly": true
+    },
+    "name": "Transit infill",
+    "weights": {
+      "amenity": 3,
+      "distress": 1,
+      "geography": 1,
+      "roofAge": 2,
+      "tenure": 2,
+      "value": 1
+    }
+  },
+  "description": "Within 800 m of a JTA stop, built before 1990, held ten years or more. Rental demand near transit.",
+  "id": "0mt4avc7x052bfnz9",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Transit infill",
+  "notifyEmail": false,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T11:33:40.893Z"
+}
