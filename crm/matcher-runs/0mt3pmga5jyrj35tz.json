@@ -1,0 +1,78 @@
+{
+  "alertsCreated": 5,
+  "alertsSuppressed": 0,
+  "dataSourceIsSample": false,
+  "dataSourceKind": "duckdb-parquet",
+  "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+  "dataSourceRowCount": 404023,
+  "detail": {
+    "dataSource": {
+      "artifactRunId": "sim-20260822013847-731873da",
+      "isSample": false,
+      "kind": "duckdb-parquet",
+      "location": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
+      "rowCount": 404023
+    },
+    "outcomes": [
+      {
+        "alertsCreated": 3,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 0,
+        "matched": 67399,
+        "matchesTruncated": true,
+        "name": "Transit infill",
+        "newMatches": 0,
+        "savedSearchId": "0mt3plj8xcu0xv5m4",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": true,
+        "unstableReads": 0,
+        "updatedMatches": 3
+      },
+      {
+        "alertsCreated": 0,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 0,
+        "matched": 151856,
+        "matchesTruncated": true,
+        "name": "Aging roof, entry price band",
+        "newMatches": 0,
+        "savedSearchId": "0mt3pliii1qr73qkb",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": true,
+        "unstableReads": 0,
+        "updatedMatches": 0
+      },
+      {
+        "alertsCreated": 2,
+        "alertsSuppressed": 0,
+        "evaluated": 2000,
+        "leftMatches": 0,
+        "matched": 10209,
+        "matchesTruncated": true,
+        "name": "Tired landlord",
+        "newMatches": 0,
+        "savedSearchId": "0mt3plhruuxyr1mr1",
+        "seeded": false,
+        "trackedMatches": 2000,
+        "truncated": true,
+        "unstableReads": 0,
+        "updatedMatches": 2
+      }
+    ]
+  },
+  "error": null,
+  "finishedAt": "2026-08-22T01:39:12.717Z",
+  "id": "0mt3pmga5jyrj35tz",
+  "notificationsSent": 7,
+  "pipelineRunId": "sim-20260822013847-731873da",
+  "pipelineRunIsNew": true,
+  "pipelineRunStartedAt": "2026-08-21T23:43:16.590Z",
+  "propertiesEvaluated": 6000,
+  "searchesEvaluated": 3,
+  "startedAt": "2026-08-22T01:38:53.884Z",
+  "trigger": "simulation"
+}
