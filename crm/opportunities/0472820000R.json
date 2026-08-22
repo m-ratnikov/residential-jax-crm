@@ -118,8 +118,8 @@
       ],
       "id": "0mt433saw0z2y29ii",
       "providerMessageId": "sim_direct_mail_390dbdb97ff4858a7300",
-      "status": "sent",
-      "statusAt": "2026-08-22T07:56:18.056Z",
+      "status": "delivered",
+      "statusAt": "2026-08-22T10:25:19.933Z",
       "subject": "Managing 2280 SHERRINGTON ST, JACKSONVILLE, 32209 from out of town?",
       "templateId": "absentee-landlord",
       "toAddress": "2280 SHERRINGTON ST"
@@ -153,8 +153,8 @@
       ],
       "id": "0mt48ezyij9tc7ij8",
       "providerMessageId": "sim_email_ff97e9372d31ea033b46",
-      "status": "sent",
-      "statusAt": "2026-08-22T10:24:59.274Z",
+      "status": "opened",
+      "statusAt": "2026-08-22T10:25:19.933Z",
       "subject": "About the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
       "templateId": "roof-condition",
       "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
