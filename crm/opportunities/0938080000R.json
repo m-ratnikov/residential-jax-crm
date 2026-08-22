@@ -3,7 +3,7 @@
   "addressLine": "4555 PALMER AVE, JACKSONVILLE, 32210",
   "addressZip": "32210",
   "alertId": null,
-  "askingPrice": null,
+  "askingPrice": 80000,
   "assessedValue": 80077,
   "assigneeId": "0mt3plgs01tie4kc4",
   "closedAt": "2026-08-22T01:40:24.653Z",
@@ -16,7 +16,7 @@
   "nextStep": null,
   "nextStepDueAt": null,
   "notes": [],
-  "offerPrice": null,
+  "offerPrice": 69000,
   "outreach": [],
   "ownerId": "0mt3po9zgdahirk9x",
   "ownerInterest": null,
@@ -94,5 +94,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T01:40:24.653Z"
+  "updatedAt": "2026-08-22T01:40:26.254Z"
 }
