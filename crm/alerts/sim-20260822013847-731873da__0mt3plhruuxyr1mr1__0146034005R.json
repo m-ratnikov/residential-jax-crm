@@ -1,0 +1,65 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-22T02:26:16.693Z",
+  "dismissedAt": null,
+  "id": "sim-20260822013847-731873da__0mt3plhruuxyr1mr1__0146034005R",
+  "kind": "new_match",
+  "matcherRunId": "0mt3rbdl27h4d2tnj",
+  "notifications": [
+    {
+      "body": "7831 S GULF RD, JACKSONVILLE, 32244 now matches your saved search \"Tired landlord\".\n\nMatch score: 100 / 100\nWhy: held 29 years (+33); roof about 38 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).\n\nOwner of record: BAKER MERLAND A\nAssessed value: $199,506\nParcel: 0146034005R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T02:27:06.793Z",
+      "id": "0mt3rcg4pr7bjvjfu",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T02:27:06.793Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 7831 S GULF RD, JACKSONVILLE, 32244"
+    },
+    {
+      "body": "7831 S GULF RD, JACKSONVILLE, 32244 now matches your saved search \"Tired landlord\".\n\nMatch score: 100 / 100\nWhy: held 29 years (+33); roof about 38 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).\n\nOwner of record: BAKER MERLAND A\nAssessed value: $199,506\nParcel: 0146034005R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T02:27:06.793Z",
+      "id": "0mt3rcg4pk4s3qrea",
+      "providerMessageId": "sim_email_834696c78d021713477a",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T02:27:06.793Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 7831 S GULF RD, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822013847-731873da",
+  "propertyId": "0146034005R",
+  "propertySnapshot": {
+    "address": "7831 S GULF RD, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 199506,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2373264,
+    "longitude": -81.778136,
+    "ownerName": "BAKER MERLAND A",
+    "ownerOccupied": false,
+    "propertyId": "0146034005R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0KBA53DPMHRGXV66NQ0GRY5",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 38,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 29
+  },
+  "rationale": "held 29 years (+33); roof about 38 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
+  "readAt": null,
+  "savedSearchId": "0mt3plhruuxyr1mr1",
+  "score": 100
+}
