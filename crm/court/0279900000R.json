@@ -1,0 +1,18 @@
+{
+  "id": "0279900000R",
+  "parcelIdentifier": "0279900000R",
+  "propertyId": "0279900000R",
+  "records": [
+    {
+      "amount": 12400,
+      "caseNumber": "2026-SIM-00000R-1",
+      "caseType": "lien",
+      "fetchedAt": "2026-08-22T04:21:42.846Z",
+      "filedDate": "2026-08-22",
+      "partyName": "PHELPS MAE C ET AL",
+      "sourceSystem": "simulated_court_feed",
+      "sourceUrl": null,
+      "status": "open"
+    }
+  ]
+}
