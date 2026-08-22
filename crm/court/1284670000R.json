@@ -1,0 +1,18 @@
+{
+  "id": "1284670000R",
+  "parcelIdentifier": "1284670000R",
+  "propertyId": "1284670000R",
+  "records": [
+    {
+      "amount": 2750,
+      "caseNumber": "2026-SIM-70000R-2",
+      "caseType": "code_enforcement",
+      "fetchedAt": "2026-08-22T03:09:45.635Z",
+      "filedDate": "2026-08-22",
+      "partyName": "ALTMAN JEFFERY PAUL SR",
+      "sourceSystem": "simulated_court_feed",
+      "sourceUrl": null,
+      "status": "open"
+    }
+  ]
+}
