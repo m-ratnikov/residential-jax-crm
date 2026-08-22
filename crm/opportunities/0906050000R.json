@@ -70,7 +70,7 @@
         },
         {
           "detail": "Delivered",
-          "occurredAt": "2026-08-22T10:26:07.876Z",
+          "occurredAt": "2026-08-22T10:25:19.933Z",
           "providerEventId": "sim_email_a3626f31935add5eb913:delivered",
           "status": "delivered"
         }
