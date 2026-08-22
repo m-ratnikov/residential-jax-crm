@@ -60,7 +60,7 @@
     "yearsSinceLastSale": 66
   },
   "savedSearchId": "0mt3v3sjckfr92p5g",
-  "stage": "identified",
+  "stage": "contacted",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -69,6 +69,14 @@
       "id": "0mt3ve9stv46w32kl",
       "note": "Created from an alert",
       "toStage": "identified"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-22T07:44:41.246Z",
+      "fromStage": "identified",
+      "id": "0mt42oun2wd89lrs0",
+      "note": null,
+      "toStage": "contacted"
     }
   ],
   "tasks": [
@@ -82,5 +90,5 @@
       "title": "Skip trace owner"
     }
   ],
-  "updatedAt": "2026-08-22T04:20:34.170Z"
+  "updatedAt": "2026-08-22T07:44:41.246Z"
 }
