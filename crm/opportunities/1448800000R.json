@@ -83,8 +83,8 @@
       ],
       "id": "0mt3sjm24jn383kle",
       "providerMessageId": "sim_sms_197c373839cd0f26e178",
-      "status": "sent",
-      "statusAt": "2026-08-22T03:00:40.685Z",
+      "status": "delivered",
+      "statusAt": "2026-08-22T03:01:00.685Z",
       "subject": null,
       "templateId": "follow-up",
       "toAddress": "(904) 555-0121"
