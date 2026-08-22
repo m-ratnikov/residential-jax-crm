@@ -123,6 +123,41 @@
       "subject": "Managing 2280 SHERRINGTON ST, JACKSONVILLE, 32209 from out of town?",
       "templateId": "absentee-landlord",
       "toAddress": "2280 SHERRINGTON ST"
+    },
+    {
+      "body": "Hello SAPP ILENE M ESTATE,\n\nCounty records suggest the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $145,475.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt48ezxt3q4no38g",
+      "campaignName": "Aging roof angle - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:24:59.274Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-8968d4a456@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T10:24:59.274Z",
+          "providerEventId": "sim_email_ff97e9372d31ea033b46:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T10:26:04.274Z",
+          "providerEventId": "sim_email_ff97e9372d31ea033b46:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-22T10:27:42.274Z",
+          "providerEventId": "sim_email_ff97e9372d31ea033b46:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt48ezyij9tc7ij8",
+      "providerMessageId": "sim_email_ff97e9372d31ea033b46",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:24:59.274Z",
+      "subject": "About the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
+      "templateId": "roof-condition",
+      "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
     }
   ],
   "ownerId": "0mt3vekkip7pmsxzt",
@@ -214,5 +249,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-22T07:56:18.056Z"
+  "updatedAt": "2026-08-22T10:24:59.274Z"
 }
