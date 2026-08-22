@@ -5,16 +5,16 @@ not control, and remembers what a team decided about a parcel as JSON documents 
 Every 30 minutes something asks "did anything just start matching," and every time the answer is no,
 that is written down too.
 
-| | |
-|---|---|
-| Parcels consumed | 404,023, read-only, never copied into this application's own store |
-| Data source | Published Duval Oracle query table, parquet on IPFS/Filebase, 133 columns |
-| Query engines | DuckDB-WASM (browser), native DuckDB or WASM-node (scheduled matcher, agent) |
-| Continuous half | GitHub Actions, every 30 minutes, diffs against the last stored snapshot |
-| CRM store | JSON documents, default: a git branch. Swappable to Postgres or in-process |
-| Membership cap / fingerprint cap | 200,000 ids per search / 2,000 fully diffed fields |
-| Outreach | Simulated: 3 channels, 8 statuses, addressed to reserved `.invalid` / 555 destinations |
-| Runtime cost when idle | none: no server, no database, no standing compute |
+|                                  |                                                                                        |
+| -------------------------------- | -------------------------------------------------------------------------------------- |
+| Parcels consumed                 | 404,023, read-only, never copied into this application's own store                     |
+| Data source                      | Published Duval Oracle query table, parquet on IPFS/Filebase, 133 columns              |
+| Query engines                    | DuckDB-WASM (browser), native DuckDB or WASM-node (scheduled matcher, agent)           |
+| Continuous half                  | GitHub Actions, every 30 minutes, diffs against the last stored snapshot               |
+| CRM store                        | JSON documents, default: a git branch. Swappable to Postgres or in-process             |
+| Membership cap / fingerprint cap | 200,000 ids per search / 2,000 fully diffed fields                                     |
+| Outreach                         | Simulated: 3 channels, 8 statuses, addressed to reserved `.invalid` / 555 destinations |
+| Runtime cost when idle           | none: no server, no database, no standing compute                                      |
 
 Diagrams follow the **C4 model** (context, then containers), drawn as Mermaid flowcharts rather than
 `C4Context` blocks for the same reason the sibling pipeline repository gives: reliable layout on
@@ -86,13 +86,13 @@ flowchart LR
     agentroute -->|model call only, key never leaves the server| llm
 ```
 
-| Container | Built with | Responsibility |
-|---|---|---|
-| Browser (map, search, criteria) | Next.js, DuckDB-WASM | Runs SQL in the visitor's own tab against the published parquet; posts what it found to the CRM routes |
-| Scheduled matcher | GitHub Actions, native DuckDB | Wakes every 30 minutes, evaluates every active saved search against the current artifact, diffs, alerts |
-| CRM API routes | Next.js route handlers, Vercel serverless | Saved searches, opportunities, alerts, outreach, simulation - all through one `CrmStore` interface |
-| CRM store | GitHub Contents API (default), Neon Postgres, or in-process | Saved criteria, match history, alerts, deals, notes, tasks, outreach, overlay - never the parcels |
-| Agent route | Vercel AI SDK, `/api/llm/<provider>` proxy | Forwards a model call on the deployment's own key; the tool loop and the data it reads never leave the tab |
+| Container                       | Built with                                                  | Responsibility                                                                                             |
+| ------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Browser (map, search, criteria) | Next.js, DuckDB-WASM                                        | Runs SQL in the visitor's own tab against the published parquet; posts what it found to the CRM routes     |
+| Scheduled matcher               | GitHub Actions, native DuckDB                               | Wakes every 30 minutes, evaluates every active saved search against the current artifact, diffs, alerts    |
+| CRM API routes                  | Next.js route handlers, Vercel serverless                   | Saved searches, opportunities, alerts, outreach, simulation - all through one `CrmStore` interface         |
+| CRM store                       | GitHub Contents API (default), Neon Postgres, or in-process | Saved criteria, match history, alerts, deals, notes, tasks, outreach, overlay - never the parcels          |
+| Agent route                     | Vercel AI SDK, `/api/llm/<provider>` proxy                  | Forwards a model call on the deployment's own key; the tool loop and the data it reads never leave the tab |
 
 ---
 
@@ -180,7 +180,7 @@ flowchart TD
 The `samegen` guard exists because it fired for real: a gateway resolved one IPNS name to two
 different pinned generations of the artifact, and four consecutive passes alerted on the same 23
 parcels as a field flickered between a value and null with nothing having actually changed on the
-roll. Comparing two reads of the *same* published generation and believing the difference is the
+roll. Comparing two reads of the _same_ published generation and believing the difference is the
 exact failure this guard closes; comparing across generations is the feature.
 
 ---
@@ -358,13 +358,13 @@ themselves within minutes of being sent.
 
 ## 11. What is real, and what is mocked
 
-| Real | Mocked, because the story says so |
-|---|---|
-| 404,023 Duval parcels, every value and its provenance | Owner outreach: addressed to a reserved `.invalid` domain and a 555 number |
-| Criteria matching, scoring, ranking, the disclosed SQL | Owner contact details: a deterministic mocked skip trace, never a real vendor |
-| Change detection: a diff against a real stored snapshot | The delivery lifecycle: a deterministic simulator, not a real Twilio/SendGrid/print vendor |
+| Real                                                           | Mocked, because the story says so                                                                                                       |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 404,023 Duval parcels, every value and its provenance          | Owner outreach: addressed to a reserved `.invalid` domain and a 555 number                                                              |
+| Criteria matching, scoring, ranking, the disclosed SQL         | Owner contact details: a deterministic mocked skip trace, never a real vendor                                                           |
+| Change detection: a diff against a real stored snapshot        | The delivery lifecycle: a deterministic simulator, not a real Twilio/SendGrid/print vendor                                              |
 | The scheduled matcher: a real GitHub Actions cron, a real diff | The "simulate a pipeline update" button: writes a real overlay row the matcher then finds by diffing - the notification is not injected |
-| Alerts, opportunities, notes, tasks, stage history | Court data volume: a small demo overlay, not a live county-records feed |
+| Alerts, opportunities, notes, tasks, stage history             | Court data volume: a small demo overlay, not a live county-records feed                                                                 |
 
 ---
 

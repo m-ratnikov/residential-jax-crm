@@ -38,7 +38,7 @@ function simulated(id: string, runId: string, createdAt: string): SimulatedDoc {
   };
 }
 
-describe("loadOverlay - which simulation is \"the latest\"", () => {
+describe('loadOverlay - which simulation is "the latest"', () => {
   it("picks the most recently created run, regardless of the store's own listing order", async () => {
     const store = crmStore();
 
