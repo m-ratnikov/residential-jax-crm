@@ -17,7 +17,43 @@
   "nextStepDueAt": null,
   "notes": [],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello STRIGGLERS EUGENE L ESTATE,\n\nCounty records suggest the roof at 2649 BETHEL RD, JACKSONVILLE, 32210 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $55,261.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3nnrs1s4qzxn5c",
+      "campaignName": "Aging roof angle - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T00:43:56.669Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-ca90a15261@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T00:43:56.669Z",
+          "providerEventId": "sim_email_30d2a2b9121811d82b2f:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T00:44:45.669Z",
+          "providerEventId": "sim_email_30d2a2b9121811d82b2f:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-22T00:45:59.669Z",
+          "providerEventId": "sim_email_30d2a2b9121811d82b2f:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt3nnrssqgp6l6kx",
+      "providerMessageId": "sim_email_30d2a2b9121811d82b2f",
+      "status": "queued",
+      "statusAt": "2026-08-22T00:43:56.669Z",
+      "subject": "About the roof at 2649 BETHEL RD, JACKSONVILLE, 32210",
+      "templateId": "roof-condition",
+      "toAddress": "owner-ca90a15261@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt3nfrlzcdldva5w",
   "ownerInterest": null,
   "ownerNameSnapshot": "STRIGGLERS EUGENE L ESTATE",
@@ -70,5 +106,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T00:38:58.081Z"
+  "updatedAt": "2026-08-22T00:43:56.669Z"
 }
