@@ -82,6 +82,35 @@
       "subject": "About the roof at 2573 RIVERSIDE AVE, JACKSONVILLE, 32204",
       "templateId": "roof-condition",
       "toAddress": "owner-62ecdf056a@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello ST VINCENTS HOSPITAL INC,\nI am reaching out about 2573 RIVERSIDE AVE, JACKSONVILLE, 32204. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 55 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt48hajwazt9f4bd",
+      "campaignName": "Cash offer introduction - 2026-08-22",
+      "channel": "direct_mail",
+      "createdAt": "2026-08-22T10:26:47.054Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-print-and-mail for 1 SHIRCLIFF WAY ROOM 1928",
+          "occurredAt": "2026-08-22T10:26:47.054Z",
+          "providerEventId": "sim_direct_mail_292282a01c0e92a590e3:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-25T12:19:37.054Z",
+          "providerEventId": "sim_direct_mail_292282a01c0e92a590e3:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt48hb4ejadg2qwd",
+      "providerMessageId": "sim_direct_mail_292282a01c0e92a590e3",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:26:47.054Z",
+      "subject": "Interested in buying 2573 RIVERSIDE AVE, JACKSONVILLE, 32204",
+      "templateId": "cash-offer-intro",
+      "toAddress": "1 SHIRCLIFF WAY ROOM 1928"
     }
   ],
   "ownerId": "0mt3vf84bhsj4qy4l",
@@ -163,5 +192,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T10:24:59.876Z"
+  "updatedAt": "2026-08-22T10:26:47.054Z"
 }
