@@ -24,7 +24,43 @@
     }
   ],
   "offerPrice": 84000,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello PIEPER SARAH B,\n\nCounty records suggest the roof at 7906 N PEARL ST, JACKSONVILLE, 32208 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $80,045.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3pnvd73g6110j9",
+      "campaignName": "Seed - negotiating",
+      "channel": "email",
+      "createdAt": "2026-08-22T01:40:00.523Z",
+      "createdById": "0mt3ple75x41kc88b",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-7e7c5fe992@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T01:40:00.523Z",
+          "providerEventId": "sim_email_9ca8472f5def6ba5ee1c:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T01:41:18.523Z",
+          "providerEventId": "sim_email_9ca8472f5def6ba5ee1c:delivered",
+          "status": "delivered"
+        },
+        {
+          "detail": "Recipient opened the message",
+          "occurredAt": "2026-08-22T01:43:14.523Z",
+          "providerEventId": "sim_email_9ca8472f5def6ba5ee1c:opened",
+          "status": "opened"
+        }
+      ],
+      "id": "0mt3pnvd7zb70j9lt",
+      "providerMessageId": "sim_email_9ca8472f5def6ba5ee1c",
+      "status": "queued",
+      "statusAt": "2026-08-22T01:40:00.523Z",
+      "subject": "About the roof at 7906 N PEARL ST, JACKSONVILLE, 32208",
+      "templateId": "roof-condition",
+      "toAddress": "owner-7e7c5fe992@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt3pnpp6ldxxjap1",
   "ownerInterest": "Motivated, unrealistic on price",
   "ownerNameSnapshot": "PIEPER SARAH B",
@@ -95,5 +131,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-22T01:39:58.746Z"
+  "updatedAt": "2026-08-22T01:40:00.523Z"
 }
