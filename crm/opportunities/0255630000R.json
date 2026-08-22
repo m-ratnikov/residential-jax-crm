@@ -53,7 +53,7 @@
     "yearsSinceLastSale": 54
   },
   "savedSearchId": "0mt3v3sjckfr92p5g",
-  "stage": "negotiating",
+  "stage": "under_contract",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -78,8 +78,16 @@
       "id": "0mt3vff9kf06k3cuc",
       "note": null,
       "toStage": "negotiating"
+    },
+    {
+      "actorId": "0mt3v3r4hz2k56t5t",
+      "createdAt": "2026-08-22T04:21:24.859Z",
+      "fromStage": "negotiating",
+      "id": "0mt3vffujme7qv04x",
+      "note": "Signed at $113,000 against an asking of $128,500. Inspection window closes in nine days.",
+      "toStage": "under_contract"
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T04:21:24.104Z"
+  "updatedAt": "2026-08-22T04:21:24.859Z"
 }
