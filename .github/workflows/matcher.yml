@@ -29,6 +29,10 @@ on:
         description: Why this pass is being run by hand
         required: false
         default: manual
+      ref:
+        description: Which ref to check out and run. Defaults to MATCHER_REF, then this workflow's own ref.
+        required: false
+        default: ""
 
 permissions:
   # The CRM store is a branch of this repository, so the pass writes documents
@@ -60,6 +64,23 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       PROPERTY_DATA_URL: ${{ vars.PROPERTY_DATA_URL }}
       RUN_HISTORY_URL: ${{ vars.RUN_HISTORY_URL }}
+      # What the evidence record says about itself.
+      #
+      # `matcher-runs` is the document a reviewer reads to answer "did the
+      # schedule run, over what, and what did it find". It used to hardcode
+      # `trigger: cron`, so a pass dispatched by hand was recorded as a scheduled
+      # one, and nothing anywhere named the commit that produced it. Three rounds
+      # of pre-fix code ran on this schedule against the live store before anyone
+      # noticed, which is exactly the failure a record that cannot name its own
+      # generation permits.
+      #
+      # `GITHUB_EVENT_NAME` is set by Actions and is what the runner reads to
+      # decide cron versus manual. `MATCHER_REASON` carries the dispatcher's own
+      # words - the `reason` input, which was declared here and consumed by
+      # nothing. `MATCHER_COMMIT_SHA` and `MATCHER_COMMIT_REF` are filled in
+      # below, after checkout, because the code that RAN is not always the code
+      # that triggered the run.
+      MATCHER_REASON: ${{ inputs.reason }}
       # Native DuckDB is available here, unlike on the serverless runtime.
       PROPERTY_ENGINE: native
       # Pull the artifact down once rather than range reading it. The public
@@ -69,7 +90,45 @@ jobs:
       # the difference between a working schedule and a red one.
       PROPERTY_FETCH_WHOLE: "1"
     steps:
+      # Explicit rather than implicit. Without a `ref` this checks out whatever
+      # ref started the run, which for `on: schedule` is always the default
+      # branch's copy of this file - a GitHub constraint that cannot be worked
+      # around and is not being worked around here. What CAN be fixed is the
+      # silence: a dispatched pass can now name the ref it wants, a repository
+      # variable can pin the schedule to a ref other than the default, and the
+      # resolved commit is echoed into the summary and written onto the run
+      # document, so "which code produced this record" has an answer.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || vars.MATCHER_REF || github.ref }}
+
+      - name: Name the code that is about to run
+        # actions/checkout has no sha output, and GITHUB_SHA names the commit
+        # that TRIGGERED the run rather than the one checked out. Asking git is
+        # the only answer that is true in both cases.
+        #
+        # The two expressions arrive as environment variables rather than being
+        # interpolated into the script. `inputs.ref` is a string a dispatcher
+        # chooses, and a `${{ }}` inside a `run:` block is pasted into the shell
+        # before the shell sees it, which is the standard Actions injection
+        # shape. As env values they are data.
+        env:
+          REQUESTED_REF: ${{ inputs.ref || vars.MATCHER_REF || github.ref }}
+          TRIGGERING_EVENT: ${{ github.event_name }}
+        run: |
+          SHA="$(git rev-parse HEAD)"
+          echo "MATCHER_COMMIT_SHA=$SHA" >> "$GITHUB_ENV"
+          echo "MATCHER_COMMIT_REF=$REQUESTED_REF" >> "$GITHUB_ENV"
+          {
+            echo "### matcher"
+            echo
+            echo "| field | value |"
+            echo "| --- | --- |"
+            echo "| event | \`$TRIGGERING_EVENT\` |"
+            echo "| requested ref | \`$REQUESTED_REF\` |"
+            echo "| resolved commit | \`$SHA\` |"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - uses: pnpm/action-setup@v4
         with:

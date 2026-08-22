@@ -38,6 +38,13 @@
  *    applies a genuine simulated pipeline update and runs an ordinary matcher
  *    pass over it. Nothing sets those fields directly.
  *
+ * 4. **Every feature the app advertises has something to show.** A fresh
+ *    visitor pressing Court distress used to see `0 matches` - the enrichment
+ *    worked, but nothing put a filing in front of anyone who did not know to
+ *    simulate one first. The seed now records filings the same way it records
+ *    roll movements, through `applySimulation`, labelled and reversible, and
+ *    against parcels that are deliberately not on the board.
+ *
  *   PROPERTY_DATA_URL=... pnpm seed
  *   PROPERTY_DATA_URL=... pnpm seed --reset
  *   pnpm seed --memory --reset      # in-process store, for checking the shape
@@ -45,12 +52,13 @@
 
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { CRITERIA_PRESETS, type CriteriaSet } from "@/lib/criteria/types";
 import { DWELLING_MIN_SQFT, tenureConfidenceOf } from "@/lib/criteria/sql";
 import { getPropertyDataSource } from "@/lib/data/source";
 import { displayAddress } from "@/lib/data/map";
-import type { ScoredProperty } from "@/lib/data/types";
+import type { PropertyDataSource, ScoredProperty } from "@/lib/data/types";
 import { crmStore, setCrmStore, storeStatus } from "@/lib/crm/db";
 import { memoryStore } from "@/lib/crm/store-memory";
 import { COLLECTIONS } from "@/lib/crm/store";
@@ -363,6 +371,142 @@ function chooseDeals(
   }
 
   return chosen;
+}
+
+/* ------------------------------------------------------------------ */
+/* Court distress                                                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * How many parcels the seed records a filing against.
+ *
+ * Six, so `applySimulation` cycles its three case types twice and the Court
+ * distress preset returns a ranked list rather than a single row that could be
+ * mistaken for a fixture. It is a handful of parcels out of four hundred
+ * thousand, which is the right size for something labelled simulated.
+ */
+const COURT_FILING_COUNT = 6;
+
+/**
+ * Which parcels get a simulated filing.
+ *
+ * The problem this solves is a first impression: a reviewer opening the app and
+ * pressing **Court distress** saw `0 matches`, because court filings only ever
+ * arrived through the simulate button and a fresh store had none. The feature
+ * worked; nothing surfaced it, so an advertised acceptance criterion read as
+ * dead code to anyone who did not already know to go and simulate first.
+ *
+ * Three constraints shape the choice, and all three are about not lying:
+ *
+ * 1. **Real parcels.** Targets come out of the pools the deal selection already
+ *    read - genuine rows from the published artifact that passed `unfitReason` -
+ *    so nothing is invented and no second full scan is paid for.
+ * 2. **Never a seeded deal.** `taken` is the nine parcels on the board. A filing
+ *    against one of them would change what the Court distress list says about a
+ *    row whose opportunity snapshot was written before the filing existed, and
+ *    the board is a fixture nine deals wide. Excluded outright.
+ * 3. **Spread across theses**, round robin, for the same reason the board is:
+ *    a distress list that is one saved search's top six is not a distress list.
+ *
+ * Court distress is not one of the MATERIAL_FIELDS the matcher fingerprints
+ * (lib/criteria/score.ts), so these filings raise no alert on the next pass and
+ * cannot add a tenth deal or disturb an existing one. They are visible exactly
+ * where they should be: in the court columns, on a search that asks for them.
+ */
+export function chooseCourtTargets(
+  pools: readonly { rows: readonly ScoredProperty[] }[],
+  taken: ReadonlySet<string>,
+  wanted: number = COURT_FILING_COUNT,
+): ScoredProperty[] {
+  const chosen: ScoredProperty[] = [];
+  const seen = new Set<string>();
+  const cursors = pools.map(() => 0);
+
+  let progress = true;
+  while (chosen.length < wanted && progress) {
+    progress = false;
+    for (const [poolIndex, pool] of pools.entries()) {
+      if (chosen.length >= wanted) break;
+      let cursor = cursors[poolIndex] ?? 0;
+      while (cursor < pool.rows.length) {
+        const scored = pool.rows[cursor];
+        cursor += 1;
+        if (!scored) continue;
+        const parcelId = scored.property.propertyId;
+        if (taken.has(parcelId) || seen.has(parcelId)) continue;
+        seen.add(parcelId);
+        chosen.push(scored);
+        progress = true;
+        break;
+      }
+      cursors[poolIndex] = cursor;
+    }
+  }
+
+  return chosen;
+}
+
+/**
+ * Record the filings, then prove the preset can see them.
+ *
+ * Written through `applySimulation("court_filing", ...)`, which is the same call
+ * the simulate button makes, so every record carries `sourceSystem:
+ * "simulated_court_feed"` and a `sim-` run id, is shown as simulated everywhere
+ * the app shows provenance, and is removed in full by clearing the simulation.
+ * Nothing here writes a court document directly.
+ *
+ * The count is then read back through `source.search` against the published
+ * preset, so the line printed at the end of a seed is the number a reviewer will
+ * see on the button rather than this script's own arithmetic.
+ */
+async function seedCourtFilings(
+  source: PropertyDataSource,
+  pools: readonly { rows: readonly ScoredProperty[] }[],
+  taken: ReadonlySet<string>,
+): Promise<void> {
+  const targets = chooseCourtTargets(pools, taken);
+  if (!targets.length) {
+    console.log("no parcel was available to record a simulated court filing against");
+    return;
+  }
+
+  const applied = await applySimulation(
+    "court_filing",
+    targets.map((scored) => ({
+      propertyId: scored.property.propertyId,
+      parcelIdentifier: scored.property.parcelIdentifier,
+      addressLine: displayAddress(scored.property),
+      ownerName: scored.property.ownerName,
+      assessedValue: scored.property.assessedValue,
+      roofPermitCount: scored.property.roofPermitCount,
+    })),
+  );
+
+  console.log(
+    `recorded ${applied.changes.length} simulated court filings (run ${applied.runId}), ` +
+      "all labelled simulated_court_feed",
+  );
+  for (const change of applied.changes) console.log(`  ${change.addressLine}: ${change.detail}`);
+
+  const preset = CRITERIA_PRESETS.find((entry) => entry.id === "distressed-court");
+  if (!preset) return;
+
+  const overlay = await loadOverlay();
+  const found = await source.search({
+    criteria: preset.criteria,
+    limit: 5,
+    orderBy: "score",
+    overlay: overlay.overlay,
+  });
+  console.log(
+    `  "${preset.name}" now returns ${found.total.toLocaleString("en-US")} matches on a fresh load`,
+  );
+  if (found.total === 0) {
+    console.error(
+      "\nCourt distress still returns nothing, so the preset a reviewer presses first is still empty.",
+    );
+    process.exitCode = 1;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -762,6 +906,17 @@ async function main(): Promise<void> {
 
   console.log(`worked ${deals.length} opportunities through the funnel`);
 
+  // Last, and deliberately after the board exists. Court distress is the one
+  // advertised acceptance criterion a fresh visitor could not see working, so
+  // the seeded state carries filings the way it carries roll movements - and it
+  // records them against parcels that are NOT on the board, so the nine deals
+  // are the same nine they were before this ran.
+  await seedCourtFilings(
+    source,
+    pools,
+    new Set(deals.map((deal) => deal.scored.property.propertyId)),
+  );
+
   await reportBoard();
 
   await source.close();
@@ -849,7 +1004,20 @@ async function reportBoard(): Promise<void> {
   }
 }
 
-main().catch((error: unknown) => {
-  console.error(error);
-  process.exit(1);
-});
+/**
+ * Run only when this file IS the command, not when it is imported.
+ *
+ * `chooseCourtTargets` decides which parcels a filing is recorded against, and
+ * the promise it keeps - never a parcel that is on the board - is worth a test.
+ * A top level `main()` would make importing it seed a CRM.
+ */
+const invokedDirectly = process.argv[1]
+  ? import.meta.url === pathToFileURL(process.argv[1]).href
+  : false;
+
+if (invokedDirectly) {
+  main().catch((error: unknown) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

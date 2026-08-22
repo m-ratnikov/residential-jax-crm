@@ -89,18 +89,20 @@ interface Detail extends OpportunityRow {
 /**
  * A parcel fact this deal's snapshot never captured, read back off the roll.
  *
- * There are two writers of `propertySnapshot` and they do not write the same
- * fields. The parcel drawer's "Track as opportunity" sends `builtYear`;
- * `alertSnapshot` in lib/notify/snapshot.ts, which is what the seed, the
- * matcher API and the alerts page all convert through, does not. So every deal
- * that arrived through an alert - which on the deployed runtime is every deal -
- * has no `builtYear` key at all, and the page printed "unknown" for a year the
- * roll publishes and the drawer beside it shows.
+ * There are two writers of `propertySnapshot`. The parcel drawer's "Track as
+ * opportunity" sends `builtYear`, and `alertSnapshot` in lib/notify/snapshot.ts
+ * - which is what the seed, the matcher API and the alerts page all convert
+ * through - did not, so every deal that arrived through an alert had no
+ * `builtYear` key at all and the page printed "unknown" for a year the roll
+ * publishes and the drawer beside it shows.
  *
- * The writer is the real fix and it is one field on a module this change does
- * not own. What this page can do is stop asserting the roll is silent when it
- * is not: the query engine lives in this tab, so the parcel is readable here,
- * the same way the drawer reads it.
+ * `alertSnapshot` now carries `builtYear`, which is the real fix and closes the
+ * gap for everything written since. This stays because it is not retroactive:
+ * an alert, and any deal opened from it, written before that change still has a
+ * snapshot with no `builtYear` in it, and those documents are in the store on
+ * the deployed runtime. The query engine lives in this tab, so rather than
+ * assert the roll is silent, the page reads the parcel the same way the drawer
+ * does.
  *
  * Loaded through a dynamic import and only when a field is actually missing, so
  * a deal whose snapshot is complete never pays for the engine, and one whose

@@ -17,6 +17,11 @@ import type { ReactNode } from "react";
 import { ownerNameCharacter } from "@/lib/data/map";
 import { STAGE_LABELS, type AcquisitionStage, type OutreachStatus } from "@/lib/notify/types";
 
+import { toDate } from "@/lib/data/instant";
+
+// Re-exported because every page imports its formatting vocabulary from here.
+export { toDate };
+
 export function cx(...parts: (string | false | null | undefined)[]): string {
   return parts.filter(Boolean).join(" ");
 }
@@ -521,57 +526,6 @@ export function year(value: unknown): string {
         : Number(String(value).trim());
   if (!Number.isFinite(parsed)) return String(value);
   return String(Math.trunc(parsed));
-}
-
-/**
- * A timestamp in any of the shapes the pipeline hands one over in: a Date, an
- * ISO string, or epoch milliseconds arriving as a number, a bigint or a numeric
- * string - which is what a parquet TIMESTAMP column becomes once it has crossed
- * Arrow into the browser. Returns null when the value is not a timestamp at
- * all, so a caller can show what it actually got rather than "Invalid Date".
- *
- * Epoch detection is deliberately narrow (11 to 14 digits, so 1973 to 2972). A
- * four digit year is never mistaken for an epoch, and neither is a parcel
- * number.
- */
-export function toDate(value: unknown): Date | null {
-  if (value === null || value === undefined || value === "") return null;
-  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
-  if (typeof value === "bigint") return finite(new Date(Number(value)));
-  if (typeof value === "number") return Number.isFinite(value) ? finite(new Date(value)) : null;
-  if (typeof value !== "string") return null;
-  const text = value.trim();
-  if (/^\d{11,14}$/.test(text)) return finite(new Date(Number(text)));
-  return finite(new Date(withZone(text)));
-}
-
-/**
- * A datetime the publisher wrote without a zone, read as UTC.
- *
- * The same instant reached two screens by two routes and rendered seven hours
- * apart. `fetched_at` is a parquet TIMESTAMP, so the browser gets it as epoch
- * milliseconds and lands on the right instant; the native driver hands the
- * server "2026-08-21 13:58:56.294", that string is what a stored
- * `propertySnapshot.provenance.fetchedAt` holds, and `new Date` parses a
- * space-separated datetime with the LEGACY rules, which read it as local. In a
- * UTC+7 tab the drawer said 08:58 PM and the deal page said 01:58 PM for one
- * collection time.
- *
- * The pipeline publishes UTC, so a datetime with no zone on it is UTC and is
- * given the "Z" it was written without. Anchored on a required time part: a
- * bare date is NOT touched here. `new Date("2026-08-21")` is already UTC by
- * spec, and the drawer's TIMESTAMP_COLUMNS note records why a bare date is
- * never turned into a local timestamp in the first place - doing so moves it a
- * day in every negative UTC offset.
- */
-const NAIVE_DATETIME = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/;
-
-function withZone(text: string): string {
-  return NAIVE_DATETIME.test(text) ? `${text.replace(" ", "T")}Z` : text;
-}
-
-function finite(date: Date): Date | null {
-  return Number.isNaN(date.getTime()) ? null : date;
 }
 
 /**

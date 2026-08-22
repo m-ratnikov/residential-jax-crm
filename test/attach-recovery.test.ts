@@ -345,7 +345,7 @@ describe("every gateway failing, on a machine that has loaded the artifact befor
 
     await rig.controller.start();
 
-    // A range read touches a few hundred kilobytes of a 49.5 MB file. Without
+    // A range read touches a few hundred kilobytes of a 49.97 MB file. Without
     // this one deliberate whole-object fetch there is nothing on disk to fall
     // back to, and the fallback above never fires for anybody.
     expect(rig.precached).toEqual([A]);
@@ -433,7 +433,7 @@ describe("the cached artifact", () => {
 
   it("is one entry per artifact, whichever gateway the bytes came from", () => {
     // Path form and subdomain form address the same object, and the old key
-    // treated them as three unrelated 49.5 MB downloads.
+    // treated them as three unrelated 49.97 MB downloads.
     expect(contentAddressOf(`https://ipfs.io/ipns/${IPNS}`)).toBe(`ipns/${IPNS}`);
     expect(contentAddressOf(`https://ipfs.filebase.io/ipns/${IPNS}`)).toBe(`ipns/${IPNS}`);
     expect(contentAddressOf(`https://${IPNS}.ipns.dweb.link/`)).toBe(`ipns/${IPNS}`);
@@ -550,7 +550,7 @@ describe("what a gateway has to prove before the engine is handed it", () => {
   });
 
   it("rejects a gateway that answers 206 with an error page", () => {
-    // gw3.io does exactly this: 206, content-range total 965, for a 49.5 MB
+    // gw3.io does exactly this: 206, content-range total 965, for a 49.97 MB
     // parquet. The old probe would have handed it to DuckDB and spent the whole
     // attach deadline discovering it was not a parquet.
     const verdict = rangeProbeVerdict(206, "bytes 0-99/965", ARTIFACT_MIN_BYTES);

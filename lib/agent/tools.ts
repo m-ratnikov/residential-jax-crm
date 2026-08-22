@@ -18,7 +18,7 @@ import { tool } from "ai";
 import { z } from "zod";
 
 import { criteriaSetSchema, CRITERIA_PRESETS } from "@/lib/criteria/types";
-import { provenanceInstant } from "@/lib/data/export-csv";
+import { provenanceInstant } from "@/lib/data/instant";
 import { NEIGHBOURHOODS } from "@/lib/criteria/areas";
 import { displayAddress } from "@/lib/data/map";
 // From runs-parse, not runs: these tools run in the browser, and lib/data/runs

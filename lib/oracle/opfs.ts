@@ -1,6 +1,7 @@
 // VENDORED FILE - do not edit here without reading lib/oracle/VENDORED.md.
 // Origin: oracle-property-intelligence-platform-pipeline-duval-fl, ui/lib/opfs.ts, commit 28088d0.
-// Only the import paths differ from the original. Run scripts/sync-shared.mjs to check for drift.
+// Deliberately diverged from the original - see the DIVERGED note below for what
+// changed and why. Run scripts/sync-shared.mjs to see the drift it reports.
 
 /**
  * DIVERGED FROM THE ORIGIN, deliberately. The origin keyed every entry on the
@@ -59,7 +60,7 @@ export interface CachedArtifact extends CacheManifest {
  * The content a gateway URL addresses, with the gateway stripped off.
  *
  * A CID (or an IPNS name) is the same object whichever gateway serves it, so
- * caching per gateway URL stores the same 49.5 MB up to five times and still
+ * caching per gateway URL stores the same 49.97 MB up to five times and still
  * misses whenever failover lands somewhere new. Both public gateway URL shapes
  * collapse to the same address here:
  *
@@ -119,7 +120,7 @@ async function directory(): Promise<FileSystemDirectoryHandle | null> {
  *
  * False in a Safari private window, an older Firefox, a locked down enterprise
  * profile - anywhere OPFS is missing or refused. It matters because the memory
- * fallback is fine for a 4 KB manifest and absurd for 49.5 MB of parquet: a
+ * fallback is fine for a 4 KB manifest and absurd for 49.97 MB of parquet: a
  * deliberate whole-object top-up that can only ever land in a Map buys nothing
  * for the next visit and pins fifty megabytes for this one.
  */
@@ -142,7 +143,7 @@ function isManifest(value: unknown): value is CacheManifest {
  * What is cached for this content, without reading the bytes.
  *
  * Cheap enough to call before deciding whether a background top-up is worth
- * 49.5 MB of somebody's bandwidth.
+ * 49.97 MB of somebody's bandwidth.
  */
 export async function cacheManifest(url: string): Promise<CacheManifest | null> {
   const key = manifestKeyFor(url);

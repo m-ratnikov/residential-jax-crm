@@ -26,6 +26,13 @@
  *     impossible, and the Origin check stops a bare request rather than a
  *     determined one - see lib/api-auth.ts for exactly where that line is.
  *
+ * WHAT COMES BACK. A 2xx body is streamed through untouched, because a
+ * tool-calling turn is long and buffering it would cost tens of seconds before
+ * the first token. Anything else is buffered, scrubbed and re-encoded: an
+ * upstream error body is the one thing on this path this deployment did not
+ * write, and a provider will quote the key it just refused inside a 401. See
+ * `scrubbedUpstreamError` below.
+ *
  * The honest residual risk: a public runtime that answers questions on the
  * owner's key can have that key spent by strangers, and no amount of per
  * process counting changes that. The deployment owner decides whether to
@@ -37,11 +44,11 @@ import { NextResponse } from "next/server";
 
 import { PROVIDERS } from "@/lib/agent/providers";
 import { isServerModel, serverKeyFor, upstreamFor } from "@/lib/agent/server-models";
-import { AGENT_RATE_LIMIT, clientAddress } from "@/lib/agent/ratelimit";
+import { AGENT_RATE_LIMIT, clientAddress, modelCallLimitMessage } from "@/lib/agent/ratelimit";
 import { isSafeProxyPath, sameOriginRequest } from "@/lib/api-auth";
 import { DYNAMIC_CACHE_CONTROL, noStoreHeaders } from "@/lib/api";
 import { logAgent } from "@/lib/agent/log";
-import { safeMessage } from "@/lib/agent/redact";
+import { redactSecrets, safeMessage } from "@/lib/agent/redact";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -84,6 +91,59 @@ function fail(status: number, message: string): NextResponse {
   return NextResponse.json({ error: { message } }, { status, headers: noStoreHeaders() });
 }
 
+/**
+ * How much of an upstream error body is kept once it has been scrubbed.
+ *
+ * The same ceiling `safeMessage` applies, for the same reason: an error is read
+ * by a person, and a provider that answers a 400 with a schema dump is not
+ * telling them anything past the first few lines.
+ */
+const UPSTREAM_ERROR_LIMIT = 600;
+
+/**
+ * An upstream failure, re-encoded rather than streamed back.
+ *
+ * THIS IS THE KEY BOUNDARY. Every other response this route produces was built
+ * here; an upstream body is the one thing on the path that this deployment did
+ * not write, and lib/agent/redact.ts names the exact hazard in its own opening
+ * comment: providers echo the submitted credential in the message of a 401. The
+ * key being echoed is this deployment's, on a public runtime, so passing the
+ * body through unread would hand it to any visitor who can make the upstream
+ * refuse - which needs nothing more than an expired key.
+ *
+ * So error responses are buffered and scrubbed. Two passes, both from
+ * `redactSecrets`: the literal key we just attached, which we still hold here,
+ * and anything else key shaped, which covers a provider quoting somebody else's
+ * credential back at us. The reason text survives, because a visitor who is told
+ * only "502" cannot tell a dead free tier from a broken deployment.
+ *
+ * Only the error path buffers. A 2xx is still streamed untouched - see the
+ * caller - because a tool-calling turn is long and buffering it would delay the
+ * first token by tens of seconds.
+ */
+async function scrubbedUpstreamError(
+  response: Response,
+  key: string,
+  label: string,
+): Promise<NextResponse> {
+  let raw = "";
+  try {
+    raw = await response.text();
+  } catch {
+    // A body that cannot be read is not a body worth reporting. The status is.
+  }
+
+  const safe = redactSecrets(raw, [key]).trim().slice(0, UPSTREAM_ERROR_LIMIT);
+  const message = safe
+    ? `${label} refused the call (${response.status}): ${safe}`
+    : `${label} refused the call with ${response.status} and no reason.`;
+
+  return NextResponse.json(
+    { error: { message } },
+    { status: response.status, headers: noStoreHeaders() },
+  );
+}
+
 export async function POST(
   request: Request,
   context: { params: Promise<{ provider: string; path: string[] }> },
@@ -117,11 +177,11 @@ export async function POST(
   const limit = AGENT_RATE_LIMIT.check(clientAddress(request.headers));
   if (!limit.allowed) {
     return NextResponse.json(
-      {
-        error: {
-          message: `Rate limit reached: ${limit.limit} requests per window for this deployment's key, shared by everyone using it. Try again in ${limit.retryAfterSeconds}s.`,
-        },
-      },
+      // Worded in the unit that was counted. The limiter counts model calls, and
+      // a question is a tool loop of up to twelve of them, so a message about
+      // "requests" left a visitor refused mid-answer with no way to read the
+      // number as anything but questions. See lib/agent/ratelimit.ts.
+      { error: { message: modelCallLimitMessage(limit) } },
       {
         status: 429,
         headers: noStoreHeaders({ "retry-after": String(limit.retryAfterSeconds) }),
@@ -156,6 +216,13 @@ export async function POST(
       status: response.status,
       ms: Date.now() - started,
     });
+
+    // An upstream error can carry key material; a success cannot. Buffer and
+    // scrub the one, stream the other.
+    if (!response.ok) {
+      logAgent("warn", "llm.upstream_error", { provider, model, status: response.status });
+      return scrubbedUpstreamError(response, key, `The ${definition.label} API`);
+    }
 
     // Streamed straight back. A tool-calling turn is long enough that buffering
     // it would delay the first token by tens of seconds for no reason.

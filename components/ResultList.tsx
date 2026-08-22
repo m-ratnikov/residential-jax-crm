@@ -254,7 +254,7 @@ export function ResultList({
             size="sm"
             variant="ghost"
             disabled={exporting || !rows.length}
-            title="Export every matching parcel, not just the page on screen."
+            title="Export the top 5,000 matches by score - the whole match set, not just the page on screen, unless it runs past 5,000. A truncated file says so on its last line."
             onClick={async () => {
               setExporting(true);
               try {

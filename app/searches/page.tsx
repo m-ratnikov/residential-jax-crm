@@ -23,6 +23,25 @@ import { displayAddress } from "@/lib/data/map";
 import { storeWarning, useServerStatus } from "@/lib/data/status";
 import { MATCH_ID_CAP, TRACKED_MATCH_CAP } from "@/lib/notify/limits";
 
+/**
+ * What this search actually watches, without understating it.
+ *
+ * `matchesTruncated` says the FINGERPRINTED slice was capped at 2,000, which is
+ * a different question from whether membership was capped at 200,000. Reporting
+ * the id cap whenever the fingerprint cap bit made a search matching 5,000 read
+ * as though something had been dropped, when every one of those 5,000 is
+ * watched for newly matching. Only a set past the id cap loses members.
+ */
+export function watchedSummary(matched: number, fingerprintsTruncated?: boolean): string {
+  if (matched > MATCH_ID_CAP) {
+    return `${count(matched)} (${count(MATCH_ID_CAP)} watched for new matches, changes to the top ${count(TRACKED_MATCH_CAP)})`;
+  }
+  if (fingerprintsTruncated) {
+    return `${count(matched)} (all watched for new matches, changes to the top ${count(TRACKED_MATCH_CAP)})`;
+  }
+  return count(matched);
+}
+
 interface SimulationResponse {
   simulation: {
     runId: string;
@@ -239,11 +258,7 @@ export default function SavedSearchesPage() {
                   <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] sm:grid-cols-3">
                     <Row
                       label="Matched last pass"
-                      value={
-                        search.matchesTruncated
-                          ? `${count(search.lastMatchCount ?? 0)} (new matches watched to ${count(MATCH_ID_CAP)}, changes to the top ${count(TRACKED_MATCH_CAP)})`
-                          : count(search.lastMatchCount ?? 0)
-                      }
+                      value={watchedSummary(search.lastMatchCount ?? 0, search.matchesTruncated)}
                     />
                     <Row label="Last evaluated" value={ago(search.lastEvaluatedAt)} />
                     <Row label="Against run" value={search.lastPipelineRunId ?? "none yet"} mono />

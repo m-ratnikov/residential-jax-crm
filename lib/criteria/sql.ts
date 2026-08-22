@@ -252,10 +252,12 @@ export function geometrySql(geometry: Geometry): string {
  * carrying a `years_since_last_sale`): the two most common values in the whole
  * `last_sale_date_any` column are not sales. 842 parcels are stamped
  * `1899-12-30` - the Delphi/Excel zero date - and 609 are stamped
- * `1899-01-01`, with one each at `1900-09-13` and `1800-01-01`. Every one of
- * them carries `tenure_basis = 'COJ_SALESL'`, a NULL `sale_count` and a NULL
- * `last_sale_date`, and the pipeline turns them into a tenure of 125 to 226
- * years. They are literal placeholder dates, not nulls that became an epoch:
+ * `1899-01-01`, with one each at `1900-09-13` and `1800-01-01`. Almost all of
+ * them carry `tenure_basis = 'COJ_SALESL'`, a NULL `sale_count` and a NULL
+ * `last_sale_date`; eight instead carry `FDOR_SALE` with a sale count of one or
+ * two, which is why the guard keys on the implied year rather than on the basis
+ * - a rule written against `COJ_SALESL` would have let those eight through. The
+ * pipeline turns the whole cohort into a tenure of 125 to 226 years. They are literal placeholder dates, not nulls that became an epoch:
  * a parcel the roll genuinely says nothing about has a NULL tenure (2,191 of
  * them) and is already handled.
  *

@@ -14,13 +14,22 @@
  */
 
 import type { CriteriaSet } from "@/lib/criteria/types";
+import { provenanceInstant, toDate } from "@/lib/data/instant";
+
+// Re-exported: this stays the import site for anything already using it.
+export { provenanceInstant };
 import { tenureCaveat } from "@/lib/criteria/score";
 import { tenureConfidenceOf } from "@/lib/criteria/sql";
-import { toDate } from "@/components/ui";
 import { displayAddress } from "./map";
 import { fetchOverlay, propertySource } from "./client-source";
 
-/** Above this the browser is doing the county's job; the file says it stopped. */
+/**
+ * Above this the browser is doing the county's job; the file says it stopped.
+ *
+ * This is the number actually requested, and the engine's own page limit may
+ * cut it further - which is why the truncation notice is written from the rows
+ * that came back rather than from this constant.
+ */
 const MAX_ROWS = 10_000;
 
 const HEADERS = [
@@ -63,26 +72,6 @@ const HEADERS = [
   "fetched_at",
   "pipeline_run_id",
 ] as const;
-
-/**
- * The collection time, as a timestamp rather than a number.
- *
- * `fetched_at` is a parquet TIMESTAMP, so it crosses Arrow into the tab as
- * epoch milliseconds and shipped as "1787320736294" in the provenance column of
- * a file sold for downstream analysis. The drawer already runs it through
- * `toDate` before showing it; the export now recognises it the same way, so one
- * parser decides what the value is on both surfaces.
- *
- * ISO 8601 in UTC rather than the drawer's readable string, because the two
- * surfaces are read by different things. A person reads the drawer, so it gets
- * a local time with its zone named. A spreadsheet or a dataframe reads this, so
- * it gets the form every one of them parses without being told a format, and
- * with the zone carried in the value.
- */
-export function provenanceInstant(value: unknown): string | null {
-  const at = toDate(value);
-  return at ? at.toISOString() : (value ?? null) === null ? null : String(value);
-}
 
 /** RFC 4180: quote anything that could be misread, double the quotes inside. */
 function cell(value: unknown): string {

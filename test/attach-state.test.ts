@@ -1,7 +1,7 @@
 /**
  * The cold load must not lie, and must not hang.
  *
- * On a cold load the tab range reads a 49.5 MB parquet of 404,023 Duval parcels
+ * On a cold load the tab range reads a 49.97 MB parquet of 404,023 Duval parcels
  * over a public IPFS gateway. That takes as long as the gateway takes, and one
  * observed load sat for roughly two minutes. During that window the search
  * surface rendered "Searching" and then "No parcels match these criteria" - so
@@ -129,16 +129,16 @@ describe("what the wait says while it waits", () => {
       ...ATTACHING,
       failedOver: true,
       gatewayIndex: 1,
-      message: "Downloading query table, 12.4 of 49.5 MB",
+      message: "Downloading query table, 12.4 of 49.97 MB",
     });
     expect(headline).toContain("gateway 2 of 3");
-    expect(headline).toContain("12.4 of 49.5 MB");
+    expect(headline).toContain("12.4 of 49.97 MB");
   });
 
   it("passes engine byte progress through, and only for the gateway being tried", () => {
     const engine = {
       stage: "downloading",
-      message: "Downloading query table, 12.4 of 49.5 MB",
+      message: "Downloading query table, 12.4 of 49.97 MB",
       progress: 0.25,
       sourceUrl: PRIMARY,
       accessMode: null,
@@ -422,7 +422,7 @@ describe("what counts as a gateway that answered", () => {
   it("moves on from a gateway that does not have the content or cannot serve it", () => {
     expect(gatewayIsAlive(404)).toBe(false);
     expect(gatewayIsAlive(410)).toBe(false);
-    // Rate limited and server errors will not serve 49.5 MB either.
+    // Rate limited and server errors will not serve 49.97 MB either.
     expect(gatewayIsAlive(429)).toBe(false);
     expect(gatewayIsAlive(500)).toBe(false);
     expect(gatewayIsAlive(504)).toBe(false);

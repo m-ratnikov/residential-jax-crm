@@ -35,13 +35,31 @@ tab **is** that pattern. Nothing is copied, nothing is converted, and when the
 pipeline re-points its IPNS name the next page load reads the new data with no
 redeploy.
 
+The artifact is **49,974,055 bytes** - 49.97 MB, which the UI renders as 47.7 MB
+because it divides by 1024 twice - and the read path has three modes, each of
+which the Data source panel names as it happens:
+
+- **Ranged.** The normal path. A query costs a few hundred kilobytes of HTTP
+  byte-range requests against the artifact, not a copy of it.
+- **Downloaded.** A gateway that ignores `Range` is not failed over, it is
+  downloaded from once. That is slower, not broken.
+- **Cached.** A copy this browser already holds, attached with no network at
+  all.
+
+One thing a reader would not guess from "range reading" alone: on the ranged
+path a **whole-object fetch still happens**, once per publish, in the
+background on idle after the page is already interactive. A range read
+deliberately never touches most of the file, so without it there would be
+nothing on disk to fall back on when every gateway is down - see the cache
+below.
+
 ### Where each piece runs, and why
 
 | Runs in          | What                                                                                              | Why there                                                                |
 | ---------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | The tab          | every parcel query: map, list, detail, scoring, the property CSV, the agent's tools               | the query engine is here, so this is where the authoritative record is   |
 | Vercel functions | the CRM store: saved searches, alerts, opportunities, outreach, tasks, court records, the overlay | the store's credential lives here, and nothing else does                 |
-| GitHub Actions   | the scheduled matcher, with native DuckDB                                                         | a runner can use the better engine, and a cron belongs outside a request |
+| GitHub Actions   | the scheduled matcher, with native DuckDB over one whole-artifact download                        | a runner can use the better engine, and a cron belongs outside a request |
 
 Producing matches and deciding what to alert on are separated
 ([`lib/notify/evaluate.ts`](lib/notify/evaluate.ts)) precisely so the tab and the
@@ -97,27 +115,108 @@ indistinguishable from a broken deployment, because the page sat on "attaching"
 with nothing on screen to explain itself.
 
 The gateway named in `NEXT_PUBLIC_PROPERTY_DATA_URL` still leads. Behind it,
-`NEXT_PUBLIC_IPFS_GATEWAYS` (`https://ipfs.io,https://dweb.link` by default) is
-a list of alternates, each tried as a rewrite of that URL's own `/ipns/...` or
-`/ipfs/...` path - so every candidate addresses the identical artifact, and
-failing over cannot quietly change which data is loaded.
+`NEXT_PUBLIC_IPFS_GATEWAYS` is a list of alternates, by default
+`https://ipfs.io`, `https://{id}.{ns}.dweb.link` and `https://ipfs.filebase.io`.
+Each is applied to the content id the configured URL already names, so every
+candidate addresses the identical artifact and failing over cannot quietly
+change which data is loaded.
+
+**Two candidate shapes, because the two public gateway conventions are not
+interchangeable.** A plain origin is a path rewrite
+(`https://ipfs.io/ipns/<name>`). A `{id}`/`{ns}` template is a **subdomain**
+rewrite (`https://<name>.ipns.dweb.link/`), and it exists for dweb.link
+specifically: the path form `https://dweb.link/ipns/<name>` answers the CORS
+preflight with a 301, and a redirected preflight is a hard failure by
+specification - the browser never sends the real request that follows. That URL
+used to be half the default fallback list and could not have worked, in any
+browser, ever. The subdomain form it redirects to serves the identical bytes
+with no hop. A template is dropped rather than mangled when the content id is
+not a valid DNS label, which is why a CIDv0 `Qm...` simply produces one fewer
+candidate.
 
 The order is fixed and not measured: the gateway in the data URL, then the
-alternates in the order they are listed. A HEAD probe
-(`NEXT_PUBLIC_GATEWAY_PROBE_TIMEOUT_MS`, 8s) is the cheap gate in front of each
-candidate in turn, not a race that reorders them. A gateway that will not answer
-a HEAD in eight seconds is not going to range read 49.5 MB, so failing the
-probe skips it for the price of one request instead of the whole
-`NEXT_PUBLIC_ATTACH_TIMEOUT_MS` (45s) the candidate would otherwise get to
-attach. The probe asks a deliberately narrow question - 405 and 501 mean the
-gateway is there and does not do HEAD, which counts as an answer, while 404 and
-anything 5xx do not - because the engine already copes with a gateway that
-refuses range reads, and failing one over for that would be failing it over
-something it can handle. Between candidates the engine is torn down, so a
-half-attached one cannot answer the next gateway's queries from the previous
-one's file handle. The attach state is on screen throughout, saying which
-gateway of how many is being tried, and offering a retry rather than an empty
-list if every one of them refuses.
+alternates in the order they are listed. A **one-byte ranged `GET`**
+(`Range: bytes=0-0`, `NEXT_PUBLIC_GATEWAY_PROBE_TIMEOUT_MS`, 8s) is the cheap
+gate in front of each candidate in turn, not a race that reorders them. It is
+deliberately the exact request the engine will make, preflight included: the
+probe used to be a `HEAD`, chosen to avoid that preflight, and avoiding it was
+how a gateway that could never have served a browser kept passing. A gateway
+that will not answer one byte in eight seconds is not going to range read 50 MB,
+so failing the probe skips it for the price of one request instead of the whole
+`NEXT_PUBLIC_ATTACH_TIMEOUT_MS` (45s) the candidate would otherwise get.
+
+The probe then asks two narrow questions. **Is it there:** 405 and 501 mean the
+gateway is present and does not implement the method, which counts as an answer,
+while 404 and anything 5xx do not. A plain 200 passes too, because the engine
+copes with a gateway that refuses range reads by downloading once, and failing
+one over for that would be failing it over something it can handle. **Is it
+serving the artifact:** a gateway is allowed to answer a range request with an
+error page, and gw3.io does exactly that, reporting a 965-byte total for a 50 MB
+parquet. A 206 claiming less than `NEXT_PUBLIC_ARTIFACT_MIN_BYTES` (1 MB) is
+refused rather than believed, because believing it costs a whole attach deadline
+and then an unreadable parse error.
+
+**A refusal is retried and silence is not.** A gateway that answers 502 or a
+rate limit is asked again after a backoff (`NEXT_PUBLIC_GATEWAY_ATTEMPTS`, 2,
+starting at 750 ms and doubling to a cap of 8x); one that consumed its whole
+deadline saying nothing is dropped, because a second ask buys the same silence
+at twice the price. The whole list is then swept again
+(`NEXT_PUBLIC_GATEWAY_PASSES`, 2) rather than abandoned, since a public
+gateway's bad thirty seconds is not a bad session, and all of it sits inside one
+wall-clock bound (`NEXT_PUBLIC_ATTACH_BUDGET_MS`, 120s) so the worst case is a
+number rather than a multiplication. After the first sweep fails, this browser's
+own cached copy is attached with no network at all.
+
+Between candidates the engine is torn down, so a half-attached one cannot answer
+the next gateway's queries from the previous one's file handle. The attach state
+is on screen throughout, saying which gateway of how many is being tried, and
+offering a retry rather than an empty list if every one of them refuses.
+
+### The cache is a fallback, so it is keyed on the content and filled on purpose
+
+A range read is the right way to answer a query and exactly the wrong way to
+leave a copy behind: it touches a few hundred kilobytes of a 50 MB file. The
+vendored engine only ever wrote to its cache on the whole-download path, so on
+the deployment that matters - the one where range reads work - the cache was
+never populated and never saved anybody from anything. Two deliberate
+divergences fix that, each stated at the top of the file it is in
+([`lib/oracle/opfs.ts`](lib/oracle/opfs.ts),
+[`lib/oracle/duckdb.ts`](lib/oracle/duckdb.ts)).
+
+**Entries are keyed on the content, not on the gateway.** `contentAddressOf`
+reduces both gateway shapes - `https://ipfs.io/ipns/k51.../x.parquet` and
+`https://k51....ipns.dweb.link/x.parquet` - to the same `ipns/k51.../x.parquet`,
+and the OPFS filename is a hash of that. So the copy taken from ipfs.io last
+week is found when the configured Filebase URL is the one being asked about
+today. Keying on the URL stored the same 50 MB once per gateway and still missed
+whenever failover landed somewhere new.
+
+**It is filled after a successful attach, never before one.** `precacheArtifact`
+runs once, from `requestIdleCallback`, only on the success path - after the page
+is interactive and the visitor is waiting on nothing. It is skipped when a copy
+of this exact publish is already present (matched on `x-ipfs-roots`, ETag or
+Last-Modified), when the object is larger than
+`NEXT_PUBLIC_ARTIFACT_CACHE_MAX_BYTES` (128 MB), and when OPFS is unavailable -
+a private window or a locked-down profile, where the in-memory fallback is right
+for a 4 KB manifest and absurd for 50 MB that would not outlive the tab.
+`NEXT_PUBLIC_ARTIFACT_PRECACHE=0` turns it off. The bytes are written before the
+manifest, deliberately: a tab closed mid-write leaves bytes with no manifest,
+which reads as "nothing cached", where the other order would leave a manifest
+promising a truncated file.
+
+**Reading it has two modes and only one of them may be stale.** A normal load
+takes the strict read - a cached copy is used only when its version matches what
+the gateway reports, so last week's bytes never pre-empt this morning's publish.
+The relaxed read, any version, is reached for in exactly one place: after a
+whole sweep of every gateway has failed. Anything served that way is labelled
+with its size and the date it was taken, on the header and on the Data source
+panel, because a stale answer presented as a fresh one is worse than no answer.
+
+**Nothing evicts.** The cache holds at most one entry per content address,
+overwritten in place when the same address is republished; a republish under a
+new address leaves the old copy until the browser reclaims the origin's storage.
+For one artifact per deployment that is the right trade, and it is stated here
+rather than left to be found.
 
 ### The bundled sample is real county data
 
@@ -264,22 +363,28 @@ each with per-track `inserted` / `updated` / `unchanged` / `table_total_after`
 and the limitations that run declared for itself. That is real evidence, and
 `/pipeline` shows it beside the CRM's own passes.
 
-The count on that page is deliberately not quoted here, because it moves.
+The count on that page is deliberately **not quoted here, because it moves**.
 `RUN_HISTORY_URL` is the pipeline's `oracle-run-history-duval` **IPNS name**,
 which re-points on every publish, so `/pipeline` shows whatever the pipeline has
-published by the time the page is opened - 40 runs when this paragraph was
-written, more after the next six-hourly pass. Pointing that variable at a CID
-instead would pin the page to one immutable snapshot and freeze the number,
-which is the one thing a page about continuous refresh must not do.
+published by the time the page is opened, and that will be a larger number than
+the last time anybody looked. Pointing that variable at a CID instead would pin
+the page to one immutable snapshot and freeze the count, which is the one thing
+a page about continuous refresh must not do. With the variable unset the bundled
+eight-run sample history answers instead, and the tile is badged as the sample.
 
 **Pipeline runs published** on that page is the published document's own
 `runCount`, read off the envelope, not the length of the list underneath it.
 The two are not the same number and the page used to confuse them: it asked for
-25 runs, printed 25 from what came back, and the artifact held 40 - so the page
-was reporting its own page size as the pipeline's history, and a reviewer who
-opened the IPNS document saw a different number. A display cap is a property of
-the request and the total is a property of the document
-([`lib/data/runs-parse.ts`](lib/data/runs-parse.ts)); they are now two fields.
+25 runs, printed 25 from what came back, and the artifact held forty-odd - so
+the page was reporting its own page size as the pipeline's history, and a
+reviewer who opened the IPNS document saw a different number. A display cap is a
+property of the request and the total is a property of the document
+([`lib/data/runs-parse.ts`](lib/data/runs-parse.ts)); they are now two fields,
+and the tile says which case it is in. The cap is 100 today, which is above what
+the pipeline has published, so the tile currently reads "all listed below" - the
+point is that it will say "latest 100 listed below" rather than silently
+re-describing its own page size once the history outgrows it.
+
 A declared `runCount` is trusted only when it is a whole number no smaller than
 what the document actually carries, so a stale envelope can never make the page
 claim fewer runs than it is listing, and an unreachable history falls back to
@@ -297,11 +402,17 @@ artifact carries no run id at all.
 So the matcher follows the snapshot-diff shape:
 
 1. Re-evaluate every active saved search against the current data.
-2. Fingerprint each matching parcel over the **sixteen fields an acquisitions
-   team would act on** (`MATERIAL_FIELDS` in [`lib/criteria/score.ts`](lib/criteria/score.ts)).
-3. Diff against the fingerprints stored last pass.
-4. Raise `new_match` for parcels new to the search, `updated_match` for parcels
-   whose material fields moved, naming exactly which ones.
+2. Collect the **id of every matching parcel** (up to `MATCH_ID_CAP`), and
+   fingerprint the best of them by the ranking order (up to
+   `TRACKED_MATCH_CAP`) over the **sixteen fields an acquisitions team would act
+   on** (`MATERIAL_FIELDS` in [`lib/criteria/score.ts`](lib/criteria/score.ts)).
+   One sweep produces both ([`lib/notify/collect.ts`](lib/notify/collect.ts)).
+3. Diff the id set against the id set stored last pass, and the fingerprints
+   against the fingerprints stored last pass. Membership and field-level change
+   are two questions of two different stores; see "Two caps" below for why.
+4. Raise `new_match` for parcels new to the search **at any rank**,
+   `updated_match` for parcels whose material fields moved, naming exactly which
+   ones.
 5. Write an immutable evidence row for the pass - **whether or not it fired**.
 
 A re-export that moves nothing material raises nothing. A change to a transit
@@ -317,7 +428,8 @@ evidence or the tenure is.
 - **Re-running is safe.** Alerts are unique on (search, property, pass), so a
   retry after a timeout cannot double notify.
 - **A broad search is capped and says so.** Each search caps alerts per pass and
-  the pass records how many it suppressed.
+  the pass records how many it suppressed; the two watch caps below are reported
+  on the same run record and disclosed on screen before a search is saved.
 
 ### Why passes that raise nothing are still recorded
 
@@ -422,9 +534,12 @@ roll, so it has its own guard ([`lib/criteria/sql.ts`](lib/criteria/sql.ts)).
 
 The two **most common non-null values in the entire sale-date column are not
 sales**. 842 parcels are stamped `1899-12-30` (the spreadsheet zero date), 609
-are stamped `1899-01-01`, one each sits at `1900-09-13` and `1800-01-01`. All
-1,453 carry `tenure_basis = 'COJ_SALESL'` with a null `sale_count` and a null
-`last_sale_date`, and the pipeline turns them into holds of 125 to 226 years.
+are stamped `1899-01-01`, one each sits at `1900-09-13` and `1800-01-01`. Almost
+all of them - 1,450 of the 1,458 rows the guard catches - carry
+`tenure_basis = 'COJ_SALESL'` with a null `sale_count` and a null
+`last_sale_date`; the remaining eight carry `FDOR_SALE`, a sale count of one or
+two, and the placeholder date sitting in `last_sale_date` where a real one would
+be. The pipeline turns all of them into holds of 125 to 226 years.
 Two dates being more common than any genuine sale date is itself the evidence
 that they are placeholders and not very old transactions. They are also not
 nulls: a parcel the roll genuinely says nothing about already carries a null
@@ -439,8 +554,12 @@ Two rules, both read off columns every query already selects, so the guard needs
 no new column and behaves identically in the tab and in the scheduled matcher:
 
 - an implied sale year of **1901 or earlier** is the placeholder, not a
-  transaction (`NO_RECORDED_SALE`). It catches all 1,453, plus six genuine
-  pre-1901 recordings, none of them residential;
+  transaction (`NO_RECORDED_SALE`). It catches every placeholder, plus six rows
+  whose implied sale year lands on 1901 exactly - four single-family, one
+  timberland, one right-of-way. Four of the six being residential is the point
+  of ranking them as unknown rather than trusting them: 125 years of unbroken
+  ownership is not a thesis anyone is ranking on either way. 1,458 rows in
+  total;
 - a sale recorded **more than a year before `built_year`** contradicts the
   roll's own record of the building (`PREDATES_STRUCTURE`, 4,225 parcels). That
   one is capped at the age of the structure rather than discarded, so a genuine
@@ -472,8 +591,14 @@ Three properties worth checking rather than taking on trust:
   is not ranked as one.
 
 Effect on the flagship thesis: the top 100 went from 23 placeholder rows and 24
-rows claiming holds over a century to **zero of each**, and
-`201 N BROOKVIEW DR` fell from rank 1 to rank 818.
+rows claiming holds over a century to **zero of each**, and the parcel that had
+been opening the list at "held 127 years" fell out of the first several hundred.
+
+Those before-and-after ranks were measured on the artifact published at the
+time, and they are not reproducible against today's roll - the parcel that led
+the list then is not in the match set now. What is reproducible, and what
+actually matters, is the after state: re-run the thesis today and the top 100
+still contains zero placeholder rows and zero holds over a century.
 
 ### What the rationale says
 
@@ -507,6 +632,13 @@ artifact, re-measured after the tenure guard, now produces **1,951 distinct
 scores over those same 10,209 matches, topping out at 89.18 with exactly one
 parcel there, and a floor of 18.33**. A top score of 100 on a ranked search
 would now be the symptom, not the goal.
+
+The same shape holds on the bundled sample, which is how to check this without
+the county artifact: the same thesis over `public/sample/query-table.parquet`
+matches 2,293 parcels across **821 distinct scores, topping out at 84.88 with
+exactly one parcel there, a floor of 19.35, and none at 100**. Different corpus,
+different numbers, same three properties - a wide spread, a single parcel in
+first place, and no perfect scores.
 
 ### What breaks a tie, and why it mattered more than it looks
 
@@ -546,23 +678,118 @@ survives as an explicit sort, because that is somebody answering a question
 rather than a machine guessing at one.
 
 The second-order effect is the one worth knowing. **The same ORDER BY decides
-which matches the scheduler watches**, since the tracked set is the top
-`TRACKED_MATCH_CAP` by that order. An unranked saved search was therefore
-watching the two thousand cheapest rows in Duval rather than a sample of what it
-matched.
+which matches the scheduler fingerprints**, since the fingerprinted set is the
+top `TRACKED_MATCH_CAP` by that order. An unranked saved search was therefore
+diffing the two thousand cheapest rows in Duval rather than a sample of what it
+matched. It no longer decides what the scheduler _watches_ - the next section is
+about why - but it still decides which matches an alert can describe field by
+field.
 
-### The cap is on screen, not just in the code
+### Two caps, because membership and change detection cost differently
 
-A thesis can match 151,856 parcels. The matcher fingerprints and watches the
-best 2,000 of them, because storing a snapshot of every match on the search
-document and diffing all of them every thirty minutes is not a trade worth
-making for the fifty-thousandth best match.
+A thesis can match six figures of parcels. On the deployed runtime, read off
+`GET /api/searches` on 2026-08-22, the three seeded saved searches matched
+**10,209, 67,398 and 151,855** of the 404,023-parcel roll, and every one of them
+had `matchIds.truncated: false` - the whole match set watched, not a slice of
+it.
 
-The cost is real: **a change to a parcel ranked below the cap raises nothing,
-and never will.** Undisclosed that is a silent lie about what the notifier
-covers, so it is disclosed where the number is read - under the match count
-before you press save, and beside `Matched last pass` on every saved search that
-exceeded it.
+Those three counts move, and it is worth saying exactly how, because the same
+thesis reports slightly different totals depending on what you ask. Querying the
+published artifact directly the same day gives 10,209, 67,400 and 151,856; the
+store reports 67,398 and 151,855 because a saved search's count is what the last
+matcher pass saw, and that pass read the roll **through the simulation
+overlay**, which is the whole point of the overlay. The county also republishes
+every six hours. So a constant in `lib/notify/limits.ts` naming 67,399 is not
+wrong, it is a different day. The roll total and the two caps are the numbers
+that do not move.
+
+There used to be one cap over all of that, and one cap was the whole defect.
+"Which parcels does this search match" and "what did each of those parcels look
+like last pass" are different questions with different storage costs - an id is
+eleven characters, a fingerprint plus its sixteen-field snapshot is roughly a
+kilobyte - so they are capped separately, in
+[`lib/notify/limits.ts`](lib/notify/limits.ts):
+
+| Cap                 | What it bounds                                                                                                | Value   |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- | ------- |
+| `MATCH_ID_CAP`      | **Membership.** The ids of every parcel the search matched, stored on the search document, grouped by prefix. | 200,000 |
+| `TRACKED_MATCH_CAP` | **Field-level history.** The fingerprint and material snapshot of the best matches, by the ranking order.     | 2,000   |
+
+What each one does and does not buy:
+
+- **`new_match` is answered from the whole match set.** A parcel that newly
+  matches at rank 5,000, or at rank 140,000, raises an alert. The pass sweeps
+  ids in ordered pages of `MATCH_ID_PAGE_SIZE` (5,000, the ceiling the data
+  source imposes on any one query) - 31 pages for the aging-roof thesis - and
+  diffs that id set against the one stored last pass. "Left the set" is the same
+  set difference over the same set.
+- **`updated_match` is still answered from the top 2,000.** Naming _which_
+  fields moved needs last pass's values of them, and that is the
+  kilobyte-a-parcel side of the trade. **A change to a field of an
+  already-matching parcel ranked below 2,000 raises nothing**, and that is the
+  limitation that survives.
+- **A new match below 2,000 still gets a usable alert.** An id cannot state an
+  address, an owner, a score or a rationale, so the sweep keeps the full rows it
+  has already materialised for up to `NEW_MATCH_DETAIL_CAP` (500) parcels below
+  the fingerprint cap that the store has not seen matching before. 500 is
+  `alertLimitPerRun`'s own maximum, so that bound can never be what stops an
+  alert the search was willing to raise. A new match detected beyond it is
+  counted on the run record as `newMatchesWithoutDetail` rather than dropped
+  quietly.
+- **200,000 is headroom, not a live constraint.** It clears the largest thesis
+  observed here by a third and stops short of a criteria set that selects the
+  whole roll, which is a browse and not a watch. Past it the stored set is
+  marked `truncated` and absence from it stops meaning "was not matching", which
+  the run record and the UI both carry. Nothing on the deployment is truncated
+  today, and `GET /api/searches/<id>` shows it.
+
+The single cap was worse than a blind spot, and that is worth keeping on the
+record. `previous` held the stored top 2,000, so a parcel that sat at rank 2,001
+and moved to 1,999 had no entry to compare against and was delivered as "now
+matches your saved search" for a parcel that had been matching for months. Every
+boundary crossing was a false alert. And a parcel below the cap was permanently
+invisible rather than merely late: the ranking is deterministic and tenure and
+roof age rise monotonically, so rank 5,000 does not climb three thousand places
+on the next refresh.
+
+**Storing a six-figure id set on a document committed to a git branch** is the
+part that had to be made cheap, and it is measured rather than asserted
+([`lib/notify/match-ids.ts`](lib/notify/match-ids.ts), pinned by
+`test/match-id-set.test.ts`). Ids are grouped by a four-character id prefix with
+the prefix stored once per group, which answers both of the costs a git-backed
+document has: how many bytes it is, and how many lines change when one parcel
+enters or leaves. Because a parcel's group is a function of its id alone rather
+than of its position in a sorted list, one id arriving rewrites one line instead
+of shifting every line after it - which a sorted array, the obvious
+representation, gets exactly wrong.
+
+Two measurements, at two scales, so neither is mistaken for the other:
+
+| Measured on                                 | Ids     | Grouped  | Bytes an id | Flat sorted array |
+| ------------------------------------------- | ------- | -------- | ----------- | ----------------- |
+| the bundled sample, whole roll (test suite) | 75,988  | 599 KB   | 8.07        | 1,410 KB          |
+| the deployed runtime, aging-roof thesis     | 151,855 | 1,212 KB | 8.18        | -                 |
+
+The second row is not an extrapolation of the first: it is
+`GET /api/searches/<id>` on the live deployment, and it gzips to 248 KB on the
+wire across 1,777 lines. Roughly twice the sample at roughly the same cost an
+id, which is what the representation was chosen to give.
+
+Both caps are disclosed where the numbers are read rather than only in the code:
+under the match count before you press save, and beside `Matched last pass` on
+every saved search, which states how many parcels are watched for new matches
+and how many of those are fingerprinted for changes.
+
+Every pass also **records** both, per search, on its evidence document -
+`knownMatches` with `knownMatchesTruncated`, `trackedMatches` with
+`matchesTruncated`, and `newMatchesWithoutDetail` beside them - so a cap that
+actually bit is answerable after the fact rather than only before it. That is
+stored in `detail.outcomes` on the `matcher-runs` document rather than rendered:
+the pass table on `/pipeline` shows searches evaluated, parcels evaluated,
+alerts raised, alerts suppressed and notifications sent, and the per-search
+watch figures are in the record underneath it. Recorded and readable, not on
+screen - said plainly here so nobody goes looking for a column that is not
+there.
 
 ---
 
@@ -628,8 +855,9 @@ Stated here rather than discovered by a reviewer.
   change in 10+ years" returns nothing. The published table is built where the
   county's own sales history is reachable: tenure is published on **401,832 of
   404,023** parcels and 153,240 of those read ten years or more. Of the
-  published values, **1,459 are the roll's placeholder date rather than a sale**
-  and 4,225 record a sale predating the structure, so on a recorded sale the
+  published values, **1,458 imply a sale in 1901 or earlier rather than a real
+  transaction** and 4,225 record a sale predating the structure, so on a
+  recorded sale the
   ten-year-plus population is **148,722**. Those rows are still returned and
   still filtered on the published column; they are excluded from the ranking and
   labelled wherever they appear. See _Tenure the roll cannot support_ above.
@@ -675,33 +903,47 @@ cat >> .env.local <<'EOF'
 CRM_STORE_REPO=owner/residential-jax-crm
 CRM_STORE_TOKEN=github_pat_...        # fine-grained, one repo, contents: write
 EOF
-pnpm seed --reset   # a team, three theses, nine worked deals
+pnpm seed            # a team, three theses, up to nine worked deals
 ```
 
-The branch (`crm-state`) and directory (`crm`) are created on the first write.
-Set `DATABASE_URL` instead for the Postgres backend; the table is created on
-first use and there is no migration step.
+`--reset` is **not** needed on a fresh store, and it is not the default. The
+branch (`crm-state`) and directory (`crm`) are created on the first write. Set
+`DATABASE_URL` instead for the Postgres backend; the table is created on first
+use and there is no migration step. "Nine worked deals" is an upper bound: the
+seed takes what the ranked pools can actually supply and reports what it wrote.
 
-**`--reset` destroys CRM state.** It clears every collection before it writes:
-saved searches, alerts, opportunities, outreach, court records, the lot. On the
-git backend that is a commit on `crm-state` and is recoverable from the branch
-history; on Postgres it is not recoverable. Read the flag before running it
-against a store somebody is using.
+**`--reset` destroys CRM state**, so it is worth reading before it is run
+against a store somebody is using. It clears all eight collections before it
+writes: the team, saved searches, alerts, matcher passes, owners, opportunities
+(and the notes, tasks and outreach threads stored inside them), court records
+and the simulation overlay. On the git backend that is **one delete commit per
+document, sequentially** - the contents API serialises commits to a branch
+anyway - so a reset over a worked board is dozens of commits and dozens of API
+calls against the hourly budget, not one. Every one of them is recoverable from
+the branch history; on Postgres none of it is.
 
-Without it the seed **refuses to run on top of a populated store** and exits 3.
-That is not caution for its own sake: seeding over an existing board leaves two
-generations of CRM state side by side, the older rows keeping the scores and
-rationales of the model that produced them, both looking equally current. That
-is how a stale fixture survives a scoring fix. `--keep-existing` says otherwise
-deliberately, in one word, and `--memory` runs the whole thing against an
-in-process store and writes nowhere, which is the way to see the shape without
-a token.
+Without it the seed **refuses to run on top of a board that already holds
+opportunities or alerts** and exits 3. Those two are what the check looks at,
+because they are what carries a score and a rationale; a store holding only a
+team or a saved search is seeded onto without complaint. The refusal is not
+caution for its own sake: seeding over an existing board leaves two generations
+of CRM state side by side, the older rows keeping the scores and rationales of
+the model that produced them, both looking equally current. That is how a stale
+fixture survives a scoring fix. `--keep-existing` says otherwise deliberately,
+in one word, and `--memory` runs the whole thing against an in-process store and
+writes nowhere, which is the way to see the shape without a token.
 
 The fixture is generated, not written down: scores and rationales come from the
 real scoring engine over the configured artifact rather than from literals, and
-three of the nine opportunities carry genuine `alert_id` and `matcher_run_id`
-values because the seed applies a real simulated pipeline update and runs an
-ordinary matcher pass over it.
+up to three of the opportunities carry genuine `alert_id` and `matcher_run_id`
+values because the seed applies real simulated pipeline updates and runs an
+ordinary matcher pass over them, rather than writing an `alertId` in. It is up
+to three rather than exactly three because the candidates have to come from a
+thesis with no assessed-value ceiling - a reassessment that pushes a parcel out
+of the band its own saved search filters on drops it from the match set, and a
+parcel that has left a search cannot raise an updated-match alert for it. The
+seed prints how many it actually produced, with the ids, so the number in the
+run log is the number on the board.
 
 **Order matters between the two scripts.** `pnpm verify` clears the simulation
 at both ends of its run, so that it says the same thing every time rather than
@@ -725,6 +967,15 @@ It writes to the store directly rather than calling the deployment, so it needs
 no runtime URL. The workflow refuses to start when no store is configured: a
 pass that silently evaluated an in-process store would report green having
 alerted nobody.
+
+**On the runner the artifact is fetched whole - about 50 MB - and queried from
+disk, not range read** (`PROPERTY_FETCH_WHOLE`, which defaults on whenever
+`CI=true`). Range reading turns each query into hundreds of small requests, and
+a public gateway rate limits and then times out under that: a scheduled pass
+once answered "Timeout was reached" for every saved search after thirteen
+minutes of it. A process that outlives a single query should pay for one large
+transfer instead, which is the opposite of the right trade in a tab and the
+right one here.
 
 To run one by hand:
 
@@ -824,10 +1075,24 @@ Each step states what to look for. All of it runs against the deployed URL.
    run id. Where the roll's tenure is a placeholder or predates the structure,
    the drawer says so in words beside the number rather than presenting it as a
    fact. The owner block shows the mocked skip-traced contact when one exists.
-6. **Save the search.** The dialog states that the first pass records a baseline
-   without alerting. Enable in-app and mocked email.
+6. **Save the search.** Before pressing save, read the line under the match
+   count. Whenever a criteria set matches more than 2,000 parcels it states
+   **both** watch promises in the two units they are actually in: _"Saving these
+   criteria watches all 10,209 for new matches, and the top 2,000 by score for
+   changes to a parcel already matching."_ Those are different promises, and the
+   sentence refuses to quote one number and let it stand for both. Past 200,000
+   it changes to name the membership cap and the total it did not cover; no
+   thesis on this deployment reaches that, which is the point of the headroom.
+   The dialog also states that the first pass records a baseline without
+   alerting. Enable in-app and mocked email.
 7. **Go to `/searches`.** The saved search shows when it was last evaluated,
-   against which pipeline run, and how many matched.
+   against which pipeline run, how many matched, and the same two caps beside
+   `Matched last pass`. To check the claim rather than read it, open
+   `/api/searches/<id>` on this deployment: `matchIds.count` is the membership
+   set actually stored and `matchIds.truncated` says whether it is all of them,
+   beside `matches` - the fingerprinted map - which stops at 2,000. On the
+   seeded theses the first is five figures and false, and the second is exactly
+   2,000, which is the whole of this design in two fields.
 8. **Press `Simulate: new court filings`.** This writes real court records
    against parcels that fit everything else, then runs the ordinary matcher. The
    result line names the synthetic run id and how many alerts it raised.
@@ -860,7 +1125,13 @@ Each step states what to look for. All of it runs against the deployed URL.
     `/search` makes the same argument about data quality: it exports
     `years_since_last_sale` unaltered and carries `tenure_confidence` and
     `tenure_caveat` beside it, so a placeholder tenure cannot travel downstream
-    with nothing attached to say so.
+    with nothing attached to say so. It re-runs the search rather than exporting
+    the rows on screen, and it stops at **5,000 rows** - the ceiling the data
+    source puts on any one query. Take it from a thesis that matches more than
+    that and the last line of the file says so, naming how many matched and how
+    many were written; the button says the same before it is pressed. A silently
+    truncated export reads as a complete one at the other end, which is the one
+    thing an export of a five-figure match set must not do.
 14. **Open `/pipeline`.** Upstream pipeline runs with their real per-source
     counts and declared limitations, next to every matcher pass including the
     ones that raised nothing. **Pipeline runs published** is the published
@@ -921,18 +1192,24 @@ which is what was done:
 `audino`, the kit's frontend bug-fix specialist, was used for several UI defect
 passes. Nothing else in the kit was.
 
-Both borrowed patterns are traced to the files and line ranges that implement
-them in [`KIT-USAGE.md`](KIT-USAGE.md), along with what was adapted off AWS and
-why, the tests that pin the matcher pattern, and the one place where the
-outreach pattern is not covered by a test. That file is the artifact to inspect;
-this section is the summary.
+Both borrowed patterns are traced to the files and constructs that implement them
+in [`KIT-USAGE.md`](KIT-USAGE.md), along with what was adapted off AWS and why
+and the tests that pin each one. The citations there are anchors rather than
+line numbers, and that file carries a runnable checker that resolves every one
+of them against the current tree. That file is the artifact to inspect; this
+section is the summary.
 
 ## Shared code
 
 `lib/oracle/` is **vendored** from the Duval pipeline repository at commit
 `28088d0`, not written here: the published column contract, the read-only SQL
-guard, the per-column meanings, the DuckDB-WASM engine with its OPFS cache, and
-the provider registry with its dated free-tier terms. See
+guard, the per-column meanings, the DuckDB-WASM engine and its OPFS cache, and
+the provider registry with its dated free-tier terms. Two of those files are
+**deliberately diverged** rather than straight copies, each saying so at the top
+of itself: the cache is keyed on the content address rather than the gateway
+URL, and the engine gained two additive exports so the cache is filled after a
+successful range attach and can be attached back with no network. Everything
+else in the directory is a copy. See
 [`lib/oracle/VENDORED.md`](lib/oracle/VENDORED.md) for why it is a copy rather
 than a package - each assignment is graded as an independently clonable
 repository - and `scripts/sync-shared.mjs` to check the two copies for drift.

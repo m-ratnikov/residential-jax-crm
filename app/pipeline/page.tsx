@@ -271,7 +271,7 @@ export default function PipelinePage() {
               value={
                 dataset?.isSample
                   ? "bundled sample extract - set PROPERTY_DATA_URL to read the full published artifact"
-                  : "published county query table read over HTTP range requests"
+                  : "published county query table - queries are HTTP range requests, a few hundred KB each. Cold, the whole ~49.97 MB object is fetched once: by a gateway that ignores Range, and by the background fill of this browser's cached copy."
               }
             />
             <Row label="Produced by run" value={dataset?.runId ?? "unknown"} mono />

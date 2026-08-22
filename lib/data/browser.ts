@@ -384,7 +384,7 @@ export class GatewayAttach {
     try {
       // The probe is the cheap half, and it asks the exact question the attach
       // will: a cross-origin ranged GET. A gateway that cannot answer that in
-      // eight seconds is not going to range read 49.5 MB, and finding that out
+      // eight seconds is not going to range read 49.97 MB, and finding that out
       // costs one request rather than the whole attach deadline.
       await withDeadline(`the gateway at ${hostOf(url)}`, probeTimeoutMs, (signal) =>
         deps.probe(url, signal),
@@ -405,7 +405,7 @@ export class GatewayAttach {
         accessMode: deps.progress(url)?.accessMode ?? null,
         cached: null,
       };
-      // A range read touches a few hundred kilobytes of a 49.5 MB file, so
+      // A range read touches a few hundred kilobytes of a 49.97 MB file, so
       // nothing is left behind for next time unless something asks for it.
       deps.precache?.(url);
       return true;
@@ -566,7 +566,7 @@ export function engineProgressFor(
  *
  * 405 and 501 mean the gateway is there and does not do HEAD, which is an
  * answer. 404 means it does not have this content, so the next gateway is the
- * right move. Anything 5xx or rate limited will not serve 49.5 MB either.
+ * right move. Anything 5xx or rate limited will not serve 49.97 MB either.
  */
 export function gatewayIsAlive(status: number): boolean {
   if (status === 405 || status === 501) return true;
@@ -628,7 +628,7 @@ export function rangeProbeVerdict(
   const totalBytes = contentRangeTotal(contentRange);
   if (totalBytes !== null && totalBytes < minBytes) {
     // A gateway is allowed to answer 206 with an error page. gw3.io does, and
-    // reports a total of 965 bytes for a 49.5 MB parquet. Believing it costs a
+    // reports a total of 965 bytes for a 49.97 MB parquet. Believing it costs a
     // whole attach deadline and then an unreadable DuckDB error.
     return {
       ok: false,
@@ -687,7 +687,7 @@ export function browserAttachDeps(options: BrowserDepsOptions = {}): AttachDeps 
         signal,
       });
       // Never read the body: a gateway that ignored the range is offering all
-      // 49.5 MB of it, and the probe is not the place to accept.
+      // 49.97 MB of it, and the probe is not the place to accept.
       void response.body?.cancel().catch(() => undefined);
 
       const verdict = rangeProbeVerdict(

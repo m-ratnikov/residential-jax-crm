@@ -1,7 +1,8 @@
 "use client";
 // VENDORED FILE - do not edit here without reading lib/oracle/VENDORED.md.
 // Origin: oracle-property-intelligence-platform-pipeline-duval-fl, ui/lib/duckdb.ts, commit 28088d0.
-// Only the import paths differ from the original. Run scripts/sync-shared.mjs to check for drift.
+// Deliberately diverged from the original - see the DIVERGED note below for what
+// changed and why. Run scripts/sync-shared.mjs to see the drift it reports.
 
 /**
  * The query engine. DuckDB-WASM runs inside the visitor's tab and range reads
@@ -370,7 +371,7 @@ export type PrecacheOutcome =
  */
 export async function precacheArtifact(url: string, maxBytes: number): Promise<PrecacheOutcome> {
   // Nowhere durable to put it. The in-memory fallback is right for a manifest
-  // and wrong for 49.5 MB that would not outlive the tab anyway.
+  // and wrong for 49.97 MB that would not outlive the tab anyway.
   if (!(await cachePersists())) return "not-persistent";
 
   const absoluteUrl = absolute(url);
@@ -381,7 +382,7 @@ export async function precacheArtifact(url: string, maxBytes: number): Promise<P
   // spelling the engine has to be handed back for `ensureLoaded` to recognise
   // what is already attached.
   const existing = await cacheManifest(url);
-  // A copy of this exact publish is already here. Re-fetching 49.5 MB to write
+  // A copy of this exact publish is already here. Re-fetching 49.97 MB to write
   // the same bytes back would be pure waste.
   if (existing && existing.version === meta.version) return "already-cached";
   if (meta.size !== null && meta.size > maxBytes) return "too-large";

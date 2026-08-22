@@ -191,7 +191,7 @@ function SearchWorkspace() {
  * What the result column shows before there is anything to rank.
  *
  * This exists because the alternative was a lie. The published parquet is
- * 49.5 MB of Duval County read over a public IPFS gateway, and on a cold load
+ * 49.97 MB of Duval County read over a public IPFS gateway, and on a cold load
  * the attach takes as long as the gateway takes. The surface used to say
  * "Searching", then "No parcels match these criteria" - so the first thing a
  * reviewer saw was a CRM that had searched 404,023 parcels and found nothing.

@@ -22,7 +22,7 @@
  */
 
 import { fail, handleError, noStoreHeaders } from "@/lib/api";
-import { provenanceInstant } from "@/lib/data/export-csv";
+import { provenanceInstant } from "@/lib/data/instant";
 import { crmStore } from "@/lib/crm/db";
 import type { AlertDoc } from "@/lib/crm/documents";
 import { listOpportunities, type OpportunityView } from "@/lib/crm/repo";

@@ -173,7 +173,7 @@ export const ARTIFACT_CACHE_MAX_BYTES = positiveInt(cacheMaxEnv, 134_217_728);
  *
  * A gateway is allowed to answer a range request with `206` and hand back an
  * error page; gw3.io does exactly that, reporting a total size of 965 bytes for
- * a 49.5 MB parquet. Believing it costs a full attach deadline and then a
+ * a 49.97 MB parquet. Believing it costs a full attach deadline and then a
  * baffling DuckDB parse error, so the probe checks the total it is told.
  */
 export const ARTIFACT_MIN_BYTES = positiveInt(minBytesEnv, 1_048_576);
