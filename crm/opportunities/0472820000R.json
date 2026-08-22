@@ -53,6 +53,35 @@
       "subject": "About the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
       "templateId": "roof-condition",
       "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello SAPP ILENE M ESTATE,\n\nJust following up on my note about 2280 SHERRINGTON ST, JACKSONVILLE, 32209. If the timing is wrong, tell me and I will not write again.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3sjm24crwf1gge",
+      "campaignName": "Follow up - 2026-08-22",
+      "channel": "sms",
+      "createdAt": "2026-08-22T03:00:41.341Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for (904) 555-0176",
+          "occurredAt": "2026-08-22T03:00:41.341Z",
+          "providerEventId": "sim_sms_fbcb80b72f6466483631:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Number not in service",
+          "occurredAt": "2026-08-22T03:01:34.341Z",
+          "providerEventId": "sim_sms_fbcb80b72f6466483631:failed",
+          "status": "failed"
+        }
+      ],
+      "id": "0mt3sjmkdtgyg14p5",
+      "providerMessageId": "sim_sms_fbcb80b72f6466483631",
+      "status": "queued",
+      "statusAt": "2026-08-22T03:00:41.341Z",
+      "subject": null,
+      "templateId": "follow-up",
+      "toAddress": "(904) 555-0176"
     }
   ],
   "ownerId": "0mt3rxctdo5arj0jk",
@@ -120,5 +149,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-22T02:43:29.406Z"
+  "updatedAt": "2026-08-22T03:00:41.341Z"
 }
