@@ -158,6 +158,35 @@
       "subject": "About the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
       "templateId": "roof-condition",
       "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello SAPP ILENE M ESTATE,\nI am reaching out about 2280 SHERRINGTON ST, JACKSONVILLE, 32209. We buy homes in JACKSONVILLE directly, as-is, and can close on your timeline.\nPublic records show you have owned it for around 54 years, so I appreciate this may be out of the blue.\nIf you have ever considered selling, I would like to talk about what that might look like. There is no cost and no obligation.\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt48hajwazt9f4bd",
+      "campaignName": "Cash offer introduction - 2026-08-22",
+      "channel": "direct_mail",
+      "createdAt": "2026-08-22T10:26:46.316Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-print-and-mail for 2280 SHERRINGTON ST",
+          "occurredAt": "2026-08-22T10:26:46.316Z",
+          "providerEventId": "sim_direct_mail_f825aa9ad2e3efb2e5de:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-24T12:49:14.316Z",
+          "providerEventId": "sim_direct_mail_f825aa9ad2e3efb2e5de:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt48hajwp7jazwyk",
+      "providerMessageId": "sim_direct_mail_f825aa9ad2e3efb2e5de",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:26:46.316Z",
+      "subject": "Interested in buying 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
+      "templateId": "cash-offer-intro",
+      "toAddress": "2280 SHERRINGTON ST"
     }
   ],
   "ownerId": "0mt3vekkip7pmsxzt",
@@ -249,5 +278,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-22T10:24:59.274Z"
+  "updatedAt": "2026-08-22T10:26:46.316Z"
 }
