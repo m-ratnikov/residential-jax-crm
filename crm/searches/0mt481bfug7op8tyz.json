@@ -1,0 +1,36 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T10:14:20.970Z",
+  "criteria": {
+    "filters": {
+      "dwellingsOnly": true,
+      "minYearsSinceSale": 15,
+      "residentialOnly": true,
+      "waterView": true
+    },
+    "name": "Waterfront long hold",
+    "weights": {
+      "amenity": 3,
+      "distress": 1,
+      "geography": 0,
+      "roofAge": 1,
+      "tenure": 3,
+      "value": 1
+    }
+  },
+  "description": null,
+  "id": "0mt481bfug7op8tyz",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Waterfront long hold",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T10:14:20.970Z"
+}
