@@ -24,7 +24,37 @@
     }
   ],
   "offerPrice": null,
-  "outreach": [],
+  "outreach": [
+    {
+      "body": "Hello SAPP ILENE M ESTATE,\n\nCounty records suggest the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $145,475.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3rxibifmh89gp9",
+      "campaignName": "Seed - contacted",
+      "channel": "email",
+      "createdAt": "2026-08-22T02:43:29.406Z",
+      "createdById": "0mt3rt37pteb7fl8e",
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-8968d4a456@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T02:43:29.406Z",
+          "providerEventId": "sim_email_4ad556807d5cc30a0800:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T02:44:46.406Z",
+          "providerEventId": "sim_email_4ad556807d5cc30a0800:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt3rxibi6ugt260c",
+      "providerMessageId": "sim_email_4ad556807d5cc30a0800",
+      "status": "queued",
+      "statusAt": "2026-08-22T02:43:29.406Z",
+      "subject": "About the roof at 2280 SHERRINGTON ST, JACKSONVILLE, 32209",
+      "templateId": "roof-condition",
+      "toAddress": "owner-8968d4a456@mocked-skip-trace.invalid"
+    }
+  ],
   "ownerId": "0mt3rxctdo5arj0jk",
   "ownerInterest": null,
   "ownerNameSnapshot": "SAPP ILENE M ESTATE",
@@ -90,5 +120,5 @@
       "title": "Follow up call"
     }
   ],
-  "updatedAt": "2026-08-22T02:43:27.608Z"
+  "updatedAt": "2026-08-22T02:43:29.406Z"
 }
