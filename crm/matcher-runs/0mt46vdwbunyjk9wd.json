@@ -1,6 +1,8 @@
 {
   "alertsCreated": 17,
   "alertsSuppressed": 0,
+  "codeCommitSha": "8c0d8cdad80fd2b895e1cfce93a2bf8c8d7414df",
+  "codeRef": "refs/heads/main",
   "dataSourceIsSample": false,
   "dataSourceKind": "duckdb-parquet",
   "dataSourceLocation": "https://ipfs.filebase.io/ipns/k51qzi5uqu5djeq93ll0n7gsrzwfry2jmxb3xa66tcthufpjxv0c3odj1hpq4r",
@@ -104,6 +106,7 @@
   "pipelineRunIsNew": false,
   "pipelineRunStartedAt": "2026-08-22T06:52:28.105Z",
   "propertiesEvaluated": 8006,
+  "reason": null,
   "searchesEvaluated": 4,
   "startedAt": "2026-08-22T09:41:44.049Z",
   "trigger": "cron"
