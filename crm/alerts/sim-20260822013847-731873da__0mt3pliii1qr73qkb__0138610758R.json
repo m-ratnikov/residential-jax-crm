@@ -1,0 +1,65 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-22T02:26:16.693Z",
+  "dismissedAt": null,
+  "id": "sim-20260822013847-731873da__0mt3pliii1qr73qkb__0138610758R",
+  "kind": "new_match",
+  "matcherRunId": "0mt3rbdl27h4d2tnj",
+  "notifications": [
+    {
+      "body": "4546 W MELISSA CT, JACKSONVILLE, 32210 now matches your saved search \"Aging roof, entry price band\".\n\nMatch score: 100 / 100\nWhy: roof about 40 years old, estimated from year built (+50); assessed at $80,047 (+50).\n\nOwner of record: CRESCENT PROPERTY MANAGEMENT\nAssessed value: $80,047\nParcel: 0138610758R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T02:26:40.353Z",
+      "id": "0mt3rbvq98qdp24ne",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T02:26:40.353Z",
+      "status": "delivered",
+      "subject": "New match for \"Aging roof, entry price band\": 4546 W MELISSA CT, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "4546 W MELISSA CT, JACKSONVILLE, 32210 now matches your saved search \"Aging roof, entry price band\".\n\nMatch score: 100 / 100\nWhy: roof about 40 years old, estimated from year built (+50); assessed at $80,047 (+50).\n\nOwner of record: CRESCENT PROPERTY MANAGEMENT\nAssessed value: $80,047\nParcel: 0138610758R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T02:26:40.353Z",
+      "id": "0mt3rbvq93i4p8ngh",
+      "providerMessageId": "sim_email_84cb5db5f37fa59a156c",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T02:26:40.353Z",
+      "status": "sent",
+      "subject": "New match for \"Aging roof, entry price band\": 4546 W MELISSA CT, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822013847-731873da",
+  "propertyId": "0138610758R",
+  "propertySnapshot": {
+    "address": "4546 W MELISSA CT, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 80047,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2557997,
+    "longitude": -81.7759978,
+    "ownerName": "CRESCENT PROPERTY MANAGEMENT",
+    "ownerOccupied": false,
+    "propertyId": "0138610758R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0KBA53DPMHRGXV66NQ0GRY5",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 40,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 17
+  },
+  "rationale": "roof about 40 years old, estimated from year built (+50); assessed at $80,047 (+50).",
+  "readAt": null,
+  "savedSearchId": "0mt3pliii1qr73qkb",
+  "score": 100
+}
