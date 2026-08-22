@@ -60,7 +60,7 @@
     "yearsSinceLastSale": 66
   },
   "savedSearchId": "0mt3v3sjckfr92p5g",
-  "stage": "negotiating",
+  "stage": "under_contract",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -85,6 +85,14 @@
       "id": "0mt42oy6ulfrxqk12",
       "note": null,
       "toStage": "negotiating"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-22T07:44:48.309Z",
+      "fromStage": "negotiating",
+      "id": "0mt42p039rd8d75ia",
+      "note": null,
+      "toStage": "under_contract"
     }
   ],
   "tasks": [
@@ -98,5 +106,5 @@
       "title": "Skip trace owner"
     }
   ],
-  "updatedAt": "2026-08-22T07:44:45.846Z"
+  "updatedAt": "2026-08-22T07:44:48.309Z"
 }
