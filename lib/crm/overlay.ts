@@ -113,7 +113,20 @@ export async function loadOverlay(): Promise<OverlaySummary> {
     });
   }
 
-  const overrides: PropertyOverride[] = simulatedDocs.map((doc) => {
+  // Ordered oldest first, because `simulatedRunIds` below is read as "the
+  // latest simulation" by taking its last element - `.at(-1)`, in
+  // lib/notify/matcher.ts. `store.list()` returns documents in the store's own
+  // listing order, which for the GitHub-documents backend is the git tree
+  // order (alphabetical by property id), not creation order. Two consecutive
+  // simulations were observed resolving to the SAME "latest" run id because
+  // the alphabetically-last property id in the collection did not change
+  // between them: the second, genuinely new simulation was then evaluated
+  // against a stale run id that already had an alert on record for it, and the
+  // retry-safety guard in evaluateAndAlert (correctly) treated it as a repeat
+  // of a pass it had already delivered and raised nothing.
+  const orderedDocs = [...simulatedDocs].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+
+  const overrides: PropertyOverride[] = orderedDocs.map((doc) => {
     const values: PropertyOverride["values"] = {};
     for (const [column, raw] of Object.entries(doc.values)) {
       if (!OVERRIDABLE.has(column)) continue;
@@ -131,6 +144,9 @@ export async function loadOverlay(): Promise<OverlaySummary> {
     courtDataAvailable: true,
     courtPropertyCount: court.length,
     simulatedPropertyCount: overrides.length,
+    // De-duplicated in createdAt order, so the last distinct id is whichever
+    // simulation actually ran most recently, not whichever one happens to
+    // touch the alphabetically-last parcel.
     simulatedRunIds: [...new Set(overrides.map((entry) => entry.runId).filter(Boolean))],
   };
 }
