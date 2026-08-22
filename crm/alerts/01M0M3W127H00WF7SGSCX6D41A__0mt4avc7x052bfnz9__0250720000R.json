@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-22T12:08:24.518Z",
+  "dismissedAt": null,
+  "id": "01M0M3W127H00WF7SGSCX6D41A__0mt4avc7x052bfnz9__0250720000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt4c40gqjg141sud",
+  "notifications": [
+    {
+      "body": "2009 RIBAULT SCENIC DR, JACKSONVILLE, 32208 now matches your saved search \"Transit infill\".\n\nMatch score: 82 / 100\nWhy: water view of St. Johns River 5 m from the water, 190 m to Soutel Dr + 5th Ave (+45.7); held 51 years (+35.8).\n\nOwner of record: WILLIAMS JOHN JR ESTATE\nAssessed value: $150,343\nParcel: 0250720000R\n\nTriggered by pipeline run 01M0M3W127H00WF7SGSCX6D41A.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T12:08:25.835Z",
+      "id": "0mt4c40yzufw2gg5p",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T12:08:25.835Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 2009 RIBAULT SCENIC DR, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0M3W127H00WF7SGSCX6D41A",
+  "propertyId": "0250720000R",
+  "propertySnapshot": {
+    "address": "2009 RIBAULT SCENIC DR, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 150343,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3959969,
+    "longitude": -81.692136,
+    "ownerName": "WILLIAMS JOHN JR ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "0250720000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0M3W127H00WF7SGSCX6D41A",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 51
+  },
+  "rationale": "water view of St. Johns River 5 m from the water, 190 m to Soutel Dr + 5th Ave (+45.7); held 51 years (+35.8).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 81.58
+}
