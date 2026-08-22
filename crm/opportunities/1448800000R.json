@@ -59,6 +59,35 @@
       "subject": "About the roof at 6854 OAKWOOD DR, JACKSONVILLE, 32211",
       "templateId": "roof-condition",
       "toAddress": "owner-1bd1879158@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello PARKS ROBERT M REVOCABLE TRUST,\n\nJust following up on my note about 6854 OAKWOOD DR, JACKSONVILLE, 32211. If the timing is wrong, tell me and I will not write again.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3sjm24crwf1gge",
+      "campaignName": "Follow up - 2026-08-22",
+      "channel": "sms",
+      "createdAt": "2026-08-22T03:00:40.685Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for (904) 555-0121",
+          "occurredAt": "2026-08-22T03:00:40.685Z",
+          "providerEventId": "sim_sms_197c373839cd0f26e178:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T03:01:00.685Z",
+          "providerEventId": "sim_sms_197c373839cd0f26e178:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt3sjm24jn383kle",
+      "providerMessageId": "sim_sms_197c373839cd0f26e178",
+      "status": "queued",
+      "statusAt": "2026-08-22T03:00:40.685Z",
+      "subject": null,
+      "templateId": "follow-up",
+      "toAddress": "(904) 555-0121"
     }
   ],
   "ownerId": "0mt3sduvqu62ur2sw",
@@ -126,5 +155,5 @@
       "title": "EVAL task: confirm trust signatory before offer"
     }
   ],
-  "updatedAt": "2026-08-22T02:59:00.346Z"
+  "updatedAt": "2026-08-22T03:00:40.685Z"
 }
