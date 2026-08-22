@@ -85,6 +85,16 @@
       "toStage": "contacted"
     }
   ],
-  "tasks": [],
-  "updatedAt": "2026-08-22T02:57:44.865Z"
+  "tasks": [
+    {
+      "assigneeId": "0mt3rt37pteb7fl8e",
+      "completedAt": null,
+      "createdAt": "2026-08-22T02:57:57.453Z",
+      "dueAt": null,
+      "id": "0mt3sg43xjjcftpil",
+      "status": "open",
+      "title": "EVAL task: confirm trust signatory before offer"
+    }
+  ],
+  "updatedAt": "2026-08-22T02:57:57.453Z"
 }
