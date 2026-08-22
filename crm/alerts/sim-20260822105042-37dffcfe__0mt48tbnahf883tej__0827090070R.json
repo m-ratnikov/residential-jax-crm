@@ -1,0 +1,72 @@
+{
+  "changedFields": [
+    "ownerName",
+    "lastSaleDate",
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-22T11:07:00.858Z",
+  "dismissedAt": null,
+  "id": "sim-20260822105042-37dffcfe__0mt48tbnahf883tej__0827090070R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt49x276vsz2bxhv",
+  "notifications": [
+    {
+      "body": "801 RIO LINDO DR, JACKSONVILLE, 32207 already matched \"WATER VIEW TEST\" and has changed.\n\nMatch score: 95 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 7 m from the water, 305 m to San Marco Blvd + Landon Ave (+95.4).\n\nChanged since the last pass: owner of record, last sale date, ownership tenure.\n\nOwner of record: STOUDEMIRE RICHARD M REVOCABLE TRUST\nAssessed value: $363,178\nParcel: 0827090070R\n\nTriggered by pipeline run sim-20260822105042-37dffcfe.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T11:07:03.532Z",
+      "id": "0mt49x3osgh98b8mn",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T11:07:03.532Z",
+      "status": "delivered",
+      "subject": "Updated match for \"WATER VIEW TEST\": 801 RIO LINDO DR, JACKSONVILLE, 32207"
+    },
+    {
+      "body": "801 RIO LINDO DR, JACKSONVILLE, 32207 already matched \"WATER VIEW TEST\" and has changed.\n\nMatch score: 95 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 7 m from the water, 305 m to San Marco Blvd + Landon Ave (+95.4).\n\nChanged since the last pass: owner of record, last sale date, ownership tenure.\n\nOwner of record: STOUDEMIRE RICHARD M REVOCABLE TRUST\nAssessed value: $363,178\nParcel: 0827090070R\n\nTriggered by pipeline run sim-20260822105042-37dffcfe.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T11:07:03.532Z",
+      "id": "0mt49x3os6mgvpxy4",
+      "providerMessageId": "sim_email_aaff4282d8e1f9b550b6",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T11:07:03.532Z",
+      "status": "sent",
+      "subject": "Updated match for \"WATER VIEW TEST\": 801 RIO LINDO DR, JACKSONVILLE, 32207"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822105042-37dffcfe",
+  "propertyId": "0827090070R",
+  "propertySnapshot": {
+    "address": "801 RIO LINDO DR, JACKSONVILLE, 32207",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32207",
+    "assessedValue": 363178,
+    "builtYear": 1984,
+    "courtDistressScore": 0,
+    "homesteadFlag": true,
+    "lastSaleDate": "2026-08-22",
+    "latitude": 30.2861945,
+    "longitude": -81.6588828,
+    "ownerName": "STOUDEMIRE RICHARD M REVOCABLE TRUST",
+    "ownerOccupied": true,
+    "propertyId": "0827090070R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0M3W127H00WF7SGSCX6D41A",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 42,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 0
+  },
+  "rationale": "water view of Jacksonville rivers (COJ Jax_River) 7 m from the water, 305 m to San Marco Blvd + Landon Ave (+95.4).",
+  "readAt": null,
+  "savedSearchId": "0mt48tbnahf883tej",
+  "score": 95.4
+}
