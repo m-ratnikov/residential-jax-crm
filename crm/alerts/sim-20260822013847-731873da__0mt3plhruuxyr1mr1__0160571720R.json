@@ -1,0 +1,65 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-22T02:26:16.693Z",
+  "dismissedAt": null,
+  "id": "sim-20260822013847-731873da__0mt3plhruuxyr1mr1__0160571720R",
+  "kind": "new_match",
+  "matcherRunId": "0mt3rbdl27h4d2tnj",
+  "notifications": [
+    {
+      "body": "7506 W GINGER TEA TRL, JACKSONVILLE, 32244 now matches your saved search \"Tired landlord\".\n\nMatch score: 100 / 100\nWhy: held 30 years (+33); roof about 31 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).\n\nOwner of record: BROWN BILLY WAYNE\nAssessed value: $223,737\nParcel: 0160571720R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T02:27:10.047Z",
+      "id": "0mt3rcin360gslraj",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T02:27:10.047Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 7506 W GINGER TEA TRL, JACKSONVILLE, 32244"
+    },
+    {
+      "body": "7506 W GINGER TEA TRL, JACKSONVILLE, 32244 now matches your saved search \"Tired landlord\".\n\nMatch score: 100 / 100\nWhy: held 30 years (+33); roof about 31 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).\n\nOwner of record: BROWN BILLY WAYNE\nAssessed value: $223,737\nParcel: 0160571720R\n\nTriggered by pipeline run sim-20260822013847-731873da.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T02:27:10.047Z",
+      "id": "0mt3rcin3ayncyqmy",
+      "providerMessageId": "sim_email_d31bd3c7905074ec2e41",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T02:27:10.047Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 7506 W GINGER TEA TRL, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822013847-731873da",
+  "propertyId": "0160571720R",
+  "propertySnapshot": {
+    "address": "7506 W GINGER TEA TRL, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 223737,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2112005,
+    "longitude": -81.7674813,
+    "ownerName": "BROWN BILLY WAYNE",
+    "ownerOccupied": false,
+    "propertyId": "0160571720R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0KBA53DPMHRGXV66NQ0GRY5",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 31,
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 30
+  },
+  "rationale": "held 30 years (+33); roof about 31 years old, estimated from year built (+33); absentee owner, no homestead exemption (+33).",
+  "readAt": null,
+  "savedSearchId": "0mt3plhruuxyr1mr1",
+  "score": 100
+}
