@@ -1,0 +1,43 @@
+{
+  "active": true,
+  "alertLimitPerRun": 25,
+  "createdAt": "2026-08-22T09:13:35.629Z",
+  "criteria": {
+    "filters": {
+      "dwellingsOnly": true,
+      "geometry": {
+        "lat": 30.337042989828575,
+        "lng": -81.6467495620608,
+        "radiusM": 1224,
+        "type": "circle"
+      },
+      "maxBuiltYear": 1990,
+      "maxTransitDistanceM": 800,
+      "minYearsSinceSale": 10,
+      "residentialOnly": true
+    },
+    "name": "Transit infill - TEST",
+    "weights": {
+      "amenity": 3,
+      "distress": 1,
+      "geography": 1,
+      "roofAge": 2,
+      "tenure": 2,
+      "value": 1
+    }
+  },
+  "description": null,
+  "id": "0mt45v6odpin15mmn",
+  "lastEvaluatedAt": null,
+  "lastMatchCount": null,
+  "lastPipelineRunId": null,
+  "matchIds": null,
+  "matches": {},
+  "matchesTruncated": false,
+  "name": "Transit infill - TEST",
+  "notifyEmail": true,
+  "notifyInApp": true,
+  "notifySms": false,
+  "ownerId": null,
+  "updatedAt": "2026-08-22T09:13:35.629Z"
+}
