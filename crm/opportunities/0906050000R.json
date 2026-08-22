@@ -77,8 +77,8 @@
       ],
       "id": "0mt48f0f89i5jarmy",
       "providerMessageId": "sim_email_a3626f31935add5eb913",
-      "status": "sent",
-      "statusAt": "2026-08-22T10:24:59.876Z",
+      "status": "delivered",
+      "statusAt": "2026-08-22T10:25:19.933Z",
       "subject": "About the roof at 2573 RIVERSIDE AVE, JACKSONVILLE, 32204",
       "templateId": "roof-condition",
       "toAddress": "owner-62ecdf056a@mocked-skip-trace.invalid"
