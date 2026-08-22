@@ -6,7 +6,7 @@
   "askingPrice": 128500,
   "assessedValue": 116863,
   "assigneeId": "0mt3v3r4hz2k56t5t",
-  "closedAt": null,
+  "closedAt": "2026-08-22T07:44:34.796Z",
   "createdAt": "2026-08-22T04:21:22.004Z",
   "id": "0255630000R",
   "latitude": 30.3938883,
@@ -60,7 +60,7 @@
     "yearsSinceLastSale": 54
   },
   "savedSearchId": "0mt3v3sjckfr92p5g",
-  "stage": "under_contract",
+  "stage": "closed",
   "stageEvents": [
     {
       "actorId": "0mt3v3p9v4cw2aqxd",
@@ -93,6 +93,14 @@
       "id": "0mt3vffujme7qv04x",
       "note": "Signed at $113,000 against an asking of $128,500. Inspection window closes in nine days.",
       "toStage": "under_contract"
+    },
+    {
+      "actorId": null,
+      "createdAt": "2026-08-22T07:44:34.796Z",
+      "fromStage": "under_contract",
+      "id": "0mt42opnxzfh5j82x",
+      "note": null,
+      "toStage": "closed"
     }
   ],
   "tasks": [
@@ -106,5 +114,5 @@
       "title": "Book inspection"
     }
   ],
-  "updatedAt": "2026-08-22T04:21:27.426Z"
+  "updatedAt": "2026-08-22T07:44:34.796Z"
 }
