@@ -70,7 +70,7 @@
         },
         {
           "detail": "Delivered",
-          "occurredAt": "2026-08-22T03:01:12.194Z",
+          "occurredAt": "2026-08-22T03:01:11.949Z",
           "providerEventId": "sim_sms_3d6f32eb940463a1cb88:delivered",
           "status": "delivered"
         }
