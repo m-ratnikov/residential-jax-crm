@@ -18,6 +18,7 @@ import { tool } from "ai";
 import { z } from "zod";
 
 import { criteriaSetSchema, CRITERIA_PRESETS } from "@/lib/criteria/types";
+import { provenanceInstant } from "@/lib/data/export-csv";
 import { NEIGHBOURHOODS } from "@/lib/criteria/areas";
 import { displayAddress } from "@/lib/data/map";
 // From runs-parse, not runs: these tools run in the browser, and lib/data/runs
@@ -278,7 +279,7 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
           rationale: row.rationale,
           source_system: row.property.provenance.sourceSystem,
           source_url: row.property.provenance.sourceUrl,
-          fetched_at: row.property.provenance.fetchedAt,
+          fetched_at: provenanceInstant(row.property.provenance.fetchedAt),
         }));
 
         if (rows.some((row) => String(row.roof_age_basis ?? "").includes("PROXY"))) {
@@ -383,7 +384,7 @@ export function createAgentTools(context: ToolContext, trace: AgentTrace) {
               address: displayAddress(property),
               source_system: property.provenance.sourceSystem,
               source_url: property.provenance.sourceUrl,
-              fetched_at: property.provenance.fetchedAt,
+              fetched_at: provenanceInstant(property.provenance.fetchedAt),
             },
           ],
           "get_property",

@@ -19,8 +19,8 @@ import { rankedTenureYears, tenureConfidenceOf } from "@/lib/criteria/sql";
 import { WEIGHT_LABELS, type CriteriaSet, type Weights } from "@/lib/criteria/types";
 import type { ScoreComponent } from "@/lib/data/types";
 import { downloadPropertyCsv } from "@/lib/data/export-csv";
-import { TRACKED_MATCH_CAP } from "@/lib/notify/limits";
-import { Badge, Button, ScoreBadge, cx, count, money } from "./ui";
+import { MATCH_ID_CAP, TRACKED_MATCH_CAP } from "@/lib/notify/limits";
+import { Badge, Button, OwnerKindBadge, ScoreBadge, cx, count, money } from "./ui";
 
 export interface ResultListProps {
   rows: SearchRow[];
@@ -182,7 +182,26 @@ export function ResultList({
   limitedToView = false,
 }: ResultListProps) {
   const [exporting, setExporting] = useState(false);
-  const unranked = !loading && isUnrankedResult(rows);
+  /*
+    Asked of the rows on screen, and of nothing else.
+
+    This used to be `!loading && isUnrankedResult(rows)`, borrowed from the rule
+    `resultSummary` obeys: do not describe a result while one is being fetched.
+    That rule is right about the summary line and exactly backwards here. Rows
+    stay on screen for the whole of a query - `run()` clears `loading` only
+    after the second search that fills the map, four thousand rows on a set of
+    337,853 - and during that window every row fell back to the ranked branch:
+    a green 100 badge on all one hundred of them, the same explanation repeated
+    under each, and the note above the list gone. That is the wall of hundreds
+    the note exists to prevent, shown at precisely the moment it is most
+    misleading, and it is what a reviewer on the deployed runtime saw.
+
+    The rows carry their own components, so they already answer this for
+    themselves whether or not a newer query is in flight; while one is, they
+    keep the ranking status they were actually scored with, exactly as they keep
+    their scores and addresses. An empty list is still not an unranked one.
+  */
+  const unranked = isUnrankedResult(rows);
 
   return (
     <div className="flex h-full min-h-0 flex-col rounded-xl border border-[var(--line)] bg-[var(--panel)]">
@@ -198,19 +217,35 @@ export function ResultList({
             {resultSummary({ loading, rowCount: rows.length, tookMs })}
           </p>
           {/*
-            The count above is what the criteria select. It is not what saving
-            them would watch: the matcher fingerprints the best
-            TRACKED_MATCH_CAP matches per pass, so a change to anything ranked
-            below that raises no alert, ever. Said here because this is the
-            number somebody reads immediately before pressing "Save and watch".
+            The count above is what the criteria select. What saving them would
+            WATCH is two different things, and saying only the smaller one
+            understated the watch by two orders of magnitude:
+
+            - membership, up to MATCH_ID_CAP - whether a parcel is in the set at
+              all, which is what "newly matches" means and is the story's own
+              promise;
+            - field level history, the best TRACKED_MATCH_CAP by score, which is
+              what lets an alert name which fields moved.
+
+            Both are said here because this is the number somebody reads
+            immediately before pressing "Save and watch".
           */}
           {!loading && total > TRACKED_MATCH_CAP && (
             <p
               className="text-[11px] text-ink-500"
-              title={`A saved search fingerprints the top ${count(TRACKED_MATCH_CAP)} matches by score on each pass and alerts on changes among those. Changes to lower ranked matches are not detected. Narrow the criteria to bring the set you care about inside the cap.`}
+              title={`A saved search records which parcels match, up to ${count(MATCH_ID_CAP)}, so a parcel that newly enters the set raises an alert wherever it ranks. It additionally fingerprints the top ${count(TRACKED_MATCH_CAP)} by score, which is what lets an alert name the fields that changed; a change to a lower ranked parcel that was already matching raises nothing.`}
             >
-              Saving these criteria watches the top {count(TRACKED_MATCH_CAP)} by score, not all{" "}
-              {count(total)}.
+              {total > MATCH_ID_CAP ? (
+                <>
+                  Saving these criteria watches {count(MATCH_ID_CAP)} of {count(total)} for new
+                  matches, and the top {count(TRACKED_MATCH_CAP)} by score for changes.
+                </>
+              ) : (
+                <>
+                  Saving these criteria watches all {count(total)} for new matches, and the top{" "}
+                  {count(TRACKED_MATCH_CAP)} by score for changes to a parcel already matching.
+                </>
+              )}
             </p>
           )}
         </div>
@@ -328,6 +363,7 @@ export function ResultList({
                 </div>
 
                 <div className="mt-1.5 flex flex-wrap gap-1">
+                  <OwnerKindBadge name={row.ownerName} />
                   {row.opportunityId && <Badge tone="accent">In pipeline</Badge>}
                   {row.simulated && (
                     <Badge

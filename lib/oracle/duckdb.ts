@@ -14,11 +14,18 @@
  *  2. If that fails (a gateway without range support or without permissive
  *     CORS), download the whole object once and register it as a buffer.
  * Either way the bytes end up cached (OPFS, memory fallback) for next time.
+ *
+ * DIVERGED FROM THE ORIGIN, deliberately. The origin only ever wrote to the
+ * cache on path 2, so the deployment that matters - the one where range reads
+ * work - never populated it and the cache never saved anybody from anything.
+ * Two additive exports fix that without touching the load path above:
+ * `precacheArtifact` fills the cache after a successful range attach, and
+ * `attachCachedBuffer` attaches what is in it with no network at all.
  */
 
 import * as duckdb from "@duckdb/duckdb-wasm";
 import type { AsyncDuckDB, AsyncDuckDBConnection } from "@duckdb/duckdb-wasm";
-import { cacheGet, cachePut } from "./opfs";
+import { cacheGet, cacheManifest, cachePersists, cachePut, type CachedArtifact } from "./opfs";
 import { VIEW_NAME } from "./sql";
 import { toPlain } from "./format";
 
@@ -300,6 +307,97 @@ async function loadParquet(rawUrl: string): Promise<void> {
     message: "Ready, downloaded once and cached in your browser",
     loadedAt: new Date().toISOString(),
   });
+}
+
+/* ------------------------------------------------------- cache, on purpose */
+
+/**
+ * Attach a cached copy of the artifact, with no network involved anywhere.
+ *
+ * This is the last card the attach controller holds: every gateway has refused,
+ * so there is nothing to range read and nothing to download, but this machine
+ * has the bytes from a previous visit. `loadedUrl` and `loadPromise` are set to
+ * the URL the cached copy came from so the very next `runQuery` against it does
+ * not turn round and try to load it over HTTP again.
+ */
+export async function attachCachedBuffer(entry: CachedArtifact): Promise<void> {
+  const db = await getDb();
+  setState({
+    stage: "attaching",
+    message: "Attaching the cached copy of the query table",
+    sourceUrl: entry.sourceUrl,
+  });
+
+  await db.registerFileBuffer(REGISTERED_FILE, entry.data);
+  const conn = await createView(db);
+  connection = conn;
+  loadedUrl = entry.sourceUrl;
+  loadPromise = Promise.resolve();
+
+  setState({
+    accessMode: "cached",
+    bytes: entry.data.byteLength,
+    columns: await describeView(conn),
+    rowCount: await countRows(conn),
+    stage: "ready",
+    progress: null,
+    error: null,
+    message: `Ready, served from this browser's cached copy taken ${entry.cachedAt}`,
+    loadedAt: new Date().toISOString(),
+  });
+}
+
+export type PrecacheOutcome =
+  | "cached"
+  | "already-cached"
+  | "too-large"
+  | "not-persistent"
+  | "unavailable";
+
+/**
+ * Make sure a cached copy of this artifact exists, so the next load survives a
+ * gateway outage.
+ *
+ * A range read never touches most of the file, which is exactly why it is the
+ * right way to answer a query and exactly why it leaves nothing behind. One
+ * whole-object fetch, once, on the visitor's own bandwidth, after the page is
+ * already interactive, buys every later load - including one where no gateway
+ * answers at all.
+ *
+ * Deliberately silent about progress: the surface has already said "ready" and
+ * writing into the load state here would drag it back to "downloading" for
+ * something the visitor is not waiting on.
+ */
+export async function precacheArtifact(url: string, maxBytes: number): Promise<PrecacheOutcome> {
+  // Nowhere durable to put it. The in-memory fallback is right for a manifest
+  // and wrong for 49.5 MB that would not outlive the tab anyway.
+  if (!(await cachePersists())) return "not-persistent";
+
+  const absoluteUrl = absolute(url);
+  const meta = await headMeta(absoluteUrl);
+
+  // Keyed on the URL as the caller knows it, not the resolved one. That is the
+  // spelling the attach controller will look the entry up by, and it is the
+  // spelling the engine has to be handed back for `ensureLoaded` to recognise
+  // what is already attached.
+  const existing = await cacheManifest(url);
+  // A copy of this exact publish is already here. Re-fetching 49.5 MB to write
+  // the same bytes back would be pure waste.
+  if (existing && existing.version === meta.version) return "already-cached";
+  if (meta.size !== null && meta.size > maxBytes) return "too-large";
+
+  try {
+    const response = await fetch(absoluteUrl);
+    if (!response.ok) return "unavailable";
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    if (bytes.byteLength === 0 || bytes.byteLength > maxBytes) return "too-large";
+    await cachePut(url, meta.version, bytes);
+    return "cached";
+  } catch {
+    // The visitor already has a working page; a failed top-up is not their
+    // problem and the next load will try again.
+    return "unavailable";
+  }
 }
 
 /** Idempotent. Every page calls this, only the first call does work. */

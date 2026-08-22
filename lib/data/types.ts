@@ -85,6 +85,29 @@ export interface AttachReady {
   readonly elapsedMs: number;
   /** How the bytes got here: range read, whole download, or browser cache. */
   readonly accessMode: string | null;
+  /**
+   * Set when NO gateway answered and this browser's own cached copy is what is
+   * being served.
+   *
+   * Present rather than absent is the whole signal, and it is not optional
+   * politeness: an app quietly answering a query about 404,023 parcels out of
+   * last Tuesday's artifact, with no gateway reachable to confirm any of it, is
+   * telling the same class of lie as "no parcels match these criteria" during a
+   * cold load. `DataSourceInfo.label` and `.location` carry it to the surface,
+   * so the Dataset row says cached and says when the copy was taken.
+   */
+  readonly cached?: CachedArtifactInfo | null;
+}
+
+/** A copy of the artifact held by this browser from an earlier visit. */
+export interface CachedArtifactInfo {
+  /** The gateway URL the bytes were originally read from. */
+  readonly sourceUrl: string;
+  readonly bytes: number;
+  /** ISO 8601, when the copy was taken. */
+  readonly cachedAt: string;
+  /** The version the gateway reported then. Null when it reported none. */
+  readonly version: string | null;
 }
 
 export interface AttachFailed {
@@ -93,6 +116,25 @@ export interface AttachFailed {
   /** Every gateway that was tried, so the retry message can name them. */
   readonly tried: readonly string[];
   readonly elapsedMs: number;
+  /**
+   * What each gateway actually did, in the order they were first tried.
+   *
+   * "Something went wrong" is not a diagnosis a person can act on. This is: it
+   * distinguishes a gateway that timed out from one that rate limited us from
+   * one that does not hold the content, which is the difference between waiting,
+   * pointing NEXT_PUBLIC_IPFS_GATEWAYS somewhere else, and re-publishing.
+   */
+  readonly attempts?: readonly GatewayAttempt[];
+}
+
+export interface GatewayAttempt {
+  readonly url: string;
+  /** How many times it was asked, across every pass. */
+  readonly tries: number;
+  /** The last thing it said, or the deadline it missed. */
+  readonly error: string;
+  /** True when it consumed its whole deadline rather than refusing outright. */
+  readonly timedOut: boolean;
 }
 
 export interface ColumnDescriptor {

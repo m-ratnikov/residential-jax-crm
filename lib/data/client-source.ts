@@ -30,6 +30,17 @@ export function propertySource(): BrowserPropertyDataSource {
     runHistoryUrl: publicDataConfig.runHistoryUrl,
     attachTimeoutMs: publicDataConfig.attachTimeoutMs,
     probeTimeoutMs: publicDataConfig.probeTimeoutMs,
+    // The recovery bounds. A gateway that refuses is asked again, the whole
+    // list is swept more than once, and this browser's own cached copy is the
+    // last card - all of it inside one wall clock budget so the worst case is
+    // a number rather than a multiplication.
+    attemptsPerGateway: publicDataConfig.attemptsPerGateway,
+    passes: publicDataConfig.passes,
+    retryBackoffMs: publicDataConfig.retryBackoffMs,
+    budgetMs: publicDataConfig.budgetMs,
+    precache: publicDataConfig.precache,
+    cacheMaxBytes: publicDataConfig.cacheMaxBytes,
+    minArtifactBytes: publicDataConfig.minArtifactBytes,
   });
   return source;
 }

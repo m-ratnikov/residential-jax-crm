@@ -12,7 +12,7 @@ import { z } from "zod";
 
 import { handleError, ok, readJson } from "@/lib/api";
 import { guardMutation } from "@/lib/api-auth";
-import { listAlerts, listSavedSearches, markAllAlertsRead } from "@/lib/crm/repo";
+import { listAlerts, listSavedSearchesForDisplay, markAllAlertsRead } from "@/lib/crm/repo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,7 +26,12 @@ export async function GET(request: Request): Promise<Response> {
         unreadOnly: url.searchParams.get("unread") === "true",
         limit: Number(url.searchParams.get("limit") ?? 100) || 100,
       }),
-      listSavedSearches(),
+      // The display projection, because all this needs is a name per id. The
+      // full documents carry the matcher's state - a snapshot per tracked
+      // parcel and the id set behind "newly matches", megabytes of it on a
+      // broad thesis - and reading them to label an alert would make the
+      // notification feed pay for the watch on every load.
+      listSavedSearchesForDisplay(),
     ]);
 
     const nameById = new Map(searches.map((search) => [search.id, search.name]));

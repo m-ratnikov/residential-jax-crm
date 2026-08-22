@@ -119,8 +119,13 @@ async function main(): Promise<void> {
   // the shape the store's contract warns about even when the intent is a reset.
   // It is the last instance of it in the repository, and leaving one behind is
   // how the pattern comes back.
+  // Both halves of the watch, not just one. `matches` is the fingerprinted top
+  // slice; `matchIds` is the membership set that decides what counts as newly
+  // matching. Clearing only the first leaves the search remembering every
+  // parcel it has ever matched, so the baseline pass this script depends on
+  // would announce no new matches and prove nothing.
   await store.update<SavedSearchDoc>("searches", target.id, (current) =>
-    current ? { ...current, matches: {}, matchesTruncated: false } : null,
+    current ? { ...current, matches: {}, matchesTruncated: false, matchIds: undefined } : null,
   );
 
   const criteria = criteriaSetSchema.parse(target.criteria);

@@ -12,17 +12,17 @@
  */
 
 import { criteriaSetSchema, type CriteriaSet } from "@/lib/criteria/types";
-import { materialSnapshot } from "@/lib/criteria/score";
-import { displayAddress } from "@/lib/data/map";
-import type { PropertyDataSource, ScoredProperty } from "@/lib/data/types";
+import type { PropertyDataSource } from "@/lib/data/types";
 import { loadOverlay } from "@/lib/crm/overlay";
 import { listSavedSearches } from "@/lib/crm/repo";
+import { collectMatches } from "./collect";
 import {
   evaluateAndAlert,
-  TRACKED_MATCH_CAP,
+  MATCH_ID_CAP,
   type MatcherResult,
   type SearchEvaluation,
 } from "./evaluate";
+import { decodeMatchIds, hasMatchIdSet } from "./match-ids";
 import { logEvent } from "./log";
 // Defined in an isomorphic module so the browser matcher builds the identical
 // record; re-exported here because this is where callers expect to find it.
@@ -36,8 +36,11 @@ export type { MatcherResult, SearchOutcome } from "./evaluate";
  * The most parcels one search is evaluated over in a pass. A criteria set
  * broader than this is a browsing query rather than a watch list, and the pass
  * records that it was truncated rather than silently narrowing.
+ *
+ * It is no longer the same number as `TRACKED_MATCH_CAP`. It was, and that is
+ * what made a pass unable to see rank 2,001 at all: see `MATCH_ID_CAP`.
  */
-export const MATCH_EVALUATION_CAP = TRACKED_MATCH_CAP;
+export const MATCH_EVALUATION_CAP = MATCH_ID_CAP;
 
 export type MatcherTrigger = "cron" | "manual" | "simulation";
 
@@ -105,17 +108,29 @@ export async function runMatcher(
     }
 
     try {
-      const result = await source.search({
+      // The whole match set as ids, the best 2,000 as fingerprinted rows, and
+      // detail for the parcels the store has not seen matching before. The
+      // browser matcher runs the identical sweep against the identical
+      // interface; there is no second implementation of what a pass retrieves,
+      // any more than there is of what it alerts on.
+      const result = await collectMatches(source, {
         criteria,
-        limit: MATCH_EVALUATION_CAP,
-        orderBy: "score",
         overlay: overlaySummary.overlay,
+        previousIds: hasMatchIdSet(search.matchIds) ? decodeMatchIds(search.matchIds) : null,
+      });
+      logEvent("matcher.swept", {
+        savedSearchId: search.id,
+        matched: result.matched,
+        ids: result.ids.length,
+        rows: result.rows.length,
+        pages: result.pages,
       });
       evaluations.push({
         savedSearchId: search.id,
-        matched: result.total,
-        rows: result.rows.map(toEvaluatedMatch),
-        truncated: result.total > result.rows.length,
+        matched: result.matched,
+        rows: result.rows,
+        truncated: result.truncated,
+        matchIds: result.matchIds,
       });
     } catch (error: unknown) {
       evaluations.push({

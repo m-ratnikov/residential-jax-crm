@@ -31,6 +31,28 @@ import { ApiError, api, patch, post, type AlertRow } from "@/lib/client";
 import { humanField } from "@/lib/criteria/score";
 import { storeWarning, useServerStatus } from "@/lib/data/status";
 
+/**
+ * What the "Held" row says, given what the roll can actually support.
+ *
+ * The alert used to print the published number alone, so a parcel whose sale
+ * date is one of the roll's 1899 placeholders read "Held: 127 years" in a
+ * structured field directly above a rationale paragraph saying the tenure was
+ * unknown. The number is still shown when it means something, and the verdict
+ * decides whether it does.
+ */
+export function heldValue(
+  years: number | null | undefined,
+  confidence: string | null | undefined,
+): string {
+  if (confidence === "NO_RECORDED_SALE") return "no recorded sale";
+  if (years === null || years === undefined) return "no recorded sale";
+  // PREDATES_STRUCTURE is a real recorded sale that is simply older than the
+  // house, and this is the published figure, not the capped one the ranking
+  // uses - so it is shown as published and the caveat below says what it means.
+  // "at most N years" would be a claim this number does not support.
+  return `${years} years`;
+}
+
 export default function AlertsPage() {
   return (
     <Suspense fallback={<div className="p-8 text-xs text-ink-500">Loading alerts</div>}>
@@ -152,6 +174,8 @@ function AlertsFeed() {
               assessedValue?: number | null;
               roofAgeYears?: number | null;
               yearsSinceLastSale?: number | null;
+              tenureConfidence?: string | null;
+              tenureCaveat?: string | null;
               courtDistressScore?: number | null;
               provenance?: { sourceSystem?: string | null; sourceUrl?: string | null };
             };
@@ -219,14 +243,19 @@ function AlertsFeed() {
                     />
                     <Row
                       label="Held"
-                      value={
-                        snapshot.yearsSinceLastSale !== null &&
-                        snapshot.yearsSinceLastSale !== undefined
-                          ? `${snapshot.yearsSinceLastSale} years`
-                          : "no recorded sale"
-                      }
+                      value={heldValue(snapshot.yearsSinceLastSale, snapshot.tenureConfidence)}
                     />
                   </dl>
+                  {snapshot.tenureCaveat && (
+                    <p
+                      data-testid="alert-tenure-caveat"
+                      className="text-[10px] leading-snug text-ink-500"
+                    >
+                      {snapshot.tenureCaveat.charAt(0).toUpperCase() +
+                        snapshot.tenureCaveat.slice(1)}
+                      .
+                    </p>
+                  )}
 
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-[11px] text-ink-500">Triggered by pipeline run</span>

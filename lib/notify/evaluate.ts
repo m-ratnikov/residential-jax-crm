@@ -20,7 +20,15 @@
  */
 
 import { changedFields } from "@/lib/criteria/score";
-import { TRACKED_MATCH_CAP } from "./limits";
+import { MATCH_ID_CAP, TRACKED_MATCH_CAP } from "./limits";
+import {
+  decodeMatchIds,
+  encodeMatchIds,
+  goneFrom,
+  hasMatchIdSet,
+  newAgainst,
+  type MatchIdSet,
+} from "./match-ids";
 import { crmStore } from "@/lib/crm/db";
 import {
   newId,
@@ -52,8 +60,22 @@ export interface SearchEvaluation {
   savedSearchId: string;
   /** Total matching before any cap. */
   matched: number;
+  /**
+   * Fingerprinted rows, best first: the top `TRACKED_MATCH_CAP` by score, plus
+   * detail for a bounded number of lower ranked parcels the caller believed to
+   * be new. This is what "changed underneath you" is computed from.
+   */
   rows: EvaluatedMatch[];
   truncated: boolean;
+  /**
+   * Every matching parcel id, which is what "newly matches" is computed from.
+   *
+   * Optional. A caller that supplies none is taken to have retrieved only what
+   * is in `rows`, which is what the tests and any older client do; membership
+   * is then as partial as it always was, and is recorded as such rather than
+   * being presented as the whole set.
+   */
+  matchIds?: MatchIdSet | null;
   error?: string;
 }
 
@@ -86,6 +108,16 @@ export interface SearchOutcome {
   evaluated: number;
   seeded: boolean;
   newMatches: number;
+  /**
+   * Parcels that newly match but arrived with no snapshot to describe them, so
+   * they were detected and counted and no alert document was written.
+   *
+   * Non-zero means more parcels newly matched below the snapshot cap than the
+   * pass carried detail for. Reported rather than hidden, because "we know
+   * something you were not told" is the exact failure this whole change is
+   * about.
+   */
+  newMatchesWithoutDetail: number;
   updatedMatches: number;
   leftMatches: number;
   /**
@@ -98,14 +130,27 @@ export interface SearchOutcome {
   alertsSuppressed: number;
   truncated: boolean;
   /**
-   * How many of `matched` this search now watches, and whether that is all of
+   * How many of `matched` this search FINGERPRINTS, and whether that is all of
    * them. `matched` is what the criteria select; `trackedMatches` is what the
-   * next pass can diff against. When they differ, a change to anything outside
-   * the tracked set raises nothing, and a screen showing `matched` on its own
-   * is describing a watch that is not happening.
+   * next pass can diff FIELD BY FIELD. When they differ, a change to a field of
+   * a parcel outside the tracked set raises nothing - which is the cap the UI
+   * discloses, unchanged.
    */
   trackedMatches: number;
   matchesTruncated: boolean;
+  /**
+   * How many of `matched` this search remembers the membership of, and whether
+   * that is all of them. This is the set "newly matches" is answered from, and
+   * it now runs to `MATCH_ID_CAP` rather than to `TRACKED_MATCH_CAP`.
+   */
+  knownMatches: number;
+  knownMatchesTruncated: boolean;
+  /**
+   * True when this pass wrote the id set for a search that had none - a brand
+   * new search, or one stored before the id set existed. Membership was not
+   * knowable, so nothing was announced as newly matching.
+   */
+  matchIdsSeeded: boolean;
   error?: string;
 }
 
@@ -191,6 +236,8 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
       const search = await store.get<SavedSearchDoc>("searches", evaluation.savedSearchId);
       if (!search) continue;
 
+      const storedIds = decodeMatchIds(search.matchIds);
+
       const outcome: SearchOutcome = {
         savedSearchId: search.id,
         name: search.name,
@@ -198,6 +245,7 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         evaluated: evaluation.rows.length,
         seeded: false,
         newMatches: 0,
+        newMatchesWithoutDetail: 0,
         updatedMatches: 0,
         leftMatches: 0,
         unstableReads: 0,
@@ -208,6 +256,9 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         // that errored still reports the watch it currently has.
         trackedMatches: Object.keys(search.matches ?? {}).length,
         matchesTruncated: search.matchesTruncated,
+        knownMatches: storedIds.size,
+        knownMatchesTruncated: search.matchIds?.truncated ?? search.matchesTruncated,
+        matchIdsSeeded: false,
         error: evaluation.error,
       };
 
@@ -220,11 +271,51 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         propertiesEvaluated += evaluation.rows.length;
 
         const previous = search.matches ?? {};
+
+        // Membership and field level history are now two different questions
+        // asked of two different stores, and conflating them was the defect.
+        //
+        // `previous` answers "what did this parcel look like last pass", for the
+        // best 2,000 by score. `known` answers "was this parcel matching last
+        // pass", for the whole match set. Reading the first as the second is
+        // what made a parcel crossing rank 2,000 in either direction either
+        // invisible or a false "now matches your saved search".
+        const knewMembership = hasMatchIdSet(search.matchIds);
+        const known = knewMembership ? storedIds : new Set(Object.keys(previous));
+
         // A search the matcher has never evaluated is seeded, not announced.
         // Otherwise saving "roofs over fifteen years" fires three hundred
         // thousand alerts about houses that have sat there for a decade.
+        //
+        // Still keyed on the snapshots rather than on the id set, and
+        // deliberately: a pass that writes one always writes the other, so an
+        // empty `matches` means this search has no history - never evaluated,
+        // or reset by hand - and a stale id set left beside it should not be
+        // read as knowledge the search does not have.
         const seeding = Object.keys(previous).length === 0;
         outcome.seeded = seeding;
+
+        // A document written before the id set existed knows only its top
+        // 2,000, so "absent from `known`" cannot be read as "newly matching" -
+        // it is far more likely to mean "was always matching, below the cap".
+        // This pass seeds the id set and announces nothing, which is the same
+        // honest answer a brand new search gets. One pass of silence beats one
+        // pass of 149,856 wrong alerts.
+        const membershipKnowable = knewMembership || seeding;
+        outcome.matchIdsSeeded = !knewMembership;
+
+        const currentIds: Set<string> = evaluation.matchIds
+          ? decodeMatchIds(evaluation.matchIds)
+          : new Set(evaluation.rows.map((row) => row.propertyId));
+        const currentTruncated = evaluation.matchIds
+          ? evaluation.matchIds.truncated
+          : evaluation.truncated;
+
+        // The complete answer, from the complete set, independent of which rows
+        // happened to arrive with detail on them.
+        const newIds =
+          membershipKnowable && !seeding ? newAgainst(known, currentIds) : ([] as string[]);
+        outcome.newMatches = newIds.length;
 
         const pending: {
           match: EvaluatedMatch;
@@ -232,13 +323,20 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
           changed: string[];
         }[] = [];
 
+        let describedNew = 0;
+
         for (const match of evaluation.rows) {
           const before = previous[match.propertyId];
-          if (!before) {
-            if (!seeding) {
+          if (!known.has(match.propertyId)) {
+            if (membershipKnowable && !seeding) {
               pending.push({ match, kind: "new_match", changed: [] });
-              outcome.newMatches += 1;
+              describedNew += 1;
             }
+          } else if (!before) {
+            // Matching before, but ranked below the snapshot cap then, so there
+            // is no `before` to diff. It is not new and nothing can be said to
+            // have changed. Its snapshot is recorded below for next time.
+            continue;
           } else if (before.matchHash !== match.matchHash) {
             // Same artifact, different fingerprint, is not a change in the
             // world - it is a bug in the reader, and raising it would be
@@ -266,6 +364,10 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
             }
           }
         }
+
+        // Detected without a snapshot to describe them. Not the same thing as
+        // `alertsSuppressed`, which is the search's own per pass alert budget.
+        outcome.newMatchesWithoutDetail = Math.max(0, newIds.length - describedNew);
 
         const toRaise = pending.slice(0, search.alertLimitPerRun);
         outcome.alertsSuppressed = pending.length - toRaise.length;
@@ -331,7 +433,15 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
           };
         }
 
-        outcome.leftMatches = Object.keys(previous).filter((id) => !matches[id]).length;
+        // "Left the set" is a membership question too, and it used to be
+        // answered from the top 2,000: a parcel that merely slipped from rank
+        // 1,999 to 2,001 counted as having left a search it still matches.
+        // With the id set it is the actual difference. When the id set is
+        // capped it is still a difference of what was retrieved, which is why
+        // `knownMatchesTruncated` travels beside it.
+        outcome.leftMatches = knewMembership
+          ? goneFrom(known, currentIds).length
+          : Object.keys(previous).filter((id) => !matches[id]).length;
 
         // Two caps sit between "matches" and "watched": the evaluation cap the
         // engine applied before this module saw a row, and TRACKED_MATCH_CAP
@@ -340,6 +450,13 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
         // reported only the second and called a partial watch complete.
         outcome.trackedMatches = tracked.length;
         outcome.matchesTruncated = evaluation.matched > tracked.length;
+
+        // Re-encoded here rather than stored as posted, so a caller cannot put
+        // a shape of its own choosing into the document, and so an unchanged
+        // set serialises identically and the store skips the write.
+        const matchIds: MatchIdSet = encodeMatchIds(currentIds, currentTruncated);
+        outcome.knownMatches = matchIds.count;
+        outcome.knownMatchesTruncated = matchIds.truncated;
 
         // Read-modify-write: an analyst renaming this search, or changing its
         // notification preference, while a matcher pass is mid-flight must not
@@ -350,6 +467,7 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
                 ...current,
                 matches,
                 matchesTruncated: outcome.matchesTruncated,
+                matchIds,
                 lastEvaluatedAt: startedAt,
                 lastPipelineRunId: runId,
                 lastMatchCount: evaluation.matched,
@@ -421,4 +539,4 @@ export async function evaluateAndAlert(input: EvaluateInput): Promise<MatcherRes
   };
 }
 
-export { TRACKED_MATCH_CAP };
+export { MATCH_ID_CAP, TRACKED_MATCH_CAP };

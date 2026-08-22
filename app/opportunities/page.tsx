@@ -18,6 +18,7 @@ import {
   Badge,
   Button,
   Empty,
+  OwnerKindBadge,
   Panel,
   ScoreBadge,
   Select,
@@ -421,6 +422,13 @@ function OpportunityCard({
       </p>
 
       <div className="mt-1.5 flex flex-wrap gap-1">
+        {/*
+          Said on the card, not only on the deal behind it. ST VINCENTS
+          HOSPITAL INC sitting in Negotiating at $972,946 is the shot a reviewer
+          takes of the board, and the board is where it has to be visible that
+          the owner of record is an organisation.
+        */}
+        <OwnerKindBadge name={row.owner?.name ?? row.opportunity.ownerNameSnapshot} />
         {snapshot.ownerOccupied === false && <Badge tone="outline">absentee</Badge>}
         {Number(snapshot.courtDistressScore ?? 0) > 0 && <Badge tone="bad">court</Badge>}
         {row.assignee && <Badge tone="neutral">{row.assignee.name.split(" ")[0]}</Badge>}

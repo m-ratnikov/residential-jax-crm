@@ -19,6 +19,7 @@ import {
   Button,
   Empty,
   Field,
+  OwnerKindBadge,
   Panel,
   ScoreBadge,
   Select,
@@ -85,6 +86,107 @@ interface Detail extends OpportunityRow {
   outreach: OutreachMessageRow[];
 }
 
+/**
+ * A parcel fact this deal's snapshot never captured, read back off the roll.
+ *
+ * There are two writers of `propertySnapshot` and they do not write the same
+ * fields. The parcel drawer's "Track as opportunity" sends `builtYear`;
+ * `alertSnapshot` in lib/notify/snapshot.ts, which is what the seed, the
+ * matcher API and the alerts page all convert through, does not. So every deal
+ * that arrived through an alert - which on the deployed runtime is every deal -
+ * has no `builtYear` key at all, and the page printed "unknown" for a year the
+ * roll publishes and the drawer beside it shows.
+ *
+ * The writer is the real fix and it is one field on a module this change does
+ * not own. What this page can do is stop asserting the roll is silent when it
+ * is not: the query engine lives in this tab, so the parcel is readable here,
+ * the same way the drawer reads it.
+ *
+ * Loaded through a dynamic import and only when a field is actually missing, so
+ * a deal whose snapshot is complete never pays for the engine, and one whose
+ * snapshot is not renders immediately and fills the field in when the parcel
+ * arrives. Nothing here blocks the deal.
+ */
+type RollLookup =
+  | { status: "idle" | "reading" | "unavailable"; builtYear: null }
+  | { status: "ready"; builtYear: number | null };
+
+/** The parcel this answer is about, so a settled answer cannot outlive it. */
+type RollState = RollLookup & { propertyId: string | null };
+
+function useRollFallback(propertyId: string, needed: boolean): RollLookup {
+  const [settled, setSettled] = useState<RollState>({
+    propertyId: null,
+    status: "idle",
+    builtYear: null,
+  });
+
+  useEffect(() => {
+    if (!needed) return;
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const { fetchOverlay, propertySource } = await import("@/lib/data/client-source");
+        const overlay = await fetchOverlay();
+        const property = await propertySource().getProperty(propertyId, overlay.overlay);
+        if (cancelled) return;
+        setSettled(
+          property
+            ? { propertyId, status: "ready", builtYear: property.builtYear }
+            : { propertyId, status: "unavailable", builtYear: null },
+        );
+      } catch {
+        if (!cancelled) setSettled({ propertyId, status: "unavailable", builtYear: null });
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [propertyId, needed]);
+
+  // "Reading" is derived rather than written, so the effect only ever reports
+  // an answer and never sets state on its way to asking the question.
+  if (!needed) return { status: "idle", builtYear: null };
+  if (settled.propertyId !== propertyId) return { status: "reading", builtYear: null };
+  return settled;
+}
+
+/** What the "Built" cell should say, and why. */
+export function builtYearCell(
+  snapshot: Readonly<Record<string, unknown>>,
+  roll: RollLookup,
+): { value: string; title?: string } {
+  const captured = snapshot["builtYear"];
+  if (typeof captured === "number") return { value: String(captured) };
+  // Present and null is the roll's own answer, and is not the same thing as a
+  // snapshot that predates the field. Only the second one is worth chasing.
+  if (captured === null) return { value: "not published" };
+
+  switch (roll.status) {
+    case "ready":
+      return roll.builtYear === null
+        ? { value: "not published" }
+        : {
+            value: String(roll.builtYear),
+            title:
+              "Read from the county roll just now. The snapshot stored when this deal was created did not carry a year built.",
+          };
+    case "reading":
+      return {
+        value: "reading the roll",
+        title: "Not in this deal's snapshot, so the parcel is being read from the published roll.",
+      };
+    default:
+      return {
+        value: "not in this deal's snapshot",
+        title:
+          "The snapshot stored when this deal was created did not carry a year built, and the published roll could not be read from this tab. Open the parcel from Show on map.",
+      };
+  }
+}
+
 export default function OpportunityPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
 
@@ -146,6 +248,12 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
     }
   };
 
+  // Read before the early returns below, because a hook cannot be. Nothing is
+  // fetched until the deal has loaded and its snapshot is found to be short of
+  // the field; see useRollFallback.
+  const snapshot = (detail?.opportunity.propertySnapshot ?? {}) as Record<string, unknown>;
+  const roll = useRollFallback(id, Boolean(detail) && snapshot["builtYear"] === undefined);
+
   if (error) {
     return (
       <div className="rounded-lg border border-bad-500/40 bg-bad-500/10 px-4 py-3 text-xs text-bad-500">
@@ -157,7 +265,7 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
   if (!detail) return <Spinner label="Reading the opportunity" />;
 
   const opportunity = detail.opportunity;
-  const snapshot = (opportunity.propertySnapshot ?? {}) as Record<string, unknown>;
+  const built = builtYearCell(snapshot, roll);
 
   return (
     <div className="space-y-4">
@@ -199,7 +307,7 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
             )}
             <dl className="tabular mt-2.5 grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] sm:grid-cols-4">
               <Row label="Assessed" value={money(opportunity.assessedValue)} />
-              <Row label="Built" value={String(snapshot["builtYear"] ?? "unknown")} />
+              <Row label="Built" value={built.value} title={built.title} testId="deal-built-year" />
               <Row
                 label="Roof age"
                 value={
@@ -478,11 +586,23 @@ export default function OpportunityPage({ params }: { params: Promise<{ id: stri
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({
+  label,
+  value,
+  title,
+  testId,
+}: {
+  label: string;
+  value: string;
+  title?: string;
+  testId?: string;
+}) {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2" title={title}>
       <dt className="w-24 shrink-0 text-ink-500">{label}</dt>
-      <dd className="min-w-0 flex-1 break-words text-ink-200">{value}</dd>
+      <dd className="min-w-0 flex-1 break-words text-ink-200" data-testid={testId}>
+        {value}
+      </dd>
     </div>
   );
 }
@@ -527,6 +647,16 @@ export function OwnerContactPanel({ owner }: { owner: DetailOwner | null }) {
         <Row label="Mailing" value={mailing} />
         <Row label="Address source" value={owner.sourceSystem ?? "not published"} />
       </dl>
+
+      {/*
+        A hospital and two churches reached the board through a residential
+        thesis, because on the roll they own residential parcels. The deal page
+        is where somebody decides to call, so it is where the app has to say
+        that the owner of record is not a person.
+      */}
+      <div className="mt-2 empty:hidden">
+        <OwnerKindBadge name={owner.name} />
+      </div>
 
       {owner.skipTrace ? (
         <SimulatedContact contact={owner.skipTrace} className="mt-3" />

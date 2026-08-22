@@ -918,6 +918,15 @@ which is what was done:
 - **`watchog`** for the scheduled matcher: diff each new snapshot against the
   last stored one, and persist an immutable evidence record per pass.
 
+`audino`, the kit's frontend bug-fix specialist, was used for several UI defect
+passes. Nothing else in the kit was.
+
+Both borrowed patterns are traced to the files and line ranges that implement
+them in [`KIT-USAGE.md`](KIT-USAGE.md), along with what was adapted off AWS and
+why, the tests that pin the matcher pattern, and the one place where the
+outreach pattern is not covered by a test. That file is the artifact to inspect;
+this section is the summary.
+
 ## Shared code
 
 `lib/oracle/` is **vendored** from the Duval pipeline repository at commit

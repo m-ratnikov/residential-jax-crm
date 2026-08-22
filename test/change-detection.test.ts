@@ -14,13 +14,15 @@ import {
   MATERIAL_FIELDS,
   rationaleFor,
 } from "@/lib/criteria/score";
+import { tenureConfidenceOf } from "@/lib/criteria/sql";
 import {
   courtDistressScore,
   buildOverlay,
   EMPTY_OVERLAY,
   isEmptyOverlay,
 } from "@/lib/data/overlay";
-import type { PropertyRecord, ScoreComponent } from "@/lib/data/types";
+import { alertSnapshot, toEvaluatedMatch } from "@/lib/notify/snapshot";
+import type { PropertyRecord, ScoreComponent, ScoredProperty } from "@/lib/data/types";
 
 function property(overrides: Partial<PropertyRecord> = {}): PropertyRecord {
   return {
@@ -83,9 +85,39 @@ function property(overrides: Partial<PropertyRecord> = {}): PropertyRecord {
   };
 }
 
+function scored(overrides: Partial<PropertyRecord> = {}): ScoredProperty {
+  const record = property(overrides);
+  return {
+    property: record,
+    score: 84,
+    components: [],
+    rationale: "held 32 years (+33)",
+    matchHash: matchHashOf(record),
+  };
+}
+
 describe("match fingerprint", () => {
   it("is stable for an unchanged record", () => {
     expect(matchHashOf(property())).toBe(matchHashOf(property()));
+  });
+
+  /**
+   * The number below is a hostage.
+   *
+   * Every stored `MatchSnapshot` carries a fingerprint computed by this
+   * function, and the matcher decides "this parcel changed underneath you" by
+   * comparing against it. Move any fingerprinted value - add a field to
+   * MATERIAL_FIELDS, change how one is stringified - and every stored snapshot
+   * is invalidated at once, so the next pass reports every watched parcel on
+   * every saved search as changed. On the live deployment that is thousands of
+   * alerts, all of them wrong, and no way to tell which if any were real.
+   *
+   * So the fingerprint is pinned to a literal rather than to itself. A change
+   * that moves it is not forbidden; it is required to be deliberate, and to
+   * arrive with an answer for what happens to the snapshots already stored.
+   */
+  it("has not moved", () => {
+    expect(matchHashOf(property())).toBe("a64c6f781123cb32c474f6590a9bdc95");
   });
 
   it("moves when a material field moves", () => {
@@ -132,6 +164,65 @@ describe("changed fields", () => {
   it("gives every material field a readable name", () => {
     for (const field of MATERIAL_FIELDS) {
       expect(humanField(field)).not.toBe(field);
+    }
+  });
+});
+
+describe("the parcel record carried on an alert", () => {
+  it("carries the tenure guard's verdict, not just the number it doubts", () => {
+    // The roll stamps 842 parcels 1899-12-30 and 609 more 1899-01-01, which
+    // reads as a 127 year hold on a house built in 1986. The search list, the
+    // parcel drawer and the CSV all print the caveat beside the number. The
+    // alert did not, so it printed "Held: 127 years" in a structured field
+    // directly above a rationale paragraph saying the tenure is unknown.
+    const placeholder = alertSnapshot(scored({ yearsSinceLastSale: 127, builtYear: 1986 }));
+
+    expect(placeholder["tenureConfidence"]).toBe("NO_RECORDED_SALE");
+    expect(String(placeholder["tenureCaveat"])).toContain("no recorded sale");
+    // And the field the guard reads, so a consumer can recompute rather than
+    // having to trust a stored verdict.
+    expect(placeholder["builtYear"]).toBe(1986);
+    expect(placeholder["yearsSinceLastSale"]).toBe(127);
+  });
+
+  it("says nothing when the roll can stand behind the tenure", () => {
+    const ordinary = alertSnapshot(scored());
+    expect(ordinary["tenureConfidence"]).toBe("RECORDED");
+    expect(ordinary["tenureCaveat"]).toBeNull();
+  });
+
+  it("agrees with the guard every other surface uses, rather than re-deriving it", () => {
+    // Not a re-implementation of the rule with the same answers: the same
+    // function. A second copy is a second answer waiting to happen, and this is
+    // the field the drawer, the list, the CSV and the SQL all key off.
+    for (const facts of [
+      { yearsSinceLastSale: 127, builtYear: 1986 },
+      { yearsSinceLastSale: 60, builtYear: 1998 },
+      { yearsSinceLastSale: null, builtYear: 1998 },
+      { yearsSinceLastSale: 32, builtYear: 1988 },
+    ]) {
+      expect(alertSnapshot(scored(facts))["tenureConfidence"]).toBe(tenureConfidenceOf(facts));
+    }
+  });
+
+  it("moves no fingerprinted value by carrying them", () => {
+    // The reason it was safe to add fields at all. `matchHashOf` and
+    // `changedFields` read MATERIAL_FIELDS off the record; the alert record is
+    // a different object that neither of them ever sees. If adding to it could
+    // reach the fingerprint, every stored snapshot would invalidate and the
+    // next pass would alert on every watched parcel.
+    const evaluated = toEvaluatedMatch(scored());
+
+    expect(evaluated.matchHash).toBe("a64c6f781123cb32c474f6590a9bdc95");
+    expect(Object.keys(evaluated.snapshot).sort()).toEqual([...MATERIAL_FIELDS].sort());
+    expect(changedFields(materialSnapshot(property()), evaluated.snapshot)).toEqual([]);
+
+    // The tenure fields are on the alert record and nowhere near the diff, so a
+    // parcel whose caveat is the only thing about it that could move still
+    // fingerprints identically.
+    for (const field of ["tenureConfidence", "tenureCaveat", "builtYear"]) {
+      expect(evaluated.snapshot[field]).toBeUndefined();
+      expect(evaluated.propertySnapshot[field]).toBeDefined();
     }
   });
 });

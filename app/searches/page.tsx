@@ -21,7 +21,7 @@ import { criteriaSetSchema } from "@/lib/criteria/types";
 import { fetchOverlay, propertySource } from "@/lib/data/client-source";
 import { displayAddress } from "@/lib/data/map";
 import { storeWarning, useServerStatus } from "@/lib/data/status";
-import { TRACKED_MATCH_CAP } from "@/lib/notify/limits";
+import { MATCH_ID_CAP, TRACKED_MATCH_CAP } from "@/lib/notify/limits";
 
 interface SimulationResponse {
   simulation: {
@@ -241,7 +241,7 @@ export default function SavedSearchesPage() {
                       label="Matched last pass"
                       value={
                         search.matchesTruncated
-                          ? `${count(search.lastMatchCount ?? 0)} (watching top ${count(TRACKED_MATCH_CAP)})`
+                          ? `${count(search.lastMatchCount ?? 0)} (new matches watched to ${count(MATCH_ID_CAP)}, changes to the top ${count(TRACKED_MATCH_CAP)})`
                           : count(search.lastMatchCount ?? 0)
                       }
                     />

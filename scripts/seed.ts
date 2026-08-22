@@ -47,7 +47,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { CRITERIA_PRESETS, type CriteriaSet } from "@/lib/criteria/types";
-import { DWELLING_MIN_SQFT } from "@/lib/criteria/sql";
+import { DWELLING_MIN_SQFT, tenureConfidenceOf } from "@/lib/criteria/sql";
 import { getPropertyDataSource } from "@/lib/data/source";
 import { displayAddress } from "@/lib/data/map";
 import type { ScoredProperty } from "@/lib/data/types";
@@ -106,24 +106,16 @@ const WATCHED = [
 /* ------------------------------------------------------------------ */
 
 /**
- * The oldest sale date this seed will believe.
+ * Longer than this is a data artifact, not an owner.
  *
- * The county roll carries a placeholder where a parcel has no recorded sale,
- * and it is not null: it is 1899-01-01, 1899-12-30 or 1900-09-13, three
- * spreadsheet epoch artifacts. The pipeline turns those into a tenure of 125 to
- * 127 years, which is the single strongest thing a tenure-weighted thesis can
- * score on, so on the published roll they float straight to the top of every
- * long-hold ranking and the board fills with "held 127 years" on houses built
- * in 1986.
- *
- * The right fix is upstream, at the point the sentinel is read. This guard is
- * here anyway and deliberately does not depend on that fix landing: a demo board
- * has to be defensible parcel by parcel on its own, not on the assumption that
- * somebody else's change is in the build.
+ * This is the one tenure bar the seed sets for itself, and it sits *on top of*
+ * `tenureConfidenceOf`, not beside it. The criteria layer already rejects the
+ * roll's no-sale placeholders and caps a sale recorded before the house existed;
+ * what it cannot do is refuse a tenure it believes. A board wants more than
+ * merely plausible: a verified eighty year hold is a real transaction the roll
+ * can stand behind and still not something to open a demo with, so the seed
+ * declines it while the application goes on ranking it.
  */
-const SALE_YEAR_FLOOR = 1950;
-
-/** Longer than this is a data artifact, not an owner. */
 const MAX_PLAUSIBLE_TENURE_YEARS = 75;
 
 /**
@@ -147,21 +139,6 @@ const MAX_DEALS_PER_ZIP = 2;
  * preserved; this only bounds the read.
  */
 const CANDIDATE_POOL = 400;
-
-/** The sale year behind a parcel's tenure, whichever column carries it. */
-function saleYearOf(property: ScoredProperty["property"]): number | null {
-  const candidates = [
-    property.lastSaleDate,
-    property.raw["last_sale_date_any"],
-    property.raw["coj_last_sale_date"],
-  ];
-  for (const value of candidates) {
-    if (typeof value !== "string") continue;
-    const year = Number(value.slice(0, 4));
-    if (Number.isFinite(year) && year > 0) return year;
-  }
-  return null;
-}
 
 /**
  * Why a parcel is not fit to be a seeded deal, or null when it is.
@@ -193,20 +170,31 @@ function unfitReason(scored: ScoredProperty, thisYear: number): string | null {
   if (assessed === null || assessed <= 0) return "no assessed value";
   if (assessed < area) return "assessed below a dollar per livable foot, a placeholder value";
 
+  // Tenure is classified by the criteria layer, not re-derived here. This used
+  // to be a hand-written copy of the same rule - a sale-year floor with its own
+  // list of the roll's placeholder dates, and a "held longer than the house has
+  // stood" test - which is the two-places-one-truth defect the WHERE guarantee
+  // work exists to remove, reproduced in a script. It had already started to
+  // drift: the copy named three of the four placeholder dates on the roll.
   const tenure = property.yearsSinceLastSale;
-  if (tenure === null) return "no ownership tenure published";
-  if (tenure > MAX_PLAUSIBLE_TENURE_YEARS) return `implausible tenure of ${tenure} years`;
-
-  const saleYear = saleYearOf(property);
-  if (saleYear !== null && saleYear < SALE_YEAR_FLOOR) {
-    return `sale year ${saleYear} is a no-sale sentinel`;
+  switch (tenureConfidenceOf(property, thisYear)) {
+    case "UNKNOWN":
+      return "no ownership tenure published";
+    case "NO_RECORDED_SALE":
+      return `tenure of ${tenure} years rests on the roll's no-sale placeholder`;
+    case "PREDATES_STRUCTURE":
+      return `held ${tenure} years on a house built in ${property.builtYear}`;
+    case "RECORDED":
+      break;
   }
 
-  // Held longer than the house has stood. Catches the sentinel even where the
-  // date column has already been nulled out and only the derived tenure is left.
+  // Stricter than the criteria layer, on purpose, and only reachable once the
+  // classification above says the roll can stand behind the number. A parcel
+  // with no `built_year` is classified RECORDED because there is nothing to
+  // contradict; a board row still has to be checkable against the house.
   if (property.builtYear === null) return "no year built to check the tenure against";
-  if (tenure > thisYear - property.builtYear + 1) {
-    return `held ${tenure} years on a house built in ${property.builtYear}`;
+  if (tenure !== null && tenure > MAX_PLAUSIBLE_TENURE_YEARS) {
+    return `implausible tenure of ${tenure} years`;
   }
 
   if (property.roofAgeYears !== null && property.roofAgeYears > MAX_PLAUSIBLE_ROOF_AGE_YEARS) {

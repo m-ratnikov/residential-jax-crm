@@ -118,3 +118,200 @@ export function displayAddress(property: {
   const parts = [property.addressStreet, property.addressCity, property.addressZip].filter(Boolean);
   return parts.length ? parts.join(", ") : `Parcel ${property.propertyId}`;
 }
+
+/* ------------------------------------------------------------------ */
+/* Owner character                                                      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Legal-form tokens. A name carrying one of these is a registered entity, not
+ * a person, and on the Duval roll that is close to a certainty rather than a
+ * guess: of the 3,799 distinct owner names in the bundled extract that match on
+ * one, the only twelve that even end like a personal name are truncated company
+ * names ("PALMS OF JACKSONVILLE INC ET A", "NERD HOMES LIMITED LIABILITY C").
+ *
+ * They are only counted away from the first position. The roll writes people
+ * surname first, so "CO ERWIN V" is a man called Erwin Co, and a token that
+ * opens the name is part of somebody's surname far more often than it is a
+ * suffix.
+ */
+const ORGANISATION_LEGAL_FORMS = new Set([
+  "LLC",
+  "INC",
+  "INCORPORATED",
+  "CORP",
+  "CORPORATION",
+  "CO",
+  "COMPANY",
+  "LTD",
+  "LIMITED",
+  "LP",
+  "LLP",
+  "LLLP",
+  "LC",
+  "PLLC",
+  "PA",
+  "PC",
+  "NA",
+]);
+
+/**
+ * Words that name what an organisation is, for the entities whose registered
+ * suffix the roll's 30 character field has cut off ("CHINESE CHRISTIAN CHURCH
+ * OF JA") or that never carried one ("EBENEZER BAPTIST CHURCH", "JACKSONVILLE
+ * PORT AUTHORITY", "CITY OF JACKSONVILLE").
+ *
+ * This is the half that can be wrong, so it is the half that is measured: 398
+ * distinct names in the bundled extract match on a word here and on no legal
+ * form, and reading all 398 turns up exactly one person - BRIAN AND MEGAN
+ * CHURCH FAMILY, who are called Church. Church, Temple, Parish and Chapel are
+ * all real surnames, which is why the leading-token and personal-tail guards
+ * below exist and why this list is deliberately short of the words that are
+ * mostly surnames (Bishop, Abbey, Mason, Priest are not here at all).
+ *
+ * Trusts and estates are deliberately absent. "SAPP ILENE M ESTATE" and
+ * "KNIGHT ANN H LIFE ESTATE" are people, and heirs on a probate parcel are the
+ * acquisition target rather than the thing to filter out.
+ */
+const ORGANISATION_WORDS = new Set([
+  // Commercial
+  "PROPERTIES",
+  "PROPERTY",
+  "HOLDINGS",
+  "HOLDING",
+  "INVESTMENTS",
+  "INVESTMENT",
+  "DEVELOPMENT",
+  "DEVELOPERS",
+  "HOMES",
+  "GROUP",
+  "REALTY",
+  "VENTURES",
+  "MANAGEMENT",
+  "ENTERPRISES",
+  "CAPITAL",
+  "EQUITY",
+  "PARTNERS",
+  "PARTNERSHIP",
+  "ACQUISITIONS",
+  "SERVICES",
+  "FUND",
+  "REIT",
+  "BANK",
+  "MORTGAGE",
+  "BUILDERS",
+  "CONSTRUCTION",
+  "RENTALS",
+  "LEASING",
+  "ASSOCIATES",
+  "ASSOCIATION",
+  "ASSN",
+  "CONDOMINIUM",
+  "CONDO",
+  "APARTMENTS",
+  // Religious
+  "CHURCH",
+  "CHAPEL",
+  "SYNAGOGUE",
+  "MOSQUE",
+  "MINISTRIES",
+  "MINISTRY",
+  "DIOCESE",
+  "CATHEDRAL",
+  "CONGREGATION",
+  "TABERNACLE",
+  "BAPTIST",
+  "LUTHERAN",
+  "METHODIST",
+  "CATHOLIC",
+  "PRESBYTERIAN",
+  "EPISCOPAL",
+  "PENTECOSTAL",
+  // Civic, medical and educational
+  "HOSPITAL",
+  "CLINIC",
+  "HEALTHCARE",
+  "UNIVERSITY",
+  "COLLEGE",
+  "SCHOOL",
+  "ACADEMY",
+  "FOUNDATION",
+  "AUTHORITY",
+  "SOCIETY",
+  "INSTITUTE",
+  "MUNICIPAL",
+  "COMMISSION",
+  "YMCA",
+  "SALVATION",
+  "COUNCIL",
+  "FEDERATION",
+]);
+
+/**
+ * Tokens that end a person's name. A trailing single letter is a middle
+ * initial; the rest are generational and professional suffixes. "SMAW CHURCH E
+ * III" is a man whose surname is Church, and this is what keeps him out.
+ */
+const PERSONAL_NAME_TAILS = new Set(["JR", "SR", "II", "III", "IV", "V", "VI", "MD", "DDS", "ESQ"]);
+
+export interface OwnerNameCharacter {
+  /** What the name looks like. Never a claim about the registry. */
+  kind: "person" | "organisation";
+  /** The token the rule fired on, so the label can show its own reasoning. */
+  token: string | null;
+}
+
+/**
+ * Does this owner name look like an organisation rather than a person?
+ *
+ * A heuristic on the published name string, and nothing more. The roll does not
+ * publish an owner-type column, so there is no authoritative answer to read;
+ * what there is, is a name written by a clerk. So this reads the name, says
+ * which token made it decide, and is wired into surfaces that LABEL rather than
+ * surfaces that filter. No row is dropped on the strength of it, which is the
+ * lesson `dwellingsOnly` records in lib/criteria/types.ts.
+ *
+ * Measured on the bundled Duval extract (75,988 parcels, 64,520 distinct owner
+ * names): 4,197 names classify as organisations, covering 9,670 parcels, 12.73
+ * per cent. Reading every keyword-only match and every legal-form match with a
+ * person-shaped tail found one false positive, BRIAN AND MEGAN CHURCH FAMILY,
+ * which is one name in 4,197 (0.02 per cent). It under-labels on purpose: an
+ * entity whose name carries no vocabulary word at all, such as "TKJ" or a
+ * truncated "MILE HIGH TL BORROWER 1 CORE L", stays a person here.
+ */
+export function ownerNameCharacter(name: string | null | undefined): OwnerNameCharacter {
+  if (!name) return { kind: "person", token: null };
+
+  const tokens = name.toUpperCase().replace(/[.,]/g, " ").split(/\s+/).filter(Boolean);
+  if (!tokens.length) return { kind: "person", token: null };
+
+  // Skipped at index 0 throughout: see ORGANISATION_LEGAL_FORMS.
+  for (let index = 1; index < tokens.length; index += 1) {
+    const token = tokens[index] as string;
+    if (ORGANISATION_LEGAL_FORMS.has(token)) return { kind: "organisation", token };
+  }
+
+  const tail = tokens[tokens.length - 1] as string;
+  const endsLikeAPerson = tail.length === 1 || PERSONAL_NAME_TAILS.has(tail);
+  if (!endsLikeAPerson) {
+    for (let index = 1; index < tokens.length; index += 1) {
+      const token = tokens[index] as string;
+      if (ORGANISATION_WORDS.has(token)) return { kind: "organisation", token };
+    }
+  }
+
+  // Government, which the roll writes with the qualifier in front.
+  if (
+    (tokens[0] === "CITY" || tokens[0] === "STATE" || tokens[0] === "TOWN") &&
+    tokens[1] === "OF"
+  ) {
+    return { kind: "organisation", token: `${tokens[0]} OF` };
+  }
+
+  return { kind: "person", token: null };
+}
+
+/** True when the published owner name looks like an organisation. */
+export function isOrganisationOwner(name: string | null | undefined): boolean {
+  return ownerNameCharacter(name).kind === "organisation";
+}

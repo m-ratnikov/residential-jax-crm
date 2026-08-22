@@ -22,6 +22,7 @@
  */
 
 import { fail, handleError, noStoreHeaders } from "@/lib/api";
+import { provenanceInstant } from "@/lib/data/export-csv";
 import { crmStore } from "@/lib/crm/db";
 import type { AlertDoc } from "@/lib/crm/documents";
 import { listOpportunities, type OpportunityView } from "@/lib/crm/repo";
@@ -251,7 +252,7 @@ export async function GET(request: Request): Promise<Response> {
               row.opportunity.createdAt,
               from.sourceSystem,
               from.sourceUrl,
-              from.fetchedAt,
+              provenanceInstant(from.fetchedAt),
               from.pipelineRunId,
               from.alertId,
               from.matcherRunId,

@@ -13,6 +13,7 @@
  */
 
 import { criteriaSetSchema, type CriteriaSet } from "@/lib/criteria/types";
+import { hasMatchIdSet, type MatchIdSet } from "@/lib/notify/match-ids";
 import type { AcquisitionStage } from "@/lib/notify/types";
 import { crmStore } from "./db";
 import {
@@ -78,7 +79,7 @@ export async function listSavedSearches(): Promise<SavedSearchDoc[]> {
 }
 
 /**
- * A saved search as a list needs it: everything except the tracked matches.
+ * A saved search as a list needs it: everything except the matcher's state.
  *
  * `matches` holds a snapshot per watched parcel - up to 2,000 of them, sixteen
  * fields each - because that is what the next pass diffs against. It is state
@@ -86,14 +87,51 @@ export async function listSavedSearches(): Promise<SavedSearchDoc[]> {
  * `GET /api/searches` a 3.5 MB response that every page listing criteria paid
  * for, on every load, to display a handful of counts.
  *
+ * `matchIds` is the same argument again and is why this projection had to be
+ * revisited rather than merely kept: the id set is around 1.2 MB for a thesis
+ * matching 151,856 parcels, and no screen shows a parcel id from it either.
+ *
  * `matchesTruncated` and `lastMatchCount` survive, because those two ARE shown:
  * they are how the cap is disclosed next to the number it applies to.
  */
-export type SavedSearchListItem = Omit<SavedSearchDoc, "matches">;
+export type SavedSearchListItem = Omit<SavedSearchDoc, "matches" | "matchIds">;
 
 export async function listSavedSearchesForDisplay(): Promise<SavedSearchListItem[]> {
   const searches = await listSavedSearches();
-  return searches.map(({ matches: _matches, ...rest }) => rest);
+  return searches.map(({ matches: _matches, matchIds: _matchIds, ...rest }) => rest);
+}
+
+/** What the store already believes a search matches, ids only. */
+export interface KnownMatchIds {
+  savedSearchId: string;
+  /** Null when the search has no id set yet, which is not the same as empty. */
+  matchIds: MatchIdSet | null;
+}
+
+/**
+ * The membership half of a saved search, for a caller that is about to
+ * re-evaluate it.
+ *
+ * The browser matcher holds the query engine, so it is the browser that
+ * discovers which parcels match now - but only the store knows which parcels
+ * matched before, and a parcel that is new needs an address, an owner and a
+ * rationale on its alert, not just an id. Handing the caller what is already
+ * known lets one sweep keep the rows it has already materialised for the
+ * difference, with no second query and no second round trip.
+ *
+ * This decides nothing. `evaluateAndAlert` re-derives what is new from the
+ * stored set when the pass is posted; this only decides which rows are worth
+ * carrying detail for.
+ */
+export async function knownMatchIds(savedSearchIds: readonly string[]): Promise<KnownMatchIds[]> {
+  const wanted = new Set(savedSearchIds);
+  const searches = await listSavedSearches();
+  return searches
+    .filter((search) => wanted.has(search.id))
+    .map((search) => ({
+      savedSearchId: search.id,
+      matchIds: hasMatchIdSet(search.matchIds) ? (search.matchIds ?? null) : null,
+    }));
 }
 
 export async function getSavedSearch(id: string): Promise<SavedSearchDoc | null> {
@@ -130,6 +168,10 @@ export async function createSavedSearch(input: SaveSearchInput): Promise<SavedSe
     lastMatchCount: null,
     matches: {},
     matchesTruncated: false,
+    // Null rather than an empty set: "this search has never been evaluated" and
+    // "this search matches nothing" must stay distinguishable, or the first
+    // pass over a new search announces every parcel it finds.
+    matchIds: null,
     createdAt: now,
     updatedAt: now,
   };

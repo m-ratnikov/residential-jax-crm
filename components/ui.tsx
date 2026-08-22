@@ -14,6 +14,7 @@
 
 import type { ReactNode } from "react";
 
+import { ownerNameCharacter } from "@/lib/data/map";
 import { STAGE_LABELS, type AcquisitionStage, type OutreachStatus } from "@/lib/notify/types";
 
 export function cx(...parts: (string | false | null | undefined)[]): string {
@@ -374,6 +375,35 @@ export function ScoreBadge({ score, title }: { score: number; title?: string }) 
   );
 }
 
+/**
+ * Says when the owner of record is evidently not a person.
+ *
+ * A hospital, a church and a homeowners association all pass a residential
+ * acquisition thesis on the county roll: ST VINCENTS HOSPITAL INC sat in the
+ * Negotiating stage under the task "Confirm both heirs will sign", and the
+ * parcel a church owns at 001 usage with 1,702 livable square feet is a house
+ * by every column the filter reads. `dwellingsOnly` cannot catch them, because
+ * there is nothing wrong with the dwelling.
+ *
+ * So this labels rather than filters, which is the whole of the difference. No
+ * row is dropped, no score moves, and the reader is told which token in the
+ * name made the app say so - a rule you can argue with beats a row that
+ * silently vanished. `ownerNameCharacter` carries the measured accuracy.
+ */
+export function OwnerKindBadge({ name }: { name: string | null | undefined }) {
+  const character = ownerNameCharacter(name);
+  if (character.kind !== "organisation") return null;
+  return (
+    <Badge
+      tone="warn"
+      testId="owner-organisation"
+      title={`The owner of record reads as an organisation rather than a person: the name carries "${character.token}". A heuristic on the published name, not a registry lookup - the roll publishes no owner-type column. Nothing is filtered on it.`}
+    >
+      organisation owner
+    </Badge>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Simulated owner contact                                             */
 /* ------------------------------------------------------------------ */
@@ -512,13 +542,47 @@ export function toDate(value: unknown): Date | null {
   if (typeof value !== "string") return null;
   const text = value.trim();
   if (/^\d{11,14}$/.test(text)) return finite(new Date(Number(text)));
-  return finite(new Date(text));
+  return finite(new Date(withZone(text)));
+}
+
+/**
+ * A datetime the publisher wrote without a zone, read as UTC.
+ *
+ * The same instant reached two screens by two routes and rendered seven hours
+ * apart. `fetched_at` is a parquet TIMESTAMP, so the browser gets it as epoch
+ * milliseconds and lands on the right instant; the native driver hands the
+ * server "2026-08-21 13:58:56.294", that string is what a stored
+ * `propertySnapshot.provenance.fetchedAt` holds, and `new Date` parses a
+ * space-separated datetime with the LEGACY rules, which read it as local. In a
+ * UTC+7 tab the drawer said 08:58 PM and the deal page said 01:58 PM for one
+ * collection time.
+ *
+ * The pipeline publishes UTC, so a datetime with no zone on it is UTC and is
+ * given the "Z" it was written without. Anchored on a required time part: a
+ * bare date is NOT touched here. `new Date("2026-08-21")` is already UTC by
+ * spec, and the drawer's TIMESTAMP_COLUMNS note records why a bare date is
+ * never turned into a local timestamp in the first place - doing so moves it a
+ * day in every negative UTC offset.
+ */
+const NAIVE_DATETIME = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/;
+
+function withZone(text: string): string {
+  return NAIVE_DATETIME.test(text) ? `${text.replace(" ", "T")}Z` : text;
 }
 
 function finite(date: Date): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+/**
+ * A timestamp, in the reader's own zone, saying which zone that is.
+ *
+ * The zone is named rather than left to be inferred. Provenance is read as
+ * evidence, the artifact is stamped in UTC and the reader is not, so a bare
+ * "08:58 PM" is a number two people in two places will disagree about. This is
+ * the deliberate half of the fix above: `toDate` settles WHICH instant, this
+ * settles which clock it is being shown on, and neither is left incidental.
+ */
 export function when(value: string | number | Date | null | undefined): string {
   if (value === null || value === undefined || value === "") return "never";
   const date = toDate(value);
@@ -529,6 +593,7 @@ export function when(value: string | number | Date | null | undefined): string {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    timeZoneName: "short",
   });
 }
 

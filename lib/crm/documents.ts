@@ -14,11 +14,15 @@
  * to get wrong. That is only reasonable because these are small and bounded: a
  * deal has tens of events, not thousands.
  *
- * The one document that can get large is a saved search, which holds the match
- * snapshot the matcher diffs against. It is capped, and the cap is recorded.
+ * The one document that can get large is a saved search, which holds both
+ * halves of what the matcher diffs against: a fingerprint and snapshot for the
+ * best 2,000 matches, and the ids of every match. The first is capped and the
+ * cap is recorded; the second is grouped rather than listed so that 151,856 ids
+ * cost about 1.2 MB and one parcel entering the set rewrites one line.
  */
 
 import type { CriteriaSet } from "@/lib/criteria/types";
+import type { MatchIdSet } from "@/lib/notify/match-ids";
 import type { AcquisitionStage, OutreachChannel, OutreachStatus } from "@/lib/notify/types";
 
 /** Always this. No skip-trace vendor is called anywhere in this build. */
@@ -103,10 +107,31 @@ export interface SavedSearchDoc {
   lastPipelineRunId: string | null;
   lastMatchCount: number | null;
 
-  /** propertyId -> what was observed. The other half of the diff. */
+  /** propertyId -> what was observed. The other half of the FIELD LEVEL diff. */
   matches: Record<string, MatchSnapshot>;
-  /** True when the tracked set was capped, so a reader knows the diff is partial. */
+  /**
+   * True when the fingerprinted set was capped, so a reader knows the field
+   * level diff is partial. This is the cap the UI discloses next to the match
+   * count, and it still means what it always meant.
+   */
   matchesTruncated: boolean;
+
+  /**
+   * Every parcel the search matched on the last pass, ids only.
+   *
+   * The other half of the MEMBERSHIP diff, and the only thing "which parcels
+   * newly match" needs. `matches` cannot answer it: it holds the best 2,000 by
+   * score, so a parcel at rank 2,001 was both invisible and, the moment it
+   * crossed to 1,999, announced as newly matching after months of matching.
+   *
+   * Optional because documents written before this existed do not carry it.
+   * That absence is load bearing and must not be read as "the search matched
+   * nothing": the pass that first finds it missing seeds the set and announces
+   * no new matches, exactly as a brand new search is seeded rather than
+   * announced. See lib/notify/match-ids.ts for the encoding and why it is
+   * grouped rather than listed.
+   */
+  matchIds?: MatchIdSet | null;
 
   createdAt: string;
   updatedAt: string;

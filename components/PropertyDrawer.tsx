@@ -26,6 +26,7 @@ import {
   Badge,
   Button,
   Empty,
+  OwnerKindBadge,
   Panel,
   ScoreBadge,
   SimulatedContact,
@@ -529,6 +530,16 @@ function OwnerContact({ detail }: { detail: PropertyDetail }) {
           value={owner?.sourceSystem ?? property.provenance.sourceSystem ?? "not published"}
         />
       </dl>
+
+      {/*
+        The roll publishes no owner-type column, so a church, a hospital and a
+        homeowners association arrive here looking exactly like a homeowner.
+        Labelled rather than filtered, and the tooltip carries the token the
+        rule fired on so a reader can disagree with it.
+      */}
+      <div className="mt-2 empty:hidden">
+        <OwnerKindBadge name={name} />
+      </div>
 
       {skipTrace ? (
         <SimulatedContact contact={skipTrace} className="mt-3" />

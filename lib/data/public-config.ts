@@ -24,6 +24,13 @@ const boundsEnv = process.env.NEXT_PUBLIC_MAP_BOUNDS;
 const gatewaysEnv = process.env.NEXT_PUBLIC_IPFS_GATEWAYS;
 const attachTimeoutEnv = process.env.NEXT_PUBLIC_ATTACH_TIMEOUT_MS;
 const probeTimeoutEnv = process.env.NEXT_PUBLIC_GATEWAY_PROBE_TIMEOUT_MS;
+const attemptsEnv = process.env.NEXT_PUBLIC_GATEWAY_ATTEMPTS;
+const passesEnv = process.env.NEXT_PUBLIC_GATEWAY_PASSES;
+const backoffEnv = process.env.NEXT_PUBLIC_GATEWAY_RETRY_BACKOFF_MS;
+const budgetEnv = process.env.NEXT_PUBLIC_ATTACH_BUDGET_MS;
+const precacheEnv = process.env.NEXT_PUBLIC_ARTIFACT_PRECACHE;
+const cacheMaxEnv = process.env.NEXT_PUBLIC_ARTIFACT_CACHE_MAX_BYTES;
+const minBytesEnv = process.env.NEXT_PUBLIC_ARTIFACT_MIN_BYTES;
 
 function pick(value: string | undefined, fallback: string): string {
   const trimmed = value?.trim();
@@ -34,6 +41,19 @@ function pick(value: string | undefined, fallback: string): string {
 export function positiveInt(value: string | undefined, fallback: number): number {
   const parsed = Number(value?.trim());
   return Number.isFinite(parsed) && parsed > 0 ? Math.round(parsed) : fallback;
+}
+
+/**
+ * A boolean from an environment string.
+ *
+ * "0", "false", "off" and "no" turn a default-on feature off; anything else
+ * that is set turns it on. An unset variable keeps the default, which is the
+ * only reason this is not just `value === "1"`.
+ */
+export function envFlag(value: string | undefined, fallback: boolean): boolean {
+  const trimmed = value?.trim().toLowerCase();
+  if (!trimmed) return fallback;
+  return !["0", "false", "off", "no"].includes(trimmed);
 }
 
 /**
@@ -58,11 +78,36 @@ export function resolvePublicArtifactUrl(baseUrl: string, objectName: string): s
  * slow or down.
  *
  * A CID is the same object whichever gateway serves it, so failover here is a
- * string rewrite and not a second copy of the data. These two were chosen
- * because they support byte range requests and permissive CORS, which is what
- * DuckDB-WASM needs to range read rather than download 49.5 MB.
+ * string rewrite and not a second copy of the data. Every entry below was
+ * verified against the deployment's own `/ipns/` name on 2026-08-22, with the
+ * request DuckDB-WASM actually makes rather than the one that is convenient to
+ * test - a cross-origin `GET` carrying a `Range` header:
+ *
+ *   https://ipfs.io/ipns/<name>              preflight 200 (Range allowed), 206
+ *   https://<name>.ipns.dweb.link/           preflight 200 (Range allowed), 206
+ *   https://ipfs.filebase.io/ipns/<name>     preflight 204 (Range allowed), 206
+ *
+ * `https://dweb.link/ipns/<name>` - which used to be the second entry in this
+ * list - is NOT here, and its removal is the single most useful line in this
+ * change. The path form answers `HEAD` with a 301 to the subdomain form, so the
+ * liveness probe passed it happily, and a 301 on a CORS *preflight* is a hard
+ * failure by specification: the browser never issues the real request. Half the
+ * configured fallback capacity could not have worked, on any browser, ever.
+ * The subdomain form it redirects to serves the identical bytes with no hop.
+ *
+ * Also tried and rejected, so nobody has to test them again: w3s.link (301 on
+ * preflight, same defect), 4everland.io (301 then 504), trustless-gateway.link
+ * (406 without a block Accept header), gateway.pinata.cloud and storry.tv (403
+ * without an account), gw3.io (206 of a 965 byte error page), gateway.ipfs.io
+ * and nftstorage.link (redirect to ipfs.io, so no added redundancy), and
+ * cloudflare-ipfs.com, cf-ipfs.com, flk-ipfs.xyz, hardbin.com, dlunar.net,
+ * ipfs-gateway.cloud and ipfs.eth.aragon.network (no DNS or no connection).
  */
-export const DEFAULT_IPFS_GATEWAYS = ["https://ipfs.io", "https://dweb.link"] as const;
+export const DEFAULT_IPFS_GATEWAYS = [
+  "https://ipfs.io",
+  "https://{id}.{ns}.dweb.link",
+  "https://ipfs.filebase.io",
+] as const;
 
 /** How long one gateway gets to attach before the next one is tried. */
 export const ATTACH_TIMEOUT_MS = positiveInt(attachTimeoutEnv, 45_000);
@@ -77,6 +122,63 @@ export const ATTACH_TIMEOUT_MS = positiveInt(attachTimeoutEnv, 45_000);
 export const GATEWAY_PROBE_TIMEOUT_MS = positiveInt(probeTimeoutEnv, 8_000);
 
 /**
+ * How many times one gateway is tried before moving on, within a single pass.
+ *
+ * Only a *fast* failure is retried - a 502, a rate limit, a connection reset.
+ * A gateway that consumed its whole deadline and said nothing has already had
+ * its chance, and asking again just spends the deadline twice.
+ */
+export const GATEWAY_ATTEMPTS = positiveInt(attemptsEnv, 2);
+
+/**
+ * How many times the whole candidate list is swept.
+ *
+ * Failover on its own treats a bad thirty seconds as permanent: the first
+ * gateway is written off, the list runs out, and the app gives up while the
+ * gateway that stumbled is already answering again. A second sweep costs
+ * nothing when the first one works and is the difference between a retry the
+ * visitor has to click and one they never see.
+ */
+export const GATEWAY_PASSES = positiveInt(passesEnv, 2);
+
+/** First wait before re-trying a gateway. Doubles per attempt, capped at 8x. */
+export const GATEWAY_RETRY_BACKOFF_MS = positiveInt(backoffEnv, 750);
+
+/**
+ * The wall clock bound on the whole attach, across every gateway and pass.
+ *
+ * Passes times candidates times attempts times two deadlines multiplies out to
+ * a quarter of an hour, which is not a wait, it is an abandonment. No new
+ * attempt starts once this is spent, so the worst case is this budget plus
+ * whatever the attempt already in flight has left.
+ */
+export const ATTACH_BUDGET_MS = positiveInt(budgetEnv, 120_000);
+
+/**
+ * Whether a successful load tops the browser cache up in the background.
+ *
+ * On by default, and it is what makes the cache a real fallback rather than a
+ * decoration: a range read deliberately never touches most of the file, so
+ * without this one deliberate whole-object fetch there is nothing on disk to
+ * fall back to when the gateways go down. It costs the visitor one transfer,
+ * once per publish, after the page is already usable.
+ */
+export const ARTIFACT_PRECACHE = envFlag(precacheEnv, true);
+
+/** Refuse to cache an artifact larger than this. 128 MB by default. */
+export const ARTIFACT_CACHE_MAX_BYTES = positiveInt(cacheMaxEnv, 134_217_728);
+
+/**
+ * The smallest object this deployment will accept as the query table.
+ *
+ * A gateway is allowed to answer a range request with `206` and hand back an
+ * error page; gw3.io does exactly that, reporting a total size of 965 bytes for
+ * a 49.5 MB parquet. Believing it costs a full attach deadline and then a
+ * baffling DuckDB parse error, so the probe checks the total it is told.
+ */
+export const ARTIFACT_MIN_BYTES = positiveInt(minBytesEnv, 1_048_576);
+
+/**
  * Split a gateway URL into the part that identifies the content and the part
  * that identifies the gateway serving it.
  *
@@ -85,17 +187,68 @@ export const GATEWAY_PROBE_TIMEOUT_MS = positiveInt(probeTimeoutEnv, 8_000);
  * second place to look for those and pretending otherwise would generate URLs
  * that 404.
  */
-export function splitGatewayUrl(url: string): { origin: string; contentPath: string } | null {
-  const match = /^(https?:\/\/[^/]+)(\/(?:ipfs|ipns)\/.+)$/i.exec(url.trim());
+export interface GatewayUrlParts {
+  origin: string;
+  contentPath: string;
+  /** "ipfs" or "ipns", lower case. */
+  namespace: string;
+  /** The CID or IPNS name itself. */
+  id: string;
+  /** Anything addressed under it, leading slash included. Usually empty. */
+  suffix: string;
+}
+
+export function splitGatewayUrl(url: string): GatewayUrlParts | null {
+  const match = /^(https?:\/\/[^/]+)(\/(ipfs|ipns)\/([^/?#]+)([^?#]*))$/i.exec(url.trim());
   if (!match) return null;
-  const [, origin, contentPath] = match;
-  if (!origin || !contentPath) return null;
-  return { origin, contentPath };
+  const [, origin, contentPath, namespace, id, suffix] = match;
+  if (!origin || !contentPath || !namespace || !id) return null;
+  return { origin, contentPath, namespace: namespace.toLowerCase(), id, suffix: suffix ?? "" };
+}
+
+/**
+ * A subdomain gateway addresses content as `<id>.<ns>.<host>` rather than
+ * `<host>/<ns>/<id>`, and only base32/base36 identifiers survive the move: DNS
+ * labels are case insensitive and capped at 63 characters, so a CIDv0 (`Qm...`,
+ * case sensitive base58) cannot be written that way at all.
+ */
+function isSubdomainSafe(id: string): boolean {
+  return /^[a-z0-9]{1,63}$/.test(id);
+}
+
+/**
+ * One gateway entry applied to one piece of content, or null if it cannot be.
+ *
+ * Two shapes are accepted, because the two public gateway conventions are not
+ * interchangeable and the one that matters most here is the subdomain form:
+ *
+ *   https://ipfs.io                 -> https://ipfs.io/ipns/<id>
+ *   https://{id}.{ns}.dweb.link     -> https://<id>.ipns.dweb.link/
+ *
+ * The template form exists because dweb.link's *path* form only answers with a
+ * 301 to its subdomain form, and a redirect on a CORS preflight is fatal - the
+ * browser gives up before it ever sends the ranged request. Addressing the
+ * subdomain directly removes the hop and the failure with it.
+ */
+export function applyGateway(gateway: string, parts: GatewayUrlParts): string | null {
+  const entry = gateway.trim();
+  if (!entry || !/^https?:\/\//i.test(entry)) return null;
+
+  if (entry.includes("{id}") || entry.includes("{ns}")) {
+    if (!isSubdomainSafe(parts.id)) return null;
+    const base = entry
+      .replace(/\/+$/, "")
+      .replaceAll("{id}", parts.id)
+      .replaceAll("{ns}", parts.namespace);
+    return parts.suffix ? `${base}${parts.suffix}` : `${base}/`;
+  }
+
+  return `${entry.replace(/\/+$/, "")}${parts.contentPath}`;
 }
 
 /**
  * The ordered list of URLs to try for one artifact: the configured one first,
- * then the same content path on each fallback gateway.
+ * then the same content on each fallback gateway.
  *
  * The configured URL always leads, so a deployment that has been pointed at a
  * private or paid gateway keeps using it and only borrows a public one when its
@@ -112,10 +265,8 @@ export function ipfsGatewayCandidates(
   const candidates: string[] = [primaryUrl];
 
   for (const gateway of gateways) {
-    const base = gateway.trim().replace(/\/+$/, "");
-    if (!base || !/^https?:\/\//i.test(base)) continue;
-    const candidate = `${base}${split.contentPath}`;
-    if (seen.has(candidate)) continue;
+    const candidate = applyGateway(gateway, split);
+    if (!candidate || seen.has(candidate)) continue;
     seen.add(candidate);
     candidates.push(candidate);
   }
@@ -224,6 +375,18 @@ export interface PublicDataConfig {
   initialBounds: MapBounds;
   attachTimeoutMs: number;
   probeTimeoutMs: number;
+  /** How many times one gateway is tried before moving on, within a pass. */
+  attemptsPerGateway: number;
+  /** How many times the whole candidate list is swept. */
+  passes: number;
+  retryBackoffMs: number;
+  /** Wall clock bound on the whole attach, across every gateway and pass. */
+  budgetMs: number;
+  /** Whether a successful load tops the browser cache up in the background. */
+  precache: boolean;
+  cacheMaxBytes: number;
+  /** Smallest object this deployment will believe is the query table. */
+  minArtifactBytes: number;
 }
 
 /**
@@ -272,4 +435,11 @@ export const publicDataConfig: PublicDataConfig = {
   initialBounds: parseMapBounds(boundsEnv, JACKSONVILLE_BOUNDS),
   attachTimeoutMs: ATTACH_TIMEOUT_MS,
   probeTimeoutMs: GATEWAY_PROBE_TIMEOUT_MS,
+  attemptsPerGateway: GATEWAY_ATTEMPTS,
+  passes: GATEWAY_PASSES,
+  retryBackoffMs: GATEWAY_RETRY_BACKOFF_MS,
+  budgetMs: ATTACH_BUDGET_MS,
+  precache: ARTIFACT_PRECACHE,
+  cacheMaxBytes: ARTIFACT_CACHE_MAX_BYTES,
+  minArtifactBytes: ARTIFACT_MIN_BYTES,
 };
