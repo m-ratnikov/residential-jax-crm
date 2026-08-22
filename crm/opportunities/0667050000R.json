@@ -46,6 +46,35 @@
       "subject": "Following up on 6062 PARK ST, JACKSONVILLE, 32205",
       "templateId": "follow-up",
       "toAddress": "owner-5fae5c87e1@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello LARSON KEVIN G ET AL,\n\nCounty records suggest the roof at 6062 PARK ST, JACKSONVILLE, 32205 may be near the end of its service life. A re-roof in JACKSONVILLE is rarely a small number.\n\nIf you would rather not carry that, we buy as-is and handle the work ourselves. Happy to talk through what we could offer against $145,495.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt49ftrrih2uz5ru",
+      "campaignName": "Aging roof angle - 2026-08-22",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:53:37.553Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-email for owner-5fae5c87e1@mocked-skip-trace.invalid",
+          "occurredAt": "2026-08-22T10:53:37.553Z",
+          "providerEventId": "sim_email_03999d755e470616881a:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Mailbox does not exist",
+          "occurredAt": "2026-08-22T10:55:39.553Z",
+          "providerEventId": "sim_email_03999d755e470616881a:bounced",
+          "status": "bounced"
+        }
+      ],
+      "id": "0mt49ftshlzed5de2",
+      "providerMessageId": "sim_email_03999d755e470616881a",
+      "status": "queued",
+      "statusAt": "2026-08-22T10:53:37.553Z",
+      "subject": "About the roof at 6062 PARK ST, JACKSONVILLE, 32205",
+      "templateId": "roof-condition",
+      "toAddress": "owner-5fae5c87e1@mocked-skip-trace.invalid"
     }
   ],
   "ownerId": "0mt48v4gevbpeghjz",
@@ -95,5 +124,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T10:37:52.563Z"
+  "updatedAt": "2026-08-22T10:53:37.553Z"
 }
