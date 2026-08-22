@@ -15,7 +15,14 @@
   "matchScore": 88.15,
   "nextStep": "Inspection Tuesday",
   "nextStepDueAt": null,
-  "notes": [],
+  "notes": [
+    {
+      "authorId": "0mt3v3r4hz2k56t5t",
+      "body": "Signed at $113,000 against an asking of $128,500. Inspection window closes in nine days.",
+      "createdAt": "2026-08-22T04:21:26.580Z",
+      "id": "0mt3vfh6cmmtfwprh"
+    }
+  ],
   "offerPrice": 113000,
   "outreach": [],
   "ownerId": "0mt3vfcyw3io53izi",
@@ -89,5 +96,5 @@
     }
   ],
   "tasks": [],
-  "updatedAt": "2026-08-22T04:21:25.740Z"
+  "updatedAt": "2026-08-22T04:21:26.580Z"
 }
