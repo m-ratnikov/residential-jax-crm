@@ -1,0 +1,73 @@
+{
+  "changedFields": [
+    "roofYearEst",
+    "roofAgeYears",
+    "roofAgeBasis",
+    "roofPermitCount"
+  ],
+  "createdAt": "2026-08-22T10:40:45.641Z",
+  "dismissedAt": null,
+  "id": "sim-20260822103648-653e208f__0mt489sx800untfkj__0667050000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt48zalytii4du6i",
+  "notifications": [
+    {
+      "body": "6062 PARK ST, JACKSONVILLE, 32205 already matched \"Waterfront long hold - TEST\" and has changed.\n\nMatch score: 69 / 100\nWhy: water view of St. Johns River 1 m from the water, 182 m to San Juan Ave + Hyde Park Rd (+49.8); held 26 years (+19).\n\nChanged since the last pass: estimated roof year, roof age, roof age evidence, roof permit count.\n\nOwner of record: LARSON KEVIN G ET AL\nAssessed value: $145,495\nParcel: 0667050000R\n\nTriggered by pipeline run sim-20260822103648-653e208f.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-22T10:40:52.962Z",
+      "id": "0mt48zftubljnov7u",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-22T10:40:52.962Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Waterfront long hold - TEST\": 6062 PARK ST, JACKSONVILLE, 32205"
+    },
+    {
+      "body": "6062 PARK ST, JACKSONVILLE, 32205 already matched \"Waterfront long hold - TEST\" and has changed.\n\nMatch score: 69 / 100\nWhy: water view of St. Johns River 1 m from the water, 182 m to San Juan Ave + Hyde Park Rd (+49.8); held 26 years (+19).\n\nChanged since the last pass: estimated roof year, roof age, roof age evidence, roof permit count.\n\nOwner of record: LARSON KEVIN G ET AL\nAssessed value: $145,495\nParcel: 0667050000R\n\nTriggered by pipeline run sim-20260822103648-653e208f.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-22T10:40:52.962Z",
+      "id": "0mt48zftuz646xdrc",
+      "providerMessageId": "sim_email_783f32c5b2d9d7b2d4bd",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-22T10:40:52.962Z",
+      "status": "sent",
+      "subject": "Updated match for \"Waterfront long hold - TEST\": 6062 PARK ST, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "sim-20260822103648-653e208f",
+  "propertyId": "0667050000R",
+  "propertySnapshot": {
+    "address": "6062 PARK ST, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 145495,
+    "builtYear": 1959,
+    "courtDistressScore": 0,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2933677,
+    "longitude": -81.745836,
+    "ownerName": "LARSON KEVIN G ET AL",
+    "ownerOccupied": true,
+    "propertyId": "0667050000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0M3W127H00WF7SGSCX6D41A",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "PERMIT",
+    "roofAgeYears": 0,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 26
+  },
+  "rationale": "water view of St. Johns River 1 m from the water, 182 m to San Juan Ave + Hyde Park Rd (+49.8); held 26 years (+19).",
+  "readAt": null,
+  "savedSearchId": "0mt489sx800untfkj",
+  "score": 68.83
+}
