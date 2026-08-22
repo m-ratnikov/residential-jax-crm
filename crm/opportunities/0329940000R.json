@@ -53,6 +53,35 @@
       "subject": "About the roof at 7906 N PEARL ST, JACKSONVILLE, 32208",
       "templateId": "roof-condition",
       "toAddress": "owner-7e7c5fe992@mocked-skip-trace.invalid"
+    },
+    {
+      "body": "Hello PIEPER SARAH B,\n\nJust following up on my note about 7906 N PEARL ST, JACKSONVILLE, 32208. If the timing is wrong, tell me and I will not write again.\n\nDana Whitfield, Riverbend Acquisitions\n(904) 555-0142",
+      "campaignId": "0mt3sjm24crwf1gge",
+      "campaignName": "Follow up - 2026-08-22",
+      "channel": "sms",
+      "createdAt": "2026-08-22T03:00:43.462Z",
+      "createdById": null,
+      "events": [
+        {
+          "detail": "Accepted by simulated-sms for (904) 555-0180",
+          "occurredAt": "2026-08-22T03:00:43.462Z",
+          "providerEventId": "sim_sms_eea69dab53722d7c1b16:sent",
+          "status": "sent"
+        },
+        {
+          "detail": "Delivered",
+          "occurredAt": "2026-08-22T03:01:03.462Z",
+          "providerEventId": "sim_sms_eea69dab53722d7c1b16:delivered",
+          "status": "delivered"
+        }
+      ],
+      "id": "0mt3sjo7a8u71lut0",
+      "providerMessageId": "sim_sms_eea69dab53722d7c1b16",
+      "status": "queued",
+      "statusAt": "2026-08-22T03:00:43.462Z",
+      "subject": null,
+      "templateId": "follow-up",
+      "toAddress": "(904) 555-0180"
     }
   ],
   "ownerId": "0mt3rxt5bt4m28ffy",
@@ -128,5 +157,5 @@
       "title": "Get a re-roof quote"
     }
   ],
-  "updatedAt": "2026-08-22T02:43:50.335Z"
+  "updatedAt": "2026-08-22T03:00:43.462Z"
 }
