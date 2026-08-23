@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-23T02:32:13.716Z",
+  "dismissedAt": null,
+  "id": "01M0P1Q46D8SHM5TZFE0QT4AJ2__0mt4avc7x052bfnz9__0680490000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt56yw4c0tgo4ef4",
+  "notifications": [
+    {
+      "body": "4816 CARDINAL BLVD, JACKSONVILLE, 32210 now matches your saved search \"Transit infill\".\n\nMatch score: 57 / 100\nWhy: 283 m from the water, 98 m to San Juan Ave + Stimson Steet (+52.6); held 10 years (+4).\n\nOwner of record: HALLS GEOFFREY B II ET AL\nAssessed value: $38,002\nParcel: 0680490000R\n\nTriggered by pipeline run 01M0P1Q46D8SHM5TZFE0QT4AJ2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-23T02:32:33.056Z",
+      "id": "0mt56zajkk2xt3u9o",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-23T02:32:33.056Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4816 CARDINAL BLVD, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+  "propertyId": "0680490000R",
+  "propertySnapshot": {
+    "address": "4816 CARDINAL BLVD, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 38002,
+    "builtYear": 1949,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2865792,
+    "longitude": -81.7290028,
+    "ownerName": "HALLS GEOFFREY B II ET AL",
+    "ownerOccupied": true,
+    "propertyId": "0680490000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 61,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "283 m from the water, 98 m to San Juan Ave + Stimson Steet (+52.6); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 56.63
+}
