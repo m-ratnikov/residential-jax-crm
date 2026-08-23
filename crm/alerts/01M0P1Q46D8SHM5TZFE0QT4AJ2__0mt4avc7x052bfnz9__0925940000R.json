@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-23T02:32:13.716Z",
+  "dismissedAt": null,
+  "id": "01M0P1Q46D8SHM5TZFE0QT4AJ2__0mt4avc7x052bfnz9__0925940000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt56yw4c0tgo4ef4",
+  "notifications": [
+    {
+      "body": "3888 BOONE PARK AVE, JACKSONVILLE, 32205 now matches your saved search \"Transit infill\".\n\nMatch score: 59 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 74 m from the water, 68 m to St Johns Ave + Riverside Ave (+54.9); held 10 years (+4).\n\nOwner of record: PATRICIA A MANN AND CARROLL W\nAssessed value: $198,435\nParcel: 0925940000R\n\nTriggered by pipeline run 01M0P1Q46D8SHM5TZFE0QT4AJ2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-23T02:32:25.915Z",
+      "id": "0mt56z517mwkkz100",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-23T02:32:25.915Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 3888 BOONE PARK AVE, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+  "propertyId": "0925940000R",
+  "propertySnapshot": {
+    "address": "3888 BOONE PARK AVE, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 198435,
+    "builtYear": 1922,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2941122,
+    "longitude": -81.7122556,
+    "ownerName": "PATRICIA A MANN AND CARROLL W",
+    "ownerOccupied": false,
+    "propertyId": "0925940000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of Jacksonville rivers (COJ Jax_River) 74 m from the water, 68 m to St Johns Ave + Riverside Ave (+54.9); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 58.91
+}
