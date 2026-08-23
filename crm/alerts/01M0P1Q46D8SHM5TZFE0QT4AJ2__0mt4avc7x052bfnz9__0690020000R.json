@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-23T02:32:13.716Z",
+  "dismissedAt": null,
+  "id": "01M0P1Q46D8SHM5TZFE0QT4AJ2__0mt4avc7x052bfnz9__0690020000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt56yw4c0tgo4ef4",
+  "notifications": [
+    {
+      "body": "4522 WHEELER AVE, JACKSONVILLE, 32210 now matches your saved search \"Transit infill\".\n\nMatch score: 56 / 100\nWhy: 266 m from the water, 111 m to Roosevelt Blvd + St Johns Ave (+51.7); held 10 years (+4).\n\nOwner of record: BOTTOM LINE INVESTORS LLC\nAssessed value: $91,925\nParcel: 0690020000R\n\nTriggered by pipeline run 01M0P1Q46D8SHM5TZFE0QT4AJ2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-23T02:32:35.331Z",
+      "id": "0mt56zcarg7kcriur",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-23T02:32:35.331Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4522 WHEELER AVE, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+  "propertyId": "0690020000R",
+  "propertySnapshot": {
+    "address": "4522 WHEELER AVE, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 91925,
+    "builtYear": 1922,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2907092,
+    "longitude": -81.7214635,
+    "ownerName": "BOTTOM LINE INVESTORS LLC",
+    "ownerOccupied": false,
+    "propertyId": "0690020000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "266 m from the water, 111 m to Roosevelt Blvd + St Johns Ave (+51.7); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 55.68
+}
