@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-23T02:32:13.716Z",
+  "dismissedAt": null,
+  "id": "01M0P1Q46D8SHM5TZFE0QT4AJ2__0mt3v3t85fmff026j__0428390000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt56yw4c0tgo4ef4",
+  "notifications": [
+    {
+      "body": "1231 BECKNER AVE, JACKSONVILLE, 32218 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $84,954 (+48.5); roof about 72 years old, estimated from year built (+44.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: JOHNSON ROSIE L\nAssessed value: $84,954\nParcel: 0428390000R\n\nTriggered by pipeline run 01M0P1Q46D8SHM5TZFE0QT4AJ2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-23T02:32:53.034Z",
+      "id": "0mt56zpyi6pn3obzj",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-23T02:32:53.034Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1231 BECKNER AVE, JACKSONVILLE, 32218"
+    },
+    {
+      "body": "1231 BECKNER AVE, JACKSONVILLE, 32218 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $84,954 (+48.5); roof about 72 years old, estimated from year built (+44.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: JOHNSON ROSIE L\nAssessed value: $84,954\nParcel: 0428390000R\n\nTriggered by pipeline run 01M0P1Q46D8SHM5TZFE0QT4AJ2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-23T02:32:53.034Z",
+      "id": "0mt56zpyinzv04xgg",
+      "providerMessageId": "sim_email_923cff0eda1b9831fb8f",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-23T02:32:53.034Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1231 BECKNER AVE, JACKSONVILLE, 32218"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+  "propertyId": "0428390000R",
+  "propertySnapshot": {
+    "address": "1231 BECKNER AVE, JACKSONVILLE, 32218",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32218",
+    "assessedValue": 84954,
+    "builtYear": 1954,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.4270267,
+    "longitude": -81.666642,
+    "ownerName": "JOHNSON ROSIE L",
+    "ownerOccupied": true,
+    "propertyId": "0428390000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 72,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 24
+  },
+  "rationale": "assessed at $84,954 (+48.5); roof about 72 years old, estimated from year built (+44.7).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.27
+}
