@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-23T02:32:13.716Z",
+  "dismissedAt": null,
+  "id": "01M0P1Q46D8SHM5TZFE0QT4AJ2__0mt4avc7x052bfnz9__0252960000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt56yw4c0tgo4ef4",
+  "notifications": [
+    {
+      "body": "3221 SEINE DR, JACKSONVILLE, 32208 already matched \"Transit infill\" and has changed.\n\nMatch score: 93 / 100\nWhy: water view of St. Johns River 121 m from the water, 40 m to Champlain Rd + Van Gundy Rd (+57); held 52 years (+36).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: WESTON LARRY L\nAssessed value: $98,469\nParcel: 0252960000R\n\nTriggered by pipeline run 01M0P1Q46D8SHM5TZFE0QT4AJ2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-23T02:32:16.089Z",
+      "id": "0mt56yxg9i92cg675",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-23T02:32:16.089Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 3221 SEINE DR, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+  "propertyId": "0252960000R",
+  "propertySnapshot": {
+    "address": "3221 SEINE DR, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 98469,
+    "builtYear": 1956,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3918705,
+    "longitude": -81.7024607,
+    "ownerName": "WESTON LARRY L",
+    "ownerOccupied": true,
+    "propertyId": "0252960000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0P1Q46D8SHM5TZFE0QT4AJ2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 70,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 52
+  },
+  "rationale": "water view of St. Johns River 121 m from the water, 40 m to Champlain Rd + Van Gundy Rd (+57); held 52 years (+36).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 93
+}
