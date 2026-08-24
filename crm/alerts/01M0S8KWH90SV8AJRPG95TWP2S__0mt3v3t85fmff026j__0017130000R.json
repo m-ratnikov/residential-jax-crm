@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-08-24T07:52:11.581Z",
+  "dismissedAt": null,
+  "id": "01M0S8KWH90SV8AJRPG95TWP2S__0mt3v3t85fmff026j__0017130000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt6xu87q8yqi7pcm",
+  "notifications": [
+    {
+      "body": "389 OTIS RD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $83,745 (+48.9); roof about 73 years old, estimated from year built (+44.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: ROBEY CHARLES K\nAssessed value: $83,745\nParcel: 0017130000R\n\nTriggered by pipeline run 01M0S8KWH90SV8AJRPG95TWP2S.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-24T07:52:19.713Z",
+      "id": "0mt6xudq9rj34q4yg",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-24T07:52:19.713Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 389 OTIS RD, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "389 OTIS RD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $83,745 (+48.9); roof about 73 years old, estimated from year built (+44.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: ROBEY CHARLES K\nAssessed value: $83,745\nParcel: 0017130000R\n\nTriggered by pipeline run 01M0S8KWH90SV8AJRPG95TWP2S.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-24T07:52:19.713Z",
+      "id": "0mt6xudq98zhdu6ql",
+      "providerMessageId": "sim_email_7f122b8fac7bb8c1a43a",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-24T07:52:19.713Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 389 OTIS RD, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0S8KWH90SV8AJRPG95TWP2S",
+  "propertyId": "0017130000R",
+  "propertySnapshot": {
+    "address": "389 OTIS RD, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 83745,
+    "builtYear": 1953,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "2008-02-11",
+    "latitude": 30.3165697,
+    "longitude": -81.8941181,
+    "ownerName": "ROBEY CHARLES K",
+    "ownerOccupied": true,
+    "propertyId": "0017130000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0S8KWH90SV8AJRPG95TWP2S",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 73,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 18
+  },
+  "rationale": "assessed at $83,745 (+48.9); roof about 73 years old, estimated from year built (+44.9).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.78
+}
