@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-24T02:33:10.010Z",
+  "dismissedAt": null,
+  "id": "01M0RM2K2GSY4E8A6K2CC2TXAD__0mt4avamhp8iakx36__0871480000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt6mfye9kzinkzoe",
+  "notifications": [
+    {
+      "body": "3204 PEARCE ST, JACKSONVILLE, 32209 now matches your saved search \"Tired landlord\".\n\nMatch score: 48 / 100\nWhy: roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20); held 10 years (+3.3).\n\nOwner of record: DAUBENMIRE JASON\nAssessed value: $76,269\nParcel: 0871480000R\n\nTriggered by pipeline run 01M0RM2K2GSY4E8A6K2CC2TXAD.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-24T02:33:38.066Z",
+      "id": "0mt6mgjdeduucikac",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-24T02:33:38.066Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 3204 PEARCE ST, JACKSONVILLE, 32209"
+    },
+    {
+      "body": "3204 PEARCE ST, JACKSONVILLE, 32209 now matches your saved search \"Tired landlord\".\n\nMatch score: 48 / 100\nWhy: roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20); held 10 years (+3.3).\n\nOwner of record: DAUBENMIRE JASON\nAssessed value: $76,269\nParcel: 0871480000R\n\nTriggered by pipeline run 01M0RM2K2GSY4E8A6K2CC2TXAD.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-24T02:33:38.066Z",
+      "id": "0mt6mgjdecyfehypy",
+      "providerMessageId": "sim_email_9acf469b194e2ac87791",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-24T02:33:38.066Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 3204 PEARCE ST, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0RM2K2GSY4E8A6K2CC2TXAD",
+  "propertyId": "0871480000R",
+  "propertySnapshot": {
+    "address": "3204 PEARCE ST, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 76269,
+    "builtYear": 1952,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3575345,
+    "longitude": -81.6849295,
+    "ownerName": "DAUBENMIRE JASON",
+    "ownerOccupied": false,
+    "propertyId": "0871480000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0RM2K2GSY4E8A6K2CC2TXAD",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20); held 10 years (+3.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 47.58
+}
