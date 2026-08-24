@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-08-24T07:52:11.581Z",
+  "dismissedAt": null,
+  "id": "01M0S8KWH90SV8AJRPG95TWP2S__0mt4avamhp8iakx36__0016500060R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt6xu87q8yqi7pcm",
+  "notifications": [
+    {
+      "body": "15465 W BEAVER ST, JACKSONVILLE, 32234 already matched \"Tired landlord\" and has changed.\n\nMatch score: 60 / 100\nWhy: roof about 88 years old, estimated from year built (+31); held 29 years (last sale 1997-01-28) (+17.2); absentee owner (+11.7).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WILKERSON WINNIE D TRUST\nAssessed value: $99,288\nParcel: 0016500060R\n\nTriggered by pipeline run 01M0S8KWH90SV8AJRPG95TWP2S.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-24T07:52:16.334Z",
+      "id": "0mt6xub4dweh2kgl6",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-24T07:52:16.334Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 15465 W BEAVER ST, JACKSONVILLE, 32234"
+    },
+    {
+      "body": "15465 W BEAVER ST, JACKSONVILLE, 32234 already matched \"Tired landlord\" and has changed.\n\nMatch score: 60 / 100\nWhy: roof about 88 years old, estimated from year built (+31); held 29 years (last sale 1997-01-28) (+17.2); absentee owner (+11.7).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WILKERSON WINNIE D TRUST\nAssessed value: $99,288\nParcel: 0016500060R\n\nTriggered by pipeline run 01M0S8KWH90SV8AJRPG95TWP2S.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-24T07:52:16.334Z",
+      "id": "0mt6xub4e0p1bkig2",
+      "providerMessageId": "sim_email_cadc9619de4909c453eb",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-24T07:52:16.334Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 15465 W BEAVER ST, JACKSONVILLE, 32234"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0S8KWH90SV8AJRPG95TWP2S",
+  "propertyId": "0016500060R",
+  "propertySnapshot": {
+    "address": "15465 W BEAVER ST, JACKSONVILLE, 32234",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32234",
+    "assessedValue": 99288,
+    "builtYear": 1938,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "1997-01-28",
+    "latitude": 30.3060618,
+    "longitude": -81.9352205,
+    "ownerName": "WILKERSON WINNIE D TRUST",
+    "ownerOccupied": false,
+    "propertyId": "0016500060R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0S8KWH90SV8AJRPG95TWP2S",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 88,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 29
+  },
+  "rationale": "roof about 88 years old, estimated from year built (+31); held 29 years (last sale 1997-01-28) (+17.2); absentee owner (+11.7).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 59.83
+}
