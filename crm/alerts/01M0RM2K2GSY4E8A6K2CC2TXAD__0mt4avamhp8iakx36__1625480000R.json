@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-24T02:33:10.010Z",
+  "dismissedAt": null,
+  "id": "01M0RM2K2GSY4E8A6K2CC2TXAD__0mt4avamhp8iakx36__1625480000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt6mfye9kzinkzoe",
+  "notifications": [
+    {
+      "body": "10780 N INDIES DR, JACKSONVILLE, 32246 already matched \"Tired landlord\" and has changed.\n\nMatch score: 58 / 100\nWhy: roof about 65 years old, estimated from year built (+28.8); held 30 years (+17.9); absentee owner (+11.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: DAVIS JOHN W\nAssessed value: $167,575\nParcel: 1625480000R\n\nTriggered by pipeline run 01M0RM2K2GSY4E8A6K2CC2TXAD.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-24T02:33:35.461Z",
+      "id": "0mt6mghd1s3mibkl2",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-24T02:33:35.461Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 10780 N INDIES DR, JACKSONVILLE, 32246"
+    },
+    {
+      "body": "10780 N INDIES DR, JACKSONVILLE, 32246 already matched \"Tired landlord\" and has changed.\n\nMatch score: 58 / 100\nWhy: roof about 65 years old, estimated from year built (+28.8); held 30 years (+17.9); absentee owner (+11.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: DAVIS JOHN W\nAssessed value: $167,575\nParcel: 1625480000R\n\nTriggered by pipeline run 01M0RM2K2GSY4E8A6K2CC2TXAD.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-24T02:33:35.461Z",
+      "id": "0mt6mghd1gje7yt0u",
+      "providerMessageId": "sim_email_391e6d9910a836937f30",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-24T02:33:35.461Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 10780 N INDIES DR, JACKSONVILLE, 32246"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0RM2K2GSY4E8A6K2CC2TXAD",
+  "propertyId": "1625480000R",
+  "propertySnapshot": {
+    "address": "10780 N INDIES DR, JACKSONVILLE, 32246",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32246",
+    "assessedValue": 167575,
+    "builtYear": 1961,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3176166,
+    "longitude": -81.5207519,
+    "ownerName": "DAVIS JOHN W",
+    "ownerOccupied": false,
+    "propertyId": "1625480000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0RM2K2GSY4E8A6K2CC2TXAD",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 65,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 30
+  },
+  "rationale": "roof about 65 years old, estimated from year built (+28.8); held 30 years (+17.9); absentee owner (+11.7).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 58.4
+}
