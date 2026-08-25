@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-25T02:28:36.345Z",
+  "dismissedAt": null,
+  "id": "01M0V6GQK5JQYFY5KBNVP704K2__0mt4avc7x052bfnz9__1786922010R",
+  "kind": "new_match",
+  "matcherRunId": "0mt81pyamgvxrdjxt",
+  "notifications": [
+    {
+      "body": "1908 STRICKLAND RD, NEPTUNE BEACH, 32266 now matches your saved search \"Transit infill\".\n\nMatch score: 53 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 128 m from the water, 147 m to Atlantic Blvd + Mayport Rd (+49); held 10 years (+4).\n\nOwner of record: HOPE BRIAN N\nAssessed value: $276,149\nParcel: 1786922010R\n\nTriggered by pipeline run 01M0V6GQK5JQYFY5KBNVP704K2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-25T02:28:50.197Z",
+      "id": "0mt81q7x1pzowsok3",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-25T02:28:50.197Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 1908 STRICKLAND RD, NEPTUNE BEACH, 32266"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0V6GQK5JQYFY5KBNVP704K2",
+  "propertyId": "1786922010R",
+  "propertySnapshot": {
+    "address": "1908 STRICKLAND RD, NEPTUNE BEACH, 32266",
+    "addressCity": "NEPTUNE BEACH",
+    "addressZip": "32266",
+    "assessedValue": 276149,
+    "builtYear": 1977,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3170586,
+    "longitude": -81.4178394,
+    "ownerName": "HOPE BRIAN N",
+    "ownerOccupied": true,
+    "propertyId": "1786922010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0V6GQK5JQYFY5KBNVP704K2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 49,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of Jacksonville rivers (COJ Jax_River) 128 m from the water, 147 m to Atlantic Blvd + Mayport Rd (+49); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 52.96
+}
