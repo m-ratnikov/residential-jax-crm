@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-25T02:28:36.345Z",
+  "dismissedAt": null,
+  "id": "01M0V6GQK5JQYFY5KBNVP704K2__0mt4avc7x052bfnz9__1789410000R",
+  "kind": "new_match",
+  "matcherRunId": "0mt81pyamgvxrdjxt",
+  "notifications": [
+    {
+      "body": "926 FLORIDA BLVD, NEPTUNE BEACH, 32266 now matches your saved search \"Transit infill\".\n\nMatch score: 50 / 100\nWhy: 536 m from the water, 186 m to Atlantic Blvd + Seminole Rd (+46); held 10 years (+4).\n\nOwner of record: NOVAKOVITCH MELANIE\nAssessed value: $363,825\nParcel: 1789410000R\n\nTriggered by pipeline run 01M0V6GQK5JQYFY5KBNVP704K2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-25T02:28:52.025Z",
+      "id": "0mt81q9btda9cs0n2",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-25T02:28:52.025Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 926 FLORIDA BLVD, NEPTUNE BEACH, 32266"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0V6GQK5JQYFY5KBNVP704K2",
+  "propertyId": "1789410000R",
+  "propertySnapshot": {
+    "address": "926 FLORIDA BLVD, NEPTUNE BEACH, 32266",
+    "addressCity": "NEPTUNE BEACH",
+    "addressZip": "32266",
+    "assessedValue": 363825,
+    "builtYear": 1965,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3145209,
+    "longitude": -81.4050919,
+    "ownerName": "NOVAKOVITCH MELANIE",
+    "ownerOccupied": true,
+    "propertyId": "1789410000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0V6GQK5JQYFY5KBNVP704K2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 26,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "536 m from the water, 186 m to Atlantic Blvd + Seminole Rd (+46); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 50.03
+}
