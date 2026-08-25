@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-25T02:28:36.345Z",
+  "dismissedAt": null,
+  "id": "01M0V6GQK5JQYFY5KBNVP704K2__0mt4avc7x052bfnz9__0305470000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt81pyamgvxrdjxt",
+  "notifications": [
+    {
+      "body": "5304 BUNCHE DR, JACKSONVILLE, 32209 already matched \"Transit infill\" and has changed.\n\nMatch score: 92 / 100\nWhy: 64 m to Cleveland Rd + Bethlehem Steel (+55.2); held 55 years (+36.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LEWIS RUTHIE LEE ESTATE\nAssessed value: $67,358\nParcel: 0305470000R\n\nTriggered by pipeline run 01M0V6GQK5JQYFY5KBNVP704K2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-25T02:28:42.177Z",
+      "id": "0mt81q1q9pz88xyjj",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-25T02:28:42.177Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 5304 BUNCHE DR, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0V6GQK5JQYFY5KBNVP704K2",
+  "propertyId": "0305470000R",
+  "propertySnapshot": {
+    "address": "5304 BUNCHE DR, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 67358,
+    "builtYear": 1956,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3685738,
+    "longitude": -81.7063847,
+    "ownerName": "LEWIS RUTHIE LEE ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "0305470000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0V6GQK5JQYFY5KBNVP704K2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 70,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 55
+  },
+  "rationale": "64 m to Cleveland Rd + Bethlehem Steel (+55.2); held 55 years (+36.4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 91.63
+}
