@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-25T02:28:36.345Z",
+  "dismissedAt": null,
+  "id": "01M0V6GQK5JQYFY5KBNVP704K2__0mt4avamhp8iakx36__1556650100R",
+  "kind": "new_match",
+  "matcherRunId": "0mt81pyamgvxrdjxt",
+  "notifications": [
+    {
+      "body": "4263 LOSCO RD, JACKSONVILLE, 32257 now matches your saved search \"Tired landlord\".\n\nMatch score: 36 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 16 years old, estimated from year built (+3.8); held 10 years (+3.3).\n\nOwner of record: VIERA ACQUISITION LLC\nAssessed value: $22,241,700\nParcel: 1556650100R\n\nTriggered by pipeline run 01M0V6GQK5JQYFY5KBNVP704K2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-25T02:29:02.695Z",
+      "id": "0mt81qhk7zrqecr76",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-25T02:29:02.695Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 4263 LOSCO RD, JACKSONVILLE, 32257"
+    },
+    {
+      "body": "4263 LOSCO RD, JACKSONVILLE, 32257 now matches your saved search \"Tired landlord\".\n\nMatch score: 36 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 16 years old, estimated from year built (+3.8); held 10 years (+3.3).\n\nOwner of record: VIERA ACQUISITION LLC\nAssessed value: $22,241,700\nParcel: 1556650100R\n\nTriggered by pipeline run 01M0V6GQK5JQYFY5KBNVP704K2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-25T02:29:02.695Z",
+      "id": "0mt81qhk7m4c2l1ws",
+      "providerMessageId": "sim_email_f2d0a51d3976fa4ae517",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-25T02:29:02.695Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 4263 LOSCO RD, JACKSONVILLE, 32257"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0V6GQK5JQYFY5KBNVP704K2",
+  "propertyId": "1556650100R",
+  "propertySnapshot": {
+    "address": "4263 LOSCO RD, JACKSONVILLE, 32257",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32257",
+    "assessedValue": 22241700,
+    "builtYear": 1984,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.173745,
+    "longitude": -81.6008629,
+    "ownerName": "VIERA ACQUISITION LLC",
+    "ownerOccupied": false,
+    "propertyId": "1556650100R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0V6GQK5JQYFY5KBNVP704K2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 16,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 16 years old, estimated from year built (+3.8); held 10 years (+3.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 35.51
+}
