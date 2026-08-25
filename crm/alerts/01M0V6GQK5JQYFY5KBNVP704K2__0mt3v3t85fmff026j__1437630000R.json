@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-25T02:28:36.345Z",
+  "dismissedAt": null,
+  "id": "01M0V6GQK5JQYFY5KBNVP704K2__0mt3v3t85fmff026j__1437630000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt81pyamgvxrdjxt",
+  "notifications": [
+    {
+      "body": "8932 INDIA AVE, JACKSONVILLE, 32211 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $84,368 (+48.7); roof about 69 years old, estimated from year built (+44.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CARMELA LAND TRUST\nAssessed value: $84,368\nParcel: 1437630000R\n\nTriggered by pipeline run 01M0V6GQK5JQYFY5KBNVP704K2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-25T02:29:09.515Z",
+      "id": "0mt81qmtnt9tcrouj",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-25T02:29:09.515Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 8932 INDIA AVE, JACKSONVILLE, 32211"
+    },
+    {
+      "body": "8932 INDIA AVE, JACKSONVILLE, 32211 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $84,368 (+48.7); roof about 69 years old, estimated from year built (+44.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CARMELA LAND TRUST\nAssessed value: $84,368\nParcel: 1437630000R\n\nTriggered by pipeline run 01M0V6GQK5JQYFY5KBNVP704K2.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-25T02:29:09.515Z",
+      "id": "0mt81qmtng1ehzyak",
+      "providerMessageId": "sim_email_4b9d2aaa7b2812a480db",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-25T02:29:09.515Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 8932 INDIA AVE, JACKSONVILLE, 32211"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0V6GQK5JQYFY5KBNVP704K2",
+  "propertyId": "1437630000R",
+  "propertySnapshot": {
+    "address": "8932 INDIA AVE, JACKSONVILLE, 32211",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32211",
+    "assessedValue": 84368,
+    "builtYear": 1957,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3213937,
+    "longitude": -81.563007,
+    "ownerName": "CARMELA LAND TRUST",
+    "ownerOccupied": false,
+    "propertyId": "1437630000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0V6GQK5JQYFY5KBNVP704K2",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 69,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 6
+  },
+  "rationale": "assessed at $84,368 (+48.7); roof about 69 years old, estimated from year built (+44.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 92.9
+}
