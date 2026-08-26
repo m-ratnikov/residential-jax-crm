@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-26T04:46:59.238Z",
+  "dismissedAt": null,
+  "id": "01M0X4A5ZS44YX445QAV80T22Q__0mt4avc7x052bfnz9__1705770500R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt9m3rbo3vu9khsp",
+  "notifications": [
+    {
+      "body": "156 BELVEDERE ST, ATLANTIC BEACH, 32233 already matched \"Transit infill\" and has changed.\n\nMatch score: 92 / 100\nWhy: 547 m from the water, 47 m to Atlantic Blvd + Seminole Rd (+56.5); held 48 years (+35.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: DOWNING GERALD M\nAssessed value: $174,762\nParcel: 1705770500R\n\nTriggered by pipeline run 01M0X4A5ZS44YX445QAV80T22Q.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-26T04:47:02.500Z",
+      "id": "0mt9m3sysabqb69d0",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-26T04:47:02.500Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 156 BELVEDERE ST, ATLANTIC BEACH, 32233"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0X4A5ZS44YX445QAV80T22Q",
+  "propertyId": "1705770500R",
+  "propertySnapshot": {
+    "address": "156 BELVEDERE ST, ATLANTIC BEACH, 32233",
+    "addressCity": "ATLANTIC BEACH",
+    "addressZip": "32233",
+    "assessedValue": 174762,
+    "builtYear": 1977,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3270927,
+    "longitude": -81.4060181,
+    "ownerName": "DOWNING GERALD M",
+    "ownerOccupied": true,
+    "propertyId": "1705770500R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0X4A5ZS44YX445QAV80T22Q",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 36,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 48
+  },
+  "rationale": "547 m from the water, 47 m to Atlantic Blvd + Seminole Rd (+56.5); held 48 years (+35.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 91.8
+}
