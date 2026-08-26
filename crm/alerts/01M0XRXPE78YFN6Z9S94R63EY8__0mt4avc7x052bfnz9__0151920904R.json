@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-26T02:33:25.969Z",
+  "dismissedAt": null,
+  "id": "01M0XRXPE78YFN6Z9S94R63EY8__0mt4avc7x052bfnz9__0151920904R",
+  "kind": "new_match",
+  "matcherRunId": "0mt9hc0erubvvnnhl",
+  "notifications": [
+    {
+      "body": "8357 KIPLING CT, JACKSONVILLE, 32244 now matches your saved search \"Transit infill\".\n\nMatch score: 49 / 100\nWhy: 194 m to 103rd St + Brannon Ave (+45.4); held 10 years (+4).\n\nOwner of record: BENTON DEBORAH C\nAssessed value: $97,732\nParcel: 0151920904R\n\nTriggered by pipeline run 01M0XRXPE78YFN6Z9S94R63EY8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-26T02:33:45.291Z",
+      "id": "0mt9hcea3vwktuyvk",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-26T02:33:45.291Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 8357 KIPLING CT, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0XRXPE78YFN6Z9S94R63EY8",
+  "propertyId": "0151920904R",
+  "propertySnapshot": {
+    "address": "8357 KIPLING CT, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 97732,
+    "builtYear": 1978,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2359252,
+    "longitude": -81.7885883,
+    "ownerName": "BENTON DEBORAH C",
+    "ownerOccupied": true,
+    "propertyId": "0151920904R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0XRXPE78YFN6Z9S94R63EY8",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 48,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "194 m to 103rd St + Brannon Ave (+45.4); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 49.44
+}
