@@ -3,31 +3,31 @@
     "lastSaleDate",
     "lastSalePrice"
   ],
-  "createdAt": "2026-08-25T19:43:05.996Z",
+  "createdAt": "2026-08-26T01:32:45.465Z",
   "dismissedAt": null,
   "id": "01M0X4A5ZS44YX445QAV80T22Q__0mt4avamhp8iakx36__0020210000R",
   "kind": "updated_match",
-  "matcherRunId": "0mt92obdpyxm0hpd8",
+  "matcherRunId": "0mt9f5z5ukxo3qs1l",
   "notifications": [
     {
       "body": "1626 S CHAFFEE RD, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 70 / 100\nWhy: roof about 85 years old, estimated from year built (+30.8); absentee owner mailing from out of state (+28.3); held 20 years (last sale 2005-11-28) (+10.6).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: BRYANT W TRUST\nAssessed value: $245,733\nParcel: 0020210000R\n\nTriggered by pipeline run 01M0X4A5ZS44YX445QAV80T22Q.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
       "channel": "in_app",
-      "createdAt": "2026-08-25T19:43:10.186Z",
-      "id": "0mt92odpmxgevc1g4",
+      "createdAt": "2026-08-26T01:32:48.682Z",
+      "id": "0mt9f60tm3mfq06el",
       "providerMessageId": null,
       "recipient": null,
-      "sentAt": "2026-08-25T19:43:10.186Z",
+      "sentAt": "2026-08-26T01:32:48.682Z",
       "status": "delivered",
       "subject": "Updated match for \"Tired landlord\": 1626 S CHAFFEE RD, JACKSONVILLE, 32221"
     },
     {
       "body": "1626 S CHAFFEE RD, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 70 / 100\nWhy: roof about 85 years old, estimated from year built (+30.8); absentee owner mailing from out of state (+28.3); held 20 years (last sale 2005-11-28) (+10.6).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: BRYANT W TRUST\nAssessed value: $245,733\nParcel: 0020210000R\n\nTriggered by pipeline run 01M0X4A5ZS44YX445QAV80T22Q.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
       "channel": "email",
-      "createdAt": "2026-08-25T19:43:10.186Z",
-      "id": "0mt92odpmli6ir3y2",
+      "createdAt": "2026-08-26T01:32:48.682Z",
+      "id": "0mt9f60tms3cms1ch",
       "providerMessageId": "sim_email_6b2071bdbddb70390190",
       "recipient": "acquisitions@example.invalid",
-      "sentAt": "2026-08-25T19:43:10.186Z",
+      "sentAt": "2026-08-26T01:32:48.682Z",
       "status": "sent",
       "subject": "Updated match for \"Tired landlord\": 1626 S CHAFFEE RD, JACKSONVILLE, 32221"
     }
