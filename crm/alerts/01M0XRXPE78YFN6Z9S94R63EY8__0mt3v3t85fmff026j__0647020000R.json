@@ -2,31 +2,31 @@
   "changedFields": [
     "yearsSinceLastSale"
   ],
-  "createdAt": "2026-08-26T02:33:25.969Z",
+  "createdAt": "2026-08-26T05:13:26.346Z",
   "dismissedAt": null,
   "id": "01M0XRXPE78YFN6Z9S94R63EY8__0mt3v3t85fmff026j__0647020000R",
   "kind": "updated_match",
-  "matcherRunId": "0mt9hc0erubvvnnhl",
+  "matcherRunId": "0mt9n1rwh6192n7m9",
   "notifications": [
     {
       "body": "549 OGRAM ST, JACKSONVILLE, 32204 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 97 / 100\nWhy: assessed at $81,066 (+49.7); roof about 102 years old, estimated from year built (+47.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: YARBOROUGH JERRY O\nAssessed value: $81,066\nParcel: 0647020000R\n\nTriggered by pipeline run 01M0XRXPE78YFN6Z9S94R63EY8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
       "channel": "in_app",
-      "createdAt": "2026-08-26T02:34:05.615Z",
-      "id": "0mt9hctynmgdy647i",
+      "createdAt": "2026-08-26T05:13:32.971Z",
+      "id": "0mt9n1w6jpjqqbxi8",
       "providerMessageId": null,
       "recipient": null,
-      "sentAt": "2026-08-26T02:34:05.615Z",
+      "sentAt": "2026-08-26T05:13:32.971Z",
       "status": "delivered",
       "subject": "Updated match for \"Aging roof, entry price band\": 549 OGRAM ST, JACKSONVILLE, 32204"
     },
     {
       "body": "549 OGRAM ST, JACKSONVILLE, 32204 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 97 / 100\nWhy: assessed at $81,066 (+49.7); roof about 102 years old, estimated from year built (+47.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: YARBOROUGH JERRY O\nAssessed value: $81,066\nParcel: 0647020000R\n\nTriggered by pipeline run 01M0XRXPE78YFN6Z9S94R63EY8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
       "channel": "email",
-      "createdAt": "2026-08-26T02:34:05.615Z",
-      "id": "0mt9hctyngrxpw1di",
+      "createdAt": "2026-08-26T05:13:32.971Z",
+      "id": "0mt9n1w6jj28c4lqk",
       "providerMessageId": "sim_email_6fa78aa4c4a7218ad058",
       "recipient": "acquisitions@example.invalid",
-      "sentAt": "2026-08-26T02:34:05.615Z",
+      "sentAt": "2026-08-26T05:13:32.971Z",
       "status": "sent",
       "subject": "Updated match for \"Aging roof, entry price band\": 549 OGRAM ST, JACKSONVILLE, 32204"
     }
