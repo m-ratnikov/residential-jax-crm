@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-26T04:46:59.238Z",
+  "dismissedAt": null,
+  "id": "01M0X4A5ZS44YX445QAV80T22Q__0mt3v3t85fmff026j__1743960000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt9m3rbo3vu9khsp",
+  "notifications": [
+    {
+      "body": "735 N 7TH AVE, JACKSONVILLE BEACH, 32250 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $83,032 (+49.1); roof about 77 years old, estimated from year built (+45.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: TUCKER THOMAS E ET AL\nAssessed value: $83,032\nParcel: 1743960000R\n\nTriggered by pipeline run 01M0X4A5ZS44YX445QAV80T22Q.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-26T04:47:20.346Z",
+      "id": "0mt9m46qi4k6ayj52",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-26T04:47:20.346Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 735 N 7TH AVE, JACKSONVILLE BEACH, 32250"
+    },
+    {
+      "body": "735 N 7TH AVE, JACKSONVILLE BEACH, 32250 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $83,032 (+49.1); roof about 77 years old, estimated from year built (+45.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: TUCKER THOMAS E ET AL\nAssessed value: $83,032\nParcel: 1743960000R\n\nTriggered by pipeline run 01M0X4A5ZS44YX445QAV80T22Q.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-26T04:47:20.346Z",
+      "id": "0mt9m46qimxwn8shm",
+      "providerMessageId": "sim_email_74e21fb520796db60153",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-26T04:47:20.346Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 735 N 7TH AVE, JACKSONVILLE BEACH, 32250"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0X4A5ZS44YX445QAV80T22Q",
+  "propertyId": "1743960000R",
+  "propertySnapshot": {
+    "address": "735 N 7TH AVE, JACKSONVILLE BEACH, 32250",
+    "addressCity": "JACKSONVILLE BEACH",
+    "addressZip": "32250",
+    "assessedValue": 83032,
+    "builtYear": 1949,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2950591,
+    "longitude": -81.3986909,
+    "ownerName": "TUCKER THOMAS E ET AL",
+    "ownerOccupied": false,
+    "propertyId": "1743960000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0X4A5ZS44YX445QAV80T22Q",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 77,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 31
+  },
+  "rationale": "assessed at $83,032 (+49.1); roof about 77 years old, estimated from year built (+45.4).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.55
+}
