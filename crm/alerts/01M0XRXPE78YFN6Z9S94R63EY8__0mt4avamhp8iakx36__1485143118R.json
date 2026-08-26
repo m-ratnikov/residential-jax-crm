@@ -2,31 +2,31 @@
   "changedFields": [
     "yearsSinceLastSale"
   ],
-  "createdAt": "2026-08-26T02:33:25.969Z",
+  "createdAt": "2026-08-26T05:13:26.346Z",
   "dismissedAt": null,
   "id": "01M0XRXPE78YFN6Z9S94R63EY8__0mt4avamhp8iakx36__1485143118R",
   "kind": "updated_match",
-  "matcherRunId": "0mt9hc0erubvvnnhl",
+  "matcherRunId": "0mt9n1rwh6192n7m9",
   "notifications": [
     {
       "body": "5106 BROMPTON CT, JACKSONVILLE, 32217 already matched \"Tired landlord\" and has changed.\n\nMatch score: 77 / 100\nWhy: held 46 years (+29); absentee owner mailing from out of state (+28.3); roof about 46 years old, estimated from year built (+19.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CHANG SHEN-SHU\nAssessed value: $262,506\nParcel: 1485143118R\n\nTriggered by pipeline run 01M0XRXPE78YFN6Z9S94R63EY8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
       "channel": "in_app",
-      "createdAt": "2026-08-26T02:33:54.569Z",
-      "id": "0mt9hclft6utspt83",
+      "createdAt": "2026-08-26T05:13:29.501Z",
+      "id": "0mt9n1ti581hz2qap",
       "providerMessageId": null,
       "recipient": null,
-      "sentAt": "2026-08-26T02:33:54.569Z",
+      "sentAt": "2026-08-26T05:13:29.501Z",
       "status": "delivered",
       "subject": "Updated match for \"Tired landlord\": 5106 BROMPTON CT, JACKSONVILLE, 32217"
     },
     {
       "body": "5106 BROMPTON CT, JACKSONVILLE, 32217 already matched \"Tired landlord\" and has changed.\n\nMatch score: 77 / 100\nWhy: held 46 years (+29); absentee owner mailing from out of state (+28.3); roof about 46 years old, estimated from year built (+19.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CHANG SHEN-SHU\nAssessed value: $262,506\nParcel: 1485143118R\n\nTriggered by pipeline run 01M0XRXPE78YFN6Z9S94R63EY8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
       "channel": "email",
-      "createdAt": "2026-08-26T02:33:54.569Z",
-      "id": "0mt9hclftj61t8jh8",
+      "createdAt": "2026-08-26T05:13:29.502Z",
+      "id": "0mt9n1ti6p3k1kfqm",
       "providerMessageId": "sim_email_09e8b01cffc4dd9bc6df",
       "recipient": "acquisitions@example.invalid",
-      "sentAt": "2026-08-26T02:33:54.569Z",
+      "sentAt": "2026-08-26T05:13:29.502Z",
       "status": "sent",
       "subject": "Updated match for \"Tired landlord\": 5106 BROMPTON CT, JACKSONVILLE, 32217"
     }
