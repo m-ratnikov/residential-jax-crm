@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-26T02:33:25.969Z",
+  "dismissedAt": null,
+  "id": "01M0XRXPE78YFN6Z9S94R63EY8__0mt4avc7x052bfnz9__0138621032R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt9hc0erubvvnnhl",
+  "notifications": [
+    {
+      "body": "5211 W LA VENTURA CT, JACKSONVILLE, 32210 already matched \"Transit infill\" and has changed.\n\nMatch score: 90 / 100\nWhy: 71 m to 103rd St and La Ventura WB FS (+54.6); held 46 years (+34.9).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ROBERTS EDITH M\nAssessed value: $54,658\nParcel: 0138621032R\n\nTriggered by pipeline run 01M0XRXPE78YFN6Z9S94R63EY8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-26T02:33:33.925Z",
+      "id": "0mt9hc5idh1fjthjv",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-26T02:33:33.925Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 5211 W LA VENTURA CT, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0XRXPE78YFN6Z9S94R63EY8",
+  "propertyId": "0138621032R",
+  "propertySnapshot": {
+    "address": "5211 W LA VENTURA CT, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 54658,
+    "builtYear": 1980,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2497087,
+    "longitude": -81.7695684,
+    "ownerName": "ROBERTS EDITH M",
+    "ownerOccupied": false,
+    "propertyId": "0138621032R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0XRXPE78YFN6Z9S94R63EY8",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 46,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 46
+  },
+  "rationale": "71 m to 103rd St and La Ventura WB FS (+54.6); held 46 years (+34.9).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 89.5
+}
