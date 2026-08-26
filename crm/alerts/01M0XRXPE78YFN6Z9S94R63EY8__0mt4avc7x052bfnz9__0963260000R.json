@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-26T02:33:25.969Z",
+  "dismissedAt": null,
+  "id": "01M0XRXPE78YFN6Z9S94R63EY8__0mt4avc7x052bfnz9__0963260000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt9hc0erubvvnnhl",
+  "notifications": [
+    {
+      "body": "5022 REDSTONE DR, JACKSONVILLE, 32210 already matched \"Transit infill\" and has changed.\n\nMatch score: 91 / 100\nWhy: 66 m to 7276 103rd St (+55.1); held 51 years (+35.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: AUGSTEIN JAMES LEONARD\nAssessed value: $66,833\nParcel: 0963260000R\n\nTriggered by pipeline run 01M0XRXPE78YFN6Z9S94R63EY8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-26T02:33:31.776Z",
+      "id": "0mt9hc3uotfq05h3m",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-26T02:33:31.776Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 5022 REDSTONE DR, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0XRXPE78YFN6Z9S94R63EY8",
+  "propertyId": "0963260000R",
+  "propertySnapshot": {
+    "address": "5022 REDSTONE DR, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 66833,
+    "builtYear": 1960,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2510575,
+    "longitude": -81.7675197,
+    "ownerName": "AUGSTEIN JAMES LEONARD",
+    "ownerOccupied": true,
+    "propertyId": "0963260000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0XRXPE78YFN6Z9S94R63EY8",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 51
+  },
+  "rationale": "66 m to 7276 103rd St (+55.1); held 51 years (+35.8).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 90.93
+}
