@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-26T04:46:59.238Z",
+  "dismissedAt": null,
+  "id": "01M0X4A5ZS44YX445QAV80T22Q__0mt3v3t85fmff026j__0198860000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mt9m3rbo3vu9khsp",
+  "notifications": [
+    {
+      "body": "11315 LEM TURNER RD, JACKSONVILLE, 32218 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: roof about 100 years old, estimated from year built (+47.2); assessed at $91,872 (+46.5).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: COKER TIMOTHY MARK II\nAssessed value: $91,872\nParcel: 0198860000R\n\nTriggered by pipeline run 01M0X4A5ZS44YX445QAV80T22Q.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-26T04:47:21.309Z",
+      "id": "0mt9m47h903vwdsmc",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-26T04:47:21.309Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 11315 LEM TURNER RD, JACKSONVILLE, 32218"
+    },
+    {
+      "body": "11315 LEM TURNER RD, JACKSONVILLE, 32218 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: roof about 100 years old, estimated from year built (+47.2); assessed at $91,872 (+46.5).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: COKER TIMOTHY MARK II\nAssessed value: $91,872\nParcel: 0198860000R\n\nTriggered by pipeline run 01M0X4A5ZS44YX445QAV80T22Q.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-26T04:47:21.309Z",
+      "id": "0mt9m47h9bgk6uahx",
+      "providerMessageId": "sim_email_1a5b93323eb3afad1539",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-26T04:47:21.309Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 11315 LEM TURNER RD, JACKSONVILLE, 32218"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M0X4A5ZS44YX445QAV80T22Q",
+  "propertyId": "0198860000R",
+  "propertySnapshot": {
+    "address": "11315 LEM TURNER RD, JACKSONVILLE, 32218",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32218",
+    "assessedValue": 91872,
+    "builtYear": 1926,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "2025-08-01",
+    "latitude": 30.4405299,
+    "longitude": -81.698633,
+    "ownerName": "COKER TIMOTHY MARK II",
+    "ownerOccupied": true,
+    "propertyId": "0198860000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M0X4A5ZS44YX445QAV80T22Q",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 100,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 0
+  },
+  "rationale": "roof about 100 years old, estimated from year built (+47.2); assessed at $91,872 (+46.5).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.7
+}
