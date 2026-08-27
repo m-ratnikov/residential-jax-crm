@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-27T04:51:37.793Z",
+  "dismissedAt": null,
+  "id": "01M10G8CVDWZ9R68KW1K82TX35__0mt4avamhp8iakx36__0418500000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtb1pkza7wcvpxi7",
+  "notifications": [
+    {
+      "body": "5718 BOQUERON CT, JACKSONVILLE, 32219 already matched \"Tired landlord\" and has changed.\n\nMatch score: 60 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 62 years old, estimated from year built (+27.3); held 12 years (+4.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: FRIERSON ANN M\nAssessed value: $175,778\nParcel: 0418500000R\n\nTriggered by pipeline run 01M10G8CVDWZ9R68KW1K82TX35.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-27T04:52:06.460Z",
+      "id": "0mtb1q664zfovl9qk",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-27T04:52:06.460Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 5718 BOQUERON CT, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "5718 BOQUERON CT, JACKSONVILLE, 32219 already matched \"Tired landlord\" and has changed.\n\nMatch score: 60 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 62 years old, estimated from year built (+27.3); held 12 years (+4.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: FRIERSON ANN M\nAssessed value: $175,778\nParcel: 0418500000R\n\nTriggered by pipeline run 01M10G8CVDWZ9R68KW1K82TX35.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-27T04:52:06.460Z",
+      "id": "0mtb1q6645t5c4fsf",
+      "providerMessageId": "sim_email_7b054a13e27b80f42134",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-27T04:52:06.460Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 5718 BOQUERON CT, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M10G8CVDWZ9R68KW1K82TX35",
+  "propertyId": "0418500000R",
+  "propertySnapshot": {
+    "address": "5718 BOQUERON CT, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 175778,
+    "builtYear": 1964,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3804346,
+    "longitude": -81.7331277,
+    "ownerName": "FRIERSON ANN M",
+    "ownerOccupied": false,
+    "propertyId": "0418500000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M10G8CVDWZ9R68KW1K82TX35",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 62,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 12
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 62 years old, estimated from year built (+27.3); held 12 years (+4.8).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 60.43
+}
