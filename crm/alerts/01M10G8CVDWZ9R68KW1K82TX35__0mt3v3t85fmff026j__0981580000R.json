@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-27T04:51:37.793Z",
+  "dismissedAt": null,
+  "id": "01M10G8CVDWZ9R68KW1K82TX35__0mt3v3t85fmff026j__0981580000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtb1pkza7wcvpxi7",
+  "notifications": [
+    {
+      "body": "6046 HILDA ST, JACKSONVILLE, 32244 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $84,539 (+48.7); roof about 75 years old, estimated from year built (+45.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: PRESCOTT EDWARD D\nAssessed value: $84,539\nParcel: 0981580000R\n\nTriggered by pipeline run 01M10G8CVDWZ9R68KW1K82TX35.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-27T04:52:12.794Z",
+      "id": "0mtb1qb226csgfpzh",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-27T04:52:12.794Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6046 HILDA ST, JACKSONVILLE, 32244"
+    },
+    {
+      "body": "6046 HILDA ST, JACKSONVILLE, 32244 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $84,539 (+48.7); roof about 75 years old, estimated from year built (+45.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: PRESCOTT EDWARD D\nAssessed value: $84,539\nParcel: 0981580000R\n\nTriggered by pipeline run 01M10G8CVDWZ9R68KW1K82TX35.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-27T04:52:12.794Z",
+      "id": "0mtb1qb22oyrqan7u",
+      "providerMessageId": "sim_email_f5ca06f5b9a8e720f9b9",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-27T04:52:12.794Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6046 HILDA ST, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M10G8CVDWZ9R68KW1K82TX35",
+  "propertyId": "0981580000R",
+  "propertySnapshot": {
+    "address": "6046 HILDA ST, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 84539,
+    "builtYear": 1951,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2396776,
+    "longitude": -81.735386,
+    "ownerName": "PRESCOTT EDWARD D",
+    "ownerOccupied": true,
+    "propertyId": "0981580000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M10G8CVDWZ9R68KW1K82TX35",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 75,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 28
+  },
+  "rationale": "assessed at $84,539 (+48.7); roof about 75 years old, estimated from year built (+45.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.84
+}
