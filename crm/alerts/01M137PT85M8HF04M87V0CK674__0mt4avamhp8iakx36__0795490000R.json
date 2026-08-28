@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-28T07:39:07.410Z",
+  "dismissedAt": null,
+  "id": "01M137PT85M8HF04M87V0CK674__0mt4avamhp8iakx36__0795490000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtcn4u8ap2jsxu7x",
+  "notifications": [
+    {
+      "body": "3557 VALENCIA RD, JACKSONVILLE, 32205 already matched \"Tired landlord\" and has changed.\n\nMatch score: 57 / 100\nWhy: roof about 101 years old, estimated from year built (+31.5); held 25 years (+14.3); absentee owner (+11.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BIONDO ANNE LIVING TRUST\nAssessed value: $234,470\nParcel: 0795490000R\n\nTriggered by pipeline run 01M137PT85M8HF04M87V0CK674.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-28T07:39:36.540Z",
+      "id": "0mtcn5fj0p1k57jfa",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-28T07:39:36.540Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 3557 VALENCIA RD, JACKSONVILLE, 32205"
+    },
+    {
+      "body": "3557 VALENCIA RD, JACKSONVILLE, 32205 already matched \"Tired landlord\" and has changed.\n\nMatch score: 57 / 100\nWhy: roof about 101 years old, estimated from year built (+31.5); held 25 years (+14.3); absentee owner (+11.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BIONDO ANNE LIVING TRUST\nAssessed value: $234,470\nParcel: 0795490000R\n\nTriggered by pipeline run 01M137PT85M8HF04M87V0CK674.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-28T07:39:36.540Z",
+      "id": "0mtcn5fj0iu0m8262",
+      "providerMessageId": "sim_email_942c1f467dde03a3c46c",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-28T07:39:36.540Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 3557 VALENCIA RD, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M137PT85M8HF04M87V0CK674",
+  "propertyId": "0795490000R",
+  "propertySnapshot": {
+    "address": "3557 VALENCIA RD, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 234470,
+    "builtYear": 1925,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3004796,
+    "longitude": -81.7073491,
+    "ownerName": "BIONDO ANNE LIVING TRUST",
+    "ownerOccupied": false,
+    "propertyId": "0795490000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M137PT85M8HF04M87V0CK674",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 101,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 25
+  },
+  "rationale": "roof about 101 years old, estimated from year built (+31.5); held 25 years (+14.3); absentee owner (+11.7).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 57.42
+}
