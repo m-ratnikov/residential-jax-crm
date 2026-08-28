@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-08-28T22:35:30.976Z",
+  "dismissedAt": null,
+  "id": "01M1560A46TPCN4HRXKZNTZVPX__0mt3v3t85fmff026j__0026810010R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtdj5loaws9yoi2h",
+  "notifications": [
+    {
+      "body": "10205 MACON RD, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $90,041 (+47); roof about 84 years old, estimated from year built (+46.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: BOWERS WILTON GLEN SR LIFE EST\nAssessed value: $90,041\nParcel: 0026810010R\n\nTriggered by pipeline run 01M1560A46TPCN4HRXKZNTZVPX.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-28T22:35:38.515Z",
+      "id": "0mtdj5qj7qusn5uq8",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-28T22:35:38.515Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 10205 MACON RD, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "10205 MACON RD, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $90,041 (+47); roof about 84 years old, estimated from year built (+46.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: BOWERS WILTON GLEN SR LIFE EST\nAssessed value: $90,041\nParcel: 0026810010R\n\nTriggered by pipeline run 01M1560A46TPCN4HRXKZNTZVPX.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-28T22:35:38.515Z",
+      "id": "0mtdj5qj7z75y1yey",
+      "providerMessageId": "sim_email_e18a6c4e9f2828c483ef",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-28T22:35:38.515Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 10205 MACON RD, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1560A46TPCN4HRXKZNTZVPX",
+  "propertyId": "0026810010R",
+  "propertySnapshot": {
+    "address": "10205 MACON RD, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 90041,
+    "builtYear": 1942,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "2024-03-04",
+    "latitude": 30.4196783,
+    "longitude": -81.7485771,
+    "ownerName": "BOWERS WILTON GLEN SR LIFE EST",
+    "ownerOccupied": true,
+    "propertyId": "0026810010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1560A46TPCN4HRXKZNTZVPX",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 84,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 2
+  },
+  "rationale": "assessed at $90,041 (+47); roof about 84 years old, estimated from year built (+46.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.21
+}
