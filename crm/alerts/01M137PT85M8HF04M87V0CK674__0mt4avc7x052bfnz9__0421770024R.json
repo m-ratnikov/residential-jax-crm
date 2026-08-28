@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-28T07:39:07.410Z",
+  "dismissedAt": null,
+  "id": "01M137PT85M8HF04M87V0CK674__0mt4avc7x052bfnz9__0421770024R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtcn4u8ap2jsxu7x",
+  "notifications": [
+    {
+      "body": "6909 S LYSTER CIR, JACKSONVILLE, 32209 already matched \"Transit infill\" and has changed.\n\nMatch score: 93 / 100\nWhy: 169 m from the water, 46 m to New Kings Rd + Richardson Rd (+56.6); held 53 years (+36.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: WHITE EMMITT\nAssessed value: $187,674\nParcel: 0421770024R\n\nTriggered by pipeline run 01M137PT85M8HF04M87V0CK674.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-28T07:39:09.758Z",
+      "id": "0mtcn4uv2d2r7qyxl",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-28T07:39:09.758Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 6909 S LYSTER CIR, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M137PT85M8HF04M87V0CK674",
+  "propertyId": "0421770024R",
+  "propertySnapshot": {
+    "address": "6909 S LYSTER CIR, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 187674,
+    "builtYear": 1968,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.383734,
+    "longitude": -81.7299973,
+    "ownerName": "WHITE EMMITT",
+    "ownerOccupied": false,
+    "propertyId": "0421770024R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M137PT85M8HF04M87V0CK674",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 58,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 53
+  },
+  "rationale": "169 m from the water, 46 m to New Kings Rd + Richardson Rd (+56.6); held 53 years (+36.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 92.7
+}
