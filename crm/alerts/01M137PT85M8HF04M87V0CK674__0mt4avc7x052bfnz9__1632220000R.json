@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-28T07:39:07.410Z",
+  "dismissedAt": null,
+  "id": "01M137PT85M8HF04M87V0CK674__0mt4avc7x052bfnz9__1632220000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtcn4u8ap2jsxu7x",
+  "notifications": [
+    {
+      "body": "10626 CRAIG DR, JACKSONVILLE, 32225 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: 101 m to Atlantic Blvd + St Johns Bluff Rd (+52.5); held 53 years (+36.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BASYE OSCAR L III\nAssessed value: $66,044\nParcel: 1632220000R\n\nTriggered by pipeline run 01M137PT85M8HF04M87V0CK674.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-28T07:39:17.579Z",
+      "id": "0mtcn50wba9q9sf7e",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-28T07:39:17.579Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 10626 CRAIG DR, JACKSONVILLE, 32225"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M137PT85M8HF04M87V0CK674",
+  "propertyId": "1632220000R",
+  "propertySnapshot": {
+    "address": "10626 CRAIG DR, JACKSONVILLE, 32225",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32225",
+    "assessedValue": 66044,
+    "builtYear": 1959,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3297691,
+    "longitude": -81.5249377,
+    "ownerName": "BASYE OSCAR L III",
+    "ownerOccupied": true,
+    "propertyId": "1632220000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M137PT85M8HF04M87V0CK674",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 67,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 53
+  },
+  "rationale": "101 m to Atlantic Blvd + St Johns Bluff Rd (+52.5); held 53 years (+36.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 88.6
+}
