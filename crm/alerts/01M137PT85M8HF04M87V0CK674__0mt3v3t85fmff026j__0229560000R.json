@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-28T07:39:07.410Z",
+  "dismissedAt": null,
+  "id": "01M137PT85M8HF04M87V0CK674__0mt3v3t85fmff026j__0229560000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtcn4u8ap2jsxu7x",
+  "notifications": [
+    {
+      "body": "7222 LINDA DR, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $80,951 (+49.7); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: MALONE PEGGY J\nAssessed value: $80,951\nParcel: 0229560000R\n\nTriggered by pipeline run 01M137PT85M8HF04M87V0CK674.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-28T07:39:40.288Z",
+      "id": "0mtcn5if4vnaom6mi",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-28T07:39:40.288Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7222 LINDA DR, JACKSONVILLE, 32208"
+    },
+    {
+      "body": "7222 LINDA DR, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $80,951 (+49.7); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: MALONE PEGGY J\nAssessed value: $80,951\nParcel: 0229560000R\n\nTriggered by pipeline run 01M137PT85M8HF04M87V0CK674.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-28T07:39:40.288Z",
+      "id": "0mtcn5if4f34c96vz",
+      "providerMessageId": "sim_email_6c17d71e3a3b966b415d",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-28T07:39:40.288Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7222 LINDA DR, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M137PT85M8HF04M87V0CK674",
+  "propertyId": "0229560000R",
+  "propertySnapshot": {
+    "address": "7222 LINDA DR, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 80951,
+    "builtYear": 1950,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3858373,
+    "longitude": -81.6723854,
+    "ownerName": "MALONE PEGGY J",
+    "ownerOccupied": true,
+    "propertyId": "0229560000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M137PT85M8HF04M87V0CK674",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 76,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 28
+  },
+  "rationale": "assessed at $80,951 (+49.7); roof about 76 years old, estimated from year built (+45.3).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 95.03
+}
