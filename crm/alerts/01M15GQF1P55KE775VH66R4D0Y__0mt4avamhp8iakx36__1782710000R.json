@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-29T01:40:12.385Z",
+  "dismissedAt": null,
+  "id": "01M15GQF1P55KE775VH66R4D0Y__0mt4avamhp8iakx36__1782710000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtdpr4agw8hmmvdh",
+  "notifications": [
+    {
+      "body": "1341 SUNSET DR, JACKSONVILLE BEACH, 32250 already matched \"Tired landlord\" and has changed.\n\nMatch score: 60 / 100\nWhy: roof about 69 years old, estimated from year built (+29.5); held 31 years (+18.6); absentee owner (+11.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: VENASKA MARTHA A\nAssessed value: $380,827\nParcel: 1782710000R\n\nTriggered by pipeline run 01M15GQF1P55KE775VH66R4D0Y.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-29T01:40:32.312Z",
+      "id": "0mtdprik8436ft6js",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-29T01:40:32.312Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 1341 SUNSET DR, JACKSONVILLE BEACH, 32250"
+    },
+    {
+      "body": "1341 SUNSET DR, JACKSONVILLE BEACH, 32250 already matched \"Tired landlord\" and has changed.\n\nMatch score: 60 / 100\nWhy: roof about 69 years old, estimated from year built (+29.5); held 31 years (+18.6); absentee owner (+11.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: VENASKA MARTHA A\nAssessed value: $380,827\nParcel: 1782710000R\n\nTriggered by pipeline run 01M15GQF1P55KE775VH66R4D0Y.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-29T01:40:32.312Z",
+      "id": "0mtdprik8fnm55m0s",
+      "providerMessageId": "sim_email_4b680a3383ba4b5b1a02",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-29T01:40:32.312Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 1341 SUNSET DR, JACKSONVILLE BEACH, 32250"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M15GQF1P55KE775VH66R4D0Y",
+  "propertyId": "1782710000R",
+  "propertySnapshot": {
+    "address": "1341 SUNSET DR, JACKSONVILLE BEACH, 32250",
+    "addressCity": "JACKSONVILLE BEACH",
+    "addressZip": "32250",
+    "assessedValue": 380827,
+    "builtYear": 1957,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.300303,
+    "longitude": -81.4074142,
+    "ownerName": "VENASKA MARTHA A",
+    "ownerOccupied": false,
+    "propertyId": "1782710000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M15GQF1P55KE775VH66R4D0Y",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 69,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 31
+  },
+  "rationale": "roof about 69 years old, estimated from year built (+29.5); held 31 years (+18.6); absentee owner (+11.7).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 59.75
+}
