@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-29T01:40:12.385Z",
+  "dismissedAt": null,
+  "id": "01M15GQF1P55KE775VH66R4D0Y__0mt4avc7x052bfnz9__1324640000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtdpr4agw8hmmvdh",
+  "notifications": [
+    {
+      "body": "1485 E 27TH ST, JACKSONVILLE, 32206 already matched \"Transit infill\" and has changed.\n\nMatch score: 93 / 100\nWhy: 152 m from the water, 64 m to 21st St + Bennett St (+55.2); held 73 years at most (the recorded sale predates the 1954 structure, so tenure is capped at the building's age) (+37.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: HOLMES MARTHA C LIFE EST\nAssessed value: $33,910\nParcel: 1324640000R\n\nTriggered by pipeline run 01M15GQF1P55KE775VH66R4D0Y.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-29T01:40:14.840Z",
+      "id": "0mtdpr52wt74dgqoo",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-29T01:40:14.840Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 1485 E 27TH ST, JACKSONVILLE, 32206"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M15GQF1P55KE775VH66R4D0Y",
+  "propertyId": "1324640000R",
+  "propertySnapshot": {
+    "address": "1485 E 27TH ST, JACKSONVILLE, 32206",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32206",
+    "assessedValue": 33910,
+    "builtYear": 1954,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3614685,
+    "longitude": -81.6350803,
+    "ownerName": "HOLMES MARTHA C LIFE EST",
+    "ownerOccupied": true,
+    "propertyId": "1324640000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M15GQF1P55KE775VH66R4D0Y",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 72,
+    "tenureCaveat": "the recorded sale predates the 1954 structure, so tenure is capped at the building's age for ranking",
+    "tenureConfidence": "PREDATES_STRUCTURE",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 74
+  },
+  "rationale": "152 m from the water, 64 m to 21st St + Bennett St (+55.2); held 73 years at most (the recorded sale predates the 1954 structure, so tenure is capped at the building's age) (+37.8).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 92.99
+}
