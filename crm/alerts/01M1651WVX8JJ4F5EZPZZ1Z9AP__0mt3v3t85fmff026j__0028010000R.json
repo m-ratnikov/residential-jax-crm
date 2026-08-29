@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "lastSaleDate"
+  ],
+  "createdAt": "2026-08-29T07:35:24.980Z",
+  "dismissedAt": null,
+  "id": "01M1651WVX8JJ4F5EZPZZ1Z9AP__0mt3v3t85fmff026j__0028010000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mte2fx5vki2ijj49",
+  "notifications": [
+    {
+      "body": "6704 JOLENE DR, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $91,646 (+46.6); roof about 86 years old, estimated from year built (+46.3).\n\nChanged since the last pass: last sale date.\n\nOwner of record: DIVINE REMODELING & CONSTRUCTI\nAssessed value: $91,646\nParcel: 0028010000R\n\nTriggered by pipeline run 01M1651WVX8JJ4F5EZPZZ1Z9AP.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-29T07:35:31.859Z",
+      "id": "0mte2g1ebwljwhcqk",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-29T07:35:31.859Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6704 JOLENE DR, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "6704 JOLENE DR, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $91,646 (+46.6); roof about 86 years old, estimated from year built (+46.3).\n\nChanged since the last pass: last sale date.\n\nOwner of record: DIVINE REMODELING & CONSTRUCTI\nAssessed value: $91,646\nParcel: 0028010000R\n\nTriggered by pipeline run 01M1651WVX8JJ4F5EZPZZ1Z9AP.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-29T07:35:31.859Z",
+      "id": "0mte2g1eb46emqjrz",
+      "providerMessageId": "sim_email_76abd83e35d6fc8c0a9d",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-29T07:35:31.859Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6704 JOLENE DR, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1651WVX8JJ4F5EZPZZ1Z9AP",
+  "propertyId": "0028010000R",
+  "propertySnapshot": {
+    "address": "6704 JOLENE DR, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 91646,
+    "builtYear": 1940,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2026-03-13",
+    "latitude": 30.4138808,
+    "longitude": -81.7532006,
+    "ownerName": "DIVINE REMODELING & CONSTRUCTI",
+    "ownerOccupied": false,
+    "propertyId": "0028010000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1651WVX8JJ4F5EZPZZ1Z9AP",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 86,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 0
+  },
+  "rationale": "assessed at $91,646 (+46.6); roof about 86 years old, estimated from year built (+46.3).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 92.91
+}
