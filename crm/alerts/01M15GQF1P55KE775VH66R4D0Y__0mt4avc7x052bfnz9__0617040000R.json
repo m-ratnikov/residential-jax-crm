@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-29T01:40:12.385Z",
+  "dismissedAt": null,
+  "id": "01M15GQF1P55KE775VH66R4D0Y__0mt4avc7x052bfnz9__0617040000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtdpr4agw8hmmvdh",
+  "notifications": [
+    {
+      "body": "1031 INGLESIDE AVE, JACKSONVILLE, 32205 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: 2029 m from the water, 23 m to Post St + Talbot Ave (+58.3); held 40 years (+30.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CATON SUSAN V\nAssessed value: $66,544\nParcel: 0617040000R\n\nTriggered by pipeline run 01M15GQF1P55KE775VH66R4D0Y.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-29T01:40:20.581Z",
+      "id": "0mtdpr9idy4x9ybrx",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-29T01:40:20.581Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 1031 INGLESIDE AVE, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M15GQF1P55KE775VH66R4D0Y",
+  "propertyId": "0617040000R",
+  "propertySnapshot": {
+    "address": "1031 INGLESIDE AVE, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 66544,
+    "builtYear": 1940,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3104337,
+    "longitude": -81.7189899,
+    "ownerName": "CATON SUSAN V",
+    "ownerOccupied": true,
+    "propertyId": "0617040000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M15GQF1P55KE775VH66R4D0Y",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 40
+  },
+  "rationale": "2029 m from the water, 23 m to Post St + Talbot Ave (+58.3); held 40 years (+30.2).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 88.52
+}
