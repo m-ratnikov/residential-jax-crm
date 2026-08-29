@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-29T01:40:12.385Z",
+  "dismissedAt": null,
+  "id": "01M15GQF1P55KE775VH66R4D0Y__0mt3v3t85fmff026j__0681690000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtdpr4agw8hmmvdh",
+  "notifications": [
+    {
+      "body": "4765 IRVINGTON AVE, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $85,683 (+48.3); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: TOVIAS GILBERTO\nAssessed value: $85,683\nParcel: 0681690000R\n\nTriggered by pipeline run 01M15GQF1P55KE775VH66R4D0Y.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-29T01:40:39.022Z",
+      "id": "0mtdprnqmy9c8foyb",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-29T01:40:39.022Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 4765 IRVINGTON AVE, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "4765 IRVINGTON AVE, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $85,683 (+48.3); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: TOVIAS GILBERTO\nAssessed value: $85,683\nParcel: 0681690000R\n\nTriggered by pipeline run 01M15GQF1P55KE775VH66R4D0Y.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-29T01:40:39.022Z",
+      "id": "0mtdprnqm4yap7dyi",
+      "providerMessageId": "sim_email_9a3d932407f7009fa883",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-29T01:40:39.022Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 4765 IRVINGTON AVE, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M15GQF1P55KE775VH66R4D0Y",
+  "propertyId": "0681690000R",
+  "propertySnapshot": {
+    "address": "4765 IRVINGTON AVE, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 85683,
+    "builtYear": 1950,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2854201,
+    "longitude": -81.7281503,
+    "ownerName": "TOVIAS GILBERTO",
+    "ownerOccupied": false,
+    "propertyId": "0681690000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M15GQF1P55KE775VH66R4D0Y",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 76,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 12
+  },
+  "rationale": "assessed at $85,683 (+48.3); roof about 76 years old, estimated from year built (+45.3).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.64
+}
