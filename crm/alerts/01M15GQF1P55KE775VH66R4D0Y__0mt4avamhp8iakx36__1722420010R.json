@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-29T01:40:12.385Z",
+  "dismissedAt": null,
+  "id": "01M15GQF1P55KE775VH66R4D0Y__0mt4avamhp8iakx36__1722420010R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtdpr4agw8hmmvdh",
+  "notifications": [
+    {
+      "body": "75 EDGAR ST, ATLANTIC BEACH, 32233 already matched \"Tired landlord\" and has changed.\n\nMatch score: 83 / 100\nWhy: roof about 66 years old, estimated from year built (+29); absentee owner mailing from out of state (+28.3); held 40 years (+25.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: RANCE RUBY T ESTATE\nAssessed value: $225,794\nParcel: 1722420010R\n\nTriggered by pipeline run 01M15GQF1P55KE775VH66R4D0Y.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-29T01:40:25.675Z",
+      "id": "0mtdprdfvhxzkxl5z",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-29T01:40:25.675Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 75 EDGAR ST, ATLANTIC BEACH, 32233"
+    },
+    {
+      "body": "75 EDGAR ST, ATLANTIC BEACH, 32233 already matched \"Tired landlord\" and has changed.\n\nMatch score: 83 / 100\nWhy: roof about 66 years old, estimated from year built (+29); absentee owner mailing from out of state (+28.3); held 40 years (+25.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: RANCE RUBY T ESTATE\nAssessed value: $225,794\nParcel: 1722420010R\n\nTriggered by pipeline run 01M15GQF1P55KE775VH66R4D0Y.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-29T01:40:25.675Z",
+      "id": "0mtdprdfvth2aib4g",
+      "providerMessageId": "sim_email_716e9083aa6c15a25db4",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-29T01:40:25.675Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 75 EDGAR ST, ATLANTIC BEACH, 32233"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M15GQF1P55KE775VH66R4D0Y",
+  "propertyId": "1722420010R",
+  "propertySnapshot": {
+    "address": "75 EDGAR ST, ATLANTIC BEACH, 32233",
+    "addressCity": "ATLANTIC BEACH",
+    "addressZip": "32233",
+    "assessedValue": 225794,
+    "builtYear": 1959,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3379303,
+    "longitude": -81.4155401,
+    "ownerName": "RANCE RUBY T ESTATE",
+    "ownerOccupied": false,
+    "propertyId": "1722420010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M15GQF1P55KE775VH66R4D0Y",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 40
+  },
+  "rationale": "roof about 66 years old, estimated from year built (+29); absentee owner mailing from out of state (+28.3); held 40 years (+25.2).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 82.53
+}
