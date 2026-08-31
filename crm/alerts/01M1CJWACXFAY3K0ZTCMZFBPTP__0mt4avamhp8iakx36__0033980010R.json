@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-08-31T19:35:54.558Z",
+  "dismissedAt": null,
+  "id": "01M1CJWACXFAY3K0ZTCMZFBPTP__0mt4avamhp8iakx36__0033980010R",
+  "kind": "updated_match",
+  "matcherRunId": "0mthn277n556ul3z9",
+  "notifications": [
+    {
+      "body": "3827 DOTTIE RD, JACKSONVILLE, 32220 already matched \"Tired landlord\" and has changed.\n\nMatch score: 59 / 100\nWhy: roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20); held 25 years (last sale 2000-10-18) (+14.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WILDE LAWRENCE J\nAssessed value: $25,801\nParcel: 0033980010R\n\nTriggered by pipeline run 01M1CJWACXFAY3K0ZTCMZFBPTP.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T19:35:59.020Z",
+      "id": "0mthn290slgy9i6cn",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T19:35:59.020Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 3827 DOTTIE RD, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "3827 DOTTIE RD, JACKSONVILLE, 32220 already matched \"Tired landlord\" and has changed.\n\nMatch score: 59 / 100\nWhy: roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20); held 25 years (last sale 2000-10-18) (+14.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WILDE LAWRENCE J\nAssessed value: $25,801\nParcel: 0033980010R\n\nTriggered by pipeline run 01M1CJWACXFAY3K0ZTCMZFBPTP.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T19:35:59.021Z",
+      "id": "0mthn290t4lcqfa86",
+      "providerMessageId": "sim_email_69fe511c107fad6c0384",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T19:35:59.021Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 3827 DOTTIE RD, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1CJWACXFAY3K0ZTCMZFBPTP",
+  "propertyId": "0033980010R",
+  "propertySnapshot": {
+    "address": "3827 DOTTIE RD, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 25801,
+    "builtYear": 1970,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2000-10-18",
+    "latitude": 30.3682183,
+    "longitude": -81.7755491,
+    "ownerName": "WILDE LAWRENCE J",
+    "ownerOccupied": false,
+    "propertyId": "0033980010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1CJWACXFAY3K0ZTCMZFBPTP",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 25
+  },
+  "rationale": "roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20); held 25 years (last sale 2000-10-18) (+14.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 58.51
+}
