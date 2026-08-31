@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avamhp8iakx36__0028400020R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "8219 GARDEN ST, JACKSONVILLE, 32219 already matched \"Tired landlord\" and has changed.\n\nMatch score: 71 / 100\nWhy: roof about 68 years old, estimated from year built (+29.3); held 35 years (last sale 1991-07-26) (+21.5); absentee owner mailing from elsewhere in Florida (+20).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WADDELL APRIL S\nAssessed value: $71,725\nParcel: 0028400020R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:39.532Z",
+      "id": "0mtgyz2a49hy7qqss",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:39.532Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 8219 GARDEN ST, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "8219 GARDEN ST, JACKSONVILLE, 32219 already matched \"Tired landlord\" and has changed.\n\nMatch score: 71 / 100\nWhy: roof about 68 years old, estimated from year built (+29.3); held 35 years (last sale 1991-07-26) (+21.5); absentee owner mailing from elsewhere in Florida (+20).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WADDELL APRIL S\nAssessed value: $71,725\nParcel: 0028400020R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T08:21:39.532Z",
+      "id": "0mtgyz2a4eb6snoaf",
+      "providerMessageId": "sim_email_b19466895146b1b36ed5",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T08:21:39.532Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 8219 GARDEN ST, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "0028400020R",
+  "propertySnapshot": {
+    "address": "8219 GARDEN ST, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 71725,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "1991-07-26",
+    "latitude": 30.4083314,
+    "longitude": -81.7877246,
+    "ownerName": "WADDELL APRIL S",
+    "ownerOccupied": false,
+    "propertyId": "0028400020R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 35
+  },
+  "rationale": "roof about 68 years old, estimated from year built (+29.3); held 35 years (last sale 1991-07-26) (+21.5); absentee owner mailing from elsewhere in Florida (+20).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 70.86
+}
