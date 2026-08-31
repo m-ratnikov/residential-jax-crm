@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avc7x052bfnz9__1423070000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "1065 CRESTDALE ST, JACKSONVILLE, 32211 already matched \"Transit infill\" and has changed.\n\nMatch score: 88 / 100\nWhy: 152 m from the water, 114 m to Arlington Expwy + Underhill Dr (+51.5); held 53 years (+36.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BENNETT SYLVIA E\nAssessed value: $59,263\nParcel: 1423070000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:20.269Z",
+      "id": "0mtgyynf17f09tyja",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:20.269Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 1065 CRESTDALE ST, JACKSONVILLE, 32211"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "1423070000R",
+  "propertySnapshot": {
+    "address": "1065 CRESTDALE ST, JACKSONVILLE, 32211",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32211",
+    "assessedValue": 59263,
+    "builtYear": 1955,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3310505,
+    "longitude": -81.5904207,
+    "ownerName": "BENNETT SYLVIA E",
+    "ownerOccupied": true,
+    "propertyId": "1423070000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 53
+  },
+  "rationale": "152 m from the water, 114 m to Arlington Expwy + Underhill Dr (+51.5); held 53 years (+36.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 87.6
+}
