@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avamhp8iakx36__0357320000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "456 MALCROSS AVE, JACKSONVILLE, 32208 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: roof about 97 years old, estimated from year built (+31.4); absentee owner mailing from elsewhere in Florida (+20); held 18 years (+9.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LOVENCIN WEBERT\nAssessed value: $92,174\nParcel: 0357320000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:54.180Z",
+      "id": "0mtgyzdl0q6awe17w",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:54.180Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 456 MALCROSS AVE, JACKSONVILLE, 32208"
+    },
+    {
+      "body": "456 MALCROSS AVE, JACKSONVILLE, 32208 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: roof about 97 years old, estimated from year built (+31.4); absentee owner mailing from elsewhere in Florida (+20); held 18 years (+9.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LOVENCIN WEBERT\nAssessed value: $92,174\nParcel: 0357320000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T08:21:54.180Z",
+      "id": "0mtgyzdl0ljivhjv3",
+      "providerMessageId": "sim_email_b1e96eccf831664b7250",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T08:21:54.180Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 456 MALCROSS AVE, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "0357320000R",
+  "propertySnapshot": {
+    "address": "456 MALCROSS AVE, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 92174,
+    "builtYear": 1929,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.379366,
+    "longitude": -81.6610422,
+    "ownerName": "LOVENCIN WEBERT",
+    "ownerOccupied": false,
+    "propertyId": "0357320000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 97,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 18
+  },
+  "rationale": "roof about 97 years old, estimated from year built (+31.4); absentee owner mailing from elsewhere in Florida (+20); held 18 years (+9.2).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 60.52
+}
