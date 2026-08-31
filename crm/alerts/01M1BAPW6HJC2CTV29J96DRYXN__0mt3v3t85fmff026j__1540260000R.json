@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt3v3t85fmff026j__1540260000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "6029 E MORROW ST, JACKSONVILLE, 32217 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $91,231 (+46.7); roof about 85 years old, estimated from year built (+46.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CARTER REGINALD\nAssessed value: $91,231\nParcel: 1540260000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:22:22.256Z",
+      "id": "0mtgyzz8w1an0atiq",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:22:22.256Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6029 E MORROW ST, JACKSONVILLE, 32217"
+    },
+    {
+      "body": "6029 E MORROW ST, JACKSONVILLE, 32217 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $91,231 (+46.7); roof about 85 years old, estimated from year built (+46.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CARTER REGINALD\nAssessed value: $91,231\nParcel: 1540260000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T08:22:22.256Z",
+      "id": "0mtgyzz8wdof64mgg",
+      "providerMessageId": "sim_email_a6681a79a8b040cfeebe",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T08:22:22.256Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6029 E MORROW ST, JACKSONVILLE, 32217"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "1540260000R",
+  "propertySnapshot": {
+    "address": "6029 E MORROW ST, JACKSONVILLE, 32217",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32217",
+    "assessedValue": 91231,
+    "builtYear": 1941,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2599338,
+    "longitude": -81.6229376,
+    "ownerName": "CARTER REGINALD",
+    "ownerOccupied": false,
+    "propertyId": "1540260000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 85,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 26
+  },
+  "rationale": "assessed at $91,231 (+46.7); roof about 85 years old, estimated from year built (+46.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 92.95
+}
