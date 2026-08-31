@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avamhp8iakx36__1646240000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "1858 CORTEZ RD, JACKSONVILLE, 32246 already matched \"Tired landlord\" and has changed.\n\nMatch score: 62 / 100\nWhy: roof about 72 years old, estimated from year built (+29.8); absentee owner mailing from elsewhere in Florida (+20); held 22 years (+12.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ILCHUK VALENTINA\nAssessed value: $141,670\nParcel: 1646240000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:49.301Z",
+      "id": "0mtgyz9thqq61i55b",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:49.301Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 1858 CORTEZ RD, JACKSONVILLE, 32246"
+    },
+    {
+      "body": "1858 CORTEZ RD, JACKSONVILLE, 32246 already matched \"Tired landlord\" and has changed.\n\nMatch score: 62 / 100\nWhy: roof about 72 years old, estimated from year built (+29.8); absentee owner mailing from elsewhere in Florida (+20); held 22 years (+12.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ILCHUK VALENTINA\nAssessed value: $141,670\nParcel: 1646240000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T08:21:49.302Z",
+      "id": "0mtgyz9ti12uauoz2",
+      "providerMessageId": "sim_email_3d35c15f1414be1f673d",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T08:21:49.302Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 1858 CORTEZ RD, JACKSONVILLE, 32246"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "1646240000R",
+  "propertySnapshot": {
+    "address": "1858 CORTEZ RD, JACKSONVILLE, 32246",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32246",
+    "assessedValue": 141670,
+    "builtYear": 1954,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3173196,
+    "longitude": -81.5334948,
+    "ownerName": "ILCHUK VALENTINA",
+    "ownerOccupied": false,
+    "propertyId": "1646240000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 72,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 22
+  },
+  "rationale": "roof about 72 years old, estimated from year built (+29.8); absentee owner mailing from elsewhere in Florida (+20); held 22 years (+12.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 61.89
+}
