@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avc7x052bfnz9__0998460000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "4301 BIRMINGHAM RD, JACKSONVILLE, 32207 already matched \"Transit infill\" and has changed.\n\nMatch score: 93 / 100\nWhy: 168 m from the water, 30 m to San Jose Blvd + Peachtree Cir (+57.7); held 47 years (+35.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: DENNO GALE E ET AL\nAssessed value: $115,129\nParcel: 0998460000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:06.673Z",
+      "id": "0mtgyycxd05o1qwc7",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:06.673Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 4301 BIRMINGHAM RD, JACKSONVILLE, 32207"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "0998460000R",
+  "propertySnapshot": {
+    "address": "4301 BIRMINGHAM RD, JACKSONVILLE, 32207",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32207",
+    "assessedValue": 115129,
+    "builtYear": 1948,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2764771,
+    "longitude": -81.650754,
+    "ownerName": "DENNO GALE E ET AL",
+    "ownerOccupied": true,
+    "propertyId": "0998460000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 47
+  },
+  "rationale": "168 m from the water, 30 m to San Jose Blvd + Peachtree Cir (+57.7); held 47 years (+35.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 92.82
+}
