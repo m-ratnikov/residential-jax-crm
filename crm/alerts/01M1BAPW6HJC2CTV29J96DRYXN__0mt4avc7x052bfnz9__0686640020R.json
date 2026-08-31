@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avc7x052bfnz9__0686640020R",
+  "kind": "new_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "5344 PALMER AVE, JACKSONVILLE, 32210 now matches your saved search \"Transit infill\".\n\nMatch score: 63 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 80 m from the water, 18 m to San Juan Ave + Lake Shore Blvd (+58.6); held 10 years (+4).\n\nOwner of record: L&Z PROPERTIES LLC\nAssessed value: $119,714\nParcel: 0686640020R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:21.693Z",
+      "id": "0mtgyyoiln9mhc3dd",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:21.693Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 5344 PALMER AVE, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "0686640020R",
+  "propertySnapshot": {
+    "address": "5344 PALMER AVE, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 119714,
+    "builtYear": 1944,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2809965,
+    "longitude": -81.7381265,
+    "ownerName": "L&Z PROPERTIES LLC",
+    "ownerOccupied": false,
+    "propertyId": "0686640020R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 46,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of Jacksonville rivers (COJ Jax_River) 80 m from the water, 18 m to San Juan Ave + Lake Shore Blvd (+58.6); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 62.63
+}
