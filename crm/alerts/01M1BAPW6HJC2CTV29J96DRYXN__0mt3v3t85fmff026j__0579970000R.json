@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt3v3t85fmff026j__0579970000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "2721 LOWELL AVE, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 96 / 100\nWhy: assessed at $80,374 (+49.9); roof about 84 years old, estimated from year built (+46.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SMITH JUSTIN\nAssessed value: $80,374\nParcel: 0579970000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:22:04.958Z",
+      "id": "0mtgyzlwe8fnoojgp",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:22:04.958Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2721 LOWELL AVE, JACKSONVILLE, 32254"
+    },
+    {
+      "body": "2721 LOWELL AVE, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 96 / 100\nWhy: assessed at $80,374 (+49.9); roof about 84 years old, estimated from year built (+46.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SMITH JUSTIN\nAssessed value: $80,374\nParcel: 0579970000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T08:22:04.958Z",
+      "id": "0mtgyzlweuyi2fpr6",
+      "providerMessageId": "sim_email_f1494f6be9759e63329a",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T08:22:04.958Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2721 LOWELL AVE, JACKSONVILLE, 32254"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "0579970000R",
+  "propertySnapshot": {
+    "address": "2721 LOWELL AVE, JACKSONVILLE, 32254",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32254",
+    "assessedValue": 80374,
+    "builtYear": 1942,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3350228,
+    "longitude": -81.7127689,
+    "ownerName": "SMITH JUSTIN",
+    "ownerOccupied": false,
+    "propertyId": "0579970000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 84,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 18
+  },
+  "rationale": "assessed at $80,374 (+49.9); roof about 84 years old, estimated from year built (+46.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 96.05
+}
