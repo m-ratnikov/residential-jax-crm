@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avamhp8iakx36__1628830168R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "405 ABINGDON PL 83, JACKSONVILLE, 32225 already matched \"Tired landlord\" and has changed.\n\nMatch score: 66 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 53 years old, estimated from year built (+22.7); held 26 years (+15).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LEWIN LAWRENCE J\nAssessed value: $138,000\nParcel: 1628830168R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:41.455Z",
+      "id": "0mtgyz3rjvwp17fo4",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:41.455Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 405 ABINGDON PL 83, JACKSONVILLE, 32225"
+    },
+    {
+      "body": "405 ABINGDON PL 83, JACKSONVILLE, 32225 already matched \"Tired landlord\" and has changed.\n\nMatch score: 66 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 53 years old, estimated from year built (+22.7); held 26 years (+15).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LEWIN LAWRENCE J\nAssessed value: $138,000\nParcel: 1628830168R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T08:21:41.455Z",
+      "id": "0mtgyz3rjqq7fdqyu",
+      "providerMessageId": "sim_email_98b91e99fac09db4a74f",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T08:21:41.455Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 405 ABINGDON PL 83, JACKSONVILLE, 32225"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "1628830168R",
+  "propertySnapshot": {
+    "address": "405 ABINGDON PL 83, JACKSONVILLE, 32225",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32225",
+    "assessedValue": 138000,
+    "builtYear": 1973,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3270457,
+    "longitude": -81.5422746,
+    "ownerName": "LEWIN LAWRENCE J",
+    "ownerOccupied": false,
+    "propertyId": "1628830168R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 53,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 26
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 53 years old, estimated from year built (+22.7); held 26 years (+15).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 66.04
+}
