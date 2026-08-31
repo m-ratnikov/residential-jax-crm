@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avc7x052bfnz9__0276340000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "3821 RIBAULT TER, JACKSONVILLE, 32208 now matches your saved search \"Transit infill\".\n\nMatch score: 62 / 100\nWhy: water view of St. Johns River 98 m from the water, 22 m to Ribault Scenic Dr + Elbert Ave (+58.4); held 10 years (+4).\n\nOwner of record: WEBB JANET\nAssessed value: $153,726\nParcel: 0276340000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:24.399Z",
+      "id": "0mtgyyqlrqd72inl7",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:24.399Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 3821 RIBAULT TER, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "0276340000R",
+  "propertySnapshot": {
+    "address": "3821 RIBAULT TER, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 153726,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3897762,
+    "longitude": -81.7106324,
+    "ownerName": "WEBB JANET",
+    "ownerOccupied": true,
+    "propertyId": "0276340000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of St. Johns River 98 m from the water, 22 m to Ribault Scenic Dr + Elbert Ave (+58.4); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 62.37
+}
