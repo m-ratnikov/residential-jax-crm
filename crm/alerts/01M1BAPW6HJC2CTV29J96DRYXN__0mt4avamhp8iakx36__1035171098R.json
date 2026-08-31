@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt4avamhp8iakx36__1035171098R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "5183 N BROKEN ARROW DR, JACKSONVILLE, 32244 already matched \"Tired landlord\" and has changed.\n\nMatch score: 63 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 45 years old, estimated from year built (+18.6); held 28 years (+16.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ACOSTA ALAN P\nAssessed value: $180,683\nParcel: 1035171098R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:21:46.310Z",
+      "id": "0mtgyz7iewyvmz49o",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:21:46.310Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 5183 N BROKEN ARROW DR, JACKSONVILLE, 32244"
+    },
+    {
+      "body": "5183 N BROKEN ARROW DR, JACKSONVILLE, 32244 already matched \"Tired landlord\" and has changed.\n\nMatch score: 63 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 45 years old, estimated from year built (+18.6); held 28 years (+16.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ACOSTA ALAN P\nAssessed value: $180,683\nParcel: 1035171098R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T08:21:46.310Z",
+      "id": "0mtgyz7ieu8jxlugt",
+      "providerMessageId": "sim_email_abe763f43f0176022e17",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T08:21:46.310Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 5183 N BROKEN ARROW DR, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "1035171098R",
+  "propertySnapshot": {
+    "address": "5183 N BROKEN ARROW DR, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 180683,
+    "builtYear": 1981,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2426121,
+    "longitude": -81.7168388,
+    "ownerName": "ACOSTA ALAN P",
+    "ownerOccupied": false,
+    "propertyId": "1035171098R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 45,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 28
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 45 years old, estimated from year built (+18.6); held 28 years (+16.4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 63.41
+}
