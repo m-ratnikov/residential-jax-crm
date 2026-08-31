@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-08-31T08:21:00.963Z",
+  "dismissedAt": null,
+  "id": "01M1BAPW6HJC2CTV29J96DRYXN__0mt3v3t85fmff026j__0081010000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtgyya2hvnqa49or",
+  "notifications": [
+    {
+      "body": "1204 E SKYE DR, JACKSONVILLE, 32221 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $80,019 (+50); roof about 67 years old, estimated from year built (+43.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SHELTON PATRICIA G\nAssessed value: $80,019\nParcel: 0081010000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-08-31T08:22:16.011Z",
+      "id": "0mtgyzuffpn9bpfql",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-08-31T08:22:16.011Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1204 E SKYE DR, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "1204 E SKYE DR, JACKSONVILLE, 32221 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $80,019 (+50); roof about 67 years old, estimated from year built (+43.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SHELTON PATRICIA G\nAssessed value: $80,019\nParcel: 0081010000R\n\nTriggered by pipeline run 01M1BAPW6HJC2CTV29J96DRYXN.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-08-31T08:22:16.011Z",
+      "id": "0mtgyzuffop25uwaq",
+      "providerMessageId": "sim_email_283bca7133a4d1a5cfad",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-08-31T08:22:16.011Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1204 E SKYE DR, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1BAPW6HJC2CTV29J96DRYXN",
+  "propertyId": "0081010000R",
+  "propertySnapshot": {
+    "address": "1204 E SKYE DR, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 80019,
+    "builtYear": 1959,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3008593,
+    "longitude": -81.7716406,
+    "ownerName": "SHELTON PATRICIA G",
+    "ownerOccupied": false,
+    "propertyId": "0081010000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1BAPW6HJC2CTV29J96DRYXN",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 67,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 38
+  },
+  "rationale": "assessed at $80,019 (+50); roof about 67 years old, estimated from year built (+43.7).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.74
+}
