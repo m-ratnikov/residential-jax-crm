@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-01T02:44:30.562Z",
+  "dismissedAt": null,
+  "id": "01M1D9NY4NGVB5YZH7RJX4D4TG__0mt4avc7x052bfnz9__1638720000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mti2ddx7qing65j4",
+  "notifications": [
+    {
+      "body": "11170 PATTON RD, JACKSONVILLE, 32246 already matched \"Transit infill\" and has changed.\n\nMatch score: 91 / 100\nWhy: 58 m to Beach Blvd + Cortez Rd (+55.7); held 48 years at most (the recorded sale predates the 1979 structure, so tenure is capped at the building's age) (+35.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SELVIG THOMAS A\nAssessed value: $138,805\nParcel: 1638720000R\n\nTriggered by pipeline run 01M1D9NY4NGVB5YZH7RJX4D4TG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T02:44:39.299Z",
+      "id": "0mti2diwzh7ot9l6j",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T02:44:39.299Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 11170 PATTON RD, JACKSONVILLE, 32246"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+  "propertyId": "1638720000R",
+  "propertySnapshot": {
+    "address": "11170 PATTON RD, JACKSONVILLE, 32246",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32246",
+    "assessedValue": 138805,
+    "builtYear": 1979,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2894751,
+    "longitude": -81.5297481,
+    "ownerName": "SELVIG THOMAS A",
+    "ownerOccupied": true,
+    "propertyId": "1638720000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 47,
+    "tenureCaveat": "the recorded sale predates the 1979 structure, so tenure is capped at the building's age for ranking",
+    "tenureConfidence": "PREDATES_STRUCTURE",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 49
+  },
+  "rationale": "58 m to Beach Blvd + Cortez Rd (+55.7); held 48 years at most (the recorded sale predates the 1979 structure, so tenure is capped at the building's age) (+35.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 90.96
+}
