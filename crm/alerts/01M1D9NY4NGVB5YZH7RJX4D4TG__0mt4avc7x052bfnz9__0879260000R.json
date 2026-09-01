@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-01T02:44:30.562Z",
+  "dismissedAt": null,
+  "id": "01M1D9NY4NGVB5YZH7RJX4D4TG__0mt4avc7x052bfnz9__0879260000R",
+  "kind": "new_match",
+  "matcherRunId": "0mti2ddx7qing65j4",
+  "notifications": [
+    {
+      "body": "4517 FAIRVIEW ST, JACKSONVILLE, 32206 now matches your saved search \"Transit infill\".\n\nMatch score: 57 / 100\nWhy: 1120 m from the water, 88 m to Pearl St. & Golfair Blvd. (+53.4); held 10 years (+4).\n\nOwner of record: FLOURNOY KELVIN\nAssessed value: $62,545\nParcel: 0879260000R\n\nTriggered by pipeline run 01M1D9NY4NGVB5YZH7RJX4D4TG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T02:44:55.300Z",
+      "id": "0mti2dv9g1298al8e",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T02:44:55.300Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4517 FAIRVIEW ST, JACKSONVILLE, 32206"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+  "propertyId": "0879260000R",
+  "propertySnapshot": {
+    "address": "4517 FAIRVIEW ST, JACKSONVILLE, 32206",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32206",
+    "assessedValue": 62545,
+    "builtYear": 1949,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3655139,
+    "longitude": -81.658239,
+    "ownerName": "FLOURNOY KELVIN",
+    "ownerOccupied": true,
+    "propertyId": "0879260000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 51,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "1120 m from the water, 88 m to Pearl St. & Golfair Blvd. (+53.4); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 57.38
+}
