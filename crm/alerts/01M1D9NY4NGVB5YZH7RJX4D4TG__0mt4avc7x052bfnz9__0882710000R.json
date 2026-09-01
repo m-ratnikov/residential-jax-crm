@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-01T02:44:30.562Z",
+  "dismissedAt": null,
+  "id": "01M1D9NY4NGVB5YZH7RJX4D4TG__0mt4avc7x052bfnz9__0882710000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mti2ddx7qing65j4",
+  "notifications": [
+    {
+      "body": "3830 LAURIE ST, JACKSONVILLE, 32206 already matched \"Transit infill\" and has changed.\n\nMatch score: 94 / 100\nWhy: 769 m from the water, 24 m to Golfair Blvd + Boulevard St. (+58.2); held 48 years (+35.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BYRD LEONA B/E\nAssessed value: $89,505\nParcel: 0882710000R\n\nTriggered by pipeline run 01M1D9NY4NGVB5YZH7RJX4D4TG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T02:44:36.885Z",
+      "id": "0mti2dh1x1txzqbea",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T02:44:36.885Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 3830 LAURIE ST, JACKSONVILLE, 32206"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+  "propertyId": "0882710000R",
+  "propertySnapshot": {
+    "address": "3830 LAURIE ST, JACKSONVILLE, 32206",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32206",
+    "assessedValue": 89505,
+    "builtYear": 1930,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.363267,
+    "longitude": -81.6616099,
+    "ownerName": "BYRD LEONA B/E",
+    "ownerOccupied": true,
+    "propertyId": "0882710000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 96,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 48
+  },
+  "rationale": "769 m from the water, 24 m to Golfair Blvd + Boulevard St. (+58.2); held 48 years (+35.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 93.52
+}
