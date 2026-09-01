@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-01T02:44:30.562Z",
+  "dismissedAt": null,
+  "id": "01M1D9NY4NGVB5YZH7RJX4D4TG__0mt4avamhp8iakx36__1178190000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mti2ddx7qing65j4",
+  "notifications": [
+    {
+      "body": "6145 S TERRY PARKER DR, JACKSONVILLE, 32211 already matched \"Tired landlord\" and has changed.\n\nMatch score: 72 / 100\nWhy: held 43 years (+27.4); roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GRAY JO ESTATE\nAssessed value: $139,764\nParcel: 1178190000R\n\nTriggered by pipeline run 01M1D9NY4NGVB5YZH7RJX4D4TG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T02:45:07.382Z",
+      "id": "0mti2e4l2uinfsij5",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T02:45:07.382Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 6145 S TERRY PARKER DR, JACKSONVILLE, 32211"
+    },
+    {
+      "body": "6145 S TERRY PARKER DR, JACKSONVILLE, 32211 already matched \"Tired landlord\" and has changed.\n\nMatch score: 72 / 100\nWhy: held 43 years (+27.4); roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GRAY JO ESTATE\nAssessed value: $139,764\nParcel: 1178190000R\n\nTriggered by pipeline run 01M1D9NY4NGVB5YZH7RJX4D4TG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-01T02:45:07.382Z",
+      "id": "0mti2e4l2wo19e59u",
+      "providerMessageId": "sim_email_570c0b05a6f94154cd63",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-01T02:45:07.382Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 6145 S TERRY PARKER DR, JACKSONVILLE, 32211"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+  "propertyId": "1178190000R",
+  "propertySnapshot": {
+    "address": "6145 S TERRY PARKER DR, JACKSONVILLE, 32211",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32211",
+    "assessedValue": 139764,
+    "builtYear": 1954,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3387065,
+    "longitude": -81.5932107,
+    "ownerName": "GRAY JO ESTATE",
+    "ownerOccupied": false,
+    "propertyId": "1178190000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 43
+  },
+  "rationale": "held 43 years (+27.4); roof about 56 years old, estimated from year built (+24.2); absentee owner mailing from elsewhere in Florida (+20).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 71.62
+}
