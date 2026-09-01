@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-01T02:44:30.562Z",
+  "dismissedAt": null,
+  "id": "01M1D9NY4NGVB5YZH7RJX4D4TG__0mt4avc7x052bfnz9__1490168068R",
+  "kind": "new_match",
+  "matcherRunId": "0mti2ddx7qing65j4",
+  "notifications": [
+    {
+      "body": "3815 MILLPOINT DR, JACKSONVILLE, 32257 now matches your saved search \"Transit infill\".\n\nMatch score: 61 / 100\nWhy: 38 m to St Augustine Rd + Kori Rd (+57.1); held 10 years (+4).\n\nOwner of record: BLUE DEBORAH LYN\nAssessed value: $271,444\nParcel: 1490168068R\n\nTriggered by pipeline run 01M1D9NY4NGVB5YZH7RJX4D4TG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T02:44:49.970Z",
+      "id": "0mti2dr5e3g8ox4h4",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T02:44:49.970Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 3815 MILLPOINT DR, JACKSONVILLE, 32257"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+  "propertyId": "1490168068R",
+  "propertySnapshot": {
+    "address": "3815 MILLPOINT DR, JACKSONVILLE, 32257",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32257",
+    "assessedValue": 271444,
+    "builtYear": 1987,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.1982816,
+    "longitude": -81.6158854,
+    "ownerName": "BLUE DEBORAH LYN",
+    "ownerOccupied": true,
+    "propertyId": "1490168068R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 39,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "38 m to St Augustine Rd + Kori Rd (+57.1); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 61.14
+}
