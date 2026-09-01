@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "lastSaleDate"
+  ],
+  "createdAt": "2026-09-01T13:37:17.279Z",
+  "dismissedAt": null,
+  "id": "01M1EH084RRNXN5EE7K1TA26BF__0mt3v3t85fmff026j__0037100020R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtipouzss4d9cqim",
+  "notifications": [
+    {
+      "body": "6233 BLUEBIRD RD, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $82,023 (+49.4); roof about 83 years old, estimated from year built (+46.1).\n\nChanged since the last pass: last sale date.\n\nOwner of record: 6233 BLUEBIRD LAND TRUST\nAssessed value: $82,023\nParcel: 0037100020R\n\nTriggered by pipeline run 01M1EH084RRNXN5EE7K1TA26BF.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T13:37:28.345Z",
+      "id": "0mtipp1y1gadun0uc",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T13:37:28.345Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6233 BLUEBIRD RD, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "6233 BLUEBIRD RD, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $82,023 (+49.4); roof about 83 years old, estimated from year built (+46.1).\n\nChanged since the last pass: last sale date.\n\nOwner of record: 6233 BLUEBIRD LAND TRUST\nAssessed value: $82,023\nParcel: 0037100020R\n\nTriggered by pipeline run 01M1EH084RRNXN5EE7K1TA26BF.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-01T13:37:28.345Z",
+      "id": "0mtipp1y1n2na77zs",
+      "providerMessageId": "sim_email_de9c7039de15001081f0",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-01T13:37:28.345Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6233 BLUEBIRD RD, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1EH084RRNXN5EE7K1TA26BF",
+  "propertyId": "0037100020R",
+  "propertySnapshot": {
+    "address": "6233 BLUEBIRD RD, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 82023,
+    "builtYear": 1943,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2025-01-17",
+    "latitude": 30.3911804,
+    "longitude": -81.7450048,
+    "ownerName": "6233 BLUEBIRD LAND TRUST",
+    "ownerOccupied": false,
+    "propertyId": "0037100020R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1EH084RRNXN5EE7K1TA26BF",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 83,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 1
+  },
+  "rationale": "assessed at $82,023 (+49.4); roof about 83 years old, estimated from year built (+46.1).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 95.48
+}
