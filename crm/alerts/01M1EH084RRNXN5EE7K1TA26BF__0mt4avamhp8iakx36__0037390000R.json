@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-01T13:37:17.279Z",
+  "dismissedAt": null,
+  "id": "01M1EH084RRNXN5EE7K1TA26BF__0mt4avamhp8iakx36__0037390000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtipouzss4d9cqim",
+  "notifications": [
+    {
+      "body": "7536 WARBLER RD, JACKSONVILLE, 32219 already matched \"Tired landlord\" and has changed.\n\nMatch score: 62 / 100\nWhy: roof about 57 years old, estimated from year built (+24.8); absentee owner mailing from elsewhere in Florida (+20); held 29 years (last sale 1997-08-30) (+17.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WRIGHT PEGGY A\nAssessed value: $56,852\nParcel: 0037390000R\n\nTriggered by pipeline run 01M1EH084RRNXN5EE7K1TA26BF.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T13:37:25.210Z",
+      "id": "0mtipoziy8b7r6itx",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T13:37:25.210Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 7536 WARBLER RD, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "7536 WARBLER RD, JACKSONVILLE, 32219 already matched \"Tired landlord\" and has changed.\n\nMatch score: 62 / 100\nWhy: roof about 57 years old, estimated from year built (+24.8); absentee owner mailing from elsewhere in Florida (+20); held 29 years (last sale 1997-08-30) (+17.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WRIGHT PEGGY A\nAssessed value: $56,852\nParcel: 0037390000R\n\nTriggered by pipeline run 01M1EH084RRNXN5EE7K1TA26BF.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-01T13:37:25.210Z",
+      "id": "0mtipoziysxbip1gf",
+      "providerMessageId": "sim_email_0f6b28a6588b496f8af9",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-01T13:37:25.210Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 7536 WARBLER RD, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1EH084RRNXN5EE7K1TA26BF",
+  "propertyId": "0037390000R",
+  "propertySnapshot": {
+    "address": "7536 WARBLER RD, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 56852,
+    "builtYear": 1969,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "1997-08-30",
+    "latitude": 30.3890817,
+    "longitude": -81.744264,
+    "ownerName": "WRIGHT PEGGY A",
+    "ownerOccupied": false,
+    "propertyId": "0037390000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1EH084RRNXN5EE7K1TA26BF",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 57,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 29
+  },
+  "rationale": "roof about 57 years old, estimated from year built (+24.8); absentee owner mailing from elsewhere in Florida (+20); held 29 years (last sale 1997-08-30) (+17.2).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 61.93
+}
