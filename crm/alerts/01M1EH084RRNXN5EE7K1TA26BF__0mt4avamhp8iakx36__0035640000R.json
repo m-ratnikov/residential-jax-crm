@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-01T13:37:17.279Z",
+  "dismissedAt": null,
+  "id": "01M1EH084RRNXN5EE7K1TA26BF__0mt4avamhp8iakx36__0035640000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtipouzss4d9cqim",
+  "notifications": [
+    {
+      "body": "6708 OLD KINGS RD, JACKSONVILLE, 32219 already matched \"Tired landlord\" and has changed.\n\nMatch score: 66 / 100\nWhy: roof about 94 years old, estimated from year built (+31.3); absentee owner mailing from elsewhere in Florida (+20); held 25 years (last sale 2001-01-02) (+14.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: BRIGHT STEPHEN A\nAssessed value: $214,744\nParcel: 0035640000R\n\nTriggered by pipeline run 01M1EH084RRNXN5EE7K1TA26BF.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T13:37:23.674Z",
+      "id": "0mtipoyca34tn8nks",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T13:37:23.674Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 6708 OLD KINGS RD, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "6708 OLD KINGS RD, JACKSONVILLE, 32219 already matched \"Tired landlord\" and has changed.\n\nMatch score: 66 / 100\nWhy: roof about 94 years old, estimated from year built (+31.3); absentee owner mailing from elsewhere in Florida (+20); held 25 years (last sale 2001-01-02) (+14.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: BRIGHT STEPHEN A\nAssessed value: $214,744\nParcel: 0035640000R\n\nTriggered by pipeline run 01M1EH084RRNXN5EE7K1TA26BF.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-01T13:37:23.674Z",
+      "id": "0mtipoyca4p0dmfk9",
+      "providerMessageId": "sim_email_179625ebaf47f5ae0d9c",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-01T13:37:23.674Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 6708 OLD KINGS RD, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1EH084RRNXN5EE7K1TA26BF",
+  "propertyId": "0035640000R",
+  "propertySnapshot": {
+    "address": "6708 OLD KINGS RD, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 214744,
+    "builtYear": 1932,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2001-01-02",
+    "latitude": 30.3775625,
+    "longitude": -81.7504933,
+    "ownerName": "BRIGHT STEPHEN A",
+    "ownerOccupied": false,
+    "propertyId": "0035640000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1EH084RRNXN5EE7K1TA26BF",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 94,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 25
+  },
+  "rationale": "roof about 94 years old, estimated from year built (+31.3); absentee owner mailing from elsewhere in Florida (+20); held 25 years (last sale 2001-01-02) (+14.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 65.51
+}
