@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-01T02:44:30.562Z",
+  "dismissedAt": null,
+  "id": "01M1D9NY4NGVB5YZH7RJX4D4TG__0mt4avamhp8iakx36__1173800000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mti2ddx7qing65j4",
+  "notifications": [
+    {
+      "body": "5865 WILTSHIRE ST, JACKSONVILLE, 32211 already matched \"Tired landlord\" and has changed.\n\nMatch score: 75 / 100\nWhy: roof about 72 years old, estimated from year built (+29.8); held 40 years (+25.2); absentee owner mailing from elsewhere in Florida (+20).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GRIMES KAREN P\nAssessed value: $109,910\nParcel: 1173800000R\n\nTriggered by pipeline run 01M1D9NY4NGVB5YZH7RJX4D4TG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-01T02:45:06.297Z",
+      "id": "0mti2e3qx0wwmn2qp",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-01T02:45:06.297Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 5865 WILTSHIRE ST, JACKSONVILLE, 32211"
+    },
+    {
+      "body": "5865 WILTSHIRE ST, JACKSONVILLE, 32211 already matched \"Tired landlord\" and has changed.\n\nMatch score: 75 / 100\nWhy: roof about 72 years old, estimated from year built (+29.8); held 40 years (+25.2); absentee owner mailing from elsewhere in Florida (+20).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GRIMES KAREN P\nAssessed value: $109,910\nParcel: 1173800000R\n\nTriggered by pipeline run 01M1D9NY4NGVB5YZH7RJX4D4TG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-01T02:45:06.297Z",
+      "id": "0mti2e3qxk78a8ynk",
+      "providerMessageId": "sim_email_33577007ea6a9ebfd50e",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-01T02:45:06.297Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 5865 WILTSHIRE ST, JACKSONVILLE, 32211"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+  "propertyId": "1173800000R",
+  "propertySnapshot": {
+    "address": "5865 WILTSHIRE ST, JACKSONVILLE, 32211",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32211",
+    "assessedValue": 109910,
+    "builtYear": 1954,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.338926,
+    "longitude": -81.5987124,
+    "ownerName": "GRIMES KAREN P",
+    "ownerOccupied": false,
+    "propertyId": "1173800000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1D9NY4NGVB5YZH7RJX4D4TG",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 72,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 40
+  },
+  "rationale": "roof about 72 years old, estimated from year built (+29.8); held 40 years (+25.2); absentee owner mailing from elsewhere in Florida (+20).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 75.01
+}
