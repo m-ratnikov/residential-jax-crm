@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-02T02:35:06.823Z",
+  "dismissedAt": null,
+  "id": "01M1FVCN3QVFK3TFTP94GKG6Q7__0mt4avc7x052bfnz9__0455250000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtjhh5bq3gfi3s3w",
+  "notifications": [
+    {
+      "body": "2826 NEPTUNE AVE, JACKSONVILLE, 32206 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: 78 m to 21st St + Saturn Ave (+54.2); held 45 years (+34.6).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: HARRIS ALTHEA ELAINE ET AL\nAssessed value: $83,521\nParcel: 0455250000R\n\nTriggered by pipeline run 01M1FVCN3QVFK3TFTP94GKG6Q7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-02T02:35:18.525Z",
+      "id": "0mtjhhcvxcr06acqp",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-02T02:35:18.525Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 2826 NEPTUNE AVE, JACKSONVILLE, 32206"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+  "propertyId": "0455250000R",
+  "propertySnapshot": {
+    "address": "2826 NEPTUNE AVE, JACKSONVILLE, 32206",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32206",
+    "assessedValue": 83521,
+    "builtYear": 1914,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3554492,
+    "longitude": -81.6635296,
+    "ownerName": "HARRIS ALTHEA ELAINE ET AL",
+    "ownerOccupied": false,
+    "propertyId": "0455250000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 82,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 45
+  },
+  "rationale": "78 m to 21st St + Saturn Ave (+54.2); held 45 years (+34.6).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 88.79
+}
