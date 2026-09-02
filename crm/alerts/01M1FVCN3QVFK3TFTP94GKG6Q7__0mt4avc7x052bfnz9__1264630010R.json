@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-02T02:35:06.823Z",
+  "dismissedAt": null,
+  "id": "01M1FVCN3QVFK3TFTP94GKG6Q7__0mt4avc7x052bfnz9__1264630010R",
+  "kind": "new_match",
+  "matcherRunId": "0mtjhh5bq3gfi3s3w",
+  "notifications": [
+    {
+      "body": "4237 MC ARTHUR ST, JACKSONVILLE, 32207 now matches your saved search \"Transit infill\".\n\nMatch score: 57 / 100\nWhy: 1630 m from the water, 99 m to 3871 Philips Hwy (+52.6); held 10 years (+4).\n\nOwner of record: AL ZAIDI HAIDAR\nAssessed value: $77,822\nParcel: 1264630010R\n\nTriggered by pipeline run 01M1FVCN3QVFK3TFTP94GKG6Q7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-02T02:35:26.266Z",
+      "id": "0mtjhhiuyx16rhkog",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-02T02:35:26.266Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4237 MC ARTHUR ST, JACKSONVILLE, 32207"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+  "propertyId": "1264630010R",
+  "propertySnapshot": {
+    "address": "4237 MC ARTHUR ST, JACKSONVILLE, 32207",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32207",
+    "assessedValue": 77822,
+    "builtYear": 1950,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2789621,
+    "longitude": -81.631593,
+    "ownerName": "AL ZAIDI HAIDAR",
+    "ownerOccupied": false,
+    "propertyId": "1264630010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 76,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "1630 m from the water, 99 m to 3871 Philips Hwy (+52.6); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 56.61
+}
