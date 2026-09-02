@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-02T02:35:06.823Z",
+  "dismissedAt": null,
+  "id": "01M1FVCN3QVFK3TFTP94GKG6Q7__0mt4avc7x052bfnz9__0515220000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtjhh5bq3gfi3s3w",
+  "notifications": [
+    {
+      "body": "2011 W 11TH ST, JACKSONVILLE, 32209 already matched \"Transit infill\" and has changed.\n\nMatch score: 94 / 100\nWhy: 34 m to 13th St + Palafox St (+57.5); held 54 years (+36.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: MANUEL EDDIE ESTATE\nAssessed value: $52,762\nParcel: 0515220000R\n\nTriggered by pipeline run 01M1FVCN3QVFK3TFTP94GKG6Q7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-02T02:35:10.988Z",
+      "id": "0mtjhh72khwnrev0q",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-02T02:35:10.988Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 2011 W 11TH ST, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+  "propertyId": "0515220000R",
+  "propertySnapshot": {
+    "address": "2011 W 11TH ST, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 52762,
+    "builtYear": 1953,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3500581,
+    "longitude": -81.6920235,
+    "ownerName": "MANUEL EDDIE ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "0515220000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 73,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 54
+  },
+  "rationale": "34 m to 13th St + Palafox St (+57.5); held 54 years (+36.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 93.76
+}
