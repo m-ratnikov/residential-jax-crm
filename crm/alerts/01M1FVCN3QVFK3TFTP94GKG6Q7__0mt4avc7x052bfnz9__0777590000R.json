@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-02T02:35:06.823Z",
+  "dismissedAt": null,
+  "id": "01M1FVCN3QVFK3TFTP94GKG6Q7__0mt4avc7x052bfnz9__0777590000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtjhh5bq3gfi3s3w",
+  "notifications": [
+    {
+      "body": "2825 SYDNEY ST, JACKSONVILLE, 32205 already matched \"Transit infill\" and has changed.\n\nMatch score: 90 / 100\nWhy: 172 m from the water, 76 m to Park St + Cherry St (+54.3); held 51 years (+35.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SEASHOLE CHARLES M\nAssessed value: $857,451\nParcel: 0777590000R\n\nTriggered by pipeline run 01M1FVCN3QVFK3TFTP94GKG6Q7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-02T02:35:13.450Z",
+      "id": "0mtjhh8yykneu4yai",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-02T02:35:13.450Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 2825 SYDNEY ST, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+  "propertyId": "0777590000R",
+  "propertySnapshot": {
+    "address": "2825 SYDNEY ST, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 857451,
+    "builtYear": 1926,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3096452,
+    "longitude": -81.6981446,
+    "ownerName": "SEASHOLE CHARLES M",
+    "ownerOccupied": false,
+    "propertyId": "0777590000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 26,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 51
+  },
+  "rationale": "172 m from the water, 76 m to Park St + Cherry St (+54.3); held 51 years (+35.8).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 90.16
+}
