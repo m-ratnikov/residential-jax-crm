@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-02T02:35:06.823Z",
+  "dismissedAt": null,
+  "id": "01M1FVCN3QVFK3TFTP94GKG6Q7__0mt4avc7x052bfnz9__1648200000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtjhh5bq3gfi3s3w",
+  "notifications": [
+    {
+      "body": "1829 LEON RD, JACKSONVILLE, 32246 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: 89 m to Atlantic Blvd + Leon Rd (+53.3); held 50 years (+35.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BEVERLEY SHIRLEY ESTATE\nAssessed value: $188,203\nParcel: 1648200000R\n\nTriggered by pipeline run 01M1FVCN3QVFK3TFTP94GKG6Q7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-02T02:35:17.658Z",
+      "id": "0mtjhhc7u8g70sq2j",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-02T02:35:17.658Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 1829 LEON RD, JACKSONVILLE, 32246"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+  "propertyId": "1648200000R",
+  "propertySnapshot": {
+    "address": "1829 LEON RD, JACKSONVILLE, 32246",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32246",
+    "assessedValue": 188203,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3179857,
+    "longitude": -81.53744,
+    "ownerName": "BEVERLEY SHIRLEY ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "1648200000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 50
+  },
+  "rationale": "89 m to Atlantic Blvd + Leon Rd (+53.3); held 50 years (+35.7).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 89.01
+}
