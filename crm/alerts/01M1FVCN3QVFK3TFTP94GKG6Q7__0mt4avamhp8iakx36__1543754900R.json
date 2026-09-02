@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-02T02:35:06.823Z",
+  "dismissedAt": null,
+  "id": "01M1FVCN3QVFK3TFTP94GKG6Q7__0mt4avamhp8iakx36__1543754900R",
+  "kind": "new_match",
+  "matcherRunId": "0mtjhh5bq3gfi3s3w",
+  "notifications": [
+    {
+      "body": "4199 HIGHWOOD DR, JACKSONVILLE, 32216 now matches your saved search \"Tired landlord\".\n\nMatch score: 30 / 100\nWhy: absentee owner mailing from elsewhere in Florida (+20); roof about 21 years old, estimated from year built (+6.4); held 10 years (+3.3).\n\nOwner of record: PIXIE DUST LLC\nAssessed value: $251,699\nParcel: 1543754900R\n\nTriggered by pipeline run 01M1FVCN3QVFK3TFTP94GKG6Q7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-02T02:35:42.967Z",
+      "id": "0mtjhhvqvg11vrbcx",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-02T02:35:42.967Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 4199 HIGHWOOD DR, JACKSONVILLE, 32216"
+    },
+    {
+      "body": "4199 HIGHWOOD DR, JACKSONVILLE, 32216 now matches your saved search \"Tired landlord\".\n\nMatch score: 30 / 100\nWhy: absentee owner mailing from elsewhere in Florida (+20); roof about 21 years old, estimated from year built (+6.4); held 10 years (+3.3).\n\nOwner of record: PIXIE DUST LLC\nAssessed value: $251,699\nParcel: 1543754900R\n\nTriggered by pipeline run 01M1FVCN3QVFK3TFTP94GKG6Q7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-02T02:35:42.968Z",
+      "id": "0mtjhhvqwqebr9k2m",
+      "providerMessageId": "sim_email_83e296a2b1a83c5e1d61",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-02T02:35:42.968Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 4199 HIGHWOOD DR, JACKSONVILLE, 32216"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+  "propertyId": "1543754900R",
+  "propertySnapshot": {
+    "address": "4199 HIGHWOOD DR, JACKSONVILLE, 32216",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32216",
+    "assessedValue": 251699,
+    "builtYear": 2005,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2518796,
+    "longitude": -81.5690274,
+    "ownerName": "PIXIE DUST LLC",
+    "ownerOccupied": false,
+    "propertyId": "1543754900R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1FVCN3QVFK3TFTP94GKG6Q7",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 21,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "absentee owner mailing from elsewhere in Florida (+20); roof about 21 years old, estimated from year built (+6.4); held 10 years (+3.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 29.73
+}
