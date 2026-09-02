@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-02T19:35:43.266Z",
+  "dismissedAt": null,
+  "id": "01M1HQMPMPQM1DWXZ229FZ5YZV__0mt3v3t85fmff026j__0038250000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtkhxo1tpe7wo57v",
+  "notifications": [
+    {
+      "body": "7111 THIEN ST, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: roof about 100 years old, estimated from year built (+47.2); assessed at $90,475 (+46.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: COOK VICKIE\nAssessed value: $90,475\nParcel: 0038250000R\n\nTriggered by pipeline run 01M1HQMPMPQM1DWXZ229FZ5YZV.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-02T19:35:52.074Z",
+      "id": "0mtkhxszutujzza7z",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-02T19:35:52.074Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7111 THIEN ST, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "7111 THIEN ST, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: roof about 100 years old, estimated from year built (+47.2); assessed at $90,475 (+46.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: COOK VICKIE\nAssessed value: $90,475\nParcel: 0038250000R\n\nTriggered by pipeline run 01M1HQMPMPQM1DWXZ229FZ5YZV.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-02T19:35:52.074Z",
+      "id": "0mtkhxszurga8qc4e",
+      "providerMessageId": "sim_email_b513b359b41ff80b220f",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-02T19:35:52.074Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7111 THIEN ST, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1HQMPMPQM1DWXZ229FZ5YZV",
+  "propertyId": "0038250000R",
+  "propertySnapshot": {
+    "address": "7111 THIEN ST, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 90475,
+    "builtYear": 1926,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "2020-11-11",
+    "latitude": 30.4383093,
+    "longitude": -81.7676479,
+    "ownerName": "COOK VICKIE",
+    "ownerOccupied": true,
+    "propertyId": "0038250000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1HQMPMPQM1DWXZ229FZ5YZV",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 100,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 5
+  },
+  "rationale": "roof about 100 years old, estimated from year built (+47.2); assessed at $90,475 (+46.9).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.11
+}
