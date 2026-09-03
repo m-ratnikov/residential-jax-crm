@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-03T01:54:53.063Z",
+  "dismissedAt": null,
+  "id": "01M1JDYWCHYCPFMGHXP9JD29VC__0mt3v3t85fmff026j__0038870000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtkvh9pniatrswz8",
+  "notifications": [
+    {
+      "body": "6738 BOWIE RD, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $81,756 (+49.5); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: GOMEZ JUSTO ANGELES ET AL\nAssessed value: $81,756\nParcel: 0038870000R\n\nTriggered by pipeline run 01M1JDYWCHYCPFMGHXP9JD29VC.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-03T01:55:27.715Z",
+      "id": "0mtkvhysjf7ga7pej",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-03T01:55:27.715Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6738 BOWIE RD, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "6738 BOWIE RD, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $81,756 (+49.5); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: GOMEZ JUSTO ANGELES ET AL\nAssessed value: $81,756\nParcel: 0038870000R\n\nTriggered by pipeline run 01M1JDYWCHYCPFMGHXP9JD29VC.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-03T01:55:27.715Z",
+      "id": "0mtkvhysjzdffa4rb",
+      "providerMessageId": "sim_email_8a05d310d2bc0bd9bb25",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-03T01:55:27.715Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6738 BOWIE RD, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1JDYWCHYCPFMGHXP9JD29VC",
+  "propertyId": "0038870000R",
+  "propertySnapshot": {
+    "address": "6738 BOWIE RD, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 81756,
+    "builtYear": 1950,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2024-07-25",
+    "latitude": 30.4299981,
+    "longitude": -81.7563362,
+    "ownerName": "GOMEZ JUSTO ANGELES ET AL",
+    "ownerOccupied": false,
+    "propertyId": "0038870000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1JDYWCHYCPFMGHXP9JD29VC",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 76,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 2
+  },
+  "rationale": "assessed at $81,756 (+49.5); roof about 76 years old, estimated from year built (+45.3).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.8
+}
