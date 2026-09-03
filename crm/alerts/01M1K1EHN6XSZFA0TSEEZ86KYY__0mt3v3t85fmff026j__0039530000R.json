@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "lastSaleDate"
+  ],
+  "createdAt": "2026-09-03T07:39:27.214Z",
+  "dismissedAt": null,
+  "id": "01M1K1EHN6XSZFA0TSEEZ86KYY__0mt3v3t85fmff026j__0039530000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtl7sie3rxxcixdp",
+  "notifications": [
+    {
+      "body": "7054 GARDEN ST, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $85,429 (+48.4); roof about 84 years old, estimated from year built (+46.2).\n\nChanged since the last pass: last sale date.\n\nOwner of record: JANKO WANDA L ESTATE\nAssessed value: $85,429\nParcel: 0039530000R\n\nTriggered by pipeline run 01M1K1EHN6XSZFA0TSEEZ86KYY.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-03T07:39:43.511Z",
+      "id": "0mtl7sownasusjypc",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-03T07:39:43.511Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7054 GARDEN ST, JACKSONVILLE, 32219"
+    },
+    {
+      "body": "7054 GARDEN ST, JACKSONVILLE, 32219 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $85,429 (+48.4); roof about 84 years old, estimated from year built (+46.2).\n\nChanged since the last pass: last sale date.\n\nOwner of record: JANKO WANDA L ESTATE\nAssessed value: $85,429\nParcel: 0039530000R\n\nTriggered by pipeline run 01M1K1EHN6XSZFA0TSEEZ86KYY.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-03T07:39:43.511Z",
+      "id": "0mtl7sown4rc5w8ji",
+      "providerMessageId": "sim_email_3b6e9324abc6ac5c8c53",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-03T07:39:43.511Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7054 GARDEN ST, JACKSONVILLE, 32219"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1K1EHN6XSZFA0TSEEZ86KYY",
+  "propertyId": "0039530000R",
+  "propertySnapshot": {
+    "address": "7054 GARDEN ST, JACKSONVILLE, 32219",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32219",
+    "assessedValue": 85429,
+    "builtYear": 1942,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2026-04-09",
+    "latitude": 30.4153563,
+    "longitude": -81.7645638,
+    "ownerName": "JANKO WANDA L ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "0039530000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1K1EHN6XSZFA0TSEEZ86KYY",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 84,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 0
+  },
+  "rationale": "assessed at $85,429 (+48.4); roof about 84 years old, estimated from year built (+46.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.57
+}
