@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-03T01:54:53.063Z",
+  "dismissedAt": null,
+  "id": "01M1JDYWCHYCPFMGHXP9JD29VC__0mt4avc7x052bfnz9__1005520240R",
+  "kind": "new_match",
+  "matcherRunId": "0mtkvh9pniatrswz8",
+  "notifications": [
+    {
+      "body": "4358 TIMUQUANA RD 193, JACKSONVILLE, 32210 now matches your saved search \"Transit infill\".\n\nMatch score: 55 / 100\nWhy: water view of St. Johns River 118 m from the water, 115 m to 6017 Roosevelt Blvd (+51.4); held 10 years (+4).\n\nOwner of record: GIESCHEN NICHOLAS H JR\nAssessed value: $102,265\nParcel: 1005520240R\n\nTriggered by pipeline run 01M1JDYWCHYCPFMGHXP9JD29VC.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-03T01:55:07.083Z",
+      "id": "0mtkvhivf70e7jn6o",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-03T01:55:07.083Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4358 TIMUQUANA RD 193, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1JDYWCHYCPFMGHXP9JD29VC",
+  "propertyId": "1005520240R",
+  "propertySnapshot": {
+    "address": "4358 TIMUQUANA RD 193, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 102265,
+    "builtYear": 1970,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2462415,
+    "longitude": -81.6956149,
+    "ownerName": "GIESCHEN NICHOLAS H JR",
+    "ownerOccupied": false,
+    "propertyId": "1005520240R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1JDYWCHYCPFMGHXP9JD29VC",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of St. Johns River 118 m from the water, 115 m to 6017 Roosevelt Blvd (+51.4); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 55.36
+}
