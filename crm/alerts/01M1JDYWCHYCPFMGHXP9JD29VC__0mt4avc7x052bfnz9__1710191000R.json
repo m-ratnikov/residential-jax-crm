@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-03T01:54:53.063Z",
+  "dismissedAt": null,
+  "id": "01M1JDYWCHYCPFMGHXP9JD29VC__0mt4avc7x052bfnz9__1710191000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtkvh9pniatrswz8",
+  "notifications": [
+    {
+      "body": "1223 JASMINE ST, ATLANTIC BEACH, 32233 now matches your saved search \"Transit infill\".\n\nMatch score: 28 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 114 m from the water, 483 m to Atlantic Blvd + Mayport Rd (+23.8); held 10 years (+4).\n\nOwner of record: LYNN JONATHAN T\nAssessed value: $242,615\nParcel: 1710191000R\n\nTriggered by pipeline run 01M1JDYWCHYCPFMGHXP9JD29VC.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-03T01:55:18.292Z",
+      "id": "0mtkvhrisddcj8hiu",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-03T01:55:18.292Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 1223 JASMINE ST, ATLANTIC BEACH, 32233"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1JDYWCHYCPFMGHXP9JD29VC",
+  "propertyId": "1710191000R",
+  "propertySnapshot": {
+    "address": "1223 JASMINE ST, ATLANTIC BEACH, 32233",
+    "addressCity": "ATLANTIC BEACH",
+    "addressZip": "32233",
+    "assessedValue": 242615,
+    "builtYear": 1983,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3338418,
+    "longitude": -81.4230676,
+    "ownerName": "LYNN JONATHAN T",
+    "ownerOccupied": false,
+    "propertyId": "1710191000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1JDYWCHYCPFMGHXP9JD29VC",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 43,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of Jacksonville rivers (COJ Jax_River) 114 m from the water, 483 m to Atlantic Blvd + Mayport Rd (+23.8); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 27.76
+}
