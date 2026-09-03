@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-03T01:54:53.063Z",
+  "dismissedAt": null,
+  "id": "01M1JDYWCHYCPFMGHXP9JD29VC__0mt4avc7x052bfnz9__1010210000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtkvh9pniatrswz8",
+  "notifications": [
+    {
+      "body": "4729 WATER OAK LN, JACKSONVILLE, 32210 now matches your saved search \"Transit infill\".\n\nMatch score: 47 / 100\nWhy: water view of St. Johns River 36 m from the water, 225 m to Timuquana Rd + Stark Rd (+43.2); held 10 years (+4).\n\nOwner of record: HAWKINS KENNETH\nAssessed value: $328,849\nParcel: 1010210000R\n\nTriggered by pipeline run 01M1JDYWCHYCPFMGHXP9JD29VC.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-03T01:55:14.876Z",
+      "id": "0mtkvhovwlcyg9s2h",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-03T01:55:14.876Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4729 WATER OAK LN, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1JDYWCHYCPFMGHXP9JD29VC",
+  "propertyId": "1010210000R",
+  "propertySnapshot": {
+    "address": "4729 WATER OAK LN, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 328849,
+    "builtYear": 1957,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2615215,
+    "longitude": -81.7038404,
+    "ownerName": "HAWKINS KENNETH",
+    "ownerOccupied": true,
+    "propertyId": "1010210000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1JDYWCHYCPFMGHXP9JD29VC",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of St. Johns River 36 m from the water, 225 m to Timuquana Rd + Stark Rd (+43.2); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 47.16
+}
