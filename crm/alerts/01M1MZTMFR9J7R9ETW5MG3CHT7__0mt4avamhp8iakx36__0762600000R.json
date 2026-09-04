@@ -2,31 +2,31 @@
   "changedFields": [
     "yearsSinceLastSale"
   ],
-  "createdAt": "2026-09-04T01:44:34.483Z",
+  "createdAt": "2026-09-04T06:51:06.074Z",
   "dismissedAt": null,
   "id": "01M1MZTMFR9J7R9ETW5MG3CHT7__0mt4avamhp8iakx36__0762600000R",
   "kind": "updated_match",
-  "matcherRunId": "0mtmajvbwh88zqoos",
+  "matcherRunId": "0mtmli2qjp4ypf2d8",
   "notifications": [
     {
       "body": "1524 W 2ND ST, JACKSONVILLE, 32209 already matched \"Tired landlord\" and has changed.\n\nMatch score: 69 / 100\nWhy: roof about 78 years old, estimated from year built (+30.4); absentee owner mailing from out of state (+28.3); held 19 years (+9.9).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CORMIER ROY P JR\nAssessed value: $46,985\nParcel: 0762600000R\n\nTriggered by pipeline run 01M1MZTMFR9J7R9ETW5MG3CHT7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
       "channel": "in_app",
-      "createdAt": "2026-09-04T01:44:46.394Z",
-      "id": "0mtmak2m2hvid4n24",
+      "createdAt": "2026-09-04T06:51:11.861Z",
+      "id": "0mtmli4xhm6tsyu4e",
       "providerMessageId": null,
       "recipient": null,
-      "sentAt": "2026-09-04T01:44:46.394Z",
+      "sentAt": "2026-09-04T06:51:11.861Z",
       "status": "delivered",
       "subject": "Updated match for \"Tired landlord\": 1524 W 2ND ST, JACKSONVILLE, 32209"
     },
     {
       "body": "1524 W 2ND ST, JACKSONVILLE, 32209 already matched \"Tired landlord\" and has changed.\n\nMatch score: 69 / 100\nWhy: roof about 78 years old, estimated from year built (+30.4); absentee owner mailing from out of state (+28.3); held 19 years (+9.9).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: CORMIER ROY P JR\nAssessed value: $46,985\nParcel: 0762600000R\n\nTriggered by pipeline run 01M1MZTMFR9J7R9ETW5MG3CHT7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
       "channel": "email",
-      "createdAt": "2026-09-04T01:44:46.394Z",
-      "id": "0mtmak2m2sdij8gx0",
+      "createdAt": "2026-09-04T06:51:11.861Z",
+      "id": "0mtmli4xhqhotiwir",
       "providerMessageId": "sim_email_827a7d38291de38095e0",
       "recipient": "acquisitions@example.invalid",
-      "sentAt": "2026-09-04T01:44:46.394Z",
+      "sentAt": "2026-09-04T06:51:11.861Z",
       "status": "sent",
       "subject": "Updated match for \"Tired landlord\": 1524 W 2ND ST, JACKSONVILLE, 32209"
     }
