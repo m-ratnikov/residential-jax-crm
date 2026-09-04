@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-04T07:38:54.971Z",
+  "dismissedAt": null,
+  "id": "01M1NKND1QCJ4NBBXZG77E1TBE__0mt3v3t85fmff026j__0356560000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtmn7kvkl329jlql",
+  "notifications": [
+    {
+      "body": "6434 TERESA AVE, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $84,530 (+48.7); roof about 78 years old, estimated from year built (+45.6).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GOGGINS ALPHONSO\nAssessed value: $84,530\nParcel: 0356560000R\n\nTriggered by pipeline run 01M1NKND1QCJ4NBBXZG77E1TBE.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-04T07:39:24.751Z",
+      "id": "0mtmn853ji6klewvc",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-04T07:39:24.751Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6434 TERESA AVE, JACKSONVILLE, 32208"
+    },
+    {
+      "body": "6434 TERESA AVE, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $84,530 (+48.7); roof about 78 years old, estimated from year built (+45.6).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GOGGINS ALPHONSO\nAssessed value: $84,530\nParcel: 0356560000R\n\nTriggered by pipeline run 01M1NKND1QCJ4NBBXZG77E1TBE.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-04T07:39:24.751Z",
+      "id": "0mtmn853jjqzjuyjy",
+      "providerMessageId": "sim_email_a356ab37e1c0b82e0dc2",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-04T07:39:24.751Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6434 TERESA AVE, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1NKND1QCJ4NBBXZG77E1TBE",
+  "propertyId": "0356560000R",
+  "propertySnapshot": {
+    "address": "6434 TERESA AVE, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 84530,
+    "builtYear": 1948,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3781634,
+    "longitude": -81.6596129,
+    "ownerName": "GOGGINS ALPHONSO",
+    "ownerOccupied": true,
+    "propertyId": "0356560000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1NKND1QCJ4NBBXZG77E1TBE",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 78,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 41
+  },
+  "rationale": "assessed at $84,530 (+48.7); roof about 78 years old, estimated from year built (+45.6).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.23
+}
