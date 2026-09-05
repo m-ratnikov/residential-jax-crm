@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-05T15:10:51.677Z",
+  "dismissedAt": null,
+  "id": "01M1RSHZZGRQEKSQQAHXJVZCCX__0mt4avc7x052bfnz9__0172710000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtoism07mlsnohi9",
+  "notifications": [
+    {
+      "body": "6722 MILLER ST, JACKSONVILLE, 32210 already matched \"Transit infill\" and has changed.\n\nMatch score: 92 / 100\nWhy: 1098 m from the water, 56 m to Wilson Blvd + McGregor Dr (+55.8); held 53 years (+36.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: TAYLOR MELBA L\nAssessed value: $67,817\nParcel: 0172710000R\n\nTriggered by pipeline run 01M1RSHZZGRQEKSQQAHXJVZCCX.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-05T15:10:56.579Z",
+      "id": "0mtoisnybyx9u5x9q",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-05T15:10:56.579Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 6722 MILLER ST, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1RSHZZGRQEKSQQAHXJVZCCX",
+  "propertyId": "0172710000R",
+  "propertySnapshot": {
+    "address": "6722 MILLER ST, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 67817,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2690631,
+    "longitude": -81.7541817,
+    "ownerName": "TAYLOR MELBA L",
+    "ownerOccupied": true,
+    "propertyId": "0172710000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1RSHZZGRQEKSQQAHXJVZCCX",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 53
+  },
+  "rationale": "1098 m from the water, 56 m to Wilson Blvd + McGregor Dr (+55.8); held 53 years (+36.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 91.94
+}
