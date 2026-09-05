@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-05T14:35:43.945Z",
+  "dismissedAt": null,
+  "id": "01M1PWANP8TM8760RH5QPT0WAP__0mt4avamhp8iakx36__1148340000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtohjfpgbruozfy3",
+  "notifications": [
+    {
+      "body": "1517 SPEARING ST, JACKSONVILLE, 32206 already matched \"Tired landlord\" and has changed.\n\nMatch score: 70 / 100\nWhy: roof about 69 years old, estimated from year built (+29.5); held 33 years (+20.1); absentee owner mailing from elsewhere in Florida (+20).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ROBBINS SAMUEL\nAssessed value: $52,273\nParcel: 1148340000R\n\nTriggered by pipeline run 01M1PWANP8TM8760RH5QPT0WAP.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-05T14:35:55.184Z",
+      "id": "0mtohjmi8u0rxi9sq",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-05T14:35:55.184Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 1517 SPEARING ST, JACKSONVILLE, 32206"
+    },
+    {
+      "body": "1517 SPEARING ST, JACKSONVILLE, 32206 already matched \"Tired landlord\" and has changed.\n\nMatch score: 70 / 100\nWhy: roof about 69 years old, estimated from year built (+29.5); held 33 years (+20.1); absentee owner mailing from elsewhere in Florida (+20).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ROBBINS SAMUEL\nAssessed value: $52,273\nParcel: 1148340000R\n\nTriggered by pipeline run 01M1PWANP8TM8760RH5QPT0WAP.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-05T14:35:55.184Z",
+      "id": "0mtohjmi8vnk2cyoq",
+      "providerMessageId": "sim_email_3c5307021326f7f817ac",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-05T14:35:55.184Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 1517 SPEARING ST, JACKSONVILLE, 32206"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1PWANP8TM8760RH5QPT0WAP",
+  "propertyId": "1148340000R",
+  "propertySnapshot": {
+    "address": "1517 SPEARING ST, JACKSONVILLE, 32206",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32206",
+    "assessedValue": 52273,
+    "builtYear": 1957,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3424031,
+    "longitude": -81.6438603,
+    "ownerName": "ROBBINS SAMUEL",
+    "ownerOccupied": false,
+    "propertyId": "1148340000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1PWANP8TM8760RH5QPT0WAP",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 69,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 33
+  },
+  "rationale": "roof about 69 years old, estimated from year built (+29.5); held 33 years (+20.1); absentee owner mailing from elsewhere in Florida (+20).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 69.54
+}
