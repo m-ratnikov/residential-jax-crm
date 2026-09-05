@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-05T15:10:51.677Z",
+  "dismissedAt": null,
+  "id": "01M1RSHZZGRQEKSQQAHXJVZCCX__0mt4avc7x052bfnz9__0638540000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtoism07mlsnohi9",
+  "notifications": [
+    {
+      "body": "607 CENTER ST, JACKSONVILLE, 32205 already matched \"Transit infill\" and has changed.\n\nMatch score: 93 / 100\nWhy: water view of St. Johns River 78 m from the water, 47 m to Edison Ave + Sunshine St (+56.5); held 52 years (+36).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SMITH ROBERT L\nAssessed value: $142,024\nParcel: 0638540000R\n\nTriggered by pipeline run 01M1RSHZZGRQEKSQQAHXJVZCCX.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-05T15:10:55.194Z",
+      "id": "0mtoismvuilc5q9xx",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-05T15:10:55.194Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 607 CENTER ST, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1RSHZZGRQEKSQQAHXJVZCCX",
+  "propertyId": "0638540000R",
+  "propertySnapshot": {
+    "address": "607 CENTER ST, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 142024,
+    "builtYear": 1922,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3202569,
+    "longitude": -81.6996043,
+    "ownerName": "SMITH ROBERT L",
+    "ownerOccupied": false,
+    "propertyId": "0638540000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1RSHZZGRQEKSQQAHXJVZCCX",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 52
+  },
+  "rationale": "water view of St. Johns River 78 m from the water, 47 m to Edison Ave + Sunshine St (+56.5); held 52 years (+36).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 92.5
+}
