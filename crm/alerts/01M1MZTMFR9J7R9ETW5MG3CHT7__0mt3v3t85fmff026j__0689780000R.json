@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-05T07:35:37.468Z",
+  "dismissedAt": null,
+  "id": "01M1MZTMFR9J7R9ETW5MG3CHT7__0mt3v3t85fmff026j__0689780000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mto2j66l4gedb0uk",
+  "notifications": [
+    {
+      "body": "1574 HAMILTON ST, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $80,168 (+50); roof about 66 years old, estimated from year built (+43.5).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: HOWELL ANDREA ROBIN\nAssessed value: $80,168\nParcel: 0689780000R\n\nTriggered by pipeline run 01M1MZTMFR9J7R9ETW5MG3CHT7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-05T07:36:09.307Z",
+      "id": "0mto2jsyjd9n96gkr",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-05T07:36:09.307Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1574 HAMILTON ST, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "1574 HAMILTON ST, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $80,168 (+50); roof about 66 years old, estimated from year built (+43.5).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: HOWELL ANDREA ROBIN\nAssessed value: $80,168\nParcel: 0689780000R\n\nTriggered by pipeline run 01M1MZTMFR9J7R9ETW5MG3CHT7.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-05T07:36:09.307Z",
+      "id": "0mto2jsyj8pzbvo3h",
+      "providerMessageId": "sim_email_f839793ead3c95ab74fd",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-05T07:36:09.307Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1574 HAMILTON ST, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1MZTMFR9J7R9ETW5MG3CHT7",
+  "propertyId": "0689780000R",
+  "propertySnapshot": {
+    "address": "1574 HAMILTON ST, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 80168,
+    "builtYear": 1922,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.290806,
+    "longitude": -81.7222953,
+    "ownerName": "HOWELL ANDREA ROBIN",
+    "ownerOccupied": true,
+    "propertyId": "0689780000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1MZTMFR9J7R9ETW5MG3CHT7",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 7
+  },
+  "rationale": "assessed at $80,168 (+50); roof about 66 years old, estimated from year built (+43.5).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.46
+}
