@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-05T02:17:39.555Z",
+  "dismissedAt": null,
+  "id": "01M1QJJQKDGWX497609FRP7B58__0mt4avamhp8iakx36__1734990000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtnr69uuq3vez8tr",
+  "notifications": [
+    {
+      "body": "305 HOPKINS ST, NEPTUNE BEACH, 32266 already matched \"Tired landlord\" and has changed.\n\nMatch score: 58 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 41 years old, estimated from year built (+16.6); held 23 years (+12.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LANDERS JAMES J\nAssessed value: $451,977\nParcel: 1734990000R\n\nTriggered by pipeline run 01M1QJJQKDGWX497609FRP7B58.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-05T02:17:55.033Z",
+      "id": "0mtnr6jq16xzpr7we",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-05T02:17:55.033Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 305 HOPKINS ST, NEPTUNE BEACH, 32266"
+    },
+    {
+      "body": "305 HOPKINS ST, NEPTUNE BEACH, 32266 already matched \"Tired landlord\" and has changed.\n\nMatch score: 58 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 41 years old, estimated from year built (+16.6); held 23 years (+12.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LANDERS JAMES J\nAssessed value: $451,977\nParcel: 1734990000R\n\nTriggered by pipeline run 01M1QJJQKDGWX497609FRP7B58.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-05T02:17:55.033Z",
+      "id": "0mtnr6jq1h6muhzyv",
+      "providerMessageId": "sim_email_3ef52d32971d92876ec2",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-05T02:17:55.033Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 305 HOPKINS ST, NEPTUNE BEACH, 32266"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1QJJQKDGWX497609FRP7B58",
+  "propertyId": "1734990000R",
+  "propertySnapshot": {
+    "address": "305 HOPKINS ST, NEPTUNE BEACH, 32266",
+    "addressCity": "NEPTUNE BEACH",
+    "addressZip": "32266",
+    "assessedValue": 451977,
+    "builtYear": 1956,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3082802,
+    "longitude": -81.3961455,
+    "ownerName": "LANDERS JAMES J",
+    "ownerOccupied": false,
+    "propertyId": "1734990000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1QJJQKDGWX497609FRP7B58",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 41,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 23
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 41 years old, estimated from year built (+16.6); held 23 years (+12.8).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 57.73
+}
