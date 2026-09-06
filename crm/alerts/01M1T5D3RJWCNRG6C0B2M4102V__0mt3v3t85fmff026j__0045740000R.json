@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-06T06:20:09.433Z",
+  "dismissedAt": null,
+  "id": "01M1T5D3RJWCNRG6C0B2M4102V__0mt3v3t85fmff026j__0045740000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtpf9zcbmenl4nlb",
+  "notifications": [
+    {
+      "body": "2402 JONES RD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $81,259 (+49.6); roof about 69 years old, estimated from year built (+44.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: POTTS DEBORAH L\nAssessed value: $81,259\nParcel: 0045740000R\n\nTriggered by pipeline run 01M1T5D3RJWCNRG6C0B2M4102V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-06T06:20:21.027Z",
+      "id": "0mtpfa65fqyir4sui",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-06T06:20:21.027Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2402 JONES RD, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "2402 JONES RD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $81,259 (+49.6); roof about 69 years old, estimated from year built (+44.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: POTTS DEBORAH L\nAssessed value: $81,259\nParcel: 0045740000R\n\nTriggered by pipeline run 01M1T5D3RJWCNRG6C0B2M4102V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-06T06:20:21.027Z",
+      "id": "0mtpfa65fkhcp98r9",
+      "providerMessageId": "sim_email_84c1424437abc03ea3c7",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-06T06:20:21.027Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2402 JONES RD, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1T5D3RJWCNRG6C0B2M4102V",
+  "propertyId": "0045740000R",
+  "propertySnapshot": {
+    "address": "2402 JONES RD, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 81259,
+    "builtYear": 1957,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "1997-08-26",
+    "latitude": 30.3526297,
+    "longitude": -81.8072568,
+    "ownerName": "POTTS DEBORAH L",
+    "ownerOccupied": true,
+    "propertyId": "0045740000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1T5D3RJWCNRG6C0B2M4102V",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 69,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 29
+  },
+  "rationale": "assessed at $81,259 (+49.6); roof about 69 years old, estimated from year built (+44.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.81
+}
