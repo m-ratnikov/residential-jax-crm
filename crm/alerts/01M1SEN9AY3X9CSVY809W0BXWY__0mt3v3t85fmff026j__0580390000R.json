@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-06T03:16:45.638Z",
+  "dismissedAt": null,
+  "id": "01M1SEN9AY3X9CSVY809W0BXWY__0mt3v3t85fmff026j__0580390000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtp8q4kdmltyn531",
+  "notifications": [
+    {
+      "body": "923 ONTARIO ST, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $89,169 (+47.3); roof about 84 years old, estimated from year built (+46.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BABU V CHITHRIKI IRA\nAssessed value: $89,169\nParcel: 0580390000R\n\nTriggered by pipeline run 01M1SEN9AY3X9CSVY809W0BXWY.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-06T03:16:57.887Z",
+      "id": "0mtp8qc2naum2ucsb",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-06T03:16:57.887Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 923 ONTARIO ST, JACKSONVILLE, 32254"
+    },
+    {
+      "body": "923 ONTARIO ST, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $89,169 (+47.3); roof about 84 years old, estimated from year built (+46.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BABU V CHITHRIKI IRA\nAssessed value: $89,169\nParcel: 0580390000R\n\nTriggered by pipeline run 01M1SEN9AY3X9CSVY809W0BXWY.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-06T03:16:57.887Z",
+      "id": "0mtp8qc2nvb2th8q4",
+      "providerMessageId": "sim_email_85e32c418c707c99e495",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-06T03:16:57.887Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 923 ONTARIO ST, JACKSONVILLE, 32254"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1SEN9AY3X9CSVY809W0BXWY",
+  "propertyId": "0580390000R",
+  "propertySnapshot": {
+    "address": "923 ONTARIO ST, JACKSONVILLE, 32254",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32254",
+    "assessedValue": 89169,
+    "builtYear": 1942,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3354563,
+    "longitude": -81.7117501,
+    "ownerName": "BABU V CHITHRIKI IRA",
+    "ownerOccupied": false,
+    "propertyId": "0580390000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1SEN9AY3X9CSVY809W0BXWY",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 84,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 6
+  },
+  "rationale": "assessed at $89,169 (+47.3); roof about 84 years old, estimated from year built (+46.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.47
+}
