@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-06T06:20:09.433Z",
+  "dismissedAt": null,
+  "id": "01M1T5D3RJWCNRG6C0B2M4102V__0mt3v3t85fmff026j__0045920000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtpf9zcbmenl4nlb",
+  "notifications": [
+    {
+      "body": "2216 JONES RD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $83,799 (+48.9); roof about 68 years old, estimated from year built (+44).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: KEENE KENNETH M SR LIFE ESTATE\nAssessed value: $83,799\nParcel: 0045920000R\n\nTriggered by pipeline run 01M1T5D3RJWCNRG6C0B2M4102V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-06T06:20:22.627Z",
+      "id": "0mtpfa7dvm2kizhb7",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-06T06:20:22.627Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2216 JONES RD, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "2216 JONES RD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $83,799 (+48.9); roof about 68 years old, estimated from year built (+44).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: KEENE KENNETH M SR LIFE ESTATE\nAssessed value: $83,799\nParcel: 0045920000R\n\nTriggered by pipeline run 01M1T5D3RJWCNRG6C0B2M4102V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-06T06:20:22.627Z",
+      "id": "0mtpfa7dv70xzs717",
+      "providerMessageId": "sim_email_6c6c09f4204fb1a2815d",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-06T06:20:22.627Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2216 JONES RD, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1T5D3RJWCNRG6C0B2M4102V",
+  "propertyId": "0045920000R",
+  "propertySnapshot": {
+    "address": "2216 JONES RD, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 83799,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "2023-05-18",
+    "latitude": 30.3507066,
+    "longitude": -81.8071764,
+    "ownerName": "KEENE KENNETH M SR LIFE ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "0045920000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1T5D3RJWCNRG6C0B2M4102V",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 3
+  },
+  "rationale": "assessed at $83,799 (+48.9); roof about 68 years old, estimated from year built (+44).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 92.86
+}
