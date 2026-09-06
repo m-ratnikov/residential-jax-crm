@@ -1,0 +1,60 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-06T19:35:50.635Z",
+  "dismissedAt": null,
+  "id": "01M1W12QE1NY9PVXRRVD0XY47H__0mt4avc7x052bfnz9__0051610000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtq7p8goyj6t83oy",
+  "notifications": [
+    {
+      "body": "144 MONTE ST, JACKSONVILLE, 32254 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: 95 m to 720 Suemac Rd (+52.8); held 50 years at most (the recorded sale predates the 1977 structure, so tenure is capped at the building's age) (+35.7).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WEST BILLY ET AL\nAssessed value: $51,319\nParcel: 0051610000R\n\nTriggered by pipeline run 01M1W12QE1NY9PVXRRVD0XY47H.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-06T19:35:54.059Z",
+      "id": "0mtq7p96z4sifmnie",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-06T19:35:54.059Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 144 MONTE ST, JACKSONVILLE, 32254"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1W12QE1NY9PVXRRVD0XY47H",
+  "propertyId": "0051610000R",
+  "propertySnapshot": {
+    "address": "144 MONTE ST, JACKSONVILLE, 32254",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32254",
+    "assessedValue": 51319,
+    "builtYear": 1977,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "1943-09-05",
+    "latitude": 30.3262507,
+    "longitude": -81.7591985,
+    "ownerName": "WEST BILLY ET AL",
+    "ownerOccupied": false,
+    "propertyId": "0051610000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1W12QE1NY9PVXRRVD0XY47H",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 49,
+    "tenureCaveat": "the recorded sale predates the 1977 structure, so tenure is capped at the building's age for ranking",
+    "tenureConfidence": "PREDATES_STRUCTURE",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 83
+  },
+  "rationale": "95 m to 720 Suemac Rd (+52.8); held 50 years at most (the recorded sale predates the 1977 structure, so tenure is capped at the building's age) (+35.7).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 88.53
+}
