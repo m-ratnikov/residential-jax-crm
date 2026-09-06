@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-06T13:36:42.099Z",
+  "dismissedAt": null,
+  "id": "01M1VCRAG95HT8MDXQ7KRCX3FJ__0mt3v3t85fmff026j__0050480000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtpuvdn4caktoomm",
+  "notifications": [
+    {
+      "body": "1720 N LANE AVE, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 96 / 100\nWhy: assessed at $84,345 (+48.7); roof about 99 years old, estimated from year built (+47.1).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: COMMUNITY BUILDING INSTITUTE I\nAssessed value: $84,345\nParcel: 0050480000R\n\nTriggered by pipeline run 01M1VCRAG95HT8MDXQ7KRCX3FJ.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-06T13:36:56.572Z",
+      "id": "0mtpuvmrgkdc2zxkh",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-06T13:36:56.572Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1720 N LANE AVE, JACKSONVILLE, 32254"
+    },
+    {
+      "body": "1720 N LANE AVE, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 96 / 100\nWhy: assessed at $84,345 (+48.7); roof about 99 years old, estimated from year built (+47.1).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: COMMUNITY BUILDING INSTITUTE I\nAssessed value: $84,345\nParcel: 0050480000R\n\nTriggered by pipeline run 01M1VCRAG95HT8MDXQ7KRCX3FJ.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-06T13:36:56.572Z",
+      "id": "0mtpuvmrgai8m1dje",
+      "providerMessageId": "sim_email_484cb8f399502bed823a",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-06T13:36:56.572Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1720 N LANE AVE, JACKSONVILLE, 32254"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1VCRAG95HT8MDXQ7KRCX3FJ",
+  "propertyId": "0050480000R",
+  "propertySnapshot": {
+    "address": "1720 N LANE AVE, JACKSONVILLE, 32254",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32254",
+    "assessedValue": 84345,
+    "builtYear": 1927,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2021-03-11",
+    "latitude": 30.3441825,
+    "longitude": -81.7524227,
+    "ownerName": "COMMUNITY BUILDING INSTITUTE I",
+    "ownerOccupied": false,
+    "propertyId": "0050480000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1VCRAG95HT8MDXQ7KRCX3FJ",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 99,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 5
+  },
+  "rationale": "assessed at $84,345 (+48.7); roof about 99 years old, estimated from year built (+47.1).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 95.86
+}
