@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-06T13:36:42.099Z",
+  "dismissedAt": null,
+  "id": "01M1VCRAG95HT8MDXQ7KRCX3FJ__0mt3v3t85fmff026j__0049800000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtpuvdn4caktoomm",
+  "notifications": [
+    {
+      "body": "1440 CLAYTON RD, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $88,278 (+47.6); roof about 81 years old, estimated from year built (+45.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: KNIGHT WILLIE E LIFE ESTATE\nAssessed value: $88,278\nParcel: 0049800000R\n\nTriggered by pipeline run 01M1VCRAG95HT8MDXQ7KRCX3FJ.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-06T13:37:02.238Z",
+      "id": "0mtpuvr4ukwvx559k",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-06T13:37:02.238Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1440 CLAYTON RD, JACKSONVILLE, 32254"
+    },
+    {
+      "body": "1440 CLAYTON RD, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $88,278 (+47.6); roof about 81 years old, estimated from year built (+45.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: KNIGHT WILLIE E LIFE ESTATE\nAssessed value: $88,278\nParcel: 0049800000R\n\nTriggered by pipeline run 01M1VCRAG95HT8MDXQ7KRCX3FJ.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-06T13:37:02.238Z",
+      "id": "0mtpuvr4ubywxz2u5",
+      "providerMessageId": "sim_email_f507710f6a99f5270e4f",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-06T13:37:02.238Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1440 CLAYTON RD, JACKSONVILLE, 32254"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1VCRAG95HT8MDXQ7KRCX3FJ",
+  "propertyId": "0049800000R",
+  "propertySnapshot": {
+    "address": "1440 CLAYTON RD, JACKSONVILLE, 32254",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32254",
+    "assessedValue": 88278,
+    "builtYear": 1945,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "1976-01-01",
+    "latitude": 30.3417846,
+    "longitude": -81.7557528,
+    "ownerName": "KNIGHT WILLIE E LIFE ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "0049800000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1VCRAG95HT8MDXQ7KRCX3FJ",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 81,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 50
+  },
+  "rationale": "assessed at $88,278 (+47.6); roof about 81 years old, estimated from year built (+45.9).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.45
+}
