@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "lastSaleDate"
+  ],
+  "createdAt": "2026-09-07T13:38:20.963Z",
+  "dismissedAt": null,
+  "id": "01M1XZE4FVTWX9AFTFKMX61VZE__0mt3v3t85fmff026j__0059520000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtradczaoywtbi25",
+  "notifications": [
+    {
+      "body": "7814 LAKELAND ST, JACKSONVILLE, 32221 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $86,359 (+48.1); roof about 80 years old, estimated from year built (+45.8).\n\nChanged since the last pass: last sale date.\n\nOwner of record: RAMEY NANNETTE V LIFE ESTATE\nAssessed value: $86,359\nParcel: 0059520000R\n\nTriggered by pipeline run 01M1XZE4FVTWX9AFTFKMX61VZE.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T13:38:35.852Z",
+      "id": "0mtradm185dq92z1g",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T13:38:35.852Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7814 LAKELAND ST, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "7814 LAKELAND ST, JACKSONVILLE, 32221 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $86,359 (+48.1); roof about 80 years old, estimated from year built (+45.8).\n\nChanged since the last pass: last sale date.\n\nOwner of record: RAMEY NANNETTE V LIFE ESTATE\nAssessed value: $86,359\nParcel: 0059520000R\n\nTriggered by pipeline run 01M1XZE4FVTWX9AFTFKMX61VZE.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-07T13:38:35.852Z",
+      "id": "0mtradm18puuc0178",
+      "providerMessageId": "sim_email_aac0d340815327a19ffc",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-07T13:38:35.852Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7814 LAKELAND ST, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1XZE4FVTWX9AFTFKMX61VZE",
+  "propertyId": "0059520000R",
+  "propertySnapshot": {
+    "address": "7814 LAKELAND ST, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 86359,
+    "builtYear": 1946,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2025-02-18",
+    "latitude": 30.3141826,
+    "longitude": -81.777374,
+    "ownerName": "RAMEY NANNETTE V LIFE ESTATE",
+    "ownerOccupied": false,
+    "propertyId": "0059520000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1XZE4FVTWX9AFTFKMX61VZE",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 80,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 1
+  },
+  "rationale": "assessed at $86,359 (+48.1); roof about 80 years old, estimated from year built (+45.8).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.91
+}
