@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-07T01:53:18.900Z",
+  "dismissedAt": null,
+  "id": "01M1WQFPYNPZ13R3RN41VPF1SA__0mt4avc7x052bfnz9__1198210000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtql6ns4t0dc7h0i",
+  "notifications": [
+    {
+      "body": "7447 S STONEHURST RD, JACKSONVILLE, 32277 now matches your saved search \"Transit infill\".\n\nMatch score: 58 / 100\nWhy: 78 m to 7440 Merrill Rd (+54.2); held 10 years (+4).\n\nOwner of record: LEE KYUNG Y\nAssessed value: $185,456\nParcel: 1198210000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T01:53:28.181Z",
+      "id": "0mtql6t85ykn72na9",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T01:53:28.181Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 7447 S STONEHURST RD, JACKSONVILLE, 32277"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+  "propertyId": "1198210000R",
+  "propertySnapshot": {
+    "address": "7447 S STONEHURST RD, JACKSONVILLE, 32277",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32277",
+    "assessedValue": 185456,
+    "builtYear": 1959,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3545934,
+    "longitude": -81.5727905,
+    "ownerName": "LEE KYUNG Y",
+    "ownerOccupied": false,
+    "propertyId": "1198210000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "78 m to 7440 Merrill Rd (+54.2); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 58.17
+}
