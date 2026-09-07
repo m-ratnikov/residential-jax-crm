@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-07T01:53:18.900Z",
+  "dismissedAt": null,
+  "id": "01M1WQFPYNPZ13R3RN41VPF1SA__0mt4avamhp8iakx36__1399880000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtql6ns4t0dc7h0i",
+  "notifications": [
+    {
+      "body": "727 GROVE PARK BLVD, JACKSONVILLE, 32216 now matches your saved search \"Tired landlord\".\n\nMatch score: 56 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 56 years old, estimated from year built (+24.2); held 10 years (+3.3).\n\nOwner of record: SANTANA HENREY\nAssessed value: $222,334\nParcel: 1399880000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T01:53:54.857Z",
+      "id": "0mtql7dt5w7eir7hd",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T01:53:54.857Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 727 GROVE PARK BLVD, JACKSONVILLE, 32216"
+    },
+    {
+      "body": "727 GROVE PARK BLVD, JACKSONVILLE, 32216 now matches your saved search \"Tired landlord\".\n\nMatch score: 56 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 56 years old, estimated from year built (+24.2); held 10 years (+3.3).\n\nOwner of record: SANTANA HENREY\nAssessed value: $222,334\nParcel: 1399880000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-07T01:53:54.857Z",
+      "id": "0mtql7dt5zqehpo74",
+      "providerMessageId": "sim_email_43cd354921ed930833bf",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-07T01:53:54.857Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 727 GROVE PARK BLVD, JACKSONVILLE, 32216"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+  "propertyId": "1399880000R",
+  "propertySnapshot": {
+    "address": "727 GROVE PARK BLVD, JACKSONVILLE, 32216",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32216",
+    "assessedValue": 222334,
+    "builtYear": 1961,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.305343,
+    "longitude": -81.5737294,
+    "ownerName": "SANTANA HENREY",
+    "ownerOccupied": false,
+    "propertyId": "1399880000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 56 years old, estimated from year built (+24.2); held 10 years (+3.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 55.91
+}
