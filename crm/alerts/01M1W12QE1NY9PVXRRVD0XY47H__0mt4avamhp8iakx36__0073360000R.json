@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-07T06:29:47.190Z",
+  "dismissedAt": null,
+  "id": "01M1W12QE1NY9PVXRRVD0XY47H__0mt4avamhp8iakx36__0073360000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtqv27tsfjngn9l0",
+  "notifications": [
+    {
+      "body": "832 WESTGATE DR, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 63 years old, estimated from year built (+27.8); held 12 years (+4.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: DEVOS HERVE IRA\nAssessed value: $136,885\nParcel: 0073360000R\n\nTriggered by pipeline run 01M1W12QE1NY9PVXRRVD0XY47H.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T06:30:02.209Z",
+      "id": "0mtqv2h9d65sfbc2q",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T06:30:02.209Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 832 WESTGATE DR, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "832 WESTGATE DR, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 63 years old, estimated from year built (+27.8); held 12 years (+4.8).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: DEVOS HERVE IRA\nAssessed value: $136,885\nParcel: 0073360000R\n\nTriggered by pipeline run 01M1W12QE1NY9PVXRRVD0XY47H.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-07T06:30:02.210Z",
+      "id": "0mtqv2h9etft7dwti",
+      "providerMessageId": "sim_email_f38ee51245d3428033f1",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-07T06:30:02.210Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 832 WESTGATE DR, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1W12QE1NY9PVXRRVD0XY47H",
+  "propertyId": "0073360000R",
+  "propertySnapshot": {
+    "address": "832 WESTGATE DR, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 136885,
+    "builtYear": 1963,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3102373,
+    "longitude": -81.7726273,
+    "ownerName": "DEVOS HERVE IRA",
+    "ownerOccupied": false,
+    "propertyId": "0073360000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1W12QE1NY9PVXRRVD0XY47H",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 63,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 12
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 63 years old, estimated from year built (+27.8); held 12 years (+4.8).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 60.94
+}
