@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-07T01:53:18.900Z",
+  "dismissedAt": null,
+  "id": "01M1WQFPYNPZ13R3RN41VPF1SA__0mt3v3t85fmff026j__0387270000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtql6ns4t0dc7h0i",
+  "notifications": [
+    {
+      "body": "5014 ROANOKE BLVD, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $80,167 (+50); roof about 65 years old, estimated from year built (+43.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LAMPKINS TAKENYA S\nAssessed value: $80,167\nParcel: 0387270000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T01:54:02.950Z",
+      "id": "0mtql7k1y3btthh93",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T01:54:02.950Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 5014 ROANOKE BLVD, JACKSONVILLE, 32208"
+    },
+    {
+      "body": "5014 ROANOKE BLVD, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $80,167 (+50); roof about 65 years old, estimated from year built (+43.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LAMPKINS TAKENYA S\nAssessed value: $80,167\nParcel: 0387270000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-07T01:54:02.950Z",
+      "id": "0mtql7k1yy8cg3qu1",
+      "providerMessageId": "sim_email_3b28fe4adb3a75dd5ece",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-07T01:54:02.950Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 5014 ROANOKE BLVD, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+  "propertyId": "0387270000R",
+  "propertySnapshot": {
+    "address": "5014 ROANOKE BLVD, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 80167,
+    "builtYear": 1961,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.4092571,
+    "longitude": -81.7259586,
+    "ownerName": "LAMPKINS TAKENYA S",
+    "ownerOccupied": true,
+    "propertyId": "0387270000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 65,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 8
+  },
+  "rationale": "assessed at $80,167 (+50); roof about 65 years old, estimated from year built (+43.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.2
+}
