@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-07T01:53:18.900Z",
+  "dismissedAt": null,
+  "id": "01M1WQFPYNPZ13R3RN41VPF1SA__0mt4avc7x052bfnz9__1656310000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtql6ns4t0dc7h0i",
+  "notifications": [
+    {
+      "body": "3041 MANGROVE AVE, JACKSONVILLE, 32246 already matched \"Transit infill\" and has changed.\n\nMatch score: 90 / 100\nWhy: 68 m to Beach Blvd + I-295 (+54.9); held 47 years (+35.1).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: OWENS DOROTHY J\nAssessed value: $93,414\nParcel: 1656310000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T01:53:23.500Z",
+      "id": "0mtql6pm4y0akjjby",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T01:53:23.500Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 3041 MANGROVE AVE, JACKSONVILLE, 32246"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+  "propertyId": "1656310000R",
+  "propertySnapshot": {
+    "address": "3041 MANGROVE AVE, JACKSONVILLE, 32246",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32246",
+    "assessedValue": 93414,
+    "builtYear": 1979,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2898085,
+    "longitude": -81.518988,
+    "ownerName": "OWENS DOROTHY J",
+    "ownerOccupied": true,
+    "propertyId": "1656310000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 47,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 47
+  },
+  "rationale": "68 m to Beach Blvd + I-295 (+54.9); held 47 years (+35.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 90.03
+}
