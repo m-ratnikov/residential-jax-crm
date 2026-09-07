@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-07T08:21:31.306Z",
+  "dismissedAt": null,
+  "id": "01M1XBEX994PFT49ACZCFJFXYA__0mt3v3t85fmff026j__0056710000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtqz1wu1oj9ul4qu",
+  "notifications": [
+    {
+      "body": "8118 HAMMOND BLVD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $86,794 (+48); roof about 89 years old, estimated from year built (+46.6).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WIDMANN THOMAS G LIFE ESTATE\nAssessed value: $86,794\nParcel: 0056710000R\n\nTriggered by pipeline run 01M1XBEX994PFT49ACZCFJFXYA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T08:21:47.358Z",
+      "id": "0mtqz26zic4z2he7y",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T08:21:47.358Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 8118 HAMMOND BLVD, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "8118 HAMMOND BLVD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $86,794 (+48); roof about 89 years old, estimated from year built (+46.6).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: WIDMANN THOMAS G LIFE ESTATE\nAssessed value: $86,794\nParcel: 0056710000R\n\nTriggered by pipeline run 01M1XBEX994PFT49ACZCFJFXYA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-07T08:21:47.358Z",
+      "id": "0mtqz26ziv7dc4o6a",
+      "providerMessageId": "sim_email_cdc1cf059c5a93090515",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-07T08:21:47.358Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 8118 HAMMOND BLVD, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1XBEX994PFT49ACZCFJFXYA",
+  "propertyId": "0056710000R",
+  "propertySnapshot": {
+    "address": "8118 HAMMOND BLVD, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 86794,
+    "builtYear": 1937,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2023-03-30",
+    "latitude": 30.3190782,
+    "longitude": -81.7842609,
+    "ownerName": "WIDMANN THOMAS G LIFE ESTATE",
+    "ownerOccupied": false,
+    "propertyId": "0056710000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1XBEX994PFT49ACZCFJFXYA",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 89,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 3
+  },
+  "rationale": "assessed at $86,794 (+48); roof about 89 years old, estimated from year built (+46.6).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.56
+}
