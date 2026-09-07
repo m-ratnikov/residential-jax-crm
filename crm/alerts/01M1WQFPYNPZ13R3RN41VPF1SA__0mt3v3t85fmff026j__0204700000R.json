@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-07T01:53:18.900Z",
+  "dismissedAt": null,
+  "id": "01M1WQFPYNPZ13R3RN41VPF1SA__0mt3v3t85fmff026j__0204700000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtql6ns4t0dc7h0i",
+  "notifications": [
+    {
+      "body": "10701 GLADWYNNE RD, JACKSONVILLE, 32218 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $80,247 (+49.9); roof about 67 years old, estimated from year built (+43.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: MCALISTER RONNIE II\nAssessed value: $80,247\nParcel: 0204700000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T01:54:01.957Z",
+      "id": "0mtql7jadwtbmt28k",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T01:54:01.957Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 10701 GLADWYNNE RD, JACKSONVILLE, 32218"
+    },
+    {
+      "body": "10701 GLADWYNNE RD, JACKSONVILLE, 32218 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $80,247 (+49.9); roof about 67 years old, estimated from year built (+43.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: MCALISTER RONNIE II\nAssessed value: $80,247\nParcel: 0204700000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-07T01:54:01.958Z",
+      "id": "0mtql7jaecwq52rnw",
+      "providerMessageId": "sim_email_f1151679bafa7e951746",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-07T01:54:01.958Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 10701 GLADWYNNE RD, JACKSONVILLE, 32218"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+  "propertyId": "0204700000R",
+  "propertySnapshot": {
+    "address": "10701 GLADWYNNE RD, JACKSONVILLE, 32218",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32218",
+    "assessedValue": 80247,
+    "builtYear": 1949,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.4299749,
+    "longitude": -81.6895811,
+    "ownerName": "MCALISTER RONNIE II",
+    "ownerOccupied": false,
+    "propertyId": "0204700000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 67,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 19
+  },
+  "rationale": "assessed at $80,247 (+49.9); roof about 67 years old, estimated from year built (+43.7).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.68
+}
