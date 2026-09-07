@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-07T08:21:31.306Z",
+  "dismissedAt": null,
+  "id": "01M1XBEX994PFT49ACZCFJFXYA__0mt3v3t85fmff026j__0058680000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtqz1wu1oj9ul4qu",
+  "notifications": [
+    {
+      "body": "8126 PASCHAL ST, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $81,499 (+49.6); roof about 72 years old, estimated from year built (+44.7).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: LUNDIE JACQUELYN A\nAssessed value: $81,499\nParcel: 0058680000R\n\nTriggered by pipeline run 01M1XBEX994PFT49ACZCFJFXYA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T08:21:48.431Z",
+      "id": "0mtqz27tbsxqme88e",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T08:21:48.431Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 8126 PASCHAL ST, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "8126 PASCHAL ST, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $81,499 (+49.6); roof about 72 years old, estimated from year built (+44.7).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: LUNDIE JACQUELYN A\nAssessed value: $81,499\nParcel: 0058680000R\n\nTriggered by pipeline run 01M1XBEX994PFT49ACZCFJFXYA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-07T08:21:48.432Z",
+      "id": "0mtqz27tb16vzpkxq",
+      "providerMessageId": "sim_email_f31a98bcb85445994dcc",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-07T08:21:48.431Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 8126 PASCHAL ST, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1XBEX994PFT49ACZCFJFXYA",
+  "propertyId": "0058680000R",
+  "propertySnapshot": {
+    "address": "8126 PASCHAL ST, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 81499,
+    "builtYear": 1954,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "2016-11-18",
+    "latitude": 30.3162081,
+    "longitude": -81.7844394,
+    "ownerName": "LUNDIE JACQUELYN A",
+    "ownerOccupied": true,
+    "propertyId": "0058680000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1XBEX994PFT49ACZCFJFXYA",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 72,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 9
+  },
+  "rationale": "assessed at $81,499 (+49.6); roof about 72 years old, estimated from year built (+44.7).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.29
+}
