@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-07T01:53:18.900Z",
+  "dismissedAt": null,
+  "id": "01M1WQFPYNPZ13R3RN41VPF1SA__0mt4avc7x052bfnz9__0731420000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtql6ns4t0dc7h0i",
+  "notifications": [
+    {
+      "body": "328 W 11TH ST, JACKSONVILLE, 32206 now matches your saved search \"Transit infill\".\n\nMatch score: 59 / 100\nWhy: 62 m to 8th St + Pearl St (+55.3); held 10 years (+4).\n\nOwner of record: VARGAS ERNESTO ET AL\nAssessed value: $173,173\nParcel: 0731420000R\n\nTriggered by pipeline run 01M1WQFPYNPZ13R3RN41VPF1SA.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-07T01:53:27.065Z",
+      "id": "0mtql6sd5rtibdvqw",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-07T01:53:27.065Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 328 W 11TH ST, JACKSONVILLE, 32206"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+  "propertyId": "0731420000R",
+  "propertySnapshot": {
+    "address": "328 W 11TH ST, JACKSONVILLE, 32206",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32206",
+    "assessedValue": 173173,
+    "builtYear": 1914,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.349791,
+    "longitude": -81.6590979,
+    "ownerName": "VARGAS ERNESTO ET AL",
+    "ownerOccupied": false,
+    "propertyId": "0731420000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1WQFPYNPZ13R3RN41VPF1SA",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "62 m to 8th St + Pearl St (+55.3); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 59.34
+}
