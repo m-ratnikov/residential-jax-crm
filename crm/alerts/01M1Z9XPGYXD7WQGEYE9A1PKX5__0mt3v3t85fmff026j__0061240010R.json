@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-08T02:19:00.047Z",
+  "dismissedAt": null,
+  "id": "01M1Z9XPGYXD7WQGEYE9A1PKX5__0mt3v3t85fmff026j__0061240010R",
+  "kind": "updated_match",
+  "matcherRunId": "0mts1jk03yr3w75oo",
+  "notifications": [
+    {
+      "body": "7739 HAMMOND BLVD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 96 / 100\nWhy: assessed at $82,694 (+49.2); roof about 86 years old, estimated from year built (+46.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: RS RENTAL I LLC\nAssessed value: $82,694\nParcel: 0061240010R\n\nTriggered by pipeline run 01M1Z9XPGYXD7WQGEYE9A1PKX5.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-08T02:19:32.492Z",
+      "id": "0mts1k6x82wyp5o2n",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-08T02:19:32.492Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7739 HAMMOND BLVD, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "7739 HAMMOND BLVD, JACKSONVILLE, 32220 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 96 / 100\nWhy: assessed at $82,694 (+49.2); roof about 86 years old, estimated from year built (+46.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: RS RENTAL I LLC\nAssessed value: $82,694\nParcel: 0061240010R\n\nTriggered by pipeline run 01M1Z9XPGYXD7WQGEYE9A1PKX5.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-08T02:19:32.492Z",
+      "id": "0mts1k6x8vi0znv34",
+      "providerMessageId": "sim_email_dfc6d2103728288bbab0",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-08T02:19:32.492Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7739 HAMMOND BLVD, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1Z9XPGYXD7WQGEYE9A1PKX5",
+  "propertyId": "0061240010R",
+  "propertySnapshot": {
+    "address": "7739 HAMMOND BLVD, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 82694,
+    "builtYear": 1940,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2021-07-28",
+    "latitude": 30.3196523,
+    "longitude": -81.7759831,
+    "ownerName": "RS RENTAL I LLC",
+    "ownerOccupied": false,
+    "propertyId": "0061240010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1Z9XPGYXD7WQGEYE9A1PKX5",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 86,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 5
+  },
+  "rationale": "assessed at $82,694 (+49.2); roof about 86 years old, estimated from year built (+46.3).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 95.54
+}
