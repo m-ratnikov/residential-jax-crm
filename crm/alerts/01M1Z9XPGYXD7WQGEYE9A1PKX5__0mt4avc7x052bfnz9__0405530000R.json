@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-08T02:19:00.047Z",
+  "dismissedAt": null,
+  "id": "01M1Z9XPGYXD7WQGEYE9A1PKX5__0mt4avc7x052bfnz9__0405530000R",
+  "kind": "new_match",
+  "matcherRunId": "0mts1jk03yr3w75oo",
+  "notifications": [
+    {
+      "body": "6134 POPE PL, JACKSONVILLE, 32209 now matches your saved search \"Transit infill\".\n\nMatch score: 56 / 100\nWhy: water view of Jacksonville rivers (COJ Jax_River) 53 m from the water, 105 m to Edgewood Ave + New Kings Rd (+52.1); held 10 years (+4).\n\nOwner of record: ROSS MICHAEL A\nAssessed value: $158,761\nParcel: 0405530000R\n\nTriggered by pipeline run 01M1Z9XPGYXD7WQGEYE9A1PKX5.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-08T02:19:15.055Z",
+      "id": "0mts1jtgvxuhvha75",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-08T02:19:15.055Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 6134 POPE PL, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M1Z9XPGYXD7WQGEYE9A1PKX5",
+  "propertyId": "0405530000R",
+  "propertySnapshot": {
+    "address": "6134 POPE PL, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 158761,
+    "builtYear": 1964,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3750222,
+    "longitude": -81.7220769,
+    "ownerName": "ROSS MICHAEL A",
+    "ownerOccupied": true,
+    "propertyId": "0405530000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M1Z9XPGYXD7WQGEYE9A1PKX5",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 46,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of Jacksonville rivers (COJ Jax_River) 53 m from the water, 105 m to Edgewood Ave + New Kings Rd (+52.1); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 56.1
+}
