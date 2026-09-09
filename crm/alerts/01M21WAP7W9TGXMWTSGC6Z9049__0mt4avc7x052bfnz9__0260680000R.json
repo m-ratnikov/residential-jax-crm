@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-09T02:19:27.098Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt4avc7x052bfnz9__0260680000R",
+  "kind": "new_match",
+  "matcherRunId": "0mttgzzwqz9k0zlvy",
+  "notifications": [
+    {
+      "body": "6437 HOWE DR, JACKSONVILLE, 32208 now matches your saved search \"Transit infill\".\n\nMatch score: 54 / 100\nWhy: 161 m from the water, 132 m to Moncrief Rd + Edgewood Ave (+50.1); held 10 years (+4).\n\nOwner of record: WALKER WHITFIELD PERNELL D\nAssessed value: $126,277\nParcel: 0260680000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-09T02:19:51.566Z",
+      "id": "0mtth0gb2611ahyg2",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-09T02:19:51.566Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 6437 HOWE DR, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "0260680000R",
+  "propertySnapshot": {
+    "address": "6437 HOWE DR, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 126277,
+    "builtYear": 1962,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3877878,
+    "longitude": -81.6944699,
+    "ownerName": "WALKER WHITFIELD PERNELL D",
+    "ownerOccupied": true,
+    "propertyId": "0260680000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 41,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "161 m from the water, 132 m to Moncrief Rd + Edgewood Ave (+50.1); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 54.08
+}
