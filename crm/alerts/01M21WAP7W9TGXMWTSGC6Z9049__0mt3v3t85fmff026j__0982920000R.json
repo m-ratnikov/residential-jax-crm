@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-09T02:19:27.098Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt3v3t85fmff026j__0982920000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mttgzzwqz9k0zlvy",
+  "notifications": [
+    {
+      "body": "5751 OVELLA RD, JACKSONVILLE, 32244 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $81,739 (+49.5); roof about 70 years old, estimated from year built (+44.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: STAKE BRUCE D\nAssessed value: $81,739\nParcel: 0982920000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-09T02:20:17.013Z",
+      "id": "0mtth0zxxgd3doqpp",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-09T02:20:17.013Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 5751 OVELLA RD, JACKSONVILLE, 32244"
+    },
+    {
+      "body": "5751 OVELLA RD, JACKSONVILLE, 32244 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $81,739 (+49.5); roof about 70 years old, estimated from year built (+44.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: STAKE BRUCE D\nAssessed value: $81,739\nParcel: 0982920000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-09T02:20:17.013Z",
+      "id": "0mtth0zxxgt078l8x",
+      "providerMessageId": "sim_email_511b63af951191a4aff1",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-09T02:20:17.013Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 5751 OVELLA RD, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "0982920000R",
+  "propertySnapshot": {
+    "address": "5751 OVELLA RD, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 81739,
+    "builtYear": 1956,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2249852,
+    "longitude": -81.7325075,
+    "ownerName": "STAKE BRUCE D",
+    "ownerOccupied": true,
+    "propertyId": "0982920000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 70,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 11
+  },
+  "rationale": "assessed at $81,739 (+49.5); roof about 70 years old, estimated from year built (+44.4).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.86
+}
