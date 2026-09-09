@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-09T02:19:27.098Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt4avc7x052bfnz9__1636110000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mttgzzwqz9k0zlvy",
+  "notifications": [
+    {
+      "body": "1760 W DIBBLE CIR, JACKSONVILLE, 32246 already matched \"Transit infill\" and has changed.\n\nMatch score: 90 / 100\nWhy: 64 m to Atlantic Blvd + Brookview Dr (+55.2); held 46 years (+34.9).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ILIADIS ELISAVET\nAssessed value: $50,406\nParcel: 1636110000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-09T02:19:34.635Z",
+      "id": "0mtth038rt9raz0vw",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-09T02:19:34.635Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 1760 W DIBBLE CIR, JACKSONVILLE, 32246"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "1636110000R",
+  "propertySnapshot": {
+    "address": "1760 W DIBBLE CIR, JACKSONVILLE, 32246",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32246",
+    "assessedValue": 50406,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3207567,
+    "longitude": -81.5296204,
+    "ownerName": "ILIADIS ELISAVET",
+    "ownerOccupied": false,
+    "propertyId": "1636110000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 46
+  },
+  "rationale": "64 m to Atlantic Blvd + Brookview Dr (+55.2); held 46 years (+34.9).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 90.09
+}
