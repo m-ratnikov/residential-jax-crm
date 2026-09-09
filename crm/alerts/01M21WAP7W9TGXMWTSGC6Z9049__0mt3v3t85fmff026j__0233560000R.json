@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-09T02:19:27.098Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt3v3t85fmff026j__0233560000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mttgzzwqz9k0zlvy",
+  "notifications": [
+    {
+      "body": "924 WAYNE ST, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $89,101 (+47.3); roof about 77 years old, estimated from year built (+45.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BENTON PATRICIA JERRIDO ET AL\nAssessed value: $89,101\nParcel: 0233560000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-09T02:20:20.478Z",
+      "id": "0mtth12m6hb4acqgx",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-09T02:20:20.478Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 924 WAYNE ST, JACKSONVILLE, 32208"
+    },
+    {
+      "body": "924 WAYNE ST, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $89,101 (+47.3); roof about 77 years old, estimated from year built (+45.4).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: BENTON PATRICIA JERRIDO ET AL\nAssessed value: $89,101\nParcel: 0233560000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-09T02:20:20.478Z",
+      "id": "0mtth12m6dj4mwtl2",
+      "providerMessageId": "sim_email_fbdff99f95a42f8e3a9f",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-09T02:20:20.478Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 924 WAYNE ST, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "0233560000R",
+  "propertySnapshot": {
+    "address": "924 WAYNE ST, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 89101,
+    "builtYear": 1949,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3979881,
+    "longitude": -81.672607,
+    "ownerName": "BENTON PATRICIA JERRIDO ET AL",
+    "ownerOccupied": false,
+    "propertyId": "0233560000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 77,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 12
+  },
+  "rationale": "assessed at $89,101 (+47.3); roof about 77 years old, estimated from year built (+45.4).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 92.76
+}
