@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-09T02:19:27.098Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt4avamhp8iakx36__0421170000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mttgzzwqz9k0zlvy",
+  "notifications": [
+    {
+      "body": "7367 E DOSTIE DR, JACKSONVILLE, 32209 already matched \"Tired landlord\" and has changed.\n\nMatch score: 58 / 100\nWhy: roof about 63 years old, estimated from year built (+27.8); absentee owner mailing from elsewhere in Florida (+20); held 20 years (+10.6).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: MATTHEWS LAMEKER L\nAssessed value: $85,626\nParcel: 0421170000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-09T02:20:05.455Z",
+      "id": "0mtth0r0vbn1gqzgp",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-09T02:20:05.455Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 7367 E DOSTIE DR, JACKSONVILLE, 32209"
+    },
+    {
+      "body": "7367 E DOSTIE DR, JACKSONVILLE, 32209 already matched \"Tired landlord\" and has changed.\n\nMatch score: 58 / 100\nWhy: roof about 63 years old, estimated from year built (+27.8); absentee owner mailing from elsewhere in Florida (+20); held 20 years (+10.6).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: MATTHEWS LAMEKER L\nAssessed value: $85,626\nParcel: 0421170000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-09T02:20:05.455Z",
+      "id": "0mtth0r0v4br7wmyv",
+      "providerMessageId": "sim_email_cf26f7b694c49ddaf0db",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-09T02:20:05.455Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 7367 E DOSTIE DR, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "0421170000R",
+  "propertySnapshot": {
+    "address": "7367 E DOSTIE DR, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 85626,
+    "builtYear": 1963,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3882781,
+    "longitude": -81.7282306,
+    "ownerName": "MATTHEWS LAMEKER L",
+    "ownerOccupied": false,
+    "propertyId": "0421170000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 63,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 20
+  },
+  "rationale": "roof about 63 years old, estimated from year built (+27.8); absentee owner mailing from elsewhere in Florida (+20); held 20 years (+10.6).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 58.43
+}
