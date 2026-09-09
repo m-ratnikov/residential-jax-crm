@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-09T02:19:27.098Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt4avamhp8iakx36__0139260046R",
+  "kind": "new_match",
+  "matcherRunId": "0mttgzzwqz9k0zlvy",
+  "notifications": [
+    {
+      "body": "7289 S SHARBETH DR, JACKSONVILLE, 32210 now matches your saved search \"Tired landlord\".\n\nMatch score: 46 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 36 years old, estimated from year built (+14); held 10 years (+3.3).\n\nOwner of record: ARTHUR V SCHROCK Z129435\nAssessed value: $150,213\nParcel: 0139260046R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-09T02:20:07.853Z",
+      "id": "0mtth0svhrk5pl898",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-09T02:20:07.853Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 7289 S SHARBETH DR, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "7289 S SHARBETH DR, JACKSONVILLE, 32210 now matches your saved search \"Tired landlord\".\n\nMatch score: 46 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 36 years old, estimated from year built (+14); held 10 years (+3.3).\n\nOwner of record: ARTHUR V SCHROCK Z129435\nAssessed value: $150,213\nParcel: 0139260046R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-09T02:20:07.853Z",
+      "id": "0mtth0svh8k4i2y5n",
+      "providerMessageId": "sim_email_25be5be166b5ed0dc944",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-09T02:20:07.853Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 7289 S SHARBETH DR, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "0139260046R",
+  "propertySnapshot": {
+    "address": "7289 S SHARBETH DR, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 150213,
+    "builtYear": 1980,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2598263,
+    "longitude": -81.7665659,
+    "ownerName": "ARTHUR V SCHROCK Z129435",
+    "ownerOccupied": false,
+    "propertyId": "0139260046R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 36,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 36 years old, estimated from year built (+14); held 10 years (+3.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 45.71
+}
