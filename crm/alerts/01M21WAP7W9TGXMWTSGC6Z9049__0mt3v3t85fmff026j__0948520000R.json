@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-09T02:19:27.098Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt3v3t85fmff026j__0948520000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mttgzzwqz9k0zlvy",
+  "notifications": [
+    {
+      "body": "5244 APPLETON AVE, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $85,656 (+48.3); roof about 74 years old, estimated from year built (+45).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: JERNIGAN TIFFANY\nAssessed value: $85,656\nParcel: 0948520000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-09T02:20:19.273Z",
+      "id": "0mtth11opp3jdsyuz",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-09T02:20:19.273Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 5244 APPLETON AVE, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "5244 APPLETON AVE, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $85,656 (+48.3); roof about 74 years old, estimated from year built (+45).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: JERNIGAN TIFFANY\nAssessed value: $85,656\nParcel: 0948520000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-09T02:20:19.273Z",
+      "id": "0mtth11opbu1oirwa",
+      "providerMessageId": "sim_email_1281d4c252048a716cf3",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-09T02:20:19.273Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 5244 APPLETON AVE, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "0948520000R",
+  "propertySnapshot": {
+    "address": "5244 APPLETON AVE, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 85656,
+    "builtYear": 1952,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2801815,
+    "longitude": -81.7359626,
+    "ownerName": "JERNIGAN TIFFANY",
+    "ownerOccupied": true,
+    "propertyId": "0948520000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 74,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 7
+  },
+  "rationale": "assessed at $85,656 (+48.3); roof about 74 years old, estimated from year built (+45).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.37
+}
