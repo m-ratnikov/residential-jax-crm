@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-10T23:37:05.902Z",
+  "dismissedAt": null,
+  "id": "01M26AP1DMAR2KKWMCSMBB68RM__0mt3v3t85fmff026j__0323070000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtw62xlrajanu52s",
+  "notifications": [
+    {
+      "body": "1504 N CARBONDALE DR, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $84,454 (+48.7); roof about 72 years old, estimated from year built (+44.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GROOVER DANIEL M\nAssessed value: $84,454\nParcel: 0323070000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T23:38:15.698Z",
+      "id": "0mtw64c9e4cgiz0ez",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T23:38:15.698Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1504 N CARBONDALE DR, JACKSONVILLE, 32208"
+    },
+    {
+      "body": "1504 N CARBONDALE DR, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $84,454 (+48.7); roof about 72 years old, estimated from year built (+44.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GROOVER DANIEL M\nAssessed value: $84,454\nParcel: 0323070000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T23:38:15.698Z",
+      "id": "0mtw64c9ez0qooct9",
+      "providerMessageId": "sim_email_8421dfd9f0f341697a22",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T23:38:15.698Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1504 N CARBONDALE DR, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M26AP1DMAR2KKWMCSMBB68RM",
+  "propertyId": "0323070000R",
+  "propertySnapshot": {
+    "address": "1504 N CARBONDALE DR, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 84454,
+    "builtYear": 1954,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.4163489,
+    "longitude": -81.6808524,
+    "ownerName": "GROOVER DANIEL M",
+    "ownerOccupied": false,
+    "propertyId": "0323070000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M26AP1DMAR2KKWMCSMBB68RM",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 72,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 13
+  },
+  "rationale": "assessed at $84,454 (+48.7); roof about 72 years old, estimated from year built (+44.7).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.42
+}
