@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-10T23:37:05.902Z",
+  "dismissedAt": null,
+  "id": "01M26AP1DMAR2KKWMCSMBB68RM__0mt4avamhp8iakx36__0164638998R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtw62xlrajanu52s",
+  "notifications": [
+    {
+      "body": "8364 N MISTWOOD CIR, JACKSONVILLE, 32244 already matched \"Tired landlord\" and has changed.\n\nMatch score: 63 / 100\nWhy: absentee owner mailing from out of state (+28.3); held 35 years (+21.5); roof about 35 years old, estimated from year built (+13.5).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: DIZON DANTE D\nAssessed value: $257,491\nParcel: 0164638998R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T23:37:51.205Z",
+      "id": "0mtw63td195l9o2c4",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T23:37:51.205Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 8364 N MISTWOOD CIR, JACKSONVILLE, 32244"
+    },
+    {
+      "body": "8364 N MISTWOOD CIR, JACKSONVILLE, 32244 already matched \"Tired landlord\" and has changed.\n\nMatch score: 63 / 100\nWhy: absentee owner mailing from out of state (+28.3); held 35 years (+21.5); roof about 35 years old, estimated from year built (+13.5).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: DIZON DANTE D\nAssessed value: $257,491\nParcel: 0164638998R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T23:37:51.205Z",
+      "id": "0mtw63td10c2mcajm",
+      "providerMessageId": "sim_email_06ade80a55c57e4b2192",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T23:37:51.205Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 8364 N MISTWOOD CIR, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M26AP1DMAR2KKWMCSMBB68RM",
+  "propertyId": "0164638998R",
+  "propertySnapshot": {
+    "address": "8364 N MISTWOOD CIR, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 257491,
+    "builtYear": 1991,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2029048,
+    "longitude": -81.7931096,
+    "ownerName": "DIZON DANTE D",
+    "ownerOccupied": false,
+    "propertyId": "0164638998R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M26AP1DMAR2KKWMCSMBB68RM",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 35,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 35
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); held 35 years (+21.5); roof about 35 years old, estimated from year built (+13.5).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 63.41
+}
