@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-10T23:37:05.902Z",
+  "dismissedAt": null,
+  "id": "01M26AP1DMAR2KKWMCSMBB68RM__0mt3v3t85fmff026j__0185650000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtw62xlrajanu52s",
+  "notifications": [
+    {
+      "body": "6946 JACK HORNER LN, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $81,512 (+49.6); roof about 65 years old, estimated from year built (+43.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: WILLIAMS ROOSEVELT JR\nAssessed value: $81,512\nParcel: 0185650000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T23:38:22.035Z",
+      "id": "0mtw64h5feohp4ky7",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T23:38:22.035Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6946 JACK HORNER LN, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "6946 JACK HORNER LN, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $81,512 (+49.6); roof about 65 years old, estimated from year built (+43.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: WILLIAMS ROOSEVELT JR\nAssessed value: $81,512\nParcel: 0185650000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T23:38:22.035Z",
+      "id": "0mtw64h5ffok0ubld",
+      "providerMessageId": "sim_email_6df68471ab024bde7ffc",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T23:38:22.035Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 6946 JACK HORNER LN, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M26AP1DMAR2KKWMCSMBB68RM",
+  "propertyId": "0185650000R",
+  "propertySnapshot": {
+    "address": "6946 JACK HORNER LN, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 81512,
+    "builtYear": 1961,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2761485,
+    "longitude": -81.7604513,
+    "ownerName": "WILLIAMS ROOSEVELT JR",
+    "ownerOccupied": true,
+    "propertyId": "0185650000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M26AP1DMAR2KKWMCSMBB68RM",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 65,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 0
+  },
+  "rationale": "assessed at $81,512 (+49.6); roof about 65 years old, estimated from year built (+43.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 92.81
+}
