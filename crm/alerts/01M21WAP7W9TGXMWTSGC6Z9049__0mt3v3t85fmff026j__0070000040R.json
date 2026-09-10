@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-10T22:35:43.187Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt3v3t85fmff026j__0070000040R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtw3vzanku1pp7wi",
+  "notifications": [
+    {
+      "body": "8006 GORDEAN RD, JACKSONVILLE, 32221 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $81,403 (+49.6); roof about 81 years old, estimated from year built (+45.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: HANNAH RONALD W\nAssessed value: $81,403\nParcel: 0070000040R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T22:36:34.872Z",
+      "id": "0mtw3x0oocvf0q1fl",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T22:36:34.872Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 8006 GORDEAN RD, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "8006 GORDEAN RD, JACKSONVILLE, 32221 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 95 / 100\nWhy: assessed at $81,403 (+49.6); roof about 81 years old, estimated from year built (+45.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: HANNAH RONALD W\nAssessed value: $81,403\nParcel: 0070000040R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T22:36:34.872Z",
+      "id": "0mtw3x0oo0uj0i5vd",
+      "providerMessageId": "sim_email_beec1fa6ed31a006423e",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T22:36:34.872Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 8006 GORDEAN RD, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "0070000040R",
+  "propertySnapshot": {
+    "address": "8006 GORDEAN RD, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 81403,
+    "builtYear": 1945,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3104869,
+    "longitude": -81.7814951,
+    "ownerName": "HANNAH RONALD W",
+    "ownerOccupied": false,
+    "propertyId": "0070000040R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 81,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 7
+  },
+  "rationale": "assessed at $81,403 (+49.6); roof about 81 years old, estimated from year built (+45.9).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 95.47
+}
