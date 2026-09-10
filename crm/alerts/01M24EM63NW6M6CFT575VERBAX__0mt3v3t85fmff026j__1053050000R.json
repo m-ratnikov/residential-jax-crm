@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-10T02:19:43.585Z",
+  "dismissedAt": null,
+  "id": "01M24EM63NW6M6CFT575VERBAX__0mt3v3t85fmff026j__1053050000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtuwg7fk2ecp8914",
+  "notifications": [
+    {
+      "body": "2247 TEGNER DR, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $81,570 (+49.5); roof about 69 years old, estimated from year built (+44.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: PIEROTTI ANGELITA\nAssessed value: $81,570\nParcel: 1053050000R\n\nTriggered by pipeline run 01M24EM63NW6M6CFT575VERBAX.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T02:20:32.107Z",
+      "id": "0mtuwh6971k4ymkpi",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T02:20:32.107Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2247 TEGNER DR, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "2247 TEGNER DR, JACKSONVILLE, 32210 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $81,570 (+49.5); roof about 69 years old, estimated from year built (+44.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: PIEROTTI ANGELITA\nAssessed value: $81,570\nParcel: 1053050000R\n\nTriggered by pipeline run 01M24EM63NW6M6CFT575VERBAX.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T02:20:32.107Z",
+      "id": "0mtuwh697ryvje8hx",
+      "providerMessageId": "sim_email_290812aa9886179e8b2c",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T02:20:32.107Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2247 TEGNER DR, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M24EM63NW6M6CFT575VERBAX",
+  "propertyId": "1053050000R",
+  "propertySnapshot": {
+    "address": "2247 TEGNER DR, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 81570,
+    "builtYear": 1957,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2760448,
+    "longitude": -81.7447472,
+    "ownerName": "PIEROTTI ANGELITA",
+    "ownerOccupied": true,
+    "propertyId": "1053050000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M24EM63NW6M6CFT575VERBAX",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 69,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 11
+  },
+  "rationale": "assessed at $81,570 (+49.5); roof about 69 years old, estimated from year built (+44.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.72
+}
