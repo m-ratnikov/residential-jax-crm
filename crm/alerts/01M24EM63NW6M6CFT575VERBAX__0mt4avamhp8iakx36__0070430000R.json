@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-10T02:19:43.585Z",
+  "dismissedAt": null,
+  "id": "01M24EM63NW6M6CFT575VERBAX__0mt4avamhp8iakx36__0070430000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtuwg7fk2ecp8914",
+  "notifications": [
+    {
+      "body": "8449 DEVOE ST, JACKSONVILLE, 32220 already matched \"Tired landlord\" and has changed.\n\nMatch score: 64 / 100\nWhy: roof about 80 years old, estimated from year built (+30.5); absentee owner mailing from elsewhere in Florida (+20); held 24 years (last sale 2002-04-08) (+13.5).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: SMITH S RALPH\nAssessed value: $135,154\nParcel: 0070430000R\n\nTriggered by pipeline run 01M24EM63NW6M6CFT575VERBAX.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T02:20:16.964Z",
+      "id": "0mtuwgukkx1qmunem",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T02:20:16.964Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 8449 DEVOE ST, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "8449 DEVOE ST, JACKSONVILLE, 32220 already matched \"Tired landlord\" and has changed.\n\nMatch score: 64 / 100\nWhy: roof about 80 years old, estimated from year built (+30.5); absentee owner mailing from elsewhere in Florida (+20); held 24 years (last sale 2002-04-08) (+13.5).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: SMITH S RALPH\nAssessed value: $135,154\nParcel: 0070430000R\n\nTriggered by pipeline run 01M24EM63NW6M6CFT575VERBAX.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T02:20:16.964Z",
+      "id": "0mtuwgukkbengoqbr",
+      "providerMessageId": "sim_email_aa9f692d9435bf03e6ed",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T02:20:16.964Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 8449 DEVOE ST, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M24EM63NW6M6CFT575VERBAX",
+  "propertyId": "0070430000R",
+  "propertySnapshot": {
+    "address": "8449 DEVOE ST, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 135154,
+    "builtYear": 1946,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2002-04-08",
+    "latitude": 30.3185791,
+    "longitude": -81.7908975,
+    "ownerName": "SMITH S RALPH",
+    "ownerOccupied": false,
+    "propertyId": "0070430000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M24EM63NW6M6CFT575VERBAX",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 80,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 24
+  },
+  "rationale": "roof about 80 years old, estimated from year built (+30.5); absentee owner mailing from elsewhere in Florida (+20); held 24 years (last sale 2002-04-08) (+13.5).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 64.05
+}
