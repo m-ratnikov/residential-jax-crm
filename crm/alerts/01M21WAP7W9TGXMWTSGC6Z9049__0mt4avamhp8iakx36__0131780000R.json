@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-10T22:35:43.187Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt4avamhp8iakx36__0131780000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtw3vzanku1pp7wi",
+  "notifications": [
+    {
+      "body": "4523 LAMBING RD, JACKSONVILLE, 32210 now matches your saved search \"Tired landlord\".\n\nMatch score: 56 / 100\nWhy: absentee owner mailing from elsewhere in Florida (+20); held 31 years (+18.6); roof about 42 years old, estimated from year built (+17.1).\n\nOwner of record: BROOKS BOBBY ELBERT JR\nAssessed value: $116,700\nParcel: 0131780000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T22:36:27.666Z",
+      "id": "0mtw3wv4ixiozv408",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T22:36:27.666Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 4523 LAMBING RD, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "4523 LAMBING RD, JACKSONVILLE, 32210 now matches your saved search \"Tired landlord\".\n\nMatch score: 56 / 100\nWhy: absentee owner mailing from elsewhere in Florida (+20); held 31 years (+18.6); roof about 42 years old, estimated from year built (+17.1).\n\nOwner of record: BROOKS BOBBY ELBERT JR\nAssessed value: $116,700\nParcel: 0131780000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T22:36:27.666Z",
+      "id": "0mtw3wv4ilqkfo0cz",
+      "providerMessageId": "sim_email_7423bda2f42ef4724fa0",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T22:36:27.666Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 4523 LAMBING RD, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "0131780000R",
+  "propertySnapshot": {
+    "address": "4523 LAMBING RD, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 116700,
+    "builtYear": 1984,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2583432,
+    "longitude": -81.7955018,
+    "ownerName": "BROOKS BOBBY ELBERT JR",
+    "ownerOccupied": false,
+    "propertyId": "0131780000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 42,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 31
+  },
+  "rationale": "absentee owner mailing from elsewhere in Florida (+20); held 31 years (+18.6); roof about 42 years old, estimated from year built (+17.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 55.74
+}
