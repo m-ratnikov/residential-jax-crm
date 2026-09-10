@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-10T23:37:05.902Z",
+  "dismissedAt": null,
+  "id": "01M26AP1DMAR2KKWMCSMBB68RM__0mt4avamhp8iakx36__0067450000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtw62xlrajanu52s",
+  "notifications": [
+    {
+      "body": "544 HAMLET RD, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 56 years old, estimated from year built (+24.2); held 17 years (last sale 2008-12-27) (+8.4).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: VALVERA MICHAEL\nAssessed value: $247,999\nParcel: 0067450000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T23:37:53.621Z",
+      "id": "0mtw63v85sd8z5ufv",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T23:37:53.621Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 544 HAMLET RD, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "544 HAMLET RD, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 56 years old, estimated from year built (+24.2); held 17 years (last sale 2008-12-27) (+8.4).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: VALVERA MICHAEL\nAssessed value: $247,999\nParcel: 0067450000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T23:37:53.621Z",
+      "id": "0mtw63v85g8l8zjjm",
+      "providerMessageId": "sim_email_603d2782371508533243",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T23:37:53.621Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 544 HAMLET RD, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M26AP1DMAR2KKWMCSMBB68RM",
+  "propertyId": "0067450000R",
+  "propertySnapshot": {
+    "address": "544 HAMLET RD, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 247999,
+    "builtYear": 1960,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2008-12-27",
+    "latitude": 30.3064029,
+    "longitude": -81.8365502,
+    "ownerName": "VALVERA MICHAEL",
+    "ownerOccupied": false,
+    "propertyId": "0067450000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M26AP1DMAR2KKWMCSMBB68RM",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 17
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 56 years old, estimated from year built (+24.2); held 17 years (last sale 2008-12-27) (+8.4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 61.01
+}
