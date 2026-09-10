@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-10T23:37:05.902Z",
+  "dismissedAt": null,
+  "id": "01M26AP1DMAR2KKWMCSMBB68RM__0mt4avamhp8iakx36__1097060670R",
+  "kind": "new_match",
+  "matcherRunId": "0mtw62xlrajanu52s",
+  "notifications": [
+    {
+      "body": "12083 HAYDEN LAKES CIR, JACKSONVILLE, 32218 now matches your saved search \"Tired landlord\".\n\nMatch score: 37 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 18 years old, estimated from year built (+4.9); held 10 years (+3.3).\n\nOwner of record: AMERICAN HOMES 4 RENT PROPERTI\nAssessed value: $269,956\nParcel: 1097060670R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T23:38:01.989Z",
+      "id": "0mtw641ollyl60juj",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T23:38:01.989Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 12083 HAYDEN LAKES CIR, JACKSONVILLE, 32218"
+    },
+    {
+      "body": "12083 HAYDEN LAKES CIR, JACKSONVILLE, 32218 now matches your saved search \"Tired landlord\".\n\nMatch score: 37 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 18 years old, estimated from year built (+4.9); held 10 years (+3.3).\n\nOwner of record: AMERICAN HOMES 4 RENT PROPERTI\nAssessed value: $269,956\nParcel: 1097060670R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T23:38:01.989Z",
+      "id": "0mtw641olbi2g5h8k",
+      "providerMessageId": "sim_email_8f58c5c8ade0ac52a3c1",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T23:38:01.989Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 12083 HAYDEN LAKES CIR, JACKSONVILLE, 32218"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M26AP1DMAR2KKWMCSMBB68RM",
+  "propertyId": "1097060670R",
+  "propertySnapshot": {
+    "address": "12083 HAYDEN LAKES CIR, JACKSONVILLE, 32218",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32218",
+    "assessedValue": 269956,
+    "builtYear": 2008,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.4532735,
+    "longitude": -81.606572,
+    "ownerName": "AMERICAN HOMES 4 RENT PROPERTI",
+    "ownerOccupied": false,
+    "propertyId": "1097060670R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M26AP1DMAR2KKWMCSMBB68RM",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 18,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 18 years old, estimated from year built (+4.9); held 10 years (+3.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 36.53
+}
