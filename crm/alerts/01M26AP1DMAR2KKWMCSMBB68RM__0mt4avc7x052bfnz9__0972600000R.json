@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-10T23:37:05.902Z",
+  "dismissedAt": null,
+  "id": "01M26AP1DMAR2KKWMCSMBB68RM__0mt4avc7x052bfnz9__0972600000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtw62xlrajanu52s",
+  "notifications": [
+    {
+      "body": "7935 S RENAULT DR, JACKSONVILLE, 32244 now matches your saved search \"Transit infill\".\n\nMatch score: 53 / 100\nWhy: 142 m to 7915 103rd St (+49.4); held 10 years (+4).\n\nOwner of record: BROWN PATRICE\nAssessed value: $131,009\nParcel: 0972600000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T23:37:35.230Z",
+      "id": "0mtw63h1as9vspidl",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T23:37:35.230Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 7935 S RENAULT DR, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M26AP1DMAR2KKWMCSMBB68RM",
+  "propertyId": "0972600000R",
+  "propertySnapshot": {
+    "address": "7935 S RENAULT DR, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 131009,
+    "builtYear": 1964,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2408844,
+    "longitude": -81.7798693,
+    "ownerName": "BROWN PATRICE",
+    "ownerOccupied": true,
+    "propertyId": "0972600000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M26AP1DMAR2KKWMCSMBB68RM",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 36,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "142 m to 7915 103rd St (+49.4); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 53.39
+}
