@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-10T22:35:43.187Z",
+  "dismissedAt": null,
+  "id": "01M21WAP7W9TGXMWTSGC6Z9049__0mt4avc7x052bfnz9__1439740000R",
+  "kind": "new_match",
+  "matcherRunId": "0mtw3vzanku1pp7wi",
+  "notifications": [
+    {
+      "body": "8431 EATON AVE, JACKSONVILLE, 32211 now matches your saved search \"Transit infill\".\n\nMatch score: 76 / 100\nWhy: 69 m to Bowlan St + Berry Ave (+54.8); held 30 years (+21.5).\n\nOwner of record: GARY MICHAEL ESTATE\nAssessed value: $139,277\nParcel: 1439740000R\n\nTriggered by pipeline run 01M21WAP7W9TGXMWTSGC6Z9049.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T22:36:10.436Z",
+      "id": "0mtw3whtw3nsxtlzk",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T22:36:10.436Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 8431 EATON AVE, JACKSONVILLE, 32211"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M21WAP7W9TGXMWTSGC6Z9049",
+  "propertyId": "1439740000R",
+  "propertySnapshot": {
+    "address": "8431 EATON AVE, JACKSONVILLE, 32211",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32211",
+    "assessedValue": 139277,
+    "builtYear": 1974,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3182296,
+    "longitude": -81.5685464,
+    "ownerName": "GARY MICHAEL ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "1439740000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M21WAP7W9TGXMWTSGC6Z9049",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 52,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 30
+  },
+  "rationale": "69 m to Bowlan St + Berry Ave (+54.8); held 30 years (+21.5).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 76.28
+}
