@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-10T23:37:05.902Z",
+  "dismissedAt": null,
+  "id": "01M26AP1DMAR2KKWMCSMBB68RM__0mt4avamhp8iakx36__0069340000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtw62xlrajanu52s",
+  "notifications": [
+    {
+      "body": "9438 PANDA ST, JACKSONVILLE, 32220 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: roof about 84 years old, estimated from year built (+30.8); absentee owner mailing from elsewhere in Florida (+20); held 20 years (last sale 2005-10-27) (+10.6).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: LENTZ WILLIAM R\nAssessed value: $108,449\nParcel: 0069340000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-10T23:37:52.527Z",
+      "id": "0mtw63udrt3j8pz46",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-10T23:37:52.527Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 9438 PANDA ST, JACKSONVILLE, 32220"
+    },
+    {
+      "body": "9438 PANDA ST, JACKSONVILLE, 32220 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: roof about 84 years old, estimated from year built (+30.8); absentee owner mailing from elsewhere in Florida (+20); held 20 years (last sale 2005-10-27) (+10.6).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: LENTZ WILLIAM R\nAssessed value: $108,449\nParcel: 0069340000R\n\nTriggered by pipeline run 01M26AP1DMAR2KKWMCSMBB68RM.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-10T23:37:52.527Z",
+      "id": "0mtw63udrus27avet",
+      "providerMessageId": "sim_email_5ddf7d682981a66a9557",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-10T23:37:52.527Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 9438 PANDA ST, JACKSONVILLE, 32220"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M26AP1DMAR2KKWMCSMBB68RM",
+  "propertyId": "0069340000R",
+  "propertySnapshot": {
+    "address": "9438 PANDA ST, JACKSONVILLE, 32220",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32220",
+    "assessedValue": 108449,
+    "builtYear": 1942,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2005-10-27",
+    "latitude": 30.3165497,
+    "longitude": -81.812241,
+    "ownerName": "LENTZ WILLIAM R",
+    "ownerOccupied": false,
+    "propertyId": "0069340000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M26AP1DMAR2KKWMCSMBB68RM",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 84,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 20
+  },
+  "rationale": "roof about 84 years old, estimated from year built (+30.8); absentee owner mailing from elsewhere in Florida (+20); held 20 years (last sale 2005-10-27) (+10.6).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 61.4
+}
