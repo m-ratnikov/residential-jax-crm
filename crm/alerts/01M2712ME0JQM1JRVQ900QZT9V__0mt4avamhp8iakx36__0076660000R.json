@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-11T18:15:28.570Z",
+  "dismissedAt": null,
+  "id": "01M2712ME0JQM1JRVQ900QZT9V__0mt4avamhp8iakx36__0076660000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtxa15cm1wrwgzl9",
+  "notifications": [
+    {
+      "body": "1027 E HILLOCK DR, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 56 / 100\nWhy: roof about 64 years old, estimated from year built (+28.3); absentee owner mailing from elsewhere in Florida (+20); held 16 years (+7.7).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: KOZEE SANDRA D ET AL\nAssessed value: $148,146\nParcel: 0076660000R\n\nTriggered by pipeline run 01M2712ME0JQM1JRVQ900QZT9V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-11T18:15:42.254Z",
+      "id": "0mtxa1dpq2fh5a8jl",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-11T18:15:42.254Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 1027 E HILLOCK DR, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "1027 E HILLOCK DR, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 56 / 100\nWhy: roof about 64 years old, estimated from year built (+28.3); absentee owner mailing from elsewhere in Florida (+20); held 16 years (+7.7).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: KOZEE SANDRA D ET AL\nAssessed value: $148,146\nParcel: 0076660000R\n\nTriggered by pipeline run 01M2712ME0JQM1JRVQ900QZT9V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-11T18:15:42.254Z",
+      "id": "0mtxa1dpqoavtan00",
+      "providerMessageId": "sim_email_19e08b70fc76bc231850",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-11T18:15:42.254Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 1027 E HILLOCK DR, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2712ME0JQM1JRVQ900QZT9V",
+  "propertyId": "0076660000R",
+  "propertySnapshot": {
+    "address": "1027 E HILLOCK DR, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 148146,
+    "builtYear": 1962,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3051065,
+    "longitude": -81.7711154,
+    "ownerName": "KOZEE SANDRA D ET AL",
+    "ownerOccupied": false,
+    "propertyId": "0076660000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2712ME0JQM1JRVQ900QZT9V",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 64,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 16
+  },
+  "rationale": "roof about 64 years old, estimated from year built (+28.3); absentee owner mailing from elsewhere in Florida (+20); held 16 years (+7.7).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 56.03
+}
