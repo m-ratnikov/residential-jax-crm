@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-11T02:19:22.307Z",
+  "dismissedAt": null,
+  "id": "01M2712ME0JQM1JRVQ900QZT9V__0mt3v3t85fmff026j__0584450000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtwbvlmsiq2z59e4",
+  "notifications": [
+    {
+      "body": "873 MELSON AVE, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 97 / 100\nWhy: assessed at $80,079 (+50); roof about 100 years old, estimated from year built (+47.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: AVALON FL PROPERTIES LLC\nAssessed value: $80,079\nParcel: 0584450000R\n\nTriggered by pipeline run 01M2712ME0JQM1JRVQ900QZT9V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-11T02:19:45.893Z",
+      "id": "0mtwbw19ht2q2plih",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-11T02:19:45.893Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 873 MELSON AVE, JACKSONVILLE, 32254"
+    },
+    {
+      "body": "873 MELSON AVE, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 97 / 100\nWhy: assessed at $80,079 (+50); roof about 100 years old, estimated from year built (+47.2).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: AVALON FL PROPERTIES LLC\nAssessed value: $80,079\nParcel: 0584450000R\n\nTriggered by pipeline run 01M2712ME0JQM1JRVQ900QZT9V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-11T02:19:45.893Z",
+      "id": "0mtwbw19h7z4re4rh",
+      "providerMessageId": "sim_email_8b8f71d4e940c6a8a9e6",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-11T02:19:45.893Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 873 MELSON AVE, JACKSONVILLE, 32254"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2712ME0JQM1JRVQ900QZT9V",
+  "propertyId": "0584450000R",
+  "propertySnapshot": {
+    "address": "873 MELSON AVE, JACKSONVILLE, 32254",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32254",
+    "assessedValue": 80079,
+    "builtYear": 1926,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3343738,
+    "longitude": -81.7222593,
+    "ownerName": "AVALON FL PROPERTIES LLC",
+    "ownerOccupied": false,
+    "propertyId": "0584450000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2712ME0JQM1JRVQ900QZT9V",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 100,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 5
+  },
+  "rationale": "assessed at $80,079 (+50); roof about 100 years old, estimated from year built (+47.2).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 97.16
+}
