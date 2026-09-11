@@ -1,0 +1,60 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-11T18:39:22.674Z",
+  "dismissedAt": null,
+  "id": "01M2890KFEZ6HF2FZBXNR80AGB__0mt4avc7x052bfnz9__0075440000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtxavvvx2ji7d7le",
+  "notifications": [
+    {
+      "body": "990 REVELS RD, JACKSONVILLE, 32205 already matched \"Transit infill\" and has changed.\n\nMatch score: 92 / 100\nWhy: 317 m from the water, 45 m to Grace Ln + Granville Rd (+56.6); held 48 years (last sale 1978-04-12) (+35.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: BOUTWELL ANNE L\nAssessed value: $132,819\nParcel: 0075440000R\n\nTriggered by pipeline run 01M2890KFEZ6HF2FZBXNR80AGB.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-11T18:39:26.752Z",
+      "id": "0mtxavwv449ak82f5",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-11T18:39:26.752Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 990 REVELS RD, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2890KFEZ6HF2FZBXNR80AGB",
+  "propertyId": "0075440000R",
+  "propertySnapshot": {
+    "address": "990 REVELS RD, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 132819,
+    "builtYear": 1952,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "1978-04-12",
+    "latitude": 30.3070064,
+    "longitude": -81.7538166,
+    "ownerName": "BOUTWELL ANNE L",
+    "ownerOccupied": false,
+    "propertyId": "0075440000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2890KFEZ6HF2FZBXNR80AGB",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 74,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 48
+  },
+  "rationale": "317 m from the water, 45 m to Grace Ln + Granville Rd (+56.6); held 48 years (last sale 1978-04-12) (+35.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 91.93
+}
