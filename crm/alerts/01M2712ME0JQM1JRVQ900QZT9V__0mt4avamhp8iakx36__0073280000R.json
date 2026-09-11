@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-11T02:19:22.307Z",
+  "dismissedAt": null,
+  "id": "01M2712ME0JQM1JRVQ900QZT9V__0mt4avamhp8iakx36__0073280000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtwbvlmsiq2z59e4",
+  "notifications": [
+    {
+      "body": "840 E CREST DR, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: roof about 64 years old, estimated from year built (+28.3); absentee owner mailing from out of state (+28.3); held 11 years (last sale 2015-02-26) (+4.1).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: MNSF T2 SPE LLC\nAssessed value: $141,382\nParcel: 0073280000R\n\nTriggered by pipeline run 01M2712ME0JQM1JRVQ900QZT9V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-11T02:19:41.129Z",
+      "id": "0mtwbvxl5laq2x8z8",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-11T02:19:41.129Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 840 E CREST DR, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "840 E CREST DR, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: roof about 64 years old, estimated from year built (+28.3); absentee owner mailing from out of state (+28.3); held 11 years (last sale 2015-02-26) (+4.1).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: MNSF T2 SPE LLC\nAssessed value: $141,382\nParcel: 0073280000R\n\nTriggered by pipeline run 01M2712ME0JQM1JRVQ900QZT9V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-11T02:19:41.129Z",
+      "id": "0mtwbvxl5t9oac40g",
+      "providerMessageId": "sim_email_39c37089ded306aea6fd",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-11T02:19:41.129Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 840 E CREST DR, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2712ME0JQM1JRVQ900QZT9V",
+  "propertyId": "0073280000R",
+  "propertySnapshot": {
+    "address": "840 E CREST DR, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 141382,
+    "builtYear": 1962,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2015-02-26",
+    "latitude": 30.3098295,
+    "longitude": -81.7733964,
+    "ownerName": "MNSF T2 SPE LLC",
+    "ownerOccupied": false,
+    "propertyId": "0073280000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2712ME0JQM1JRVQ900QZT9V",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 64,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 11
+  },
+  "rationale": "roof about 64 years old, estimated from year built (+28.3); absentee owner mailing from out of state (+28.3); held 11 years (last sale 2015-02-26) (+4.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 60.72
+}
