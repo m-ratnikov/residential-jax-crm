@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-11T18:15:28.570Z",
+  "dismissedAt": null,
+  "id": "01M2712ME0JQM1JRVQ900QZT9V__0mt4avamhp8iakx36__0075580000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtxa15cm1wrwgzl9",
+  "notifications": [
+    {
+      "body": "957 REVELS RD, JACKSONVILLE, 32205 already matched \"Tired landlord\" and has changed.\n\nMatch score: 58 / 100\nWhy: roof about 66 years old, estimated from year built (+29); absentee owner mailing from elsewhere in Florida (+20); held 18 years (+9.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: REVELS FOUR LLC\nAssessed value: $146,390\nParcel: 0075580000R\n\nTriggered by pipeline run 01M2712ME0JQM1JRVQ900QZT9V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-11T18:15:40.697Z",
+      "id": "0mtxa1cihzqdlr5e3",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-11T18:15:40.697Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 957 REVELS RD, JACKSONVILLE, 32205"
+    },
+    {
+      "body": "957 REVELS RD, JACKSONVILLE, 32205 already matched \"Tired landlord\" and has changed.\n\nMatch score: 58 / 100\nWhy: roof about 66 years old, estimated from year built (+29); absentee owner mailing from elsewhere in Florida (+20); held 18 years (+9.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: REVELS FOUR LLC\nAssessed value: $146,390\nParcel: 0075580000R\n\nTriggered by pipeline run 01M2712ME0JQM1JRVQ900QZT9V.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-11T18:15:40.697Z",
+      "id": "0mtxa1cihz3nb6tmd",
+      "providerMessageId": "sim_email_be0f30e9171662aaf34d",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-11T18:15:40.697Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 957 REVELS RD, JACKSONVILLE, 32205"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2712ME0JQM1JRVQ900QZT9V",
+  "propertyId": "0075580000R",
+  "propertySnapshot": {
+    "address": "957 REVELS RD, JACKSONVILLE, 32205",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32205",
+    "assessedValue": 146390,
+    "builtYear": 1960,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3081666,
+    "longitude": -81.7531703,
+    "ownerName": "REVELS FOUR LLC",
+    "ownerOccupied": false,
+    "propertyId": "0075580000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2712ME0JQM1JRVQ900QZT9V",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 18
+  },
+  "rationale": "roof about 66 years old, estimated from year built (+29); absentee owner mailing from elsewhere in Florida (+20); held 18 years (+9.2).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 58.17
+}
