@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-12T02:18:28.274Z",
+  "dismissedAt": null,
+  "id": "01M29KBHVCBWWY357G09RKD7GG__0mt4avamhp8iakx36__1564113936R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtxrabgb6e9ap0sr",
+  "notifications": [
+    {
+      "body": "3370 EXCALIBUR WAY, JACKSONVILLE, 32223 already matched \"Tired landlord\" and has changed.\n\nMatch score: 56 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 44 years old, estimated from year built (+18.1); held 19 years (+9.9).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: FORSYTH CHRISTOPHER D\nAssessed value: $199,441\nParcel: 1564113936R\n\nTriggered by pipeline run 01M29KBHVCBWWY357G09RKD7GG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-12T02:18:50.848Z",
+      "id": "0mtxrapgg2n2nyp5z",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-12T02:18:50.848Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 3370 EXCALIBUR WAY, JACKSONVILLE, 32223"
+    },
+    {
+      "body": "3370 EXCALIBUR WAY, JACKSONVILLE, 32223 already matched \"Tired landlord\" and has changed.\n\nMatch score: 56 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 44 years old, estimated from year built (+18.1); held 19 years (+9.9).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: FORSYTH CHRISTOPHER D\nAssessed value: $199,441\nParcel: 1564113936R\n\nTriggered by pipeline run 01M29KBHVCBWWY357G09RKD7GG.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-12T02:18:50.848Z",
+      "id": "0mtxrapggvgv786qq",
+      "providerMessageId": "sim_email_86f86bb3ccc4e53f51c0",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-12T02:18:50.848Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 3370 EXCALIBUR WAY, JACKSONVILLE, 32223"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M29KBHVCBWWY357G09RKD7GG",
+  "propertyId": "1564113936R",
+  "propertySnapshot": {
+    "address": "3370 EXCALIBUR WAY, JACKSONVILLE, 32223",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32223",
+    "assessedValue": 199441,
+    "builtYear": 1982,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.1692868,
+    "longitude": -81.6213801,
+    "ownerName": "FORSYTH CHRISTOPHER D",
+    "ownerOccupied": false,
+    "propertyId": "1564113936R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M29KBHVCBWWY357G09RKD7GG",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 44,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 19
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 44 years old, estimated from year built (+18.1); held 19 years (+9.9).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 56.35
+}
