@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-13T04:14:55.694Z",
+  "dismissedAt": null,
+  "id": "01M2C65QX4DCNYZCA00K5AY75D__0mt4avamhp8iakx36__1080940280R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtzavx0b7v6buxl8",
+  "notifications": [
+    {
+      "body": "14333 DENTON RD, JACKSONVILLE, 32226 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: roof about 53 years old, estimated from year built (+22.7); absentee owner mailing from elsewhere in Florida (+20); held 30 years (+17.9).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: KRAUS DONNA\nAssessed value: $89,044\nParcel: 1080940280R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-13T04:15:35.515Z",
+      "id": "0mtzawoyjaawwuzrh",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-13T04:15:35.515Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 14333 DENTON RD, JACKSONVILLE, 32226"
+    },
+    {
+      "body": "14333 DENTON RD, JACKSONVILLE, 32226 already matched \"Tired landlord\" and has changed.\n\nMatch score: 61 / 100\nWhy: roof about 53 years old, estimated from year built (+22.7); absentee owner mailing from elsewhere in Florida (+20); held 30 years (+17.9).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: KRAUS DONNA\nAssessed value: $89,044\nParcel: 1080940280R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-13T04:15:35.515Z",
+      "id": "0mtzawoyjxmnrxcu1",
+      "providerMessageId": "sim_email_3dd8aae8275c6e333d4b",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-13T04:15:35.515Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 14333 DENTON RD, JACKSONVILLE, 32226"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2C65QX4DCNYZCA00K5AY75D",
+  "propertyId": "1080940280R",
+  "propertySnapshot": {
+    "address": "14333 DENTON RD, JACKSONVILLE, 32226",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32226",
+    "assessedValue": 89044,
+    "builtYear": 1973,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.4969115,
+    "longitude": -81.5553881,
+    "ownerName": "KRAUS DONNA",
+    "ownerOccupied": false,
+    "propertyId": "1080940280R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2C65QX4DCNYZCA00K5AY75D",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 53,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 30
+  },
+  "rationale": "roof about 53 years old, estimated from year built (+22.7); absentee owner mailing from elsewhere in Florida (+20); held 30 years (+17.9).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 60.62
+}
