@@ -1,0 +1,60 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-13T04:14:55.694Z",
+  "dismissedAt": null,
+  "id": "01M2C65QX4DCNYZCA00K5AY75D__0mt4avc7x052bfnz9__0088061054R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtzavx0b7v6buxl8",
+  "notifications": [
+    {
+      "body": "1556 SONOMA CT, JACKSONVILLE, 32221 already matched \"Transit infill\" and has changed.\n\nMatch score: 92 / 100\nWhy: 50 m to 8435 Normandy Blvd (+56.2); held 48 years (last sale 1978-05-17) (+35.3).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: COLLINS PHILLIP\nAssessed value: $116,095\nParcel: 0088061054R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-13T04:15:09.039Z",
+      "id": "0mtzaw4j3z4nlck89",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-13T04:15:09.039Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 1556 SONOMA CT, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2C65QX4DCNYZCA00K5AY75D",
+  "propertyId": "0088061054R",
+  "propertySnapshot": {
+    "address": "1556 SONOMA CT, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 116095,
+    "builtYear": 1978,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "1978-05-17",
+    "latitude": 30.2929136,
+    "longitude": -81.7910125,
+    "ownerName": "COLLINS PHILLIP",
+    "ownerOccupied": true,
+    "propertyId": "0088061054R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2C65QX4DCNYZCA00K5AY75D",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 48,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 48
+  },
+  "rationale": "50 m to 8435 Normandy Blvd (+56.2); held 48 years (last sale 1978-05-17) (+35.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 91.53
+}
