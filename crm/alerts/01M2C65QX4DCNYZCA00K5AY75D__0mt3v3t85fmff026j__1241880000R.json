@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-13T04:14:55.694Z",
+  "dismissedAt": null,
+  "id": "01M2C65QX4DCNYZCA00K5AY75D__0mt3v3t85fmff026j__1241880000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtzavx0b7v6buxl8",
+  "notifications": [
+    {
+      "body": "2937 FOREST BLVD, JACKSONVILLE, 32246 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $88,322 (+47.6); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ESPOSITO TRUST\nAssessed value: $88,322\nParcel: 1241880000R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-13T04:15:51.397Z",
+      "id": "0mtzax17pmt2xg72n",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-13T04:15:51.397Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2937 FOREST BLVD, JACKSONVILLE, 32246"
+    },
+    {
+      "body": "2937 FOREST BLVD, JACKSONVILLE, 32246 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $88,322 (+47.6); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: ESPOSITO TRUST\nAssessed value: $88,322\nParcel: 1241880000R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-13T04:15:51.397Z",
+      "id": "0mtzax17pf1rrmf26",
+      "providerMessageId": "sim_email_9db9f9d1ac96a0986dd5",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-13T04:15:51.397Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 2937 FOREST BLVD, JACKSONVILLE, 32246"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2C65QX4DCNYZCA00K5AY75D",
+  "propertyId": "1241880000R",
+  "propertySnapshot": {
+    "address": "2937 FOREST BLVD, JACKSONVILLE, 32246",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32246",
+    "assessedValue": 88322,
+    "builtYear": 1950,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2922002,
+    "longitude": -81.5440277,
+    "ownerName": "ESPOSITO TRUST",
+    "ownerOccupied": false,
+    "propertyId": "1241880000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2C65QX4DCNYZCA00K5AY75D",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 76,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 18
+  },
+  "rationale": "assessed at $88,322 (+47.6); roof about 76 years old, estimated from year built (+45.3).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 92.86
+}
