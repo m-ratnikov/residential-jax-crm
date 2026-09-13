@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-13T04:03:20.035Z",
+  "dismissedAt": null,
+  "id": "01M28X88MEH6G96XK4NSTS38VD__0mt4avc7x052bfnz9__0088060504R",
+  "kind": "new_match",
+  "matcherRunId": "0mtzah0b9flu6ajjk",
+  "notifications": [
+    {
+      "body": "8749 S HAMMONDWOOD RD, JACKSONVILLE, 32221 now matches your saved search \"Transit infill\".\n\nMatch score: 52 / 100\nWhy: 236 m to Normandy Blvd + Hammond Blvd (+42.3); held 17 years (+10.1).\n\nOwner of record: SOBALVARRO JULIO C\nAssessed value: $171,189\nParcel: 0088060504R\n\nTriggered by pipeline run 01M28X88MEH6G96XK4NSTS38VD.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-13T04:03:33.710Z",
+      "id": "0mtzah80edp4nmwk4",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-13T04:03:33.710Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 8749 S HAMMONDWOOD RD, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M28X88MEH6G96XK4NSTS38VD",
+  "propertyId": "0088060504R",
+  "propertySnapshot": {
+    "address": "8749 S HAMMONDWOOD RD, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 171189,
+    "builtYear": 1977,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2930796,
+    "longitude": -81.7967264,
+    "ownerName": "SOBALVARRO JULIO C",
+    "ownerOccupied": false,
+    "propertyId": "0088060504R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M28X88MEH6G96XK4NSTS38VD",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 49,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 17
+  },
+  "rationale": "236 m to Normandy Blvd + Hammond Blvd (+42.3); held 17 years (+10.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 52.41
+}
