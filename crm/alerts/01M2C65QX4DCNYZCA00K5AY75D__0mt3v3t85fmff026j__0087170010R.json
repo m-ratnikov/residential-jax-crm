@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-13T04:14:55.694Z",
+  "dismissedAt": null,
+  "id": "01M2C65QX4DCNYZCA00K5AY75D__0mt3v3t85fmff026j__0087170010R",
+  "kind": "updated_match",
+  "matcherRunId": "0mtzavx0b7v6buxl8",
+  "notifications": [
+    {
+      "body": "1327 ALTMAN RD, JACKSONVILLE, 32221 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $82,409 (+49.3); roof about 68 years old, estimated from year built (+44).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: LUNDEEN RICHARD A\nAssessed value: $82,409\nParcel: 0087170010R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-13T04:15:49.749Z",
+      "id": "0mtzawzxxxf1mhlau",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-13T04:15:49.749Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1327 ALTMAN RD, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "1327 ALTMAN RD, JACKSONVILLE, 32221 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 93 / 100\nWhy: assessed at $82,409 (+49.3); roof about 68 years old, estimated from year built (+44).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: LUNDEEN RICHARD A\nAssessed value: $82,409\nParcel: 0087170010R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-13T04:15:49.749Z",
+      "id": "0mtzawzxxkwf6npcx",
+      "providerMessageId": "sim_email_9b2b9cd78b53df02d857",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-13T04:15:49.749Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 1327 ALTMAN RD, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2C65QX4DCNYZCA00K5AY75D",
+  "propertyId": "0087170010R",
+  "propertySnapshot": {
+    "address": "1327 ALTMAN RD, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 82409,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "1982-04-05",
+    "latitude": 30.3001581,
+    "longitude": -81.7894399,
+    "ownerName": "LUNDEEN RICHARD A",
+    "ownerOccupied": true,
+    "propertyId": "0087170010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2C65QX4DCNYZCA00K5AY75D",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 44
+  },
+  "rationale": "assessed at $82,409 (+49.3); roof about 68 years old, estimated from year built (+44).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.26
+}
