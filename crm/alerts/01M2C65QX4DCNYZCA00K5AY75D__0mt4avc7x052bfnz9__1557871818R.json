@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-13T04:14:55.694Z",
+  "dismissedAt": null,
+  "id": "01M2C65QX4DCNYZCA00K5AY75D__0mt4avc7x052bfnz9__1557871818R",
+  "kind": "new_match",
+  "matcherRunId": "0mtzavx0b7v6buxl8",
+  "notifications": [
+    {
+      "body": "3551 WHALERS WAY, JACKSONVILLE, 32257 now matches your saved search \"Transit infill\".\n\nMatch score: 48 / 100\nWhy: 218 m to 9775 San Jose Blvd (+43.7); held 10 years (+4).\n\nOwner of record: KRUSEMARK JESSICA N\nAssessed value: $171,241\nParcel: 1557871818R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-13T04:15:22.341Z",
+      "id": "0mtzaweslt9k48v7n",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-13T04:15:22.341Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 3551 WHALERS WAY, JACKSONVILLE, 32257"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2C65QX4DCNYZCA00K5AY75D",
+  "propertyId": "1557871818R",
+  "propertySnapshot": {
+    "address": "3551 WHALERS WAY, JACKSONVILLE, 32257",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32257",
+    "assessedValue": 171241,
+    "builtYear": 1983,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.1864142,
+    "longitude": -81.619124,
+    "ownerName": "KRUSEMARK JESSICA N",
+    "ownerOccupied": true,
+    "propertyId": "1557871818R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2C65QX4DCNYZCA00K5AY75D",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 31,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "218 m to 9775 San Jose Blvd (+43.7); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 47.65
+}
