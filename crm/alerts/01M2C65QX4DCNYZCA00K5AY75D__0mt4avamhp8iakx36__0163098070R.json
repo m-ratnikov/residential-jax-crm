@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-13T04:14:55.694Z",
+  "dismissedAt": null,
+  "id": "01M2C65QX4DCNYZCA00K5AY75D__0mt4avamhp8iakx36__0163098070R",
+  "kind": "new_match",
+  "matcherRunId": "0mtzavx0b7v6buxl8",
+  "notifications": [
+    {
+      "body": "7450 PETRELL DR, JACKSONVILLE, 32222 now matches your saved search \"Tired landlord\".\n\nMatch score: 46 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 37 years old, estimated from year built (+14.6); held 10 years (+3.3).\n\nOwner of record: JAMES CHRISTOPHER DOWNING III\nAssessed value: $213,786\nParcel: 0163098070R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-13T04:15:39.837Z",
+      "id": "0mtzawsal46oj62l4",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-13T04:15:39.837Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 7450 PETRELL DR, JACKSONVILLE, 32222"
+    },
+    {
+      "body": "7450 PETRELL DR, JACKSONVILLE, 32222 now matches your saved search \"Tired landlord\".\n\nMatch score: 46 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 37 years old, estimated from year built (+14.6); held 10 years (+3.3).\n\nOwner of record: JAMES CHRISTOPHER DOWNING III\nAssessed value: $213,786\nParcel: 0163098070R\n\nTriggered by pipeline run 01M2C65QX4DCNYZCA00K5AY75D.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-13T04:15:39.837Z",
+      "id": "0mtzawsal9ef46a9i",
+      "providerMessageId": "sim_email_d93dc028b65c8c497217",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-13T04:15:39.837Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 7450 PETRELL DR, JACKSONVILLE, 32222"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2C65QX4DCNYZCA00K5AY75D",
+  "propertyId": "0163098070R",
+  "propertySnapshot": {
+    "address": "7450 PETRELL DR, JACKSONVILLE, 32222",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32222",
+    "assessedValue": 213786,
+    "builtYear": 1989,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2077581,
+    "longitude": -81.8019888,
+    "ownerName": "JAMES CHRISTOPHER DOWNING III",
+    "ownerOccupied": false,
+    "propertyId": "0163098070R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2C65QX4DCNYZCA00K5AY75D",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 37,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 37 years old, estimated from year built (+14.6); held 10 years (+3.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 46.22
+}
