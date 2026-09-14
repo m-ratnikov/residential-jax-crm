@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-14T04:43:26.022Z",
+  "dismissedAt": null,
+  "id": "01M2AV5AGYT25VJ11RQRM2JCX0__0mt4avc7x052bfnz9__0395990000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu0rciqfm93mfzh0",
+  "notifications": [
+    {
+      "body": "8570 DARLINGTON DR, JACKSONVILLE, 32208 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: water view of St. Johns River 45 m from the water, 92 m to Clyde Dr + Rochdale Rd (+53.1); held 54 years (+36.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: HOLSEY ESSIE B/E\nAssessed value: $62,232\nParcel: 0395990000R\n\nTriggered by pipeline run 01M2AV5AGYT25VJ11RQRM2JCX0.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-14T04:43:45.259Z",
+      "id": "0mu0rcrfvyjjqfk15",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-14T04:43:45.259Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 8570 DARLINGTON DR, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2AV5AGYT25VJ11RQRM2JCX0",
+  "propertyId": "0395990000R",
+  "propertySnapshot": {
+    "address": "8570 DARLINGTON DR, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 62232,
+    "builtYear": 1959,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3968348,
+    "longitude": -81.7214364,
+    "ownerName": "HOLSEY ESSIE B/E",
+    "ownerOccupied": true,
+    "propertyId": "0395990000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2AV5AGYT25VJ11RQRM2JCX0",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 67,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 54
+  },
+  "rationale": "water view of St. Johns River 45 m from the water, 92 m to Clyde Dr + Rochdale Rd (+53.1); held 54 years (+36.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 89.36
+}
