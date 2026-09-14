@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-14T05:14:26.010Z",
+  "dismissedAt": null,
+  "id": "01M2ERDCXQB0S5S9B8GKMQDVXV__0mt4avamhp8iakx36__0088921160R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu0sgafeosuf4ebf",
+  "notifications": [
+    {
+      "body": "9581 S VILLIERS DR, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 63 / 100\nWhy: absentee owner mailing from out of state (+28.3); held 32 years (last sale 1993-12-20) (+19.4); roof about 38 years old, estimated from year built (+15.1).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: GERMAN AIMEE\nAssessed value: $193,231\nParcel: 0088921160R\n\nTriggered by pipeline run 01M2ERDCXQB0S5S9B8GKMQDVXV.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-14T05:14:50.110Z",
+      "id": "0mu0sgqdaofvpmjni",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-14T05:14:50.110Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 9581 S VILLIERS DR, JACKSONVILLE, 32221"
+    },
+    {
+      "body": "9581 S VILLIERS DR, JACKSONVILLE, 32221 already matched \"Tired landlord\" and has changed.\n\nMatch score: 63 / 100\nWhy: absentee owner mailing from out of state (+28.3); held 32 years (last sale 1993-12-20) (+19.4); roof about 38 years old, estimated from year built (+15.1).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: GERMAN AIMEE\nAssessed value: $193,231\nParcel: 0088921160R\n\nTriggered by pipeline run 01M2ERDCXQB0S5S9B8GKMQDVXV.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-14T05:14:50.111Z",
+      "id": "0mu0sgqdbr9oj2byh",
+      "providerMessageId": "sim_email_950d71f81331ffcf48a1",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-14T05:14:50.111Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 9581 S VILLIERS DR, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2ERDCXQB0S5S9B8GKMQDVXV",
+  "propertyId": "0088921160R",
+  "propertySnapshot": {
+    "address": "9581 S VILLIERS DR, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 193231,
+    "builtYear": 1988,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "1993-12-20",
+    "latitude": 30.3034697,
+    "longitude": -81.8155096,
+    "ownerName": "GERMAN AIMEE",
+    "ownerOccupied": false,
+    "propertyId": "0088921160R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2ERDCXQB0S5S9B8GKMQDVXV",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 38,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 32
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); held 32 years (last sale 1993-12-20) (+19.4); roof about 38 years old, estimated from year built (+15.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 62.76
+}
