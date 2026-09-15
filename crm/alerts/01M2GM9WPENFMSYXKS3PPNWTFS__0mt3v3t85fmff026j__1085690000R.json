@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-15T03:16:35.211Z",
+  "dismissedAt": null,
+  "id": "01M2GM9WPENFMSYXKS3PPNWTFS__0mt3v3t85fmff026j__1085690000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu23olktww03oh9c",
+  "notifications": [
+    {
+      "body": "857 CEDAR BAY RD, JACKSONVILLE, 32218 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $83,459 (+49); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: NEWMAN SHIRLEY\nAssessed value: $83,459\nParcel: 1085690000R\n\nTriggered by pipeline run 01M2GM9WPENFMSYXKS3PPNWTFS.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-15T03:16:57.030Z",
+      "id": "0mu23ozeu30vz3f0v",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-15T03:16:57.030Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 857 CEDAR BAY RD, JACKSONVILLE, 32218"
+    },
+    {
+      "body": "857 CEDAR BAY RD, JACKSONVILLE, 32218 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $83,459 (+49); roof about 76 years old, estimated from year built (+45.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: NEWMAN SHIRLEY\nAssessed value: $83,459\nParcel: 1085690000R\n\nTriggered by pipeline run 01M2GM9WPENFMSYXKS3PPNWTFS.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-15T03:16:57.030Z",
+      "id": "0mu23ozeug4b9xc11",
+      "providerMessageId": "sim_email_66d30d16b41c6703d5c5",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-15T03:16:57.030Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 857 CEDAR BAY RD, JACKSONVILLE, 32218"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2GM9WPENFMSYXKS3PPNWTFS",
+  "propertyId": "1085690000R",
+  "propertySnapshot": {
+    "address": "857 CEDAR BAY RD, JACKSONVILLE, 32218",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32218",
+    "assessedValue": 83459,
+    "builtYear": 1939,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.4335411,
+    "longitude": -81.6285571,
+    "ownerName": "NEWMAN SHIRLEY",
+    "ownerOccupied": true,
+    "propertyId": "1085690000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2GM9WPENFMSYXKS3PPNWTFS",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 76,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 55
+  },
+  "rationale": "assessed at $83,459 (+49); roof about 76 years old, estimated from year built (+45.3).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.3
+}
