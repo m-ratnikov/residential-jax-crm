@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-15T02:43:30.248Z",
+  "dismissedAt": null,
+  "id": "01M2HAP5ZZ0253TMBZYJMWPRZ9__0mt4avamhp8iakx36__1490171068R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu22i1xrnkpxidkx",
+  "notifications": [
+    {
+      "body": "4335 PILGRIM WAY, JACKSONVILLE, 32257 already matched \"Tired landlord\" and has changed.\n\nMatch score: 57 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 43 years old, estimated from year built (+17.6); held 20 years (+10.6).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SZABO ALIN O ET AL\nAssessed value: $271,897\nParcel: 1490171068R\n\nTriggered by pipeline run 01M2HAP5ZZ0253TMBZYJMWPRZ9.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-15T02:43:57.401Z",
+      "id": "0mu22ijx5p9d1m1ht",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-15T02:43:57.401Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 4335 PILGRIM WAY, JACKSONVILLE, 32257"
+    },
+    {
+      "body": "4335 PILGRIM WAY, JACKSONVILLE, 32257 already matched \"Tired landlord\" and has changed.\n\nMatch score: 57 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 43 years old, estimated from year built (+17.6); held 20 years (+10.6).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: SZABO ALIN O ET AL\nAssessed value: $271,897\nParcel: 1490171068R\n\nTriggered by pipeline run 01M2HAP5ZZ0253TMBZYJMWPRZ9.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-15T02:43:57.401Z",
+      "id": "0mu22ijx58rszezqj",
+      "providerMessageId": "sim_email_d0f3bb4dd05eff689cca",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-15T02:43:57.401Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 4335 PILGRIM WAY, JACKSONVILLE, 32257"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2HAP5ZZ0253TMBZYJMWPRZ9",
+  "propertyId": "1490171068R",
+  "propertySnapshot": {
+    "address": "4335 PILGRIM WAY, JACKSONVILLE, 32257",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32257",
+    "assessedValue": 271897,
+    "builtYear": 1983,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.1942387,
+    "longitude": -81.6049375,
+    "ownerName": "SZABO ALIN O ET AL",
+    "ownerOccupied": false,
+    "propertyId": "1490171068R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2HAP5ZZ0253TMBZYJMWPRZ9",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 43,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 20
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 43 years old, estimated from year built (+17.6); held 20 years (+10.6).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 56.57
+}
