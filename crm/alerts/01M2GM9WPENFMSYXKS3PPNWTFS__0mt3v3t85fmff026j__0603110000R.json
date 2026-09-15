@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-15T03:16:35.211Z",
+  "dismissedAt": null,
+  "id": "01M2GM9WPENFMSYXKS3PPNWTFS__0mt3v3t85fmff026j__0603110000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu23olktww03oh9c",
+  "notifications": [
+    {
+      "body": "5125 BENNING RD, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $84,801 (+48.6); roof about 79 years old, estimated from year built (+45.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LULU PROPERTIES LLC\nAssessed value: $84,801\nParcel: 0603110000R\n\nTriggered by pipeline run 01M2GM9WPENFMSYXKS3PPNWTFS.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-15T03:16:58.152Z",
+      "id": "0mu23p0a0m7vasd1z",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-15T03:16:58.152Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 5125 BENNING RD, JACKSONVILLE, 32254"
+    },
+    {
+      "body": "5125 BENNING RD, JACKSONVILLE, 32254 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: assessed at $84,801 (+48.6); roof about 79 years old, estimated from year built (+45.7).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: LULU PROPERTIES LLC\nAssessed value: $84,801\nParcel: 0603110000R\n\nTriggered by pipeline run 01M2GM9WPENFMSYXKS3PPNWTFS.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-15T03:16:58.152Z",
+      "id": "0mu23p0a0iyn54cng",
+      "providerMessageId": "sim_email_96a7222c3b4ee5eb5576",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-15T03:16:58.152Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 5125 BENNING RD, JACKSONVILLE, 32254"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2GM9WPENFMSYXKS3PPNWTFS",
+  "propertyId": "0603110000R",
+  "propertySnapshot": {
+    "address": "5125 BENNING RD, JACKSONVILLE, 32254",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32254",
+    "assessedValue": 84801,
+    "builtYear": 1947,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3195195,
+    "longitude": -81.7325445,
+    "ownerName": "LULU PROPERTIES LLC",
+    "ownerOccupied": false,
+    "propertyId": "0603110000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2GM9WPENFMSYXKS3PPNWTFS",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 79,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 15
+  },
+  "rationale": "assessed at $84,801 (+48.6); roof about 79 years old, estimated from year built (+45.7).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 94.26
+}
