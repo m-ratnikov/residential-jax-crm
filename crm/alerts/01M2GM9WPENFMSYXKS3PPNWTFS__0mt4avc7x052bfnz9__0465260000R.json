@@ -1,0 +1,59 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-15T03:16:35.211Z",
+  "dismissedAt": null,
+  "id": "01M2GM9WPENFMSYXKS3PPNWTFS__0mt4avc7x052bfnz9__0465260000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu23olktww03oh9c",
+  "notifications": [
+    {
+      "body": "2014 W 15TH ST, JACKSONVILLE, 32209 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: 35 m to 13th St + Palafox St (+57.4); held 42 years (+32).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: NOBLES NATHANIEL I LIFE ESTATE\nAssessed value: $60,384\nParcel: 0465260000R\n\nTriggered by pipeline run 01M2GM9WPENFMSYXKS3PPNWTFS.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-15T03:16:44.934Z",
+      "id": "0mu23oq2uefioa2o5",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-15T03:16:44.934Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 2014 W 15TH ST, JACKSONVILLE, 32209"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2GM9WPENFMSYXKS3PPNWTFS",
+  "propertyId": "0465260000R",
+  "propertySnapshot": {
+    "address": "2014 W 15TH ST, JACKSONVILLE, 32209",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32209",
+    "assessedValue": 60384,
+    "builtYear": 1967,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.3524672,
+    "longitude": -81.6920314,
+    "ownerName": "NOBLES NATHANIEL I LIFE ESTATE",
+    "ownerOccupied": true,
+    "propertyId": "0465260000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2GM9WPENFMSYXKS3PPNWTFS",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 59,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 42
+  },
+  "rationale": "35 m to 13th St + Palafox St (+57.4); held 42 years (+32).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 89.36
+}
