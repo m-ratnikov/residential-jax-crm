@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-15T02:43:30.248Z",
+  "dismissedAt": null,
+  "id": "01M2HAP5ZZ0253TMBZYJMWPRZ9__0mt4avc7x052bfnz9__1030170010R",
+  "kind": "new_match",
+  "matcherRunId": "0mu22i1xrnkpxidkx",
+  "notifications": [
+    {
+      "body": "4537 ORTEGA FARMS CIR, JACKSONVILLE, 32210 now matches your saved search \"Transit infill\".\n\nMatch score: 49 / 100\nWhy: water view of St. Johns River 46 m from the water, 203 m to 5347 Timuquana Rd (+44.8); held 10 years (+4).\n\nOwner of record: SCHLEGEL KEITH ET AL\nAssessed value: $560,088\nParcel: 1030170010R\n\nTriggered by pipeline run 01M2HAP5ZZ0253TMBZYJMWPRZ9.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-15T02:43:50.454Z",
+      "id": "0mu22iek6qvuxkf17",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-15T02:43:50.454Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4537 ORTEGA FARMS CIR, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2HAP5ZZ0253TMBZYJMWPRZ9",
+  "propertyId": "1030170010R",
+  "propertySnapshot": {
+    "address": "4537 ORTEGA FARMS CIR, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 560088,
+    "builtYear": 1974,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.259597,
+    "longitude": -81.7203927,
+    "ownerName": "SCHLEGEL KEITH ET AL",
+    "ownerOccupied": true,
+    "propertyId": "1030170010R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2HAP5ZZ0253TMBZYJMWPRZ9",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 52,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of St. Johns River 46 m from the water, 203 m to 5347 Timuquana Rd (+44.8); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 48.76
+}
