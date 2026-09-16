@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-16T15:38:37.293Z",
+  "dismissedAt": null,
+  "id": "01M2N4ZD6KA6EYW49T6WG149W8__0mt4avamhp8iakx36__1551670000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu49mpwjp1h2yhmt",
+  "notifications": [
+    {
+      "body": "3150 SKIPPER LN, JACKSONVILLE, 32216 already matched \"Tired landlord\" and has changed.\n\nMatch score: 57 / 100\nWhy: roof about 51 years old, estimated from year built (+21.7); absentee owner mailing from elsewhere in Florida (+20); held 26 years (+15).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: HELTON RONNIE N\nAssessed value: $236,338\nParcel: 1551670000R\n\nTriggered by pipeline run 01M2N4ZD6KA6EYW49T6WG149W8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-16T15:39:14.662Z",
+      "id": "0mu49nfjahr3dcxj2",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-16T15:39:14.662Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 3150 SKIPPER LN, JACKSONVILLE, 32216"
+    },
+    {
+      "body": "3150 SKIPPER LN, JACKSONVILLE, 32216 already matched \"Tired landlord\" and has changed.\n\nMatch score: 57 / 100\nWhy: roof about 51 years old, estimated from year built (+21.7); absentee owner mailing from elsewhere in Florida (+20); held 26 years (+15).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: HELTON RONNIE N\nAssessed value: $236,338\nParcel: 1551670000R\n\nTriggered by pipeline run 01M2N4ZD6KA6EYW49T6WG149W8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-16T15:39:14.662Z",
+      "id": "0mu49nfja0jji5mjv",
+      "providerMessageId": "sim_email_27639aa95c5ad9a1d0e6",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-16T15:39:14.662Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 3150 SKIPPER LN, JACKSONVILLE, 32216"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2N4ZD6KA6EYW49T6WG149W8",
+  "propertyId": "1551670000R",
+  "propertySnapshot": {
+    "address": "3150 SKIPPER LN, JACKSONVILLE, 32216",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32216",
+    "assessedValue": 236338,
+    "builtYear": 1965,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.26797,
+    "longitude": -81.6035883,
+    "ownerName": "HELTON RONNIE N",
+    "ownerOccupied": false,
+    "propertyId": "1551670000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2N4ZD6KA6EYW49T6WG149W8",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 51,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 26
+  },
+  "rationale": "roof about 51 years old, estimated from year built (+21.7); absentee owner mailing from elsewhere in Florida (+20); held 26 years (+15).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 56.68
+}
