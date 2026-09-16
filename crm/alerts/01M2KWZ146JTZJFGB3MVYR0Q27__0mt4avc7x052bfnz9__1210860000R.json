@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-16T03:15:56.784Z",
+  "dismissedAt": null,
+  "id": "01M2KWZ146JTZJFGB3MVYR0Q27__0mt4avc7x052bfnz9__1210860000R",
+  "kind": "new_match",
+  "matcherRunId": "0mu3j3npfgogmqlwp",
+  "notifications": [
+    {
+      "body": "8408 S LAMANTO AVE, JACKSONVILLE, 32211 now matches your saved search \"Transit infill\".\n\nMatch score: 50 / 100\nWhy: 185 m to 8560 Arlington Expwy (+46.2); held 10 years (+4).\n\nOwner of record: ADAMS DONALD HOWARD JR\nAssessed value: $125,861\nParcel: 1210860000R\n\nTriggered by pipeline run 01M2KWZ146JTZJFGB3MVYR0Q27.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-16T03:16:32.832Z",
+      "id": "0mu3j4benagl4ebh4",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-16T03:16:32.831Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 8408 S LAMANTO AVE, JACKSONVILLE, 32211"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2KWZ146JTZJFGB3MVYR0Q27",
+  "propertyId": "1210860000R",
+  "propertySnapshot": {
+    "address": "8408 S LAMANTO AVE, JACKSONVILLE, 32211",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32211",
+    "assessedValue": 125861,
+    "builtYear": 1956,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3324295,
+    "longitude": -81.5636701,
+    "ownerName": "ADAMS DONALD HOWARD JR",
+    "ownerOccupied": false,
+    "propertyId": "1210860000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2KWZ146JTZJFGB3MVYR0Q27",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "185 m to 8560 Arlington Expwy (+46.2); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 50.16
+}
