@@ -1,0 +1,60 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-16T13:38:44.424Z",
+  "dismissedAt": null,
+  "id": "01M2N4ZD6KA6EYW49T6WG149W8__0mt4avc7x052bfnz9__0092000000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu45ckl28w6fqjeq",
+  "notifications": [
+    {
+      "body": "8047 RAYMOND ST, JACKSONVILLE, 32221 already matched \"Transit infill\" and has changed.\n\nMatch score: 88 / 100\nWhy: 82 m to Herlong Rd + Fouraker Dr (+53.9); held 45 years (last sale 1981-02-18) (+34.6).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: ROBERTS MICHAEL D\nAssessed value: $60,330\nParcel: 0092000000R\n\nTriggered by pipeline run 01M2N4ZD6KA6EYW49T6WG149W8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-16T13:38:54.298Z",
+      "id": "0mu45co9mkkm6pv4z",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-16T13:38:54.298Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 8047 RAYMOND ST, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2N4ZD6KA6EYW49T6WG149W8",
+  "propertyId": "0092000000R",
+  "propertySnapshot": {
+    "address": "8047 RAYMOND ST, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 60330,
+    "builtYear": 1972,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "1981-02-18",
+    "latitude": 30.2871875,
+    "longitude": -81.7826038,
+    "ownerName": "ROBERTS MICHAEL D",
+    "ownerOccupied": true,
+    "propertyId": "0092000000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2N4ZD6KA6EYW49T6WG149W8",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 54,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 45
+  },
+  "rationale": "82 m to Herlong Rd + Fouraker Dr (+53.9); held 45 years (last sale 1981-02-18) (+34.6).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 88.48
+}
