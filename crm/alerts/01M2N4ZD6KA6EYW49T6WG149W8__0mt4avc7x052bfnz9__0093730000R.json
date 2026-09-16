@@ -1,0 +1,60 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-16T23:35:41.324Z",
+  "dismissedAt": null,
+  "id": "01M2N4ZD6KA6EYW49T6WG149W8__0mt4avc7x052bfnz9__0093730000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu4qo8g1v2p83myc",
+  "notifications": [
+    {
+      "body": "1706 FOURAKER RD, JACKSONVILLE, 32221 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: 46 m to Fouracker Rd + Renoir Dr (+56.6); held 43 years (+32.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: FISHER KIM S\nAssessed value: $104,039\nParcel: 0093730000R\n\nTriggered by pipeline run 01M2N4ZD6KA6EYW49T6WG149W8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-16T23:35:52.994Z",
+      "id": "0mu4qoe5e9i922o5x",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-16T23:35:52.994Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 1706 FOURAKER RD, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2N4ZD6KA6EYW49T6WG149W8",
+  "propertyId": "0093730000R",
+  "propertySnapshot": {
+    "address": "1706 FOURAKER RD, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 104039,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.289105,
+    "longitude": -81.7816989,
+    "ownerName": "FISHER KIM S",
+    "ownerOccupied": true,
+    "propertyId": "0093730000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2N4ZD6KA6EYW49T6WG149W8",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 43
+  },
+  "rationale": "46 m to Fouracker Rd + Renoir Dr (+56.6); held 43 years (+32.9).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 89.41
+}
