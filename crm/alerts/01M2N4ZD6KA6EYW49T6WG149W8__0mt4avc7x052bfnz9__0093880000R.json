@@ -1,0 +1,60 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-16T23:35:41.324Z",
+  "dismissedAt": null,
+  "id": "01M2N4ZD6KA6EYW49T6WG149W8__0mt4avc7x052bfnz9__0093880000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu4qo8g1v2p83myc",
+  "notifications": [
+    {
+      "body": "1651 LOUVRE DR, JACKSONVILLE, 32221 already matched \"Transit infill\" and has changed.\n\nMatch score: 90 / 100\nWhy: 1382 m from the water, 77 m to Normandy Blvd + Combs St (+54.2); held 51 years (+35.8).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: COLE GERTRUDE\nAssessed value: $58,642\nParcel: 0093880000R\n\nTriggered by pipeline run 01M2N4ZD6KA6EYW49T6WG149W8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-16T23:35:49.847Z",
+      "id": "0mu4qobpzfb5nscju",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-16T23:35:49.847Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 1651 LOUVRE DR, JACKSONVILLE, 32221"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2N4ZD6KA6EYW49T6WG149W8",
+  "propertyId": "0093880000R",
+  "propertySnapshot": {
+    "address": "1651 LOUVRE DR, JACKSONVILLE, 32221",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32221",
+    "assessedValue": 58642,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2898837,
+    "longitude": -81.7775243,
+    "ownerName": "COLE GERTRUDE",
+    "ownerOccupied": true,
+    "propertyId": "0093880000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2N4ZD6KA6EYW49T6WG149W8",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 51
+  },
+  "rationale": "1382 m from the water, 77 m to Normandy Blvd + Combs St (+54.2); held 51 years (+35.8).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 90.09
+}
