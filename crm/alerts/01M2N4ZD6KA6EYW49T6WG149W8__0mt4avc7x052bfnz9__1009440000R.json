@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-16T15:38:37.293Z",
+  "dismissedAt": null,
+  "id": "01M2N4ZD6KA6EYW49T6WG149W8__0mt4avc7x052bfnz9__1009440000R",
+  "kind": "new_match",
+  "matcherRunId": "0mu49mpwjp1h2yhmt",
+  "notifications": [
+    {
+      "body": "4725 QUEEN LN, JACKSONVILLE, 32210 now matches your saved search \"Transit infill\".\n\nMatch score: 50 / 100\nWhy: water view of St. Johns River 121 m from the water, 181 m to Roosevelt Blvd + Longfellow St (+46.4); held 10 years (+4).\n\nOwner of record: JEANETTE D SCHNAUSS LIVING TRU\nAssessed value: $190,016\nParcel: 1009440000R\n\nTriggered by pipeline run 01M2N4ZD6KA6EYW49T6WG149W8.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-16T15:39:06.625Z",
+      "id": "0mu49n9c191ps3xh0",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-16T15:39:06.625Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4725 QUEEN LN, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2N4ZD6KA6EYW49T6WG149W8",
+  "propertyId": "1009440000R",
+  "propertySnapshot": {
+    "address": "4725 QUEEN LN, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 190016,
+    "builtYear": 1956,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2615555,
+    "longitude": -81.7092294,
+    "ownerName": "JEANETTE D SCHNAUSS LIVING TRU",
+    "ownerOccupied": true,
+    "propertyId": "1009440000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2N4ZD6KA6EYW49T6WG149W8",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 56,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "water view of St. Johns River 121 m from the water, 181 m to Roosevelt Blvd + Longfellow St (+46.4); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 50.45
+}
