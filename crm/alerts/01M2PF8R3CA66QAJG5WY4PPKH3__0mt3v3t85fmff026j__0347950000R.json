@@ -1,0 +1,70 @@
+{
+  "changedFields": [
+    "yearsSinceLastSale"
+  ],
+  "createdAt": "2026-09-17T01:48:25.997Z",
+  "dismissedAt": null,
+  "id": "01M2PF8R3CA66QAJG5WY4PPKH3__0mt3v3t85fmff026j__0347950000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu4vey752lv2glkz",
+  "notifications": [
+    {
+      "body": "7320 BRUCE ST, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: roof about 104 years old, estimated from year built (+47.4); assessed at $92,652 (+46.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GOGGINS ASHLEY\nAssessed value: $92,652\nParcel: 0347950000R\n\nTriggered by pipeline run 01M2PF8R3CA66QAJG5WY4PPKH3.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-17T01:49:31.736Z",
+      "id": "0mu4vg9g802shj3sy",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-17T01:49:31.736Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7320 BRUCE ST, JACKSONVILLE, 32208"
+    },
+    {
+      "body": "7320 BRUCE ST, JACKSONVILLE, 32208 already matched \"Aging roof, entry price band\" and has changed.\n\nMatch score: 94 / 100\nWhy: roof about 104 years old, estimated from year built (+47.4); assessed at $92,652 (+46.3).\n\nChanged since the last pass: ownership tenure.\n\nOwner of record: GOGGINS ASHLEY\nAssessed value: $92,652\nParcel: 0347950000R\n\nTriggered by pipeline run 01M2PF8R3CA66QAJG5WY4PPKH3.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-17T01:49:31.736Z",
+      "id": "0mu4vg9g8cd87gjfy",
+      "providerMessageId": "sim_email_6c72a3506e791cb0efb3",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-17T01:49:31.736Z",
+      "status": "sent",
+      "subject": "Updated match for \"Aging roof, entry price band\": 7320 BRUCE ST, JACKSONVILLE, 32208"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2PF8R3CA66QAJG5WY4PPKH3",
+  "propertyId": "0347950000R",
+  "propertySnapshot": {
+    "address": "7320 BRUCE ST, JACKSONVILLE, 32208",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32208",
+    "assessedValue": 92652,
+    "builtYear": 1922,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.3854823,
+    "longitude": -81.655572,
+    "ownerName": "GOGGINS ASHLEY",
+    "ownerOccupied": true,
+    "propertyId": "0347950000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2PF8R3CA66QAJG5WY4PPKH3",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 104,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 13
+  },
+  "rationale": "roof about 104 years old, estimated from year built (+47.4); assessed at $92,652 (+46.3).",
+  "readAt": null,
+  "savedSearchId": "0mt3v3t85fmff026j",
+  "score": 93.64
+}
