@@ -1,0 +1,57 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-17T01:48:25.997Z",
+  "dismissedAt": null,
+  "id": "01M2PF8R3CA66QAJG5WY4PPKH3__0mt4avc7x052bfnz9__1533570000R",
+  "kind": "new_match",
+  "matcherRunId": "0mu4vey752lv2glkz",
+  "notifications": [
+    {
+      "body": "4806 SOUTHLAND DR, JACKSONVILLE, 32207 now matches your saved search \"Transit infill\".\n\nMatch score: 50 / 100\nWhy: 182 m to University Hub (+46.4); held 10 years (+4).\n\nOwner of record: HAGANS DARRIEL D\nAssessed value: $143,555\nParcel: 1533570000R\n\nTriggered by pipeline run 01M2PF8R3CA66QAJG5WY4PPKH3.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-17T01:49:00.298Z",
+      "id": "0mu4vfl6yc35exo6h",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-17T01:49:00.298Z",
+      "status": "delivered",
+      "subject": "New match for \"Transit infill\": 4806 SOUTHLAND DR, JACKSONVILLE, 32207"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2PF8R3CA66QAJG5WY4PPKH3",
+  "propertyId": "1533570000R",
+  "propertySnapshot": {
+    "address": "4806 SOUTHLAND DR, JACKSONVILLE, 32207",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32207",
+    "assessedValue": 143555,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": null,
+    "latitude": 30.2739501,
+    "longitude": -81.6175509,
+    "ownerName": "HAGANS DARRIEL D",
+    "ownerOccupied": true,
+    "propertyId": "1533570000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2PF8R3CA66QAJG5WY4PPKH3",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 36,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "182 m to University Hub (+46.4); held 10 years (+4).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 50.37
+}
