@@ -1,0 +1,60 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-17T07:41:27.671Z",
+  "dismissedAt": null,
+  "id": "01M2Q32SCA6GE2F0RS9FXS76PS__0mt4avc7x052bfnz9__0099030000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu580xyn69tg1i9k",
+  "notifications": [
+    {
+      "body": "2116 W PATOU DR, JACKSONVILLE, 32210 already matched \"Transit infill\" and has changed.\n\nMatch score: 89 / 100\nWhy: 77 m to Herlong Rd + De La Roche Dr (+54.2); held 46 years (last sale 1980-04-25) (+34.9).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: GALLAZZI JOSEPH\nAssessed value: $58,384\nParcel: 0099030000R\n\nTriggered by pipeline run 01M2Q32SCA6GE2F0RS9FXS76PS.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-17T07:41:37.394Z",
+      "id": "0mu5812422zziua50",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-17T07:41:37.394Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 2116 W PATOU DR, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2Q32SCA6GE2F0RS9FXS76PS",
+  "propertyId": "0099030000R",
+  "propertySnapshot": {
+    "address": "2116 W PATOU DR, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 58384,
+    "builtYear": 1959,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "1980-04-25",
+    "latitude": 30.2797441,
+    "longitude": -81.7843585,
+    "ownerName": "GALLAZZI JOSEPH",
+    "ownerOccupied": false,
+    "propertyId": "0099030000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2Q32SCA6GE2F0RS9FXS76PS",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 67,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 46
+  },
+  "rationale": "77 m to Herlong Rd + De La Roche Dr (+54.2); held 46 years (last sale 1980-04-25) (+34.9).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 89.07
+}
