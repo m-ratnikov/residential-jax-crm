@@ -1,0 +1,71 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-17T01:48:25.997Z",
+  "dismissedAt": null,
+  "id": "01M2PF8R3CA66QAJG5WY4PPKH3__0mt4avamhp8iakx36__0096880000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu4vey752lv2glkz",
+  "notifications": [
+    {
+      "body": "1927 E DELAROCHE DR, JACKSONVILLE, 32210 already matched \"Tired landlord\" and has changed.\n\nMatch score: 64 / 100\nWhy: roof about 68 years old, estimated from year built (+29.3); absentee owner mailing from out of state (+28.3); held 14 years (last sale 2012-03-06) (+6.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: SURAN LLC\nAssessed value: $112,246\nParcel: 0096880000R\n\nTriggered by pipeline run 01M2PF8R3CA66QAJG5WY4PPKH3.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-17T01:49:09.516Z",
+      "id": "0mu4vfsb06idf79dn",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-17T01:49:09.516Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Tired landlord\": 1927 E DELAROCHE DR, JACKSONVILLE, 32210"
+    },
+    {
+      "body": "1927 E DELAROCHE DR, JACKSONVILLE, 32210 already matched \"Tired landlord\" and has changed.\n\nMatch score: 64 / 100\nWhy: roof about 68 years old, estimated from year built (+29.3); absentee owner mailing from out of state (+28.3); held 14 years (last sale 2012-03-06) (+6.2).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: SURAN LLC\nAssessed value: $112,246\nParcel: 0096880000R\n\nTriggered by pipeline run 01M2PF8R3CA66QAJG5WY4PPKH3.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-17T01:49:09.516Z",
+      "id": "0mu4vfsb0cf6beoa5",
+      "providerMessageId": "sim_email_bc6ce0389c12eef0fb7d",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-17T01:49:09.516Z",
+      "status": "sent",
+      "subject": "Updated match for \"Tired landlord\": 1927 E DELAROCHE DR, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2PF8R3CA66QAJG5WY4PPKH3",
+  "propertyId": "0096880000R",
+  "propertySnapshot": {
+    "address": "1927 E DELAROCHE DR, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 112246,
+    "builtYear": 1958,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": "2012-03-06",
+    "latitude": 30.2835303,
+    "longitude": -81.775945,
+    "ownerName": "SURAN LLC",
+    "ownerOccupied": false,
+    "propertyId": "0096880000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2PF8R3CA66QAJG5WY4PPKH3",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 68,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 14
+  },
+  "rationale": "roof about 68 years old, estimated from year built (+29.3); absentee owner mailing from out of state (+28.3); held 14 years (last sale 2012-03-06) (+6.2).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 63.9
+}
