@@ -1,0 +1,68 @@
+{
+  "changedFields": [],
+  "createdAt": "2026-09-17T01:48:25.997Z",
+  "dismissedAt": null,
+  "id": "01M2PF8R3CA66QAJG5WY4PPKH3__0mt4avamhp8iakx36__0991352850R",
+  "kind": "new_match",
+  "matcherRunId": "0mu4vey752lv2glkz",
+  "notifications": [
+    {
+      "body": "5347 MARSALA LN, JACKSONVILLE, 32244 now matches your saved search \"Tired landlord\".\n\nMatch score: 40 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 25 years old, estimated from year built (+8.4); held 10 years (+3.3).\n\nOwner of record: CLARK SABRIANA A\nAssessed value: $294,118\nParcel: 0991352850R\n\nTriggered by pipeline run 01M2PF8R3CA66QAJG5WY4PPKH3.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-17T01:49:23.328Z",
+      "id": "0mu4vg2yolr2j4gns",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-17T01:49:23.328Z",
+      "status": "delivered",
+      "subject": "New match for \"Tired landlord\": 5347 MARSALA LN, JACKSONVILLE, 32244"
+    },
+    {
+      "body": "5347 MARSALA LN, JACKSONVILLE, 32244 now matches your saved search \"Tired landlord\".\n\nMatch score: 40 / 100\nWhy: absentee owner mailing from out of state (+28.3); roof about 25 years old, estimated from year built (+8.4); held 10 years (+3.3).\n\nOwner of record: CLARK SABRIANA A\nAssessed value: $294,118\nParcel: 0991352850R\n\nTriggered by pipeline run 01M2PF8R3CA66QAJG5WY4PPKH3.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "email",
+      "createdAt": "2026-09-17T01:49:23.328Z",
+      "id": "0mu4vg2yoseholwpc",
+      "providerMessageId": "sim_email_dfe583638513e79645bd",
+      "recipient": "acquisitions@example.invalid",
+      "sentAt": "2026-09-17T01:49:23.328Z",
+      "status": "sent",
+      "subject": "New match for \"Tired landlord\": 5347 MARSALA LN, JACKSONVILLE, 32244"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2PF8R3CA66QAJG5WY4PPKH3",
+  "propertyId": "0991352850R",
+  "propertySnapshot": {
+    "address": "5347 MARSALA LN, JACKSONVILLE, 32244",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32244",
+    "assessedValue": 294118,
+    "builtYear": 2001,
+    "courtDistressScore": null,
+    "homesteadFlag": false,
+    "lastSaleDate": null,
+    "latitude": 30.2091135,
+    "longitude": -81.7150754,
+    "ownerName": "CLARK SABRIANA A",
+    "ownerOccupied": false,
+    "propertyId": "0991352850R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2PF8R3CA66QAJG5WY4PPKH3",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 25,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": true,
+    "yearsSinceLastSale": 10
+  },
+  "rationale": "absentee owner mailing from out of state (+28.3); roof about 25 years old, estimated from year built (+8.4); held 10 years (+3.3).",
+  "readAt": null,
+  "savedSearchId": "0mt4avamhp8iakx36",
+  "score": 40.1
+}
