@@ -1,0 +1,60 @@
+{
+  "changedFields": [
+    "lastSaleDate",
+    "lastSalePrice"
+  ],
+  "createdAt": "2026-09-17T14:15:45.179Z",
+  "dismissedAt": null,
+  "id": "01M2QQG2KEJMKBN6Z6524QDCG4__0mt4avc7x052bfnz9__0101660000R",
+  "kind": "updated_match",
+  "matcherRunId": "0mu5m3zzqwbd2miug",
+  "notifications": [
+    {
+      "body": "2013 MONTEAU DR, JACKSONVILLE, 32210 already matched \"Transit infill\" and has changed.\n\nMatch score: 93 / 100\nWhy: 45 m to Herlong Rd + Monteau Dr (+56.7); held 53 years (last sale 1973-02-23) (+36.1).\n\nChanged since the last pass: last sale date, last sale price.\n\nOwner of record: BURGESS BERNICE H\nAssessed value: $69,718\nParcel: 0101660000R\n\nTriggered by pipeline run 01M2QQG2KEJMKBN6Z6524QDCG4.\nSource: https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip",
+      "channel": "in_app",
+      "createdAt": "2026-09-17T14:15:52.277Z",
+      "id": "0mu5m42c518xtb8tc",
+      "providerMessageId": null,
+      "recipient": null,
+      "sentAt": "2026-09-17T14:15:52.277Z",
+      "status": "delivered",
+      "subject": "Updated match for \"Transit infill\": 2013 MONTEAU DR, JACKSONVILLE, 32210"
+    }
+  ],
+  "opportunityId": null,
+  "pipelineRunId": "01M2QQG2KEJMKBN6Z6524QDCG4",
+  "propertyId": "0101660000R",
+  "propertySnapshot": {
+    "address": "2013 MONTEAU DR, JACKSONVILLE, 32210",
+    "addressCity": "JACKSONVILLE",
+    "addressZip": "32210",
+    "assessedValue": 69718,
+    "builtYear": 1960,
+    "courtDistressScore": null,
+    "homesteadFlag": true,
+    "lastSaleDate": "1973-02-23",
+    "latitude": 30.2827103,
+    "longitude": -81.7868709,
+    "ownerName": "BURGESS BERNICE H",
+    "ownerOccupied": true,
+    "propertyId": "0101660000R",
+    "provenance": {
+      "fetchedAt": "2026-08-21 13:58:56.294",
+      "runId": "01M2QQG2KEJMKBN6Z6524QDCG4",
+      "sourceArtifact": "appraisal/duval-26-preliminary-nal-2026.zip",
+      "sourceSha256": "4ae67aa7550d9d9051c44f01a52ab335897af4959e9625e9ae1e007d77521691",
+      "sourceSystem": "duval_appraiser",
+      "sourceUrl": "https://floridarevenue.com/property/dataportal/Documents/PTO%20Data%20Portal/Tax%20Roll%20Data%20Files/NAL/2026P/Duval%2026%20Preliminary%20NAL%202026.zip"
+    },
+    "roofAgeBasis": "EFF_YR_BLT_PROXY",
+    "roofAgeYears": 66,
+    "tenureCaveat": null,
+    "tenureConfidence": "RECORDED",
+    "waterViewFlag": false,
+    "yearsSinceLastSale": 53
+  },
+  "rationale": "45 m to Herlong Rd + Monteau Dr (+56.7); held 53 years (last sale 1973-02-23) (+36.1).",
+  "readAt": null,
+  "savedSearchId": "0mt4avc7x052bfnz9",
+  "score": 92.81
+}
